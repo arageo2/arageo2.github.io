@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地理総合 インタラクティブ・ラボ 年間版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1f3340; --paper:#f3f8f6; --card:#fff; --line:#d8e4e0;
+  --u1:#2e6fdb; --u1soft:#e7effc;
+  --u2:#e8702a; --u2soft:#fdeee3;
+  --u3:#1e8f5a; --u3soft:#e4f4ec;
+  --alert:#d64545; --ok:#1e8f5a; --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75}
+h1,h2,h3,.tab,.chip,.pagechip{font-family:'M PLUS Rounded 1c',sans-serif}
+
+header{position:relative;background:var(--ink);color:#fff;padding:30px 20px 80px;overflow:hidden}
+header svg.contours{position:absolute;inset:0;width:100%;height:100%;opacity:.18}
+.head-inner{position:relative;max-width:980px;margin:0 auto}
+.head-eyebrow{font-size:.8rem;letter-spacing:.18em;color:#9fd0c0;font-weight:700}
+header h1{font-size:clamp(1.4rem,4.5vw,2.2rem);font-weight:800;margin-top:6px}
+header p.lead{margin-top:8px;font-size:.92rem;color:#cfe3dd;max-width:680px}
+
+nav.tabs{max-width:980px;margin:-50px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:relative;z-index:2}
+.tab{border:none;cursor:pointer;border-radius:var(--radius);padding:13px 10px;background:var(--card);box-shadow:0 4px 14px rgba(31,51,64,.12);font-weight:800;font-size:.92rem;color:var(--ink);border-top:6px solid var(--line);transition:transform .15s;text-align:left}
+.tab small{display:block;font-weight:500;font-size:.7rem;color:#6b7f8a;font-family:'Noto Sans JP'}
+.tab:hover{transform:translateY(-3px)}
+.tab[data-u="1"].active{border-top-color:var(--u1);color:var(--u1)}
+.tab[data-u="2"].active{border-top-color:var(--u2);color:var(--u2)}
+.tab[data-u="3"].active{border-top-color:var(--u3);color:var(--u3)}
+
+.chipbar{max-width:980px;margin:14px auto 0;padding:0 16px;display:none;flex-wrap:wrap;gap:7px;align-items:center}
+.chipbar.active{display:flex}
+.chiplabel{font-size:.72rem;font-weight:700;color:#6b7f8a;width:100%;margin-top:4px}
+.pagechip{border:2px solid var(--line);background:#fff;border-radius:99px;padding:6px 13px;font-weight:700;font-size:.8rem;cursor:pointer;color:var(--ink)}
+.pagechip:hover{border-color:var(--ink)}
+.cb1 .pagechip.active{background:var(--u1);border-color:var(--u1);color:#fff}
+.cb2 .pagechip.active{background:var(--u2);border-color:var(--u2);color:#fff}
+.cb3 .pagechip.active{background:var(--u3);border-color:var(--u3);color:#fff}
+
+main{max-width:980px;margin:22px auto 70px;padding:0 16px}
+section.page{display:none}
+section.page.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.crumb{font-size:.78rem;font-weight:700;color:#6b7f8a;margin-bottom:10px}
+.pagetitle{font-size:1.35rem;font-weight:800;margin-bottom:4px}
+.pagelead{font-size:.9rem;color:#51626d;margin-bottom:18px}
+
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--line);box-shadow:0 2px 10px rgba(31,51,64,.06);padding:22px;margin-bottom:24px}
+.card h2{font-size:1.12rem;font-weight:800;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{font-size:.68rem;font-weight:700;color:#fff;border-radius:99px;padding:3px 11px;letter-spacing:.05em}
+.b1{background:var(--u1)}.b2{background:var(--u2)}.b3{background:var(--u3)}
+.card p.desc{font-size:.9rem;color:#51626d;margin:8px 0 12px}
+.hint{margin-top:14px;font-size:.85rem;background:var(--paper);border-left:4px solid var(--ink);border-radius:8px;padding:10px 14px}
+.keybox{font-size:.88rem;background:var(--paper);border-radius:10px;padding:12px 16px;margin-top:8px}
+.keybox b{border-bottom:2px solid currentColor}
+
+.chip{border:2px solid var(--line);background:#fff;border-radius:99px;padding:8px 16px;font-weight:700;font-size:.86rem;cursor:pointer;color:var(--ink);transition:all .15s}
+.chip:hover{border-color:var(--ink)}
+.chip.sel-u2{background:var(--u2);border-color:var(--u2);color:#fff}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+select{font:inherit;font-weight:700;padding:9px 12px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7fb2ff;outline-offset:2px}
+
+/* 時差 */
+.clock-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;margin-top:16px}
+.clock{background:var(--u1soft);border-radius:14px;padding:16px;text-align:center}
+.clock .city{font-weight:800}
+.clock .lon{font-size:.78rem;color:#51626d}
+.clock .time{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:2rem;color:var(--u1);letter-spacing:.04em}
+.clock .date{font-size:.82rem;color:#51626d}
+.diff-mid{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:120px}
+.diff-mid .val{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:1.4rem}
+.diff-mid .formula{font-size:.74rem;color:#51626d;text-align:center}
+@media(max-width:640px){.clock-wrap{grid-template-columns:1fr}}
+
+/* フリップカード */
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:14px;margin-top:14px}
+.flip{perspective:900px;cursor:pointer;min-height:235px}
+.flip-inner{position:relative;width:100%;height:100%;min-height:235px;transition:transform .5s;transform-style:preserve-3d}
+.flip.open .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:15px;border:2px solid var(--line);background:#fff;display:flex;flex-direction:column;gap:7px}
+.face.back{transform:rotateY(180deg)}
+.f1 .face.back{background:var(--u1soft);border-color:var(--u1)} .f1 .face h3{color:var(--u1)}
+.f2 .face.back{background:var(--u2soft);border-color:var(--u2)} .f2 .face h3{color:var(--u2)}
+.f3 .face.back{background:var(--u3soft);border-color:var(--u3)} .f3 .face h3{color:var(--u3)}
+.face h3{font-size:.98rem}
+.face .tapnote{margin-top:auto;font-size:.73rem;color:#8a9aa4;text-align:right}
+.face ul{padding-left:1.2em;font-size:.83rem}
+.face p{font-size:.84rem}
+.face .big{font-size:2rem;text-align:center}
+
+/* GIS */
+.gis-wrap{display:grid;grid-template-columns:215px 1fr;gap:16px;margin-top:14px}
+@media(max-width:680px){.gis-wrap{grid-template-columns:1fr}}
+.layer-panel label{display:flex;gap:8px;align-items:center;font-weight:700;font-size:.88rem;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.layer-panel input{width:18px;height:18px;accent-color:var(--u1)}
+.gis-map{border:2px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.gis-map svg{display:block;width:100%;height:auto}
+
+/* 雨温図 */
+.climate-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+@media(max-width:720px){.climate-wrap{grid-template-columns:1fr}}
+.hythergraph{border:2px solid var(--line);border-radius:14px;background:#fff;padding:10px}
+.climate-info{background:var(--u2soft);border-radius:14px;padding:16px;font-size:.9rem}
+.climate-info h3{color:var(--u2);font-size:1.02rem;margin-bottom:6px}
+.climate-info .life{margin-top:10px;border-top:1px dashed var(--u2);padding-top:10px}
+
+/* クイズ */
+.quiz-q{font-weight:700;margin:14px 0 10px}
+.quiz-opts{display:grid;gap:8px}
+.quiz-opt{text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;font:inherit;cursor:pointer;transition:all .12s}
+.quiz-opt:hover{border-color:var(--ink)}
+.quiz-opt.correct{border-color:var(--ok);background:var(--u3soft);font-weight:700}
+.quiz-opt.wrong{border-color:var(--alert);background:#fdecec}
+.quiz-fb{margin-top:10px;font-size:.88rem;font-weight:700;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb .exp{font-weight:400;color:#51626d;display:block;margin-top:4px}
+.quiz-score{margin-top:14px;font-weight:800;font-family:'M PLUS Rounded 1c'}
+.quiz-next{margin-top:12px}
+
+/* 仕分け */
+.sort-current{background:var(--paper);border:2px dashed #9bb3aa;border-radius:14px;padding:15px;text-align:center;font-weight:700;margin:14px 0}
+.sort-btns{display:flex;gap:10px;flex-wrap:wrap}
+.sort-btn{flex:1 1 130px;border:none;border-radius:12px;padding:12px;font:inherit;font-weight:800;font-family:'M PLUS Rounded 1c';font-size:.95rem;color:#fff;cursor:pointer}
+.sort-btn small{display:block;font-weight:500;font-family:'Noto Sans JP';font-size:.72rem}
+.sort-btn:hover{filter:brightness(1.08)}
+.sort-fb{min-height:1.6em;font-weight:700;margin-top:10px;font-size:.88rem}
+
+/* マッチング */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.match-col{display:grid;gap:8px;align-content:start}
+.match-item{border:2px solid var(--line);border-radius:12px;background:#fff;padding:10px 12px;font-size:.84rem;cursor:pointer;text-align:left;font-family:inherit}
+.match-item.picked{border-color:var(--u2);background:var(--u2soft)}
+.match-item.done{border-color:var(--ok);background:var(--u3soft);color:#3a6b53;cursor:default}
+.match-item.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+/* 並べ替え */
+.tl-pool,.tl-answer{display:grid;gap:8px;margin-top:10px}
+.tl-item{border:2px solid var(--line);border-radius:12px;background:#fff;padding:10px 14px;cursor:pointer;font-size:.86rem;text-align:left;font-family:inherit}
+.tl-item:hover{border-color:var(--u3)}
+.tl-answer .tl-item{cursor:default;border-color:var(--u3);background:var(--u3soft)}
+.tl-answer .tl-item::before{content:attr(data-n) " ";font-weight:800;color:var(--u3)}
+
+/* 選択ゲーム */
+.pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:12px}
+.pick-item{border:2px solid var(--line);border-radius:12px;background:#fff;padding:10px;font:inherit;font-size:.84rem;cursor:pointer}
+.pick-item.on{border-color:var(--u3);background:var(--u3soft);font-weight:700}
+.pick-item.good{border-color:var(--ok);background:var(--u3soft)}
+.pick-item.bad{border-color:var(--alert);background:#fdecec}
+.pick-item.miss{border-color:#e8a13a;background:#fdf3e0}
+
+/* 人口ピラミッド */
+.pyr-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;margin-top:14px}
+@media(max-width:720px){.pyr-wrap{grid-template-columns:1fr}}
+.pyr-svg{border:2px solid var(--line);border-radius:14px;background:#fff;padding:8px}
+input[type=range]{width:100%;accent-color:var(--u2)}
+.pyr-stage{font-weight:800;color:var(--u2);font-family:'M PLUS Rounded 1c';font-size:1.02rem}
+
+/* 領域図・季節風 */
+.diagram-wrap{display:grid;grid-template-columns:1fr 240px;gap:14px;margin-top:14px}
+@media(max-width:680px){.diagram-wrap{grid-template-columns:1fr}}
+.diagram-box{border:2px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.diagram-box svg{display:block;width:100%;height:auto}
+.terr-part{cursor:pointer;transition:opacity .15s}
+.terr-part:hover{opacity:.75}
+.diagram-info{background:var(--u1soft);border-radius:14px;padding:14px;font-size:.85rem}
+.diagram-info h3{color:var(--u1);font-size:.98rem;margin-bottom:6px}
+
+.pagenav{display:flex;justify-content:space-between;gap:10px;margin:8px 0 30px}
+.pn-btn{border:2px solid var(--line);background:#fff;border-radius:12px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer;color:var(--ink);max-width:48%}
+.pn-btn:hover{border-color:var(--ink)}
+.pn-btn:disabled{opacity:.35;cursor:default}
+.pn-btn small{display:block;font-size:.7rem;color:#6b7f8a;font-weight:500}
+
+
+/* ===== v3追加:問い・参照・模式図・用語・Think ===== */
+.toi{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:14px 16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start}
+.toi .qmark{flex:none;width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;font-family:'M PLUS Rounded 1c';font-weight:800;display:flex;align-items:center;justify-content:center;font-size:1.15rem}
+.toi .qtext{font-weight:800;font-family:'M PLUS Rounded 1c';font-size:1.04rem;line-height:1.6}
+.toi .qsub{font-size:.8rem;color:#51626d;margin-top:5px}
+.toi.t1{border-color:var(--u1)} .toi.t1 .qmark{background:var(--u1)} .toi.t1 .qtext{color:var(--u1)}
+.toi.t2{border-color:var(--u2)} .toi.t2 .qmark{background:var(--u2)} .toi.t2 .qtext{color:#b3531a}
+.toi.t3{border-color:var(--u3)} .toi.t3 .qmark{background:var(--u3)} .toi.t3 .qtext{color:#14694a}
+.pgref{display:inline-block;background:var(--ink);color:#fff;border-radius:8px;font-size:.7rem;font-weight:700;padding:3px 10px;margin-left:10px;vertical-align:middle;font-family:'Noto Sans JP'}
+.ref{font-size:.72rem;color:#fff;background:#8a9aa4;border-radius:6px;padding:2px 8px;font-weight:700;font-family:'Noto Sans JP'}
+.model{border:2px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;margin:12px 0 0}
+.model svg{display:block;width:100%;height:auto}
+.model figcaption{font-size:.78rem;color:#51626d;padding:8px 12px;border-top:1px dashed var(--line);background:var(--paper)}
+.vocab{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:8px;margin-top:12px}
+.vocab div{background:var(--paper);border-radius:10px;padding:9px 12px;font-size:.8rem;line-height:1.6}
+.vocab b{display:block;font-size:.86rem;color:var(--ink)}
+.think{background:var(--ink);color:#fff;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;font-size:.9rem;line-height:1.8}
+.think b{color:#9fd0c0;font-family:'M PLUS Rounded 1c'}
+footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
+.reset-link{background:none;border:none;color:var(--u1);font:inherit;font-weight:700;cursor:pointer;text-decoration:underline}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="contours" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke="#8fd0bb" stroke-width="1.5">
+      <path d="M-20,250 C200,180 350,290 560,210 S900,120 1220,200"/>
+      <path d="M-20,210 C220,140 380,250 600,170 S920,80 1220,160"/>
+      <path d="M-20,170 C240,100 410,210 640,130 S940,40 1220,120"/>
+      <path d="M-20,130 C260,60 440,170 680,90 S960,0 1220,80"/>
+      <path d="M-20,90 C280,20 470,130 720,50 S980,-40 1220,40"/>
+    </g>
+  </svg>
+  <div class="head-inner">
+    <div class="head-eyebrow">GEOGRAPHY INTERACTIVE LAB ─ FULL YEAR EDITION</div>
+    <h1>地理総合 インタラクティブ・ラボ 年間版</h1>
+    <p class="lead">教科書の目次に対応した全20ページ。第1編は章ごと、第2編・第3編は節ごとに、各ページは「問い → 基礎・模式図 → 体験ワーク → 確認クイズ → 用語チェック → Think!」の流れ。教科書の参照ページつきで、1年間の学びをサポートします。</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="編の切り替え">
+  <button class="tab active" data-u="1">第1編 地図とGIS<small>地図や地理情報システムでとらえる現代世界</small></button>
+  <button class="tab" data-u="2">第2編 国際理解と国際協力<small>生活文化の多様性/地球的課題</small></button>
+  <button class="tab" data-u="3">第3編 持続可能な地域づくり<small>自然環境と防災/生活圏の調査</small></button>
+</nav>
+
+<div class="chipbar cb1 active" id="chips1">
+  <button class="pagechip active" data-page="p11">1章 球面上の世界と地図</button>
+  <button class="pagechip" data-page="p12">2章 国家の結びつきとグローバル化</button>
+</div>
+<div class="chipbar cb2" id="chips2">
+  <span class="chiplabel">▼ 1章 生活文化の多様性と国際理解</span>
+  <button class="pagechip active" data-page="p211">1節 地形</button>
+  <button class="pagechip" data-page="p212">2節 気候</button>
+  <button class="pagechip" data-page="p213">3節 衣</button>
+  <button class="pagechip" data-page="p214">4節 食</button>
+  <button class="pagechip" data-page="p215">5節 住</button>
+  <button class="pagechip" data-page="p216">6節 産業</button>
+  <button class="pagechip" data-page="p217">7節 言語・宗教</button>
+  <button class="pagechip" data-page="p218">8節 多文化共生</button>
+  <span class="chiplabel">▼ 2章 地球的課題と国際協力</span>
+  <button class="pagechip" data-page="p221">1節 SDGs</button>
+  <button class="pagechip" data-page="p222">2節 尊厳と平等</button>
+  <button class="pagechip" data-page="p223">3節 自然との調和</button>
+  <button class="pagechip" data-page="p224">4節 地球環境</button>
+  <button class="pagechip" data-page="p225">5節 平和と公正</button>
+</div>
+<div class="chipbar cb3" id="chips3">
+  <span class="chiplabel">▼ 1章 自然環境と防災</span>
+  <button class="pagechip active" data-page="p311">1節 日本の自然</button>
+  <button class="pagechip" data-page="p312">2節 変動帯と防災</button>
+  <button class="pagechip" data-page="p313">3節 湿潤地域と防災</button>
+  <button class="pagechip" data-page="p314">4節 災害への備え</button>
+  <span class="chiplabel">▼ 2章 生活圏の調査と地域の展望</span>
+  <button class="pagechip" data-page="p321">地域調査の方法</button>
+</div>
+
+<main>
+
+<!-- ===================== 1編1章 ===================== -->
+<section class="page active" id="p11">
+  <div class="crumb">第1編 地図や地理情報システムでとらえる現代世界 > 1章</div>
+  <div class="pagetitle">球面上の世界と地図<span class="pgref">📖 教科書 p.6–27</span></div>
+  <p class="pagelead">地球上の位置の表し方、時差のしくみ、世界地図の見方、そしてGIS・地理院地図の活用まで──地理の学びの「道具箱」をそろえる章。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">なぜ、どんな世界地図も「正しくない」のだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置や分布</b><br>球面を平面にすると何が起こる? 「目的に合った地図」とはどういうことか、学びながら考えよう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b1">基礎</span>📐 位置と時差のキホン</h2>
+    <div class="keybox">地球上の位置は<b>緯度</b>(赤道が0°、南北90°まで)と<b>経度</b>(本初子午線が0°、東西180°まで)で表す。地球は24時間で360°自転するから、<b>経度15°で1時間</b>の時差。日本の標準時子午線は<b>東経135°</b>(兵庫県明石市)。経度180°付近には<b>日付変更線</b>が引かれている。</div><figure class="model"><svg viewBox="0 0 470 240" role="img" aria-label="緯度と経度の模式図">
+<rect width="470" height="240" fill="#fbfdfc"/>
+<circle cx="140" cy="120" r="92" fill="#e7effc" stroke="#2e6fdb" stroke-width="2"/>
+<ellipse cx="140" cy="120" rx="92" ry="30" fill="none" stroke="#d64545" stroke-width="2.5"/>
+<ellipse cx="140" cy="120" rx="92" ry="62" fill="none" stroke="#9bb8e8"/>
+<ellipse cx="140" cy="120" rx="30" ry="92" fill="none" stroke="#2e6fdb" stroke-width="2.5"/>
+<ellipse cx="140" cy="120" rx="62" ry="92" fill="none" stroke="#9bb8e8"/>
+<line x1="140" y1="14" x2="140" y2="226" stroke="#51626d" stroke-dasharray="4 3"/>
+<circle cx="140" cy="28" r="4" fill="#1f3340"/>
+<text x="150" y="24" font-size="11" font-weight="bold" fill="#1f3340">北極点(北緯90°)</text>
+<text x="238" y="124" font-size="11" font-weight="bold" fill="#d64545">赤道(緯度0°)</text>
+<text x="96" y="36" font-size="11" font-weight="bold" fill="#2e6fdb" text-anchor="end">本初子午線(経度0°)</text>
+<text x="306" y="60" font-size="12" font-weight="bold" fill="#1f3340">🌐 緯線=東西の輪(横)</text>
+<text x="306" y="84" font-size="12" font-weight="bold" fill="#1f3340">🌐 経線=南北の線(縦)</text>
+<text x="306" y="120" font-size="12" font-weight="bold" fill="#e8702a">⏰ 経度15°ごとに1時間の時差</text>
+<text x="306" y="142" font-size="11" fill="#51626d">360°÷24時間=15°/時間</text>
+<text x="306" y="176" font-size="12" font-weight="bold" fill="#1f3340">📍 位置=緯度×経度で表す</text>
+<text x="306" y="198" font-size="11" fill="#51626d">例:東京は北緯36°・東経140°付近</text>
+</svg><figcaption>【模式図】緯度・経度と時差のしくみ(▶ 教科書 p.6–9)</figcaption></figure>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🌏 時差シミュレーター <span class="ref">▶ p.8–9・ワーク1</span></h2>
+    <p class="desc">2つの都市を選んで、いまこの瞬間の現地時刻を比べよう。海外との「ちょうどよい通話時間帯」を探すのも面白い。</p>
+    <div class="row">
+      <select id="cityA" aria-label="都市A"></select><span style="font-weight:800">と</span><select id="cityB" aria-label="都市B"></select>
+    </div>
+    <div class="clock-wrap">
+      <div class="clock" id="clockA"></div>
+      <div class="diff-mid"><div class="val" id="diffVal"></div><div class="formula" id="diffFormula"></div></div>
+      <div class="clock" id="clockB"></div>
+    </div>
+    <div class="hint"><b>考えよう:</b>サマータイムを採用している国では、この計算とずれることがある。また、西経の都市と比べると日付が変わるのはなぜだろう?</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🗺️ 地図投影法くらべ ─ カードをタップ! <span class="ref">▶ p.10–13</span></h2>
+    <p class="desc">球面を平面にすると必ず「ひずみ」が生まれる。<b>何を正しく表すか</b>で図法を使い分けよう。</p>
+    <div class="flip-grid">
+      <div class="flip f1" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>メルカトル図法</h3>
+            <svg viewBox="0 0 200 90" aria-hidden="true"><rect x="10" y="5" width="180" height="80" fill="#e7effc" stroke="#2e6fdb"/><g stroke="#9bb8e8"><line x1="10" y1="25" x2="190" y2="25"/><line x1="10" y1="45" x2="190" y2="45"/><line x1="10" y1="65" x2="190" y2="65"/><line x1="55" y1="5" x2="55" y2="85"/><line x1="100" y1="5" x2="100" y2="85"/><line x1="145" y1="5" x2="145" y2="85"/></g><path d="M40,40 q15,-12 35,-5 q20,8 8,18 q-25,8 -43,-13z" fill="#2e6fdb" opacity=".6"/></svg>
+            <p>経線と緯線が直角に交わる、おなじみの世界地図。</p><span class="tapnote">タップして答え →</span></div>
+          <div class="face back"><h3>角度が正しい(正角)</h3><ul><li>2点を結ぶ直線が<b>等角航路</b> → <b>航海図</b>で活躍</li><li>弱点:高緯度ほど面積が拡大(グリーンランドが巨大に)</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f1" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>モルワイデ図法</h3>
+            <svg viewBox="0 0 200 90" aria-hidden="true"><ellipse cx="100" cy="45" rx="90" ry="40" fill="#e7effc" stroke="#2e6fdb"/><g stroke="#9bb8e8" fill="none"><ellipse cx="100" cy="45" rx="45" ry="40"/><line x1="10" y1="45" x2="190" y2="45"/><path d="M20,25 h160 M20,65 h160"/></g><path d="M75,40 q12,-10 28,-4 q16,7 6,15 q-20,7 -34,-11z" fill="#2e6fdb" opacity=".6"/></svg>
+            <p>楕円形のなめらかな世界地図。</p><span class="tapnote">タップして答え →</span></div>
+          <div class="face back"><h3>面積が正しい(正積)</h3><ul><li>面積比較が正確 → 人口や植生の<b>分布図</b>にぴったり</li><li>弱点:周辺部ほど形がゆがむ</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f1" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>正距方位図法</h3>
+            <svg viewBox="0 0 200 90" aria-hidden="true"><circle cx="100" cy="45" r="40" fill="#e7effc" stroke="#2e6fdb"/><circle cx="100" cy="45" r="25" fill="none" stroke="#9bb8e8"/><circle cx="100" cy="45" r="12" fill="none" stroke="#9bb8e8"/><circle cx="100" cy="45" r="3" fill="#2e6fdb"/><line x1="100" y1="45" x2="135" y2="18" stroke="#e8702a" stroke-width="2"/></svg>
+            <p>中心から円形に広がる地図。国連旗のデザインにも。</p><span class="tapnote">タップして答え →</span></div>
+          <div class="face back"><h3>中心からの距離・方位が正しい</h3><ul><li>中心からの直線が<b>大圏航路</b>(最短コース) → <b>航空図</b></li><li>弱点:中心以外の2点間は正しくない</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🧭 一般図?主題図? 地図の仕分け <span class="ref">▶ p.14–15・ワーク2</span></h2>
+    <p class="desc">地図には、地形や道路などを幅広く表す<b>一般図</b>と、特定のテーマを表す<b>主題図</b>がある。表示される地図を仕分けよう。</p>
+    <div id="sortMapType"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🛰️ GISレイヤー重ね合わせ体験 <span class="ref">▶ p.16–23</span></h2>
+    <p class="desc">GIS(地理情報システム)の武器は情報を「重ねる」こと。架空の「みなと町」でレイヤーをON/OFFして避難について考えよう。地理院地図でも同じことができる。</p>
+    <div class="gis-wrap">
+      <div class="layer-panel">
+        <label><input type="checkbox" id="lyrElev"> 標高(色別)</label>
+        <label><input type="checkbox" id="lyrFlood"> 浸水想定区域</label>
+        <label><input type="checkbox" id="lyrShelter"> 避難所</label>
+        <p style="font-size:.8rem;color:#51626d;margin-top:6px">✅ を入れると地図に重なります</p>
+      </div>
+      <div class="gis-map">
+        <svg viewBox="0 0 460 300" role="img" aria-label="架空の町の地図">
+          <rect width="460" height="300" fill="#fbfdfc"/>
+          <path d="M0,210 C90,200 150,240 240,230 S380,250 460,235 L460,300 L0,300 Z" fill="#cfe5f7"/>
+          <path d="M0,210 C90,200 150,240 240,230 S380,250 460,235" fill="none" stroke="#7fb2dd" stroke-width="3"/>
+          <g stroke="#c9d4d0" stroke-width="6"><line x1="0" y1="120" x2="460" y2="110"/><line x1="120" y1="0" x2="140" y2="300"/><line x1="320" y1="0" x2="330" y2="300"/></g>
+          <g fill="#aab8b2">
+            <rect x="60" y="135" width="16" height="12"/><rect x="90" y="150" width="16" height="12"/><rect x="170" y="140" width="16" height="12"/><rect x="200" y="160" width="16" height="12"/><rect x="240" y="135" width="16" height="12"/><rect x="280" y="155" width="16" height="12"/><rect x="355" y="140" width="16" height="12"/><rect x="390" y="160" width="16" height="12"/><rect x="65" y="180" width="16" height="12"/><rect x="250" y="185" width="16" height="12"/><rect x="60" y="60" width="16" height="12"/><rect x="180" y="55" width="16" height="12"/><rect x="360" y="50" width="16" height="12"/><rect x="270" y="70" width="16" height="12"/>
+          </g>
+          <text x="14" y="24" font-size="13" fill="#51626d" font-weight="bold">みなと町(架空)</text>
+          <text x="380" y="290" font-size="11" fill="#5a86a8">みなと川</text>
+          <g id="gElev" style="display:none" opacity=".45">
+            <rect x="0" y="0" width="460" height="95" fill="#d8744a"/><rect x="0" y="95" width="460" height="80" fill="#e8c25a"/><rect x="0" y="175" width="460" height="125" fill="#79b65f"/>
+            <text x="380" y="22" font-size="11" fill="#5a2c14" font-weight="bold">高い(台地)</text><text x="390" y="200" font-size="11" fill="#1d3a14" font-weight="bold">低い</text>
+          </g>
+          <g id="gFlood" style="display:none" opacity=".55">
+            <path d="M0,165 C90,160 160,200 250,190 S390,210 460,195 L460,300 L0,300 Z" fill="#4d8fd1"/>
+            <text x="20" y="265" font-size="12" fill="#fff" font-weight="bold">浸水想定 3m</text>
+          </g>
+          <g id="gShelter" style="display:none">
+            <g font-size="20" text-anchor="middle"><text x="200" y="48">🏫</text><text x="100" y="200">🏢</text><text x="395" y="75">🏫</text></g>
+            <g font-size="10" fill="#1f3340" font-weight="bold" text-anchor="middle"><text x="200" y="62">北小学校</text><text x="100" y="214">川沿い会館</text><text x="395" y="89">東中学校</text></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="hint"><b>考えよう:</b>3つ全部ONにすると、「川沿い会館」の問題点が見えてくる。実際の<b>地理院地図</b>では「標高・土地の凹凸」「土地の成り立ち」「災害伝承・避難場所」などのレイヤーを重ねられ、断面図・3D・計測のツールも使える。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">確認</span>✏️ 章末チェッククイズ</h2>
+    <div id="quizP11"></div>
+  </div>
+<div class="card"><h2><span class="badge b1">+α</span>📚 地図・GIS 用語ミニ辞典 <span class="ref">▶ p.6–27</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>本初子午線</b>経度0°の線。ロンドン旧グリニッジ天文台を通る。</div><div><b>日付変更線</b>経度180°付近。西から東へこえると日付を1日もどす。</div><div><b>GIS(地理情報システム)</b>位置情報をもつデータを地図上で重ね、分析するしくみ。</div><div><b>GNSS</b>人工衛星で位置を測るしくみの総称。GPSやみちびきなど。</div><div><b>地理院地図</b>国土地理院のウェブ地図。標高・地形分類・災害情報を重ねられる。</div><div><b>縮尺</b>実際の距離を縮めた割合。分母が小さいほど詳しい地図。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「正しい地図」は存在しない。では<b>悪い地図</b>とは何だろう? 目的に合わない地図を選ぶとどんな失敗が起こるか、旅行・防災・物流の3つの場面で具体的に説明してみよう。</div>
+</section>
+
+<!-- ===================== 1編2章 ===================== -->
+<section class="page" id="p12">
+  <div class="crumb">第1編 地図や地理情報システムでとらえる現代世界 > 2章</div>
+  <div class="pagetitle">国家の結びつきとグローバル化する世界<span class="pgref">📖 教科書 p.28–43</span></div>
+  <p class="pagelead">国家の領域と国境、日本の領土をめぐる問題、国家をこえた結びつき(ASEAN・EU)、交通・通信の発達と貿易・人の移動を学ぶ章。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">交通・通信がこれほど発達した世界で、なぜ「国境」は今も重要なのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用</b><br>結びつきが強まるほど、領域やルールの問題も浮かび上がる。グローバル化の光と影を見ていこう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🚩 国家の領域たんけん図 ─ タップして調べよう <span class="ref">▶ p.28–31</span></h2>
+    <p class="desc">国家は「領域・国民・主権」の3要素で成り立つ。下の断面図の各部分をタップすると解説が出るよ。</p>
+    <div class="diagram-wrap">
+      <div class="diagram-box">
+        <svg viewBox="0 0 480 270" role="img" aria-label="国家の領域の模式図">
+          <rect width="480" height="270" fill="#eaf4fb"/>
+          <text x="14" y="22" font-size="12" font-weight="bold" fill="#51626d">↑宇宙空間(どの国のものでもない)</text>
+          <rect class="terr-part" data-t="airspace" x="0" y="30" width="270" height="120" fill="#cfe8fa"/>
+          <text x="70" y="95" font-size="14" font-weight="bold" fill="#2e6fdb" pointer-events="none">領空</text>
+          <path class="terr-part" data-t="land" d="M0,190 L0,150 L60,120 L130,150 L160,150 L160,190 Z" fill="#caa97a"/>
+          <text x="48" y="180" font-size="13" font-weight="bold" fill="#5a3c14" pointer-events="none">領土</text>
+          <rect class="terr-part" data-t="tsea" x="160" y="150" width="110" height="120" fill="#7fb2dd"/>
+          <text x="180" y="185" font-size="13" font-weight="bold" fill="#fff" pointer-events="none">領海</text>
+          <text x="166" y="142" font-size="10" fill="#2e6fdb" pointer-events="none">←12海里→</text>
+          <rect class="terr-part" data-t="eez" x="270" y="150" width="150" height="120" fill="#a8cdec"/>
+          <text x="295" y="185" font-size="13" font-weight="bold" fill="#1f5a8c" pointer-events="none">排他的経済水域</text>
+          <text x="300" y="142" font-size="10" fill="#2e6fdb" pointer-events="none">←沿岸から200海里→</text>
+          <rect class="terr-part" data-t="high" x="420" y="150" width="60" height="120" fill="#d6e8f5"/>
+          <text x="430" y="185" font-size="12" font-weight="bold" fill="#51626d" pointer-events="none">公海</text>
+          <line x1="0" y1="150" x2="480" y2="150" stroke="#5a86a8" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="diagram-info" id="terrInfo"><h3>タップしてみよう</h3>図の「領土」「領海」「排他的経済水域」などをタップすると、ここに解説が表示されます。</div>
+    </div>
+    <div class="hint"><b>考えよう:</b>国土面積では世界60位ほどの日本が、領海+排他的経済水域の広さでは<b>世界有数</b>になるのはなぜ?(ヒント:離島の存在)</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🤝 地域組織マッチング <span class="ref">▶ p.32–35</span></h2>
+    <p class="desc">国家をこえた結びつきが世界各地で進んでいる。組織名と説明をタップしてつなげよう。</p>
+    <div class="match-wrap"><div class="match-col" id="orgL"></div><div class="match-col" id="orgR"></div></div>
+    <div class="sort-fb" id="orgFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">体験</span>🚢 この貨物、どの交通機関で運ぶ? <span class="ref">▶ p.36–41</span></h2>
+    <p class="desc">交通機関には得意・不得意がある。貨物や移動の場面を、最も適した輸送手段に仕分けよう。</p>
+    <div id="sortTransport"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b1">確認</span>✏️ 章末チェッククイズ</h2>
+    <div id="quizP12"></div>
+  </div>
+<div class="card"><h2><span class="badge b1">+α</span>📚 グローバル化 用語ミニ辞典 <span class="ref">▶ p.28–43</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>排他的経済水域(EEZ)</b>基線から200海里。水産・鉱産資源の権利が沿岸国に。</div><div><b>ハブ空港</b>乗り継ぎの拠点となる空港。仁川・ドバイなど。</div><div><b>コンテナ</b>規格化された輸送箱。船↔トラック↔鉄道の積み替えを効率化。</div><div><b>LCC</b>格安航空会社。人の国際移動を一気に身近にした。</div><div><b>海底ケーブル</b>大陸間のインターネット通信の9割以上を支える。</div><div><b>多国籍企業</b>複数の国に拠点をもち、世界規模で活動する企業。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>国境の意味は「消えた」のではなく「変わった」。ヒト・モノ・カネ・情報のうち、国境をこえやすいものとこえにくいものは何か。理由とともに順位づけしてみよう。</div>
+</section>
+
+<!-- ===================== 2編1章1節 地形 ===================== -->
+<section class="page" id="p211">
+  <div class="crumb">第2編 国際理解と国際協力 > 1章 生活文化の多様性と国際理解 > 1節</div>
+  <div class="pagetitle">人々の生活の舞台となる地形<span class="pgref">📖 教科書 p.46–53</span></div>
+  <p class="pagelead">世界的視野から見た大地形、河川がつくる地形、海岸の地形、そして気候の影響を強く受けた地形(FILE5)まで──「舞台」としての地形を知る。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">同じ地球の上なのに、なぜ場所によって地形がまったく違うのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>自然環境(地形)・規模(スケール)</b><br>大地形(プレート)→小地形(川・海岸)→気候地形と、スケールを変えながら「土地のなりたち」を読み解こう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">基礎</span>🌋 大地形のキホン</h2>
+    <div class="keybox">地球の表面は十数枚の<b>プレート</b>に覆われ、年に数cmずつ動いている。プレート境界に沿った<b>変動帯</b>では地震・火山が多く、高くけわしい山脈ができる。一方、プレート内部の<b>安定地域(安定陸塊)</b>はなだらかで、地震が少ない。</div><figure class="model"><svg viewBox="0 0 470 230" role="img" aria-label="狭まる境界(沈み込み帯)の模式断面図">
+<rect width="470" height="230" fill="#eaf4fb"/>
+<rect x="0" y="60" width="470" height="170" fill="#cfe5f7"/>
+<path d="M0,100 L210,118 L260,150 L470,230 L0,230 Z" fill="#8a9aa4"/>
+<path d="M250,230 L470,230 L470,95 L300,95 Q265,100 250,130 Z" fill="#caa97a"/>
+<path d="M330,95 L355,52 L380,95 Z" fill="#b3531a"/>
+<path d="M350,95 Q352,130 340,160" stroke="#d64545" stroke-width="6" fill="none"/>
+<text x="20" y="90" font-size="12" font-weight="bold" fill="#3b4a54">海洋プレート →</text>
+<text x="330" y="120" font-size="12" font-weight="bold" fill="#5a3c14">← 大陸プレート</text>
+<text x="196" y="146" font-size="12" font-weight="bold" fill="#1f3340">海溝</text>
+<text x="346" y="44" font-size="12" font-weight="bold" fill="#b3531a">火山</text>
+<text x="352" y="178" font-size="11" font-weight="bold" fill="#d64545">マグマ↑</text>
+<g fill="#d64545" font-size="14" font-weight="bold"><text x="262" y="170">✕</text><text x="288" y="192">✕</text><text x="240" y="150">✕</text></g>
+<text x="300" y="212" font-size="10" fill="#7a2222">✕=地震が発生しやすい場所</text>
+<text x="14" y="22" font-size="11" fill="#51626d">プレートが沈み込み、ひずみがたまる → 巨大地震・火山活動</text>
+</svg><figcaption>【模式図】狭まる境界(沈み込み帯)の断面 ─ 日本列島のなりたち(▶ 教科書 p.46–47)</figcaption></figure>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🧩 プレート境界3タイプ ─ カードをタップ! <span class="ref">▶ p.46–47</span></h2>
+    <div class="flip-grid">
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>広がる境界</h3><div class="big">← →</div><p>2枚のプレートが離れていく場所。</p><span class="tapnote">タップして答え →</span></div>
+          <div class="face back"><h3>海嶺・地溝帯ができる</h3><ul><li>海底の大山脈=<b>海嶺</b>でマグマが新しいプレートをつくる</li><li>例:大西洋中央海嶺、<b>アイスランド</b>(ギャオ)、アフリカ大地溝帯</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>狭まる境界</h3><div class="big">→ ←</div><p>2枚のプレートがぶつかる場所。</p><span class="tapnote">タップして答え →</span></div>
+          <div class="face back"><h3>海溝・大山脈ができる</h3><ul><li>沈み込み:<b>海溝</b>と弧状列島(例:<b>日本列島</b>)。巨大地震・火山が多い</li><li>衝突:<b>ヒマラヤ山脈</b>のような大山脈</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>ずれる境界</h3><div class="big">⇄</div><p>2枚のプレートがすれ違う場所。</p><span class="tapnote">タップして答え →</span></div>
+          <div class="face back"><h3>横ずれ断層ができる</h3><ul><li>プレートがすれ違い、ひずみがたまると地震が発生</li><li>例:北アメリカの<b>サンアンドレアス断層</b></li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🏞️ 川がつくる地形マッチング <span class="ref">▶ p.48–49</span></h2>
+    <p class="desc">川は山地をけずり(侵食)、土砂を運び(運搬)、平地に積もらせる(堆積)。上流から河口へ、地形と特徴・土地利用をつなげよう。</p>
+    <figure class="model"><svg viewBox="0 0 640 240" role="img" aria-label="川がつくる地形の模式図(上流から河口へ)">
+<rect width="640" height="240" fill="#fbfdfc"/>
+<rect x="0" y="190" width="640" height="50" fill="#d9c9a3"/>
+<rect x="560" y="170" width="80" height="70" fill="#9fc5e8"/>
+<path d="M0,190 L0,60 L70,190 Z" fill="#8a9aa4"/>
+<path d="M0,60 L40,150 L70,190" fill="none" stroke="#5b86a8" stroke-width="4"/>
+<path d="M70,190 L190,150 A120,40 0 0 1 70,190 Z" fill="#e3cf9e"/>
+<path d="M70,190 Q130,165 190,160" fill="none" stroke="#7fb2dd" stroke-width="3"/>
+<path d="M190,165 C260,160 300,185 380,178 S500,190 560,185" fill="none" stroke="#7fb2dd" stroke-width="8"/>
+<ellipse cx="300" cy="172" rx="34" ry="9" fill="#efe3b8"/>
+<ellipse cx="430" cy="196" rx="40" ry="10" fill="#cfe0c8"/>
+<path d="M360,205 q30,-10 60,0" stroke="#9bb8e8" stroke-width="4" stroke-dasharray="6 5" fill="none"/>
+<path d="M520,185 L640,185 L640,240 L500,240 Z" fill="#efe3b8" opacity=".9"/>
+<text x="6" y="40" font-size="11" font-weight="bold" fill="#3b4a54">山地:V字谷(侵食)</text>
+<text x="80" y="146" font-size="11" font-weight="bold" fill="#8a6a1f">扇状地🍇(果樹園)</text>
+<text x="150" y="206" font-size="10" fill="#51626d">扇端:湧水と集落</text>
+<text x="262" y="152" font-size="11" font-weight="bold" fill="#8a6a1f">自然堤防🏠(微高地)</text>
+<text x="392" y="222" font-size="11" font-weight="bold" fill="#4a6b3a">後背湿地🌾(水田)</text>
+<text x="352" y="200" font-size="10" fill="#5b86a8">旧河道(昔の川の跡)</text>
+<text x="524" y="176" font-size="11" font-weight="bold" fill="#8a6a1f">三角州🏙️</text>
+<text x="586" y="220" font-size="11" font-weight="bold" fill="#1f5a8c">海</text>
+<text x="240" y="30" font-size="11" fill="#51626d">山地で「けずり」、流れながら「運び」、平地で「積もらせる」</text>
+</svg><figcaption>【模式図】川がつくる地形 ─ 上流から河口まで(▶ 教科書 p.48–49)</figcaption></figure>
+    <div class="match-wrap"><div class="match-col" id="riverL"></div><div class="match-col" id="riverR"></div></div>
+    <div class="sort-fb" id="riverFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🏜️ 気候がつくる地形 仕分けチャレンジ(FILE5) <span class="ref">▶ p.52–53</span></h2>
+    <p class="desc">乾燥地形・氷河地形・カルスト地形・サンゴ礁──気候の影響を強く受けた地形のキーワードを正しく仕分けよう。</p>
+    <div id="sortKikoChikei"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP211"></div>
+  </div>
+<div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>地形は「過去の記録」だ。あなたの家の周りの地形(台地? 低地? 扇状地?)は、どんな歴史を物語っているだろう。地理院地図の「土地の成り立ち」で確かめてみよう。</div>
+</section>
+
+<!-- ===================== 2編1章2節 気候 ===================== -->
+<section class="page" id="p212">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 2節</div>
+  <div class="pagetitle">人々の生活に彩りを与える気候<span class="pgref">📖 教科書 p.54–63</span></div>
+  <p class="pagelead">気温・降水量・風という気候要素から、ケッペンの気候区分、各気候帯の暮らしまで。雨温図を「読む目」を鍛える節。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">緯度がほぼ同じでも、気候が大きく違う場所があるのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>分布とその要因</b><br>東京とローマ、カイロはほぼ同じ緯度帯。大気大循環・海との距離・地形…要因を組み合わせて説明できるようになろう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">基礎</span>🌍 気候のキホン</h2>
+    <div class="keybox">気候を決める主な要素は<b>気温・降水量・風</b>。気温は緯度や標高、海からの距離(隔海度)で変わり、降水は<b>大気大循環</b>(赤道低圧帯=多雨、中緯度高圧帯=乾燥)や季節風で決まる。ケッペンは<b>植生</b>に注目して気候をA(熱帯)・B(乾燥帯)・C(温帯)・D(亜寒帯)・E(寒帯)に区分した。</div><figure class="model"><svg viewBox="0 0 640 230" role="img" aria-label="大気大循環の模式図">
+<rect width="640" height="230" fill="#fbfdfc"/>
+<rect x="0" y="180" width="640" height="50" fill="#caa97a"/>
+<rect x="0" y="180" width="160" height="50" fill="#79b65f"/>
+<rect x="160" y="180" width="160" height="50" fill="#e3cf9e"/>
+<rect x="480" y="180" width="160" height="50" fill="#dfeefb"/>
+<text x="30" y="214" font-size="11" font-weight="bold" fill="#1d3a14">熱帯雨林</text>
+<text x="210" y="214" font-size="11" font-weight="bold" fill="#7a5a14">砂漠</text>
+<text x="372" y="214" font-size="11" font-weight="bold" fill="#3b4a54">温帯〜亜寒帯</text>
+<text x="540" y="214" font-size="11" font-weight="bold" fill="#1f5a8c">極地方</text>
+<g font-size="10.5" fill="#51626d"><text x="36" y="232">緯度0°</text><text x="222" y="232">30°</text><text x="400" y="232">60°</text><text x="580" y="232">90°</text></g>
+<g stroke="#2e6fdb" stroke-width="5" fill="none"><path d="M80,170 L80,80"/></g>
+<path d="M80,80 L72,94 L88,94 Z" fill="#2e6fdb" transform="rotate(180 80 87)"/>
+<text x="60" y="64" font-size="13">☁️🌧️</text>
+<text x="20" y="48" font-size="11" font-weight="bold" fill="#2e6fdb">赤道低圧帯(上昇気流=雨)</text>
+<g stroke="#e8702a" stroke-width="5" fill="none"><path d="M240,80 L240,170"/></g>
+<path d="M240,170 L232,156 L248,156 Z" fill="#e8702a"/>
+<text x="228" y="64" font-size="13">☀️</text>
+<text x="160" y="48" font-size="11" font-weight="bold" fill="#b3531a">中緯度(亜熱帯)高圧帯(下降気流=乾燥)</text>
+<path d="M95,70 Q160,28 226,70" stroke="#8a9aa4" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+<g font-size="11" font-weight="bold" fill="#1f3340">
+<text x="128" y="158">← 貿易風</text><text x="300" y="158">偏西風 →</text><text x="520" y="158">← 極東風</text>
+</g>
+<text x="408" y="64" font-size="13">☁️</text>
+<text x="356" y="48" font-size="11" font-weight="bold" fill="#2e6fdb">寒帯前線(60°付近・上昇=雨)</text>
+</svg><figcaption>【模式図】大気大循環 ─ 「どこで雨が降り、どこが乾くか」の世界ルール(▶ 教科書 p.54–55)</figcaption></figure>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🌦️ 世界の気候ナビ ─ 雨温図で旅する <span class="ref">▶ p.54–61</span></h2>
+    <p class="desc">気候区を選ぶと雨温図(折れ線=気温、棒=降水量)と暮らしを表示。雨温図の「形」を覚えよう。</p>
+    <div class="row" id="climateBtns"></div>
+    <div class="climate-wrap">
+      <div class="hythergraph"><svg id="hgSvg" viewBox="0 0 360 260" role="img" aria-label="雨温図"></svg></div>
+      <div class="climate-info" id="climateInfo"></div>
+    </div>
+    <div class="hint"><b>読み取りのコツ:</b>①最暖月・最寒月の気温 ②降水の「ある時期・ない時期」 ③年較差。南半球の都市は気温グラフが「谷型」になる。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🎯 雨温図あてゲーム <span class="ref">▶ p.56 FILE6</span></h2>
+    <p class="desc">都市名をかくした雨温図が出題される。形だけを手がかりに、どの気候区か当てよう。連続正解記録に挑戦!</p>
+    <button class="chip" id="guessStart">出題する!</button>
+    <div class="climate-wrap">
+      <div class="hythergraph"><svg id="guessSvg" viewBox="0 0 360 260" role="img" aria-label="出題用の雨温図"></svg></div>
+      <div>
+        <div class="quiz-opts" id="guessOpts"></div>
+        <div class="quiz-fb" id="guessFb"></div>
+        <div class="quiz-score" id="guessStreak"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP212"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 気候 用語ミニ辞典 <span class="ref">▶ p.54–63</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>気候要素</b>気温・降水量・風など、気候を構成する要素。</div><div><b>気候因子</b>緯度・標高・隔海度・海流など、気候要素を変化させる原因。</div><div><b>赤道低圧帯</b>上昇気流で雨が多い。熱帯雨林の帯をつくる。</div><div><b>中緯度高圧帯</b>下降気流で乾燥。世界の砂漠の多くがこの緯度帯。</div><div><b>季節風(モンスーン)</b>季節で向きが変わる風。アジアの稲作を支える。</div><div><b>偏西風</b>中緯度上空を西から東へ。日本の天気が西から変わる理由。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「東京・ローマ・カイロはほぼ同じ緯度帯なのに気候が違う」──この一文を、大気大循環の模式図と「海との位置関係」を使って、中学生にもわかるように説明してみよう。</div>
+</section>
+
+<!-- ===================== 2編1章3節 衣 ===================== -->
+<section class="page" id="p213">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 3節</div>
+  <div class="pagetitle">「衣」から見る世界<span class="pgref">📖 教科書 p.64–69</span></div>
+  <p class="pagelead">衣服は自然環境(暑さ・寒さ・日差し)への適応であり、宗教や文化の表現でもある。そしていま、「衣」のグローバル化が進む。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">人はなぜ「その服」を着るのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>人間と自然環境との関わり・文化</b><br>自然への適応と、宗教・伝統という2つのレンズで世界の衣服を見てみよう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">基礎</span>👕 衣服を決める2つの環境</h2>
+    <div class="keybox"><b>自然環境</b>:気温・湿度・日差しから体を守る(例:砂漠の長袖)。<b>社会環境</b>:宗教の決まりや伝統(例:ムスリム女性のかぶり物、民族衣装)。近年はジーンズやTシャツのような<b>洋装の世界的な普及</b>と、ファストファッションの大量生産・大量廃棄が話題に。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🧥 環境と衣服のマッチング <span class="ref">▶ p.64–67</span></h2>
+    <p class="desc">その土地の環境と、生まれた衣服の知恵をつなげよう。</p>
+    <div class="match-wrap"><div class="match-col" id="clothL"></div><div class="match-col" id="clothR"></div></div>
+    <div class="sort-fb" id="clothFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP213"></div>
+  </div>
+<div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>明日のあなたの服装を「自然環境への適応」と「社会・文化の表現」の2つの面から分析してみよう。制服にも、実は両方の意味がかくれていないだろうか?</div>
+</section>
+
+<!-- ===================== 2編1章4節 食 ===================== -->
+<section class="page" id="p214">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 4節</div>
+  <div class="pagetitle">「食」から見る世界<span class="pgref">📖 教科書 p.70–79</span></div>
+  <p class="pagelead">主食の地域性、食べ方の多様性、農業形態、そして食のグローバル化。「いただきます」の向こう側に世界が見える。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">あなたの今日の一食は、世界のどこと、どうつながっているだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用</b><br>主食の地域性から食のグローバル化まで。「いただきます」の向こう側を地図でたどろう。</div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🍙 食のキホン</h2><div class="keybox">主食は<b>米・小麦・とうもろこし</b>の三大穀物といも類が中心。何が主食になるかは<b>気候</b>(育つ作物)で決まり、どう食べるかは<b>文化</b>(調理・宗教)で決まる。流通の発達で食はグローバル化する一方、<b>食料自給率</b>や<b>フードロス</b>という新しい課題も生まれた。</div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🍚 世界の主食マッチング <span class="ref">▶ p.70–75</span></h2>
+    <p class="desc">主食は、その土地の気候で育ちやすい作物から生まれる。主食と地域・食べ方をつなげよう。</p>
+    <div class="match-wrap"><div class="match-col" id="foodL"></div><div class="match-col" id="foodR"></div></div>
+    <div class="sort-fb" id="foodFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🚜 農業形態の仕分けゲーム <span class="ref">▶ p.76–77</span></h2>
+    <p class="desc">農業は「自分たちが食べるため(自給的)」「売るため(商業的)」「大資本が輸出のために(企業的)」に大きく分けられる。表示される農業を仕分けよう。</p>
+    <div id="sortAgri"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP214"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 食の地理 用語ミニ辞典 <span class="ref">▶ p.70–79</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>三大穀物</b>米・小麦・とうもろこし。世界の食を支える。</div><div><b>ハラール</b>イスラームの教えで許された食品。</div><div><b>食料自給率</b>国内消費のうち国内生産でまかなう割合。日本は約38%(カロリーベース)。</div><div><b>フードロス</b>まだ食べられるのに捨てられる食品。日本で年間500万t規模。</div><div><b>バーチャルウォーター</b>輸入食料の生産に使われた水。食料輸入=水の輸入。</div><div><b>地産地消</b>地元で生産された物を地元で消費。輸送エネルギーも減らせる。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>今夜の夕食の材料の「出身地」を調べて世界地図に置いてみよう。あなたの一食は何か国とつながっていた? その輸入が止まったら何が起こるだろう?</div>
+</section>
+
+<!-- ===================== 2編1章5節 住 ===================== -->
+<section class="page" id="p215">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 5節</div>
+  <div class="pagetitle">「住」から見る世界<span class="pgref">📖 教科書 p.80–89</span></div>
+  <p class="pagelead">住居は「その土地で手に入る材料」と「気候への工夫」のかたまり。世界の住まいから環境適応の知恵を読み取ろう。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">世界の家の形を決めているのは、いったい「何」だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>人間と自然環境との関わり</b><br>ヒント:①その土地で手に入る材料 ②気候への工夫 ③社会の変化。3つの視点で住まいを観察しよう。</div></div></div><figure class="model"><svg viewBox="0 0 640 220" role="img" aria-label="高床式住居の2つの理由">
+<rect width="640" height="220" fill="#fbfdfc"/>
+<line x1="320" y1="10" x2="320" y2="210" stroke="#d8e4e0" stroke-width="2"/>
+<rect x="0" y="170" width="320" height="50" fill="#79b65f"/>
+<rect x="70" y="90" width="130" height="60" fill="#e3cf9e" stroke="#8a6a1f"/>
+<path d="M60,90 L135,55 L210,90 Z" fill="#8a6a1f"/>
+<g stroke="#8a6a1f" stroke-width="6"><line x1="90" y1="150" x2="90" y2="172"/><line x1="180" y1="150" x2="180" y2="172"/></g>
+<g font-size="13" fill="#2e6fdb"><text x="100" y="166">〰️</text><text x="140" y="166">〰️</text></g>
+<text x="236" y="40" font-size="16">☀️</text>
+<text x="20" y="34" font-size="12" font-weight="bold" fill="#14694a">熱帯の高床</text>
+<text x="20" y="200" font-size="10.5" fill="#1d3a14">湿気・熱気・洪水・害虫を避け、床下に風を通す</text>
+<rect x="320" y="170" width="320" height="50" fill="#9fc5e8"/>
+<text x="336" y="200" font-size="10.5" font-weight="bold" fill="#1f5a8c">永久凍土(一年中こおった土)</text>
+<rect x="400" y="90" width="150" height="60" fill="#dfeefb" stroke="#3b6a8c"/>
+<path d="M392,90 L475,58 L558,90 Z" fill="#3b6a8c"/>
+<g stroke="#3b6a8c" stroke-width="6"><line x1="420" y1="150" x2="420" y2="172"/><line x1="530" y1="150" x2="530" y2="172"/></g>
+<text x="452" y="118" font-size="12">🔥</text>
+<text x="340" y="34" font-size="12" font-weight="bold" fill="#1f5a8c">シベリアの高床</text>
+<text x="336" y="216" font-size="10.5" fill="#1f3340">暖房の熱で凍土が解け、建物が傾くのを防ぐ</text>
+<text x="568" y="40" font-size="16">❄️</text>
+</svg><figcaption>【模式図】同じ「高床」でも理由が違う! 左:熱帯(湿気・熱気・洪水対策) 右:シベリア(永久凍土を守る)(▶ 教科書 p.80–83)</figcaption></figure>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🏠 環境と住まいのマッチング <span class="ref">▶ p.80–85</span></h2>
+    <p class="desc">環境と、そこで発達した住居の特徴をつなげよう。「なぜその材料? なぜその形?」を考えるのがポイント。</p>
+    <div class="match-wrap"><div class="match-col" id="houseL"></div><div class="match-col" id="houseR"></div></div>
+    <div class="sort-fb" id="houseFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP215"></div>
+  </div>
+<div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>50年後、地球の平均気温が上がった世界の「理想の家」を設計するとしたら、今日学んだ世界の住まいの知恵から何を取り入れる? 3つ選んで理由を説明しよう。</div>
+</section>
+
+<!-- ===================== 2編1章6節 産業 ===================== -->
+<section class="page" id="p216">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 6節</div>
+  <div class="pagetitle">暮らしを豊かにする産業<span class="pgref">📖 教科書 p.90–101</span></div>
+  <p class="pagelead">産業の発展と生活の変化、自動車・ICT産業のグローバル化、地場産業の挑戦。アメリカと中国の事例(学習を深めよう)にも対応。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">産業が発展すると、人々の暮らしの何が変わり、何が課題になるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域の変容</b><br>農業中心の社会から、工場、そしてICTへ。アメリカと中国の事例から変化の光と影をとらえよう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">基礎</span>🏭 産業のキホン</h2>
+    <div class="keybox">産業は<b>第1次</b>(農林水産業)・<b>第2次</b>(鉱工業・建設)・<b>第3次</b>(商業・サービス)に分類され、経済が発展すると就業人口の中心は1次→2次→3次へ移る(<b>産業構造の高度化</b>)。自動車産業は貿易摩擦を背景に<b>現地生産</b>を拡大。ICT産業は<b>シリコンバレー</b>(アメリカ)や<b>バンガロール</b>(インド)が拠点に。</div><figure class="model"><svg viewBox="0 0 640 200" role="img" aria-label="産業構造の高度化の模式図">
+<rect width="640" height="200" fill="#fbfdfc"/>
+<g font-size="11.5" font-weight="bold" fill="#1f3340"><text x="20" y="56">発展途上国</text><text x="20" y="106">新興国</text><text x="20" y="156">先進国</text></g>
+<g>
+<rect x="110" y="38" width="322" height="26" fill="#79b65f"/><rect x="432" y="38" width="69" height="26" fill="#7fa8e8"/><rect x="501" y="38" width="69" height="26" fill="#f2b264"/>
+<rect x="110" y="88" width="138" height="26" fill="#79b65f"/><rect x="248" y="88" width="161" height="26" fill="#7fa8e8"/><rect x="409" y="88" width="161" height="26" fill="#f2b264"/>
+<rect x="110" y="138" width="23" height="26" fill="#79b65f"/><rect x="133" y="138" width="115" height="26" fill="#7fa8e8"/><rect x="248" y="138" width="322" height="26" fill="#f2b264"/>
+</g>
+<g font-size="10.5" font-weight="bold" fill="#fff"><text x="230" y="55">第1次 70%</text><text x="150" y="105">30%</text><text x="300" y="105">第2次 35%</text><text x="460" y="105">第3次 35%</text><text x="160" y="155">25%</text><text x="370" y="155">第3次 70%</text></g>
+<text x="110" y="190" font-size="10.5" fill="#51626d">経済発展とともに就業人口の中心が 1次 → 2次 → 3次 へ(数値はモデル)</text>
+<g font-size="10" font-weight="bold"><text x="585" y="56" fill="#4a6b3a">■1次</text><text x="585" y="106" fill="#2e5a9c">■2次</text><text x="585" y="156" fill="#b3531a">■3次</text></g>
+</svg><figcaption>【模式図】産業構造の高度化 ─ 就業人口の割合の変化(▶ 教科書 p.90–91)</figcaption></figure>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>💼 第1次・2次・3次産業 仕分けゲーム <span class="ref">▶ p.90–91</span></h2>
+    <div id="sortIndustry"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP216"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 産業 用語ミニ辞典 <span class="ref">▶ p.90–101</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>産業構造の高度化</b>就業人口の中心が1次→2次→3次産業へ移ること。</div><div><b>現地生産</b>市場のある国に工場を建てて生産。貿易摩擦の解消にも。</div><div><b>シリコンバレー</b>米国のICT産業集積地。大学・人材・投資の好循環。</div><div><b>バンガロール</b>インドのICT都市。英語人材と時差を強みに成長。</div><div><b>地場産業</b>地域の資源・技術に根ざした産業。鯖江の眼鏡など。</div><div><b>産業の空洞化</b>生産拠点の海外移転で国内産業が衰退する現象。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>AIやロボットが広がる「次の産業の変化」で、あなたの町の仕事はどう変わるだろう? 産業構造の高度化のグラフの「その先」を予想して描いてみよう。</div>
+</section>
+
+<!-- ===================== 2編1章7節 言語・宗教 ===================== -->
+<section class="page" id="p217">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 7節</div>
+  <div class="pagetitle">世界の言語・宗教と人々の生活<span class="pgref">📖 教科書 p.102–117</span></div>
+  <p class="pagelead">言語と宗教は生活文化の核。世界宗教の分布と教え、暮らしへの影響(食・祈り・祭り)を学び、互いを尊重する土台をつくる。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">宗教や言語を知ることが、なぜ「世界を理解する」ことにつながるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>文化の多様性</b><br>食・祈り・祭り・休日…宗教は暮らしの設計図。違いの背景を知れば、ニュースの見え方が変わる。</div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🗣️ 言語のキホン</h2><div class="keybox">世界には約<b>7,000</b>の言語がある。国が公の場で使うと定めた言語が<b>公用語</b>で、スイスのように複数もつ国も多い。母語人口の最大は<b>中国語</b>、最も広い地域で使われるのは<b>英語</b>。中南米のスペイン語・ポルトガル語のように、言語分布には<b>植民地支配の歴史</b>が刻まれている。</div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🕌 世界の宗教カード図鑑 ─ タップ! <span class="ref">▶ p.104–111</span></h2>
+    <div class="flip-grid">
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>キリスト教</h3><div class="big">✝️</div><p>世界で最も信者が多い宗教。</p><span class="tapnote">タップ →</span></div>
+          <div class="face back"><h3>暮らしとのかかわり</h3><ul><li>ヨーロッパ・南北アメリカ・オセアニアに分布</li><li>日曜の礼拝、クリスマスやイースターの行事</li><li>カトリック・プロテスタント・正教会など</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>イスラーム</h3><div class="big">☪️</div><p>西アジア・北アフリカ・東南アジアに広がる。</p><span class="tapnote">タップ →</span></div>
+          <div class="face back"><h3>暮らしとのかかわり</h3><ul><li>1日5回の礼拝、ラマダーン月の断食</li><li>豚肉・酒は禁忌。<b>ハラール</b>食品</li><li>インドネシアは世界最大のムスリム人口国</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>仏教</h3><div class="big">☸️</div><p>東アジア・東南アジアに分布。</p><span class="tapnote">タップ →</span></div>
+          <div class="face back"><h3>暮らしとのかかわり</h3><ul><li><b>上座部仏教</b>:タイ・ミャンマーなど。男性の出家の習慣</li><li><b>大乗仏教</b>:日本・中国・韓国など</li><li>チベット仏教はチベット・モンゴルに</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f2" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>ヒンドゥー教</h3><div class="big">🕉️</div><p>インドの人々の約8割が信仰。</p><span class="tapnote">タップ →</span></div>
+          <div class="face back"><h3>暮らしとのかかわり</h3><ul><li>特定の民族と結びつく<b>民族宗教</b></li><li>牛を神聖視し牛肉を食べない。菜食の人も多い</li><li>ガンジス川での沐浴</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="hint"><b>用語:</b>キリスト教・イスラーム・仏教のように民族をこえて広がる宗教を<b>世界宗教</b>、ヒンドゥー教やユダヤ教のように特定の民族と結びつく宗教を<b>民族宗教</b>という。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(言語・宗教)</h2>
+    <div id="quizP217"></div>
+  </div>
+<div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>日本のカレンダー(正月・お盆・クリスマス…)には、複数の宗教や文化が同居している。これは世界では当たり前? それとも珍しい? 学んだ宗教分布から考えてみよう。</div>
+</section>
+
+<!-- ===================== 2編1章8節 多文化共生 ===================== -->
+<section class="page" id="p218">
+  <div class="crumb">第2編 > 1章 生活文化の多様性と国際理解 > 8節</div>
+  <div class="pagetitle">多文化共生に向けて<span class="pgref">📖 教科書 p.118–121</span></div>
+  <p class="pagelead">多様性に富んだ世界の人々との共生。違いを「困りごと」ではなく「豊かさ」に変えるには? 修学旅行プランニングのワーク(ワーク7)にもつながる節。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">文化の違いは「壁」だろうか、それとも「豊かさ」だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>多様性と共生</b><br>ここまで学んだ衣食住・宗教の知識を、実際の場面で使ってみよう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🌈 多文化共生 こんなときどうする? シナリオクイズ <span class="ref">▶ p.118–121・ワーク7</span></h2>
+    <p class="desc">学校や町で出会うリアルな場面。あなたならどう行動する?</p>
+    <div id="quizP218a"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP218b"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 多文化共生 用語ミニ辞典 <span class="ref">▶ p.118–121</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>多文化共生</b>文化の違いを認め合い、対等な関係で共に生きること。</div><div><b>やさしい日本語</b>短く・簡単に・はっきり伝える日本語。災害時に力を発揮。</div><div><b>ピクトグラム</b>言葉がわからなくても伝わる絵記号。</div><div><b>ハラール対応</b>ムスリムが安心して食べられるメニュー・表示の工夫。</div><div><b>エスニックタウン</b>外国にルーツをもつ人々が集まる地区。文化の発信地。</div><div><b>ユニバーサルデザイン</b>言語・年齢・障がいの有無をこえて使いやすい設計。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>あなたの学校に来週、海外から転校生が来るとしたら? 今日の学びを使って「最初の1週間サポートプラン」を3項目で提案してみよう。</div>
+</section>
+
+<!-- ===================== 2編2章1節 SDGs ===================== -->
+<section class="page" id="p221">
+  <div class="crumb">第2編 > 2章 地球的課題と国際協力 > 1節</div>
+  <div class="pagetitle">持続可能な社会を目指して(SDGs)<span class="pgref">📖 教科書 p.124–127</span></div>
+  <p class="pagelead">2015年に国連で採択されたSDGs(持続可能な開発目標)は17の目標からなり、2030年までの達成を目指す。地球的課題を「地理的にとらえる」入口の節。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">「誰一人取り残さない」世界は、きれいごとだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>持続可能性</b><br>SDGsを「暗記する目標」ではなく「使う道具」に。課題どうしのつながりを地理的に見抜こう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">基礎</span>🎯 SDGsのキホン</h2>
+    <div class="keybox">SDGsの17目標は<b>5つのP</b>に整理できる:<b>People</b>(人間)・<b>Prosperity</b>(豊かさ)・<b>Planet</b>(地球)・<b>Peace</b>(平和)・<b>Partnership</b>(協働)。合言葉は「<b>誰一人取り残さない</b>」。地球的課題は地域によって現れ方が異なり、相互に関連し合っている──だから地理の見方・考え方が役に立つ。</div><figure class="model"><svg viewBox="0 0 640 230" role="img" aria-label="SDGsウェディングケーキモデル">
+<rect width="640" height="230" fill="#fbfdfc"/>
+<ellipse cx="320" cy="196" rx="250" ry="26" fill="#79b65f"/>
+<rect x="70" y="150" width="500" height="46" rx="10" fill="#79b65f"/>
+<ellipse cx="320" cy="150" rx="250" ry="24" fill="#8fc97a"/>
+<rect x="150" y="96" width="340" height="46" rx="10" fill="#e88a8a"/>
+<ellipse cx="320" cy="96" rx="170" ry="20" fill="#f0a3a3"/>
+<rect x="225" y="46" width="190" height="42" rx="10" fill="#7fa8e8"/>
+<ellipse cx="320" cy="46" rx="95" ry="16" fill="#9bbcf0"/>
+<circle cx="320" cy="22" r="14" fill="#7a4fc9"/>
+<text x="342" y="26" font-size="11" font-weight="bold" fill="#7a4fc9">目標17 パートナーシップ</text>
+<text x="320" y="72" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">経済(8・9・10・12)</text>
+<text x="320" y="124" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">社会(1・2・3・4・5・7・11・16)</text>
+<text x="320" y="178" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">生物圏=地球環境(6・13・14・15)</text>
+<text x="26" y="30" font-size="11" fill="#51626d">経済は社会に、</text>
+<text x="26" y="48" font-size="11" fill="#51626d">社会は地球環境に</text>
+<text x="26" y="66" font-size="11" fill="#51626d">支えられている</text>
+</svg><figcaption>【模式図】SDGsウェディングケーキモデル ─ 17目標の「土台」の関係(▶ 教科書 p.124–127)</figcaption></figure>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🖐️ SDGs目標を「5つのP」に仕分けよう <span class="ref">▶ p.124–125</span></h2>
+    <div id="sortSDGs"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🤝 課題と取り組みのマッチング <span class="ref">▶ p.126–127</span></h2>
+    <p class="desc">左の地球的課題と右の取り組みをタップしてつなげよう。私たちにできるアクションも入っているよ。</p>
+    <div class="match-wrap"><div class="match-col" id="matchL"></div><div class="match-col" id="matchR"></div></div>
+    <div class="sort-fb" id="matchFb"></div>
+    <div class="hint"><b>豆知識:</b>教科書にも登場する、日本企業がエチオピアなどで進める<b>水の浄化技術</b>支援は、企業の社会的責任(CSR)とSDGsが結びついた例。フェアトレード商品を選ぶのは<b>エシカル消費</b>の第一歩。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP221"></div>
+  </div>
+<div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>SDGsの17目標から「最優先で解決すべき」と思うものを1つ選び、ウェディングケーキモデルのどの層にあるか、他のどの目標とつながっているかを説明してみよう。</div>
+</section>
+
+<!-- ===================== 2編2章2節 尊厳と平等 ===================== -->
+<section class="page" id="p222">
+  <div class="crumb">第2編 > 2章 地球的課題と国際協力 > 2節(People)</div>
+  <div class="pagetitle">すべての人々の尊厳と平等が守られた社会に向けて<span class="pgref">📖 教科書 p.128–145</span></div>
+  <p class="pagelead">貧困・人口・食料・水・健康福祉・教育とジェンダー。「People(人間)」に関わる課題を、データと人口ピラミッドから考える。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">貧困や人口の問題は、遠い国の「他人事」だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用・公正</b><br>人口ピラミッドと人口転換モデルという「2つの武器」で、世界と日本の課題を同じ土俵で考えよう。</div></div></div><figure class="model"><svg viewBox="0 0 640 250" role="img" aria-label="人口転換モデル">
+<rect width="640" height="250" fill="#fbfdfc"/>
+<line x1="60" y1="20" x2="60" y2="200" stroke="#aab8b2"/><line x1="60" y1="200" x2="610" y2="200" stroke="#aab8b2"/>
+<g stroke="#d8e4e0"><line x1="197" y1="20" x2="197" y2="200"/><line x1="334" y1="20" x2="334" y2="200"/><line x1="471" y1="20" x2="471" y2="200"/></g>
+<polygon points="60,70 197,68 334,90 471,160 610,168 610,158 471,150 334,150 197,150 60,90" fill="#fdeee3"/>
+<polyline points="60,70 197,68 334,90 471,160 610,168" fill="none" stroke="#d64545" stroke-width="3"/>
+<polyline points="60,90 197,150 334,150 471,150 610,158" fill="none" stroke="#2e6fdb" stroke-width="3"/>
+<text x="66" y="60" font-size="11" font-weight="bold" fill="#d64545">出生率</text>
+<text x="66" y="110" font-size="11" font-weight="bold" fill="#2e6fdb">死亡率</text>
+<text x="250" y="126" font-size="11" font-weight="bold" fill="#b3531a">自然増加(人口爆発)</text>
+<g font-size="11" font-weight="bold" fill="#1f3340" text-anchor="middle">
+<text x="128" y="222">第1段階</text><text x="265" y="222">第2段階</text><text x="402" y="222">第3段階</text><text x="540" y="222">第4段階</text></g>
+<g font-size="10" fill="#51626d" text-anchor="middle">
+<text x="128" y="238">多産多死</text><text x="265" y="238">多産少死(途上国)</text><text x="402" y="238">少産少死へ</text><text x="540" y="238">少子高齢化(日本)</text></g>
+<text x="22" y="34" font-size="10" fill="#51626d">高</text><text x="22" y="196" font-size="10" fill="#51626d">低</text>
+</svg><figcaption>【模式図】人口転換モデル ─ 出生率と死亡率の差が「自然増加」。第2段階で人口爆発が起こる(▶ 教科書 p.132–135)</figcaption></figure>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>👥 人口ピラミッド・モーフィング <span class="ref">▶ p.132–135・ワーク8</span></h2>
+    <p class="desc">スライダーで人口転換(多産多死→多産少死→少産少死)を再現。形が語る社会の姿を読み取ろう。</p>
+    <div class="pyr-wrap">
+      <div class="pyr-svg"><svg id="pyrSvg" viewBox="0 0 360 300" role="img" aria-label="人口ピラミッド"></svg></div>
+      <div>
+        <div class="pyr-stage" id="pyrStage"></div>
+        <p id="pyrDesc" style="font-size:.9rem;margin:8px 0 14px"></p>
+        <input type="range" id="pyrRange" min="0" max="100" value="0" aria-label="人口転換の段階">
+        <div class="row" style="justify-content:space-between;font-size:.78rem;color:#51626d"><span>富士山型</span><span>つりがね型</span><span>つぼ型</span></div>
+      </div>
+    </div>
+    <div class="hint"><b>考えよう:</b>人口爆発が続くサブサハラ・アフリカと、少子高齢化の日本。それぞれどんな課題(教育・雇用/労働力・社会保障)が生まれるだろう? 教科書のワーク「人口ピラミッドをつくってみよう」では実データで作図できる。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(貧困・食料・健康・教育)</h2>
+    <div id="quizP222"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 People 用語ミニ辞典 <span class="ref">▶ p.128–145</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>国際貧困ライン</b>1日2.15ドル未満の暮らし=極度の貧困(世界銀行)。</div><div><b>人口爆発</b>死亡率低下+高い出生率による急激な人口増加。</div><div><b>人口転換</b>多産多死→多産少死→少産少死への変化。</div><div><b>合計特殊出生率</b>1人の女性が生涯に産む子どもの数の平均。日本は1.2前後。</div><div><b>識字率</b>文字の読み書きができる人の割合。教育格差の指標。</div><div><b>フェアトレード</b>途上国の生産者から適正価格で買い取る公正な貿易。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「日本の少子高齢化」と「アフリカの人口爆発」── 一見正反対の2つの問題に、共通する解決のカギ(教育・雇用・社会のしくみ)はないだろうか? 人口転換モデルを手がかりに考えよう。</div>
+</section>
+
+<!-- ===================== 2編2章3節 自然との調和 ===================== -->
+<section class="page" id="p223">
+  <div class="crumb">第2編 > 2章 地球的課題と国際協力 > 3節(Prosperity)</div>
+  <div class="pagetitle">自然と調和した豊かな社会に向けて<span class="pgref">📖 教科書 p.146–161</span></div>
+  <p class="pagelead">持続可能な産業、限りある資源、エネルギー問題、都市・居住問題。「Prosperity(豊かさ)」をどう持続可能にするかを考える節。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">経済の豊かさと地球の限界は、両立できるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>持続可能性・トレードオフ</b><br>エネルギーも都市も「便利さ」と「持続可能性」のせめぎ合い。仕分けゲームでその構図をつかもう。</div></div></div><div class="card"><h2><span class="badge b2">基礎</span>⛏️ 資源のキホン</h2><div class="keybox">鉱産資源・エネルギー資源は<b>偏在</b>している(石油は西アジア、レアメタルは特定の国に集中)。資源に乏しい日本は輸入に依存し、<b>エネルギー自給率</b>は1割程度。だからこそ再生可能エネルギーの拡大と<b>循環型社会(3R)</b>への転換が重要になる。</div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>⚡ エネルギー仕分けゲーム ─ 再生可能? 枯渇性? <span class="ref">▶ p.148–153</span></h2>
+    <p class="desc">使ってもくり返し利用できる<b>再生可能エネルギー</b>と、使えばなくなる<b>枯渇性エネルギー</b>。正しく仕分けよう。</p>
+    <div id="sortEnergy"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🏙️ 都市問題の仕分け ─ 先進国? 発展途上国? <span class="ref">▶ p.154–157</span></h2>
+    <p class="desc">都市問題は、先進国と発展途上国で現れ方が違う。表示される問題を仕分けよう。</p>
+    <div id="sortCity"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(資源・エネルギー・都市)</h2>
+    <div id="quizP223"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 Prosperity 用語ミニ辞典 <span class="ref">▶ p.146–161</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>レアメタル</b>埋蔵・生産が偏る希少金属。スマホに不可欠。</div><div><b>都市鉱山</b>使用済み製品にふくまれる金属資源。リサイクルの宝庫。</div><div><b>再生可能エネルギー</b>太陽光・風力・地熱・水力・バイオマスなど。</div><div><b>プライメートシティ</b>人口・機能が一極集中した首位都市。バンコクなど。</div><div><b>スラム</b>住環境の劣悪な過密市街地。急速な都市化で拡大。</div><div><b>コンパクトシティ</b>都市機能を中心部に集約し、持続可能性を高めるまちづくり。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「2050年のあなたの町の電源構成」を考えてみよう。地形・気候・土地利用から見て、あなたの地域に向いている再生可能エネルギーはどれだろう?</div>
+</section>
+
+<!-- ===================== 2編2章4節 地球環境 ===================== -->
+<section class="page" id="p224">
+  <div class="crumb">第2編 > 2章 地球的課題と国際協力 > 4節(Planet)</div>
+  <div class="pagetitle">現役世代と将来世代のための地球<span class="pgref">📖 教科書 p.162–171</span></div>
+  <p class="pagelead">地球温暖化、陸の環境問題(森林破壊・砂漠化)、海の環境問題、生物多様性。「Planet(地球)」を将来世代に引き継ぐために。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">なぜ地球環境問題は、一国だけでは絶対に解決できないのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地球的規模の相互依存</b><br>原因の場所と被害の場所がずれる──そこに環境問題の難しさがある。模式図でしくみから理解しよう。</div></div></div><figure class="model"><svg viewBox="0 0 640 230" role="img" aria-label="温室効果の模式図">
+<rect width="640" height="230" fill="#eaf4fb"/>
+<rect x="0" y="190" width="640" height="40" fill="#79b65f"/>
+<circle cx="70" cy="50" r="26" fill="#f2c14e"/>
+<g stroke="#f2a93b" stroke-width="3"><line x1="100" y1="60" x2="240" y2="150"/><line x1="106" y1="40" x2="300" y2="120"/></g>
+<path d="M40,130 Q320,86 600,130" stroke="#b48ad6" stroke-width="14" fill="none" opacity=".55"/>
+<text x="252" y="96" font-size="12" font-weight="bold" fill="#6b3fa0">温室効果ガスの層(CO₂など)</text>
+<g stroke="#d64545" stroke-width="3"><line x1="330" y1="188" x2="330" y2="138"/><line x1="430" y1="188" x2="430" y2="140"/></g>
+<path d="M330,138 L324,150 L336,150 Z" fill="#d64545"/><path d="M430,140 L424,152 L436,152 Z" fill="#d64545"/>
+<path d="M444,136 Q470,108 452,76" stroke="#d64545" stroke-width="3" fill="none"/>
+<path d="M452,76 L444,86 L458,88 Z" fill="#d64545"/>
+<path d="M344,134 Q372,116 366,158 " stroke="#b3531a" stroke-width="3" fill="none"/>
+<path d="M366,158 L358,148 L372,148 Z" fill="#b3531a"/>
+<text x="26" y="106" font-size="11" font-weight="bold" fill="#b3791a">太陽光が地表を温める</text>
+<text x="300" y="214" font-size="11" font-weight="bold" fill="#7a2222">地表から熱(赤外線)が放出</text>
+<text x="470" y="66" font-size="10.5" fill="#51626d">一部は宇宙へ</text>
+<text x="368" y="178" font-size="10.5" font-weight="bold" fill="#b3531a">一部は地表へ戻る=保温</text>
+<text x="26" y="28" font-size="11" fill="#51626d">ガスが増えすぎる → 戻る熱が増えて気温上昇(地球温暖化)</text>
+</svg><figcaption>【模式図】温室効果のしくみ ─ 温室効果自体は地球を生命の住める温度に保つ働き。問題は「強まりすぎ」(▶ 教科書 p.162–163)</figcaption></figure>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🌡️ 環境問題と対策のマッチング <span class="ref">▶ p.162–167</span></h2>
+    <p class="desc">左の環境問題と右の対策・国際的な枠組みをつなげよう。</p>
+    <div class="match-wrap"><div class="match-col" id="envL"></div><div class="match-col" id="envR"></div></div>
+    <div class="sort-fb" id="envFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP224"></div>
+  </div>
+<div class="card"><h2><span class="badge b2">+α</span>📚 Planet 用語ミニ辞典 <span class="ref">▶ p.162–171</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>パリ協定</b>気温上昇を2℃未満(努力目標1.5℃)に。全ての国が参加。</div><div><b>カーボンニュートラル</b>温室効果ガスの排出を実質ゼロにすること。</div><div><b>砂漠化</b>干ばつ+過放牧・過耕作などで土地が劣化する現象。</div><div><b>生物多様性</b>生き物のつながりの豊かさ。生態系サービスの土台。</div><div><b>マイクロプラスチック</b>5mm以下のプラスチック片。食物連鎖に入り込む。</div><div><b>持続可能な開発</b>将来世代のニーズを損なわずに現在のニーズを満たす開発。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>温暖化の「原因を多く出している地域」と「被害を強く受ける地域」を地図でくらべると、何が見える? この「ずれ」が国際交渉を難しくする理由を説明してみよう。</div>
+</section>
+
+<!-- ===================== 2編2章5節 平和と公正 ===================== -->
+<section class="page" id="p225">
+  <div class="crumb">第2編 > 2章 地球的課題と国際協力 > 5節(Peace・Partnership)</div>
+  <div class="pagetitle">平和で公正な社会に向けて<span class="pgref">📖 教科書 p.172–189</span></div>
+  <p class="pagelead">世界の民族と民族問題、紛争、難民、そして国際協力とパートナーシップ。教科書p.180-181の「国際協力」の主体を整理する節。</p>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">紛争のニュースを「地理の目」で見ると、何が見えてくるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置・歴史的背景・公正</b><br>資源の分布、植民地時代の国境、民族のモザイク。背景を知ることが平和への第一歩だ。</div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🌍 民族・紛争のキホン</h2><div class="keybox"><b>民族</b>は言語・宗教・生活習慣などの文化を共有する集団。世界のほとんどの国は<b>多民族国家</b>だ。紛争の背景には資源・宗教対立・<b>植民地時代に引かれた人為的国境</b>などが複雑にからむ。紛争から逃れた<b>難民</b>は世界で1億人をこえ、UNHCRや各国・NGOが支援している。</div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">体験</span>🕊️ 国際協力の主体 仕分けゲーム <span class="ref">▶ p.178–183・ワーク9</span></h2>
+    <p class="desc">国際協力には、国連・政府・民間(NGO/NPO・企業・個人)とさまざまな主体がいる。表示される活動を、中心となる主体に仕分けよう。</p>
+    <div id="sortCoop"></div>
+    <div class="hint"><b>豆知識:</b>「国境なき医師団(MSF)」は1999年にノーベル平和賞を受賞した国際NGO。アフガニスタンで灌漑事業を行った<b>ペシャワール会</b>のように、日本のNGOも世界で活動している。複数の主体が対話し協力することを<b>マルチステークホルダー・プロセス</b>という。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(民族・紛争・難民・国際協力)</h2>
+    <div id="quizP225"></div>
+  </div>
+<div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>もしあなたが1万円を国際協力に使えるなら、国連・政府系・NGO・フェアトレードのどこに、どう使う? 仕分けゲームで学んだ各主体の強みをふまえて理由を説明しよう。</div>
+</section>
+
+<!-- ===================== 3編1章1節 日本の自然 ===================== -->
+<section class="page" id="p311">
+  <div class="crumb">第3編 持続可能な地域づくりと私たち > 1章 自然環境と防災 > 1節</div>
+  <div class="pagetitle">人々の暮らしを取り巻く自然環境<span class="pgref">📖 教科書 p.192–197</span></div>
+  <p class="pagelead">変動帯に位置する日本の地形、季節風がつくる日本の気候。災害の多さは、豊かな自然の裏返しでもある。</p>
+<div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">災害大国・日本に、人々はなぜ暮らし続けてきたのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>人間と自然環境との関わり</b><br>変動帯の地形と季節風の気候は、災害と恵みの両方をもたらす。日本の自然の「二面性」をとらえよう。</div></div></div><div class="card"><h2><span class="badge b3">基礎</span>🌀 日本の気候を動かす4つの主役</h2><div class="vocab"><div><b>季節風(モンスーン)</b>冬は北西から、夏は南東から。日本の降水の主役。</div><div><b>梅雨前線・秋雨前線</b>暖気と寒気の境目に停滞し、長雨をもたらす。</div><div><b>台風</b>夏〜秋に接近・上陸。大雨・暴風・高潮の複合リスク。</div><div><b>海流(黒潮・親潮)</b>暖流と寒流が気候と豊かな漁場をつくる。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b2">基礎</span>🗾 日本の地形のキホン</h2>
+    <div class="keybox">日本列島は4枚のプレートがぶつかる<b>変動帯</b>に位置し、国土の約4分の3が山地・丘陵。本州中央部には<b>フォッサマグナ</b>(大地溝帯)があり、その西縁が糸魚川・静岡構造線。川は短くて急流のため、大雨で一気に増水しやすい。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🌬️ 季節風シミュレーター ─ 夏と冬を切り替えよう <span class="ref">▶ p.196–197</span></h2>
+    <p class="desc">日本の気候を理解するカギは<b>季節風(モンスーン)</b>。ボタンで夏と冬を切り替えて、雨や雪の降る場所の違いを確かめよう。</p>
+    <div class="row">
+      <button class="chip" id="btnWinter">❄️ 冬</button>
+      <button class="chip" id="btnSummer">☀️ 夏</button>
+    </div>
+    <div class="diagram-box" style="margin-top:12px">
+      <svg viewBox="0 0 480 230" role="img" aria-label="季節風の模式図">
+        <rect width="480" height="230" fill="#eaf4fb"/>
+        <text x="14" y="22" font-size="11" fill="#51626d">日本海側</text>
+        <text x="420" y="22" font-size="11" fill="#51626d">太平洋側</text>
+        <rect x="0" y="190" width="480" height="40" fill="#9fc5e8"/>
+        <path d="M0,190 L150,190 L240,80 L330,190 L480,190 L480,230 L0,230 Z" fill="#caa97a"/>
+        <text x="226" y="70" font-size="11" font-weight="bold" fill="#5a3c14">中央の山地</text>
+        <g id="seasonWinter">
+          <g stroke="#2e6fdb" stroke-width="4" fill="none" marker-end="url(#arrB)">
+            <path d="M20,120 L120,135"/><path d="M20,90 L120,105"/>
+          </g>
+          <text x="18" y="70" font-size="12" font-weight="bold" fill="#2e6fdb">北西の季節風(冷たく乾いた風)</text>
+          <text x="60" y="160" font-size="20">🌨️🌨️</text>
+          <text x="150" y="178" font-size="10" fill="#2e6fdb" font-weight="bold">日本海で水蒸気を補給→大雪</text>
+          <text x="370" y="120" font-size="20">☀️</text>
+          <text x="345" y="150" font-size="10" fill="#b07a2a" font-weight="bold">山をこえて乾燥→晴天続き</text>
+        </g>
+        <g id="seasonSummer" style="display:none">
+          <g stroke="#e8702a" stroke-width="4" fill="none" marker-end="url(#arrO)">
+            <path d="M460,120 L360,135"/><path d="M460,90 L360,105"/>
+          </g>
+          <text x="250" y="70" font-size="12" font-weight="bold" fill="#e8702a">南東の季節風(暖かく湿った風)</text>
+          <text x="380" y="165" font-size="20">🌧️🌧️</text>
+          <text x="300" y="182" font-size="10" fill="#e8702a" font-weight="bold">太平洋側に雨をもたらす</text>
+          <text x="70" y="120" font-size="20">☀️</text>
+          <text x="40" y="150" font-size="10" fill="#b07a2a" font-weight="bold">日本海側は晴れて高温に</text>
+        </g>
+        <defs>
+          <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2e6fdb"/></marker>
+          <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#e8702a"/></marker>
+        </defs>
+      </svg>
+    </div>
+    <div class="hint"><b>考えよう:</b>北陸が世界有数の豪雪地帯になる理由を、「季節風+日本海+山地」の3語で説明してみよう。フェーン現象や、梅雨・台風も日本の降水の特徴だ。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🗾 日本の気候区分マッチング <span class="ref">▶ p.196–197</span></h2>
+    <p class="desc">日本の気候は大きく6つに分けられる。気候区と特徴をつなげよう。</p>
+    <div class="match-wrap"><div class="match-col" id="jclimL"></div><div class="match-col" id="jclimR"></div></div>
+    <div class="sort-fb" id="jclimFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP311"></div>
+  </div>
+<div class="card"><h2><span class="badge b3">+α</span>📚 日本の自然 用語ミニ辞典 <span class="ref">▶ p.192–197</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>変動帯</b>プレート境界に沿う、地震・火山の活発な地帯。</div><div><b>フォッサマグナ</b>本州中央の大地溝帯。西縁が糸魚川・静岡構造線。</div><div><b>リアス海岸</b>沈水した入り組んだ海岸。三陸海岸など。津波が増幅しやすい。</div><div><b>やませ</b>初夏に東北の太平洋側に吹く冷たい北東風。冷害の原因。</div><div><b>フェーン現象</b>山をこえた風が高温・乾燥になる現象。</div><div><b>ヒートアイランド</b>都市の気温が周辺より高くなる現象。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「災害の多い場所」と「人が住みたい場所」は、なぜ重なってしまうのだろう? 扇状地・三角州・火山のふもとを例に、恵みとリスクの表裏一体を説明してみよう。</div>
+</section>
+
+<!-- ===================== 3編1章2節 変動帯と防災 ===================== -->
+<section class="page" id="p312">
+  <div class="crumb">第3編 > 1章 自然環境と防災 > 2節</div>
+  <div class="pagetitle">変動帯の自然と防災(地震・火山)<span class="pgref">📖 教科書 p.198–207</span></div>
+  <p class="pagelead">プレート境界地震と活断層地震、火山の災害と恵み。地形図の読み取り(FILE11)ともつながる、防災学習の核となる節。</p>
+<div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">地震や噴火そのものは止められないのに、なぜ被害は減らせるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>防災・減災</b><br>しくみを知る→危険な場所を知る→行動を決める。科学と地理の知識が命を守る武器になる。</div></div></div><div class="card"><h2><span class="badge b3">基礎</span>📏 マグニチュードと震度のちがい</h2><div class="keybox"><b>マグニチュード(M)</b>は地震そのものの規模(エネルギー)で1つの地震に1つ。<b>震度</b>は各地点での揺れの強さで場所ごとに違う(0〜7の10段階)。Mが小さくても、震源が近い直下型では大きな震度になる。</div><figure class="model"><svg viewBox="0 0 640 210" role="img" aria-label="海溝型地震と津波の発生(3コマ)">
+<rect width="640" height="210" fill="#fbfdfc"/>
+<g><rect x="10" y="20" width="195" height="150" fill="#eaf4fb" stroke="#d8e4e0"/>
+<rect x="10" y="50" width="195" height="120" fill="#cfe5f7"/>
+<path d="M10,110 L110,124 L205,170 L10,170 Z" fill="#8a9aa4"/>
+<path d="M110,124 Q150,116 205,112 L205,170 L110,170 Z" fill="#caa97a"/>
+<path d="M150,118 L138,104" stroke="#d64545" stroke-width="3"/>
+<text x="20" y="40" font-size="11" font-weight="bold" fill="#1f3340">① ひずみがたまる</text>
+<text x="20" y="196" font-size="10" fill="#51626d">陸側の先端が引きずり込まれる</text></g>
+<g><rect x="222" y="20" width="195" height="150" fill="#eaf4fb" stroke="#d8e4e0"/>
+<rect x="222" y="50" width="195" height="120" fill="#cfe5f7"/>
+<path d="M222,110 L322,124 L417,170 L222,170 Z" fill="#8a9aa4"/>
+<path d="M322,124 Q360,102 417,100 L417,170 L322,170 Z" fill="#caa97a"/>
+<text x="338" y="92" font-size="16">💥</text>
+<text x="232" y="40" font-size="11" font-weight="bold" fill="#d64545">② 限界ではね上がる=地震</text>
+<text x="232" y="196" font-size="10" fill="#51626d">プレート境界が一気にずれ動く</text></g>
+<g><rect x="434" y="20" width="195" height="150" fill="#eaf4fb" stroke="#d8e4e0"/>
+<rect x="434" y="50" width="195" height="120" fill="#cfe5f7"/>
+<path d="M434,50 Q500,34 560,50 T629,50" stroke="#1f5a8c" stroke-width="4" fill="none"/>
+<path d="M434,110 L534,124 L629,170 L434,170 Z" fill="#8a9aa4"/>
+<path d="M534,124 Q570,104 629,102 L629,170 L534,170 Z" fill="#caa97a"/>
+<g stroke="#1f5a8c" stroke-width="3"><line x1="520" y1="100" x2="520" y2="62"/></g>
+<text x="444" y="40" font-size="11" font-weight="bold" fill="#1f5a8c">③ 海水が持ち上がる=津波</text>
+<text x="444" y="196" font-size="10" fill="#51626d">沿岸へ高速で伝わる→すぐ高台へ!</text></g>
+</svg><figcaption>【模式図】海溝型地震と津波発生の3ステップ(▶ 教科書 p.198–199)</figcaption></figure></div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🫨 地震2タイプ比較カード ─ タップ! <span class="ref">▶ p.198–201</span></h2>
+    <div class="flip-grid">
+      <div class="flip f3" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>プレート境界地震(海溝型)</h3><div class="big">🌊</div><p>海のプレートが沈み込む境界で発生。</p><span class="tapnote">タップ →</span></div>
+          <div class="face back"><h3>特徴と備え</h3><ul><li>マグニチュードが大きく、<b>津波</b>をともなうことがある</li><li>例:東北地方太平洋沖地震(2011)、想定される南海トラフ地震</li><li>揺れたら・警報が出たら<b>すぐ、より高い所へ</b></li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+      <div class="flip f3" role="button" tabindex="0">
+        <div class="flip-inner">
+          <div class="face front"><h3>活断層地震(内陸型・直下型)</h3><div class="big">⚡</div><p>内陸の活断層がずれて発生。</p><span class="tapnote">タップ →</span></div>
+          <div class="face back"><h3>特徴と備え</h3><ul><li>規模は海溝型より小さくても、<b>真下で起こる</b>ため被害が大きい</li><li>例:兵庫県南部地震(1995)、熊本地震(2016)</li><li>家具固定・耐震化・出火防止が命を守る</li></ul><span class="tapnote">← もどる</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🌋 火山 ─ 「恵み」と「災害」仕分けゲーム <span class="ref">▶ p.202–205</span></h2>
+    <p class="desc">火山は脅威であると同時に、私たちの暮らしを豊かにもしてくれる。表示される項目を仕分けよう。</p>
+    <div id="sortVolcano"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP312"></div>
+  </div>
+<div class="card"><h2><span class="badge b3">+α</span>📚 地震・火山 用語ミニ辞典 <span class="ref">▶ p.198–207</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>南海トラフ</b>駿河湾〜九州沖のプレート境界。巨大地震が想定される。</div><div><b>液状化</b>砂地盤が揺れで液体状に。埋立地・旧河道で発生しやすい。</div><div><b>緊急地震速報</b>P波を検知してS波の前に警報。数秒〜数十秒の猶予。</div><div><b>火砕流</b>高温ガスと岩石が高速で流下。事前避難しかない。</div><div><b>カルデラ</b>巨大噴火でできた大きなくぼ地。阿蘇など。</div><div><b>ジオパーク</b>大地の遺産を保護・活用する地域認定制度。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「想定外」をなくすことはできない。では、想定外が起きたときにも命を守れる人と守れない人の差は、どこから生まれるのだろう? 知識・訓練・想像力の3語を使って答えてみよう。</div>
+</section>
+
+<!-- ===================== 3編1章3節 湿潤地域と防災 ===================== -->
+<section class="page" id="p313">
+  <div class="crumb">第3編 > 1章 自然環境と防災 > 3節</div>
+  <div class="pagetitle">湿潤地域の自然と防災(大雨・水害)<span class="pgref">📖 教科書 p.208–213</span></div>
+  <p class="pagelead">大雨による災害とその備え。水害ハザードマップの読み取り(ワーク11)、マイ・タイムライン作成(ワーク12)に対応する節。</p>
+<div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">同じ大雨でも、被害が出る場所と出ない場所があるのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>土地の成り立ちとリスク</b><br>答えは「地形」にある。模式断面図とハザードマップで、雨の行き先を読めるようになろう。</div></div></div><figure class="model"><svg viewBox="0 0 660 250" role="img" aria-label="水害リスクの模式断面図">
+<rect width="660" height="250" fill="#fbfdfc"/>
+<path d="M0,180 L0,60 L80,180 Z" fill="#8a9aa4"/>
+<path d="M80,180 L170,150 L200,180 Z" fill="#e3cf9e"/>
+<rect x="200" y="120" width="90" height="60" fill="#d9c9a3"/>
+<rect x="290" y="180" width="370" height="70" fill="#cfe0c8"/>
+<rect x="350" y="168" width="60" height="12" fill="#efe3b8"/>
+<path d="M470,180 L470,150 L505,150 L505,180 Z" fill="#9bb38a"/>
+<rect x="505" y="158" width="60" height="22" fill="#7fb2dd"/>
+<path d="M565,180 L565,150 L600,150 L600,180 Z" fill="#9bb38a"/>
+<rect x="600" y="170" width="60" height="80" fill="#efe3b8"/>
+<g font-size="14"><text x="364" y="164">🏠</text><text x="222" y="112">🏫</text><text x="120" y="146">🍇</text><text x="620" y="166">🏙️</text></g>
+<g font-size="10.5" font-weight="bold">
+<text x="4" y="40" fill="#7a2222">山地:土砂災害⚠️</text>
+<text x="86" y="206" fill="#8a6a1f">扇状地:土石流⚠️</text>
+<text x="206" y="206" fill="#3b6a8c">台地:水害に強い◎(縁は崖崩れ⚠️)</text>
+<text x="332" y="148" fill="#8a6a1f">自然堤防:集落○</text>
+<text x="298" y="232" fill="#7a2222">後背湿地・旧河道:浸水・液状化⚠️</text>
+<text x="508" y="148" fill="#1f5a8c">川(堤防)</text>
+<text x="598" y="232" fill="#7a2222">三角州:洪水・高潮・液状化⚠️</text>
+</g>
+<text x="300" y="30" font-size="11" fill="#51626d">土地の高さと成り立ちがリスクを決める ─ 地理院地図「地形分類」で自分の家を確かめよう</text>
+</svg><figcaption>【模式図】水害リスクの断面図 ─ 同じ雨でも、土地の高さと成り立ちで運命が分かれる(▶ 教科書 p.208–212・FILE11 地形図の読み取り p.206)</figcaption></figure>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>⛰️ 地形と災害リスククイズ <span class="ref">▶ p.206–212・FILE11</span></h2>
+    <p class="desc">「どんな地形か」がわかれば「どんな災害に注意すべきか」がわかる。ハザードマップを読む力の土台だ。</p>
+    <div id="quizP313a"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🚨 警戒レベルと行動のマッチング <span class="ref">▶ p.210–211</span></h2>
+    <p class="desc">大雨のとき発表される「警戒レベル」。レベルと取るべき行動を正しくつなげよう。</p>
+    <figure class="model"><svg viewBox="0 0 640 210" role="img" aria-label="外水氾濫と内水氾濫">
+<g><rect x="10" y="16" width="300" height="160" fill="#fbfdfc" stroke="#d8e4e0"/>
+<rect x="10" y="120" width="300" height="56" fill="#cfe0c8"/>
+<path d="M40,120 L40,84 L80,84 L80,120 Z" fill="#9bb38a"/>
+<rect x="80" y="74" width="70" height="46" fill="#7fb2dd"/>
+<path d="M150,120 L150,84 L168,84" fill="none" stroke="#9bb38a" stroke-width="10"/>
+<path d="M168,90 Q220,98 280,128" stroke="#2e6fdb" stroke-width="8" fill="none"/>
+<g font-size="13"><text x="216" y="118">🏠</text><text x="256" y="118">🏠</text></g>
+<text x="20" y="38" font-size="12" font-weight="bold" fill="#1f5a8c">外水氾濫</text>
+<text x="20" y="56" font-size="10" fill="#51626d">川の水が堤防を越える・壊す</text>
+<text x="20" y="196" font-size="10" fill="#51626d">川沿いの低地が一気に深く浸水</text></g>
+<g><rect x="330" y="16" width="300" height="160" fill="#fbfdfc" stroke="#d8e4e0"/>
+<rect x="330" y="120" width="300" height="56" fill="#cfe0c8"/>
+<rect x="330" y="112" width="300" height="10" fill="#7fb2dd" opacity=".8"/>
+<g font-size="13"><text x="380" y="112">🏠</text><text x="430" y="112">🏢</text><text x="480" y="112">🏠</text></g>
+<g font-size="13" fill="#2e6fdb"><text x="370" y="60">🌧️</text><text x="430" y="48">🌧️</text><text x="490" y="60">🌧️</text></g>
+<circle cx="545" cy="128" r="9" fill="none" stroke="#3b4a54" stroke-width="3"/>
+<path d="M545,120 L545,100" stroke="#2e6fdb" stroke-width="4"/>
+<text x="340" y="38" font-size="12" font-weight="bold" fill="#1f5a8c">内水氾濫</text>
+<text x="340" y="56" font-size="10" fill="#51626d">排水が追いつかず街に水がたまる</text>
+<text x="340" y="196" font-size="10" fill="#51626d">下水・マンホールから逆流。都市部で多発</text></g>
+</svg><figcaption>【模式図】外水氾濫と内水氾濫 ─ 都市では「内水」も要警戒(▶ 教科書 p.208–211)</figcaption></figure>
+    <div class="match-wrap"><div class="match-col" id="lvlL"></div><div class="match-col" id="lvlR"></div></div>
+    <div class="sort-fb" id="lvlFb"></div>
+    <div class="hint"><b>鉄則:</b><b>レベル5(緊急安全確保)を待ってはいけない。</b>レベル4までに全員避難が原則。レベル3では高齢者など避難に時間がかかる人が避難を始める。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>⏱️ マイ・タイムラインを作ろう ─ 台風接近! <span class="ref">▶ p.213 ワーク12</span></h2>
+    <p class="desc">大型台風が3日後に接近する予報。取るべき行動を<b>早い順</b>にタップして並べよう。</p>
+    <div class="tl-pool" id="tlPool"></div>
+    <div style="margin-top:14px;font-weight:800;font-family:'M PLUS Rounded 1c'">あなたのタイムライン</div>
+    <div class="tl-answer" id="tlAnswer"></div>
+    <div class="sort-fb" id="tlFb"></div>
+    <button class="chip" id="tlReset" style="margin-top:10px">やり直す</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ</h2>
+    <div id="quizP313b"></div>
+  </div>
+<div class="card"><h2><span class="badge b3">+α</span>📚 大雨災害 用語ミニ辞典 <span class="ref">▶ p.208–213</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>線状降水帯</b>積乱雲が列をなし同じ場所に猛烈な雨を降らせ続ける。</div><div><b>特別警報</b>数十年に一度の重大な危険。ただちに命を守る行動を。</div><div><b>キキクル</b>気象庁の危険度分布。土砂・浸水・洪水の危険を地図で確認。</div><div><b>内水氾濫</b>排水が追いつかず市街地に水がたまる。都市部で多発。</div><div><b>流域治水</b>ダムや堤防だけに頼らず、流域全体で水を受け止める考え方。</div><div><b>マイ・タイムライン</b>台風接近時などの自分の避難行動計画(▶ワーク12)。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>冒頭の問い「同じ大雨でも被害が分かれるのはなぜか」に、模式断面図の言葉(扇状地・自然堤防・後背湿地・旧河道・三角州)を最低3つ使って、自分の言葉で答えてみよう。</div>
+</section>
+
+<!-- ===================== 3編1章4節 災害への備え ===================== -->
+<section class="page" id="p314">
+  <div class="crumb">第3編 > 1章 自然環境と防災 > 4節</div>
+  <div class="pagetitle">自然災害への備え<span class="pgref">📖 教科書 p.214–217</span></div>
+  <p class="pagelead">自助・共助・公助、複合災害、伝統的な治水の知恵。「地理」を学んだ高校生だからこそできる備えと貢献を考える、防災学習の総まとめ。</p>
+<div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">「備える」とは、モノをそろえることだけだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>自助・共助・公助</b><br>モノ・情報・人のつながり。3つの備えのバランスを、ゲームを通して点検しよう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🤲 自助・共助・公助 仕分けゲーム <span class="ref">▶ p.214–215</span></h2>
+    <p class="desc">阪神・淡路大震災では、生き埋めからの救助の<b>約77%が近隣住民など</b>によるものだった。共助の力は想像以上に大きい。</p>
+    <div id="sortJKK"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🎒 非常用持ち出し袋に入れるのはどれ? 全部選んで判定! <span class="ref">▶ p.214</span></h2>
+    <p class="desc">避難のとき本当に役立つ物を選んでタップし(複数選択)、「判定する」を押そう。</p>
+    <div class="pick-grid" id="pickBag"></div>
+    <div class="row" style="margin-top:12px"><button class="chip" id="pickJudge">判定する!</button><button class="chip" id="pickReset">リセット</button></div>
+    <div class="sort-fb" id="pickFb"></div>
+  </div>
+
+<div class="card"><h2><span class="badge b3">基礎</span>🏞️ 伝統的な治水の知恵 ─ 模式図で見る <span class="ref">▶ p.217 地形図で見る伝統的な治水対策</span></h2><p class="desc">「水を完全に閉じ込める」のではなく「上手に受け流す」。先人の発想は、近年の<b>流域治水</b>にも受け継がれている。</p><figure class="model"><svg viewBox="0 0 640 220" role="img" aria-label="霞堤と輪中の模式図">
+<g><rect x="10" y="14" width="380" height="192" fill="#fbfdfc" stroke="#d8e4e0"/>
+<path d="M30,40 C130,60 250,50 370,70 L370,110 C250,90 130,100 30,80 Z" fill="#7fb2dd"/>
+<g stroke="#9bb38a" stroke-width="9" fill="none">
+<path d="M40,96 L150,112"/><path d="M180,104 L290,120"/><path d="M320,112 L370,118"/>
+</g>
+<path d="M168,118 Q150,140 120,150" stroke="#2e6fdb" stroke-width="5" fill="none" stroke-dasharray="7 5"/>
+<path d="M120,150 L132,144 L130,158 Z" fill="#2e6fdb"/>
+<text x="96" y="176" font-size="10.5" font-weight="bold" fill="#1f5a8c">増水時:切れ目から水を逃がし勢いを弱める</text>
+<text x="20" y="34" font-size="12" font-weight="bold" fill="#14694a">霞堤(切れ目のある堤防)</text>
+<text x="200" y="146" font-size="10" fill="#51626d">水が引くと自然に川へ戻る</text></g>
+<g><rect x="404" y="14" width="226" height="192" fill="#fbfdfc" stroke="#d8e4e0"/>
+<ellipse cx="517" cy="118" rx="88" ry="62" fill="#cfe0c8" stroke="#9bb38a" stroke-width="8"/>
+<g font-size="13"><text x="478" y="112">🏠</text><text x="516" y="130">🏠</text><text x="548" y="108">🏠</text></g>
+<rect x="498" y="78" width="30" height="20" fill="#caa97a"/>
+<text x="468" y="72" font-size="10" font-weight="bold" fill="#5a3c14">水屋(避難用の高い建物)</text>
+<path d="M404,40 Q517,18 630,40" stroke="#7fb2dd" stroke-width="10" fill="none"/>
+<text x="414" y="34" font-size="12" font-weight="bold" fill="#14694a">輪中(集落を堤防で囲む)</text>
+<text x="430" y="196" font-size="10" fill="#51626d">木曽川下流など低地の知恵</text></g>
+</svg><figcaption>【模式図】左:霞堤(武田信玄の信玄堤などに見られる、切れ目で水の勢いを弱める堤防) 右:輪中(木曽川下流の低地で集落を堤防で囲み、水屋を備えた)</figcaption></figure></div>
+  <div class="card">
+    <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ(複合災害・伝統的治水)</h2>
+    <div id="quizP314"></div>
+  </div>
+<div class="card"><h2><span class="badge b3">+α</span>📚 備え 用語ミニ辞典 <span class="ref">▶ p.214–217</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>自助・共助・公助</b>自分で守る・地域で守る・行政が守る。基本は自助。</div><div><b>在宅避難</b>自宅が安全なら家にとどまる避難。避難=避難所とは限らない。</div><div><b>分散避難</b>親戚宅・ホテル・車中など避難先を分散させる考え方。</div><div><b>ローリングストック</b>備蓄品を日常で食べて買い足す備蓄法。</div><div><b>複合災害</b>地震+津波+原発事故のように災害が連鎖・同時発生。</div><div><b>自然災害伝承碑</b>過去の災害の教訓を伝える碑。地理院地図の地図記号にも。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「備える」=モノ+情報+人のつながり。あなたの家の備えをこの3つで採点すると何点? 一番足りないものを今週中に1つ補う計画を立てよう。</div>
+</section>
+
+<!-- ===================== 3編2章 地域調査 ===================== -->
+<section class="page" id="p321">
+  <div class="crumb">第3編 > 2章 生活圏の調査と地域の展望</div>
+  <div class="pagetitle">地域調査の方法と地域の展望<span class="pgref">📖 教科書 p.220–227</span></div>
+  <p class="pagelead">1年間の学びの集大成。テーマ設定から野外調査、統計地図での表現、発表まで──「地理の力」で自分の生活圏を調べ、未来を展望しよう。</p>
+<div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">地理の力で、自分の町の「10年後」をどう描けるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域の課題と展望</b><br>1年間で手に入れた道具(地図・GIS・統計・防災の知識)を総動員して、生活圏の調査に挑もう。</div></div></div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🚶 地域調査の手順 並べ替えチャレンジ <span class="ref">▶ p.220–227・ワーク13</span></h2>
+    <p class="desc">地域調査の正しい流れを、順番にタップして並べよう。</p>
+    <div class="tl-pool" id="svPool"></div>
+    <div style="margin-top:14px;font-weight:800;font-family:'M PLUS Rounded 1c'">調査の流れ</div>
+    <div class="tl-answer" id="svAnswer"></div>
+    <div class="sort-fb" id="svFb"></div>
+    <button class="chip" id="svReset" style="margin-top:10px">やり直す</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">体験</span>🗺️ 統計地図の使い分けマッチング <span class="ref">▶ p.15 ワーク2</span></h2>
+    <p class="desc">調べた結果は地図で表現すると伝わる。「何を表したいか」と「適した統計地図」をつなげよう(ワーク2「さまざまな統計地図」対応)。</p>
+    <figure class="model"><svg viewBox="0 0 660 190" role="img" aria-label="統計地図4種のミニ見本">
+<g font-size="11" font-weight="bold" fill="#1f3340">
+<rect x="10" y="14" width="150" height="130" fill="#fbfdfc" stroke="#d8e4e0"/>
+<g fill="#2e6fdb"><circle cx="40" cy="50" r="3"/><circle cx="52" cy="60" r="3"/><circle cx="46" cy="74" r="3"/><circle cx="64" cy="52" r="3"/><circle cx="110" cy="100" r="3"/><circle cx="122" cy="92" r="3"/><circle cx="118" cy="110" r="3"/><circle cx="90" cy="70" r="3"/><circle cx="76" cy="96" r="3"/></g>
+<text x="28" y="166">ドットマップ(分布)</text>
+<rect x="175" y="14" width="150" height="130" fill="#fbfdfc" stroke="#d8e4e0"/>
+<path d="M185,30 h60 v50 h-60 Z" fill="#fbd2ad"/><path d="M245,30 h70 v50 h-70 Z" fill="#e8702a"/>
+<path d="M185,80 h70 v54 h-70 Z" fill="#f5a86b"/><path d="M255,80 h60 v54 h-60 Z" fill="#fdeee3"/>
+<text x="184" y="166">階級区分図(割合)</text>
+<rect x="340" y="14" width="150" height="130" fill="#fbfdfc" stroke="#d8e4e0"/>
+<circle cx="380" cy="60" r="22" fill="#7fa8e8" opacity=".8"/><circle cx="445" cy="90" r="12" fill="#7fa8e8" opacity=".8"/><circle cx="400" cy="112" r="7" fill="#7fa8e8" opacity=".8"/>
+<text x="346" y="166">図形表現図(絶対量)</text>
+<rect x="505" y="14" width="150" height="130" fill="#fbfdfc" stroke="#d8e4e0"/>
+<path d="M530,110 Q570,70 620,46" stroke="#1e8f5a" stroke-width="10" fill="none"/>
+<path d="M620,46 L602,48 L612,62 Z" fill="#1e8f5a"/>
+<path d="M535,116 Q580,104 614,96" stroke="#1e8f5a" stroke-width="4" fill="none"/>
+<path d="M614,96 L600,94 L606,104 Z" fill="#1e8f5a"/>
+<text x="516" y="166">流線図(移動・太さ=量)</text>
+</g>
+</svg><figcaption>【模式図】統計地図4種の見本 ─ 「何を表したいか」で選ぶ(▶ 教科書 p.14–15 ワーク2)</figcaption></figure>
+    <div class="match-wrap"><div class="match-col" id="smapL"></div><div class="match-col" id="smapR"></div></div>
+    <div class="sort-fb" id="smapFb"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b3">確認</span>✏️ 最終チェッククイズ(地域調査の達人)</h2>
+    <div id="quizP321"></div>
+  </div>
+<div class="card"><h2><span class="badge b3">+α</span>📚 地域調査 用語ミニ辞典 <span class="ref">▶ p.220–227</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>仮説</b>調査の前に立てる「予想される答え」。調査の羅針盤。</div><div><b>ルートマップ</b>野外調査の経路と観察ポイントを記した地図。</div><div><b>景観観察</b>土地利用・建物・看板などを観て地域を読み取る方法。</div><div><b>聞き取り調査</b>地域の人への取材。目的を伝え許可を得るのがマナー。</div><div><b>階級区分図</b>割合を色の濃淡で表す統計地図。割合に使い、絶対量には使わない。</div><div><b>提言</b>調査結果をもとに地域の未来への提案をまとめること。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>1年間の総まとめ。「地図とGIS」「世界の多様性」「地球的課題」「防災」の4つの学びを1つずつ使って、あなたの町の10年後を良くする調査テーマを1つ提案してみよう。それが、地理総合のゴールだ。</div>
+</section>
+
+<div class="pagenav">
+  <button class="pn-btn" id="pnPrev"><small>← 前のページ</small><span id="pnPrevT"></span></button>
+  <button class="pn-btn" id="pnNext" style="text-align:right"><small>次のページ →</small><span id="pnNextT"></span></button>
+</div>
+
+</main>
+
+<footer>
+  地理総合 インタラクティブ・ラボ 年間版|教科書(第一学習社『地理総合』)の目次構成に対応した補助教材<br>
+  <button class="reset-link" onclick="location.reload()">すべてリセットして最初から</button>
+</footer>
+
+<script>
+/* ================= ナビゲーション ================= */
+const pages=[
+ ['p11','1編1章 球面上の世界と地図'],['p12','1編2章 結びつく世界'],
+ ['p211','2編1章1節 地形'],['p212','2編1章2節 気候'],['p213','2編1章3節 衣'],['p214','2編1章4節 食'],['p215','2編1章5節 住'],['p216','2編1章6節 産業'],['p217','2編1章7節 言語・宗教'],['p218','2編1章8節 多文化共生'],
+ ['p221','2編2章1節 SDGs'],['p222','2編2章2節 尊厳と平等'],['p223','2編2章3節 自然との調和'],['p224','2編2章4節 地球環境'],['p225','2編2章5節 平和と公正'],
+ ['p311','3編1章1節 日本の自然'],['p312','3編1章2節 変動帯と防災'],['p313','3編1章3節 湿潤地域と防災'],['p314','3編1章4節 災害への備え'],['p321','3編2章 地域調査']
+];
+const unitOf=id=>id[1];
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('.pagechip').forEach(c=>c.classList.toggle('active',c.dataset.page===id));
+  const u=unitOf(id);
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.u===u));
+  document.querySelectorAll('.chipbar').forEach((b,i)=>b.classList.toggle('active',String(i+1)===u));
+  const idx=pages.findIndex(p=>p[0]===id);
+  const prev=pages[idx-1],next=pages[idx+1];
+  const pp=document.getElementById('pnPrev'),pn=document.getElementById('pnNext');
+  pp.disabled=!prev; pn.disabled=!next;
+  document.getElementById('pnPrevT').textContent=prev?prev[1]:'─';
+  document.getElementById('pnNextT').textContent=next?next[1]:'─ 1年間おつかれさま!';
+  pp.onclick=()=>prev&&showPage(prev[0]);
+  pn.onclick=()=>next&&showPage(next[0]);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>showPage({1:'p11',2:'p211',3:'p311'}[t.dataset.u]));
+});
+document.querySelectorAll('.pagechip').forEach(c=>c.addEventListener('click',()=>showPage(c.dataset.page)));
+showPage('p11');
+
+/* ================= 共通エンジン ================= */
+function makeQuiz(containerId,questions){
+  const box=document.getElementById(containerId);
+  let i=0,score=0;
+  function render(){
+    if(i>=questions.length){
+      const msg= score===questions.length?'🎉 パーフェクト!':score>=questions.length-1?'✨ すばらしい! あと一歩!':'💪 解説を読み直してもう一度!';
+      box.innerHTML='<div class="quiz-score" style="font-size:1.15rem">結果:'+score+' / '+questions.length+' 問正解  '+msg+'</div><button class="chip quiz-next">もう一度</button>';
+      box.querySelector('button').onclick=()=>{i=0;score=0;render();};
+      return;
+    }
+    const q=questions[i];
+    let html='<div class="quiz-q">Q'+(i+1)+'/'+questions.length+'. '+q.q+'</div><div class="quiz-opts">';
+    q.o.forEach((o,oi)=>{html+='<button class="quiz-opt" data-i="'+oi+'">'+o+'</button>';});
+    html+='</div><div class="quiz-fb"></div>';
+    box.innerHTML=html;
+    const fb=box.querySelector('.quiz-fb');
+    box.querySelectorAll('.quiz-opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(box.dataset.done)return;
+        box.dataset.done='1';
+        const ok=Number(btn.dataset.i)===q.a;
+        if(ok){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');box.querySelectorAll('.quiz-opt')[q.a].classList.add('correct');}
+        fb.innerHTML=(ok?'⭕ 正解!':'❌ ざんねん…')+'<span class="exp">'+q.e+'</span>';
+        fb.classList.add('show');
+        const next=document.createElement('button');
+        next.className='chip quiz-next';next.textContent= i===questions.length-1?'結果を見る':'次の問題へ';
+        next.onclick=()=>{delete box.dataset.done;i++;render();};
+        box.appendChild(next);
+      };
+    });
+  }
+  render();
+}
+function makeSort(containerId,cats,items){
+  const box=document.getElementById(containerId);
+  const data=[...items].sort(()=>Math.random()-.5);
+  let i=0,score=0;
+  box.innerHTML='<div class="sort-current"></div><div class="sort-btns"></div><div class="sort-fb"></div><div class="quiz-score"></div>';
+  const cur=box.querySelector('.sort-current'),btns=box.querySelector('.sort-btns'),fb=box.querySelector('.sort-fb'),sc=box.querySelector('.quiz-score');
+  cats.forEach(c=>{
+    const b=document.createElement('button');b.className='sort-btn';b.style.background=c.color;
+    b.innerHTML=c.label+(c.sub?'<small>'+c.sub+'</small>':'');b.dataset.k=c.key;
+    b.onclick=()=>{
+      const it=data[i];if(!it)return;
+      const ok=c.key===it[1];if(ok)score++;
+      const catLabel=cats.find(x=>x.key===it[1]).label;
+      fb.style.color=ok?'var(--ok)':'var(--alert)';
+      fb.textContent=(ok?'⭕ 正解! ':'❌ 正解は「'+catLabel+'」。')+(it[2]||'');
+      i++;step();
+    };
+    btns.appendChild(b);
+  });
+  function step(){
+    if(i>=data.length){
+      cur.textContent='🎉 全問終了!';
+      sc.textContent='結果:'+score+' / '+data.length+' 問正解'+(score===data.length?' ─ 完璧!':' ─ まちがえた項目を確認しよう');
+      btns.querySelectorAll('button').forEach(b=>b.disabled=true);
+      const re=document.createElement('button');re.className='chip';re.style.marginTop='10px';re.textContent='もう一度';
+      re.onclick=()=>makeSort(containerId,cats,items);box.appendChild(re);
+      return;
+    }
+    cur.textContent='「'+data[i][0]+'」はどれ?';
+    sc.textContent=i+' / '+data.length+' 問終了(正解 '+score+')';
+  }
+  step();
+}
+function makeMatch(lId,rId,fbId,pairs,doneMsg){
+  const colL=document.getElementById(lId),colR=document.getElementById(rId),fb=document.getElementById(fbId);
+  colL.innerHTML='';colR.innerHTML='';fb.textContent='';
+  let pickL=null,pickR=null,matched=0;
+  pairs.forEach((p,i)=>{const b=document.createElement('button');b.className='match-item';b.textContent=p[0];b.dataset.pair=i;colL.appendChild(b);});
+  [...pairs.keys()].sort(()=>Math.random()-.5).forEach(i=>{const b=document.createElement('button');b.className='match-item';b.textContent=pairs[i][1];b.dataset.pair=i;colR.appendChild(b);});
+  function tryMatch(){
+    if(pickL===null||pickR===null)return;
+    const l=colL.querySelector('[data-pair="'+pickL+'"]'),r=colR.querySelector('[data-pair="'+pickR+'"]');
+    if(pickL===pickR){
+      l.classList.remove('picked');r.classList.remove('picked');
+      l.classList.add('done');r.classList.add('done');l.disabled=r.disabled=true;matched++;
+      fb.style.color='var(--ok)';
+      fb.textContent= matched===pairs.length? '🎉 コンプリート! '+(doneMsg||''):'⭕ ナイスマッチ!('+matched+'/'+pairs.length+')';
+    }else{
+      [l,r].forEach(x=>{x.classList.add('shake');setTimeout(()=>x.classList.remove('shake'),350);x.classList.remove('picked');});
+      fb.style.color='var(--alert)';fb.textContent='❌ 組み合わせが違うみたい。もう一度!';
+    }
+    pickL=pickR=null;
+  }
+  colL.addEventListener('click',e=>{const b=e.target.closest('.match-item');if(!b||b.disabled)return;colL.querySelectorAll('.match-item').forEach(x=>x.classList.remove('picked'));b.classList.add('picked');pickL=Number(b.dataset.pair);tryMatch();});
+  colR.addEventListener('click',e=>{const b=e.target.closest('.match-item');if(!b||b.disabled)return;colR.querySelectorAll('.match-item').forEach(x=>x.classList.remove('picked'));b.classList.add('picked');pickR=Number(b.dataset.pair);tryMatch();});
+}
+function makeOrder(poolId,ansId,fbId,resetId,steps,maskRe,okMsg){
+  const pool=document.getElementById(poolId),ans=document.getElementById(ansId),fb=document.getElementById(fbId);
+  let picked=[];
+  function init(){
+    picked=[];ans.innerHTML='';fb.textContent='';pool.innerHTML='';
+    [...steps.keys()].sort(()=>Math.random()-.5).forEach(i=>{
+      const b=document.createElement('button');b.className='tl-item';
+      b.textContent= maskRe? steps[i].replace(maskRe,'❓ '):steps[i];
+      b.dataset.i=i;
+      b.onclick=()=>{
+        picked.push(Number(b.dataset.i));b.remove();
+        const d=document.createElement('div');d.className='tl-item';d.dataset.n=picked.length+'.';d.textContent=steps[Number(b.dataset.i)];
+        ans.appendChild(d);
+        if(picked.length===steps.length){
+          const ok=picked.every((v,k)=>v===k);
+          fb.style.color=ok?'var(--ok)':'var(--alert)';
+          fb.textContent=ok?'🎉 完璧! '+(okMsg||''):'❌ 順番が違うところがあるみたい。「やり直す」でもう一度!';
+        }
+      };
+      pool.appendChild(b);
+    });
+  }
+  document.getElementById(resetId).onclick=init;
+  init();
+}
+/* フリップ(全ページ共通・委譲) */
+document.addEventListener('click',e=>{const f=e.target.closest('.flip');if(f)f.classList.toggle('open');});
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('flip')){e.preventDefault();e.target.classList.toggle('open');}
+});
+
+/* ================= p11 球面上の世界と地図 ================= */
+const cities=[
+ {n:'東京',off:9,lon:'東経135°'},{n:'ロンドン',off:0,lon:'経度0°(本初子午線)'},
+ {n:'デリー',off:5.5,lon:'東経82.5°'},{n:'ドバイ',off:4,lon:'東経60°'},
+ {n:'シドニー',off:10,lon:'東経150°'},{n:'ニューヨーク',off:-5,lon:'西経75°'},
+ {n:'ロサンゼルス',off:-8,lon:'西経120°'},{n:'リオデジャネイロ',off:-3,lon:'西経45°'}
+];
+const selA=document.getElementById('cityA'),selB=document.getElementById('cityB');
+cities.forEach((c,i)=>{selA.add(new Option(c.n,i));selB.add(new Option(c.n,i));});
+selA.value=0;selB.value=1;
+function fmt(d){return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
+function renderClocks(){
+  const a=cities[selA.value],b=cities[selB.value],now=Date.now();
+  const da=new Date(now+a.off*3600000),db=new Date(now+b.off*3600000);
+  const days=['日','月','火','水','木','金','土'];
+  const block=(c,d)=>'<div class="city">'+c.n+'</div><div class="lon">'+c.lon+'</div><div class="time">'+fmt(d)+'</div><div class="date">'+(d.getUTCMonth()+1)+'月'+d.getUTCDate()+'日('+days[d.getUTCDay()]+')</div>';
+  document.getElementById('clockA').innerHTML=block(a,da);
+  document.getElementById('clockB').innerHTML=block(b,db);
+  const diff=a.off-b.off,abs=Math.abs(diff),hh=Math.floor(abs),half=abs%1?'.5':'';
+  document.getElementById('diffVal').textContent='時差 '+hh+half+'時間';
+  document.getElementById('diffFormula').textContent= diff===0?'同じ時刻!':(diff>0?a.n:b.n)+'のほうが進んでいる(経度差÷15)';
+}
+selA.addEventListener('change',renderClocks);selB.addEventListener('change',renderClocks);
+renderClocks();setInterval(renderClocks,30000);
+
+makeSort('sortMapType',
+ [{label:'一般図',sub:'地形・道路などを幅広く',color:'#2e6fdb',key:'g'},{label:'主題図',sub:'特定のテーマを表す',color:'#7a4fc9',key:'t'}],
+ [['2万5千分の1地形図','g','国土地理院の実測図。地形・建物・道路をまんべんなく表す一般図の代表。'],
+  ['20万分の1地勢図','g','広い範囲の地形を概観する一般図。'],
+  ['人口分布のドットマップ','t','人口という特定テーマを表す主題図。'],
+  ['天気図','t','気圧・前線という特定テーマの主題図。'],
+  ['鉄道路線図','t','路線・駅というテーマに特化。距離や形はデフォルメされる。'],
+  ['洪水ハザードマップ','t','浸水リスクという特定テーマの主題図。地形図に重ねて作られる。']]);
+
+[['lyrElev','gElev'],['lyrFlood','gFlood'],['lyrShelter','gShelter']].forEach(([cb,g])=>{
+  document.getElementById(cb).addEventListener('change',e=>{document.getElementById(g).style.display=e.target.checked?'':'none';});
+});
+
+makeQuiz('quizP11',[
+ {q:'経度0°の本初子午線が通る都市は?',o:['パリ','ロンドン','ニューヨーク','カイロ'],a:1,e:'ロンドン郊外の旧グリニッジ天文台を通る。ここを基準に東経・西経を180°ずつに分ける。'},
+ {q:'日本の標準時子午線は?',o:['東経120°','東経135°','東経140°','東経150°'],a:1,e:'兵庫県明石市などを通る東経135°。135÷15=9なので、日本はロンドンより9時間進んでいる。'},
+ {q:'地球上のある地点の正反対側の地点を何という?',o:['対蹠点','回帰点','極点','基準点'],a:0,e:'対蹠点(たいせきてん)。日本の対蹠点は南アメリカ大陸の沖合。時差はちょうど12時間になる。'},
+ {q:'2万5千分の1地形図と20万分の1地勢図、同じ範囲をより詳しく表せるのは?',o:['2万5千分の1','20万分の1','どちらも同じ','縮尺と詳しさは無関係'],a:0,e:'分母が小さいほど縮尺が大きく、詳しい地図になる。地理院地図はシームレスにズームできるのが強み。'},
+ {q:'地理院地図の「ツール」でできないことは?',o:['距離や面積の計測','断面図の作成','3D表示','天気予報の発表'],a:3,e:'計測・断面図・並べて比較・3Dなどができる。天気予報は気象庁の仕事。函館山の断面図づくりは教科書ワーク3にも登場。'},
+ {q:'スマートフォンの地図アプリで現在地がわかるのは、何のおかげ?',o:['GNSS(人工衛星による測位)','方位磁針','うわさ','偶然'],a:0,e:'GPSやみちびきなどのGNSS。位置情報はナビ・防災・物流・スポーツまで社会を支える基盤になっている(▶p.16-19)。'}
+]);
+
+/* ================= p12 結びつく世界 ================= */
+const terrTexts={
+ airspace:['領空','領土と領海の上空。他国の航空機は許可なく飛行できない。人工衛星が飛ぶ宇宙空間は含まれない。'],
+ land:['領土','国の主権がおよぶ陸地。日本の国土面積は約38万km²で世界60位ほど。'],
+ tsea:['領海','基線(海岸線)から12海里(約22km)。沿岸国の主権がおよぶ。外国船にも無害通航権はある。'],
+ eez:['排他的経済水域(EEZ)','基線から200海里(約370km)まで。水産資源や海底資源の探査・開発の権利が沿岸国にある。船の航行や上空の飛行は自由。離島が多い日本はEEZ+領海の面積が世界有数!'],
+ high:['公海','どの国にも属さない海。どの国の船も自由に航行できる(公海自由の原則)。']
+};
+document.querySelectorAll('.terr-part').forEach(p=>{
+  p.addEventListener('click',()=>{
+    const t=terrTexts[p.dataset.t];
+    document.getElementById('terrInfo').innerHTML='<h3>'+t[0]+'</h3>'+t[1];
+  });
+});
+makeMatch('orgL','orgR','orgFb',[
+ ['EU(ヨーロッパ連合)','ヨーロッパの27か国。共通通貨ユーロ、国境をこえた移動の自由'],
+ ['ASEAN(東南アジア諸国連合)','東南アジアの10か国。経済成長が著しく日本との結びつきも強い'],
+ ['USMCA','アメリカ・メキシコ・カナダの3か国による貿易協定'],
+ ['AU(アフリカ連合)','アフリカの55の国・地域が加盟する連合'],
+ ['APEC','アジア太平洋の21の国・地域による経済協力の枠組み']
+],'国家をこえた結びつきが世界各地で進んでいる!');
+makeSort('sortTransport',
+ [{label:'海上輸送',sub:'船',color:'#2e6fdb',key:'sea'},{label:'航空輸送',sub:'飛行機',color:'#e8702a',key:'air'},{label:'陸上輸送',sub:'鉄道・自動車',color:'#1e8f5a',key:'land'}],
+ [['鉄鉱石や原油を大量に運ぶ','sea','重くてかさばる資源は専用船で。安いが時間がかかる。'],
+  ['コンテナで雑貨や部品を世界へ','sea','規格化されたコンテナは積み替えが効率的。世界の貿易を支える。'],
+  ['半導体や医薬品をすばやく届ける','air','軽くて高価な貨物は運賃の高い航空でも採算が合う。'],
+  ['生花や高級食材など鮮度が命の品','air','スピード勝負の貨物は航空輸送の出番。'],
+  ['都市の通勤・通学の大量輸送','land','定時性に優れた鉄道は大量輸送が得意。環境負荷も小さい。'],
+  ['家の玄関まで荷物を届ける宅配便','land','戸口から戸口へ(ドア・ツー・ドア)は自動車の独壇場。']]);
+makeQuiz('quizP12',[
+ {q:'国家の3要素に含まれないものは?',o:['領域','国民','主権','宗教'],a:3,e:'国家は領域・国民・主権で成り立つ。領域は領土・領海・領空からなる。'},
+ {q:'排他的経済水域(EEZ)の範囲は基線から?',o:['12海里','24海里','200海里','370海里'],a:2,e:'200海里(約370km)。水産・鉱産資源の権利が沿岸国に認められる。領海は12海里。'},
+ {q:'北方領土に含まれない島は?',o:['択捉島','国後島','色丹島','竹島'],a:3,e:'北方領土は択捉島・国後島・色丹島・歯舞群島。日本固有の領土だがロシアが不法に占拠している。竹島(島根県)は韓国が不法占拠している、別の領土問題。'},
+ {q:'コンテナ輸送が世界の貿易を変えた理由は?',o:['船が速くなったから','規格統一で積み替えが効率化したから','運賃が無料だから','飛行機より速いから'],a:1,e:'大きさが規格化されたコンテナは、船・トラック・鉄道の間の積み替えがスムーズ。輸送コストを劇的に下げた。'},
+ {q:'多くの路線が乗り入れ、乗り継ぎの拠点となる空港を何という?',o:['ハブ空港','ターミナル駅','ドックヤード','ゲートウェイ港'],a:0,e:'自転車の車輪の中心(ハブ)にたとえた呼び名。仁川(韓国)やドバイなどが代表例。'}
+]);
+
+/* ================= p211 地形 ================= */
+makeMatch('riverL','riverR','riverFb',[
+ ['V字谷(上流)','川の侵食でできる深い谷。ダムや発電に利用されることも'],
+ ['扇状地(谷の出口)','水はけがよく果樹園に。末端(扇端)には湧水と集落'],
+ ['氾濫原(中・下流)','自然堤防の微高地に集落、低い後背湿地は水田に'],
+ ['三角州(河口)','低平で水害に弱いが、平らで広く都市が発達しやすい']
+],'川の上流から河口まで、地形と土地利用はセットで覚えよう!');
+makeSort('sortKikoChikei',
+ [{label:'乾燥地形',color:'#d8a23a',key:'dry'},{label:'氷河地形',color:'#5b9bd5',key:'ice'},{label:'カルスト地形',color:'#8a6fc9',key:'karst'},{label:'サンゴ礁',color:'#2aa9a0',key:'coral'}],
+ [['ワジ(涸れ谷)','dry','ふだんは水のない谷。まれな大雨のときだけ川になる。'],
+  ['オアシス','dry','砂漠で水が得られる場所。集落や交易の中継地に。'],
+  ['カール(圏谷)','ice','山頂付近の半椀状のくぼ地。氷河がけずった跡。長野県の涸沢カールなど。'],
+  ['モレーン','ice','氷河が運んだ岩くずが積もった堤防状の小丘。'],
+  ['フィヨルド','ice','U字谷に海水が浸入した奥深い入り江。ノルウェーが有名。'],
+  ['ドリーネ','karst','石灰岩が雨水に溶けてできた円形のくぼ地。'],
+  ['鍾乳洞','karst','地下に発達する洞窟。秋吉台(山口県)の秋芳洞など。'],
+  ['環礁','coral','島が沈み、リング状のサンゴ礁だけが残ったもの。'],
+  ['堡礁','coral','島とサンゴ礁の間に礁湖(ラグーン)をもつ。グレートバリアリーフなど。']]);
+makeQuiz('quizP211',[
+ {q:'プレート内部にあり、地震が少なくなだらかな地域を何という?',o:['変動帯','安定地域(安定陸塊)','造山帯','沈み込み帯'],a:1,e:'長い侵食でなだらかになった安定地域。対して変動帯では高くけわしい山脈と地震・火山。'},
+ {q:'日本列島が位置するのはどんな場所?',o:['広がる境界','狭まる境界(沈み込み帯)','ずれる境界','プレートの中央'],a:1,e:'海のプレートが沈み込む狭まる境界。海溝と並行に弧状列島が連なり、地震・火山が多い。'},
+ {q:'扇状地の中央部(扇央)の伝統的な土地利用は?',o:['水田','果樹園','港','塩田'],a:1,e:'粒の粗い土砂で水はけがよく、水田には不向き。ぶどうや桃などの果樹園に利用されてきた(甲府盆地など)。'},
+ {q:'リアス海岸の説明として正しいのは?',o:['砂が堆積した遠浅の海岸','山地が沈水してできた入り組んだ海岸','サンゴ礁の海岸','氷河がけずった海岸'],a:1,e:'谷に海水が入り込んだ出入りの多い海岸。波が静かで養殖に好適だが、湾奥では津波が高くなりやすい。'},
+ {q:'砂漠を流れるナイル川のように、湿潤地域から流れてくる川を何という?',o:['内陸河川','外来河川','運河','伏流水'],a:1,e:'外来河川。砂漠地域の貴重な水源で、流域には古くから文明が栄えた。'}
+]);
+
+/* ================= p212 気候 ================= */
+const climates=[
+ {k:'Af',name:'熱帯雨林気候',city:'シンガポール',t:[26,27,27,28,28,28,27,27,27,27,27,26],p:[240,160,190,180,170,130,150,170,170,190,260,290],
+  feat:'一年中高温多雨で年較差がごく小さい。毎日のようにスコールが降り、常緑広葉樹の熱帯雨林が広がる。',
+  life:'👕 風通しのよい簡素な衣服 🏠 湿気と熱を逃がす高床式住居 🍚 キャッサバ・タロいも・米'},
+ {k:'Aw',name:'サバナ気候',city:'バンコク(タイ)',t:[26,28,29,30,30,29,29,28,28,28,27,26],p:[10,30,30,90,150,160,160,190,320,230,50,10],
+  feat:'雨季と乾季がはっきり分かれる熱帯。丈の長い草原(サバナ)に樹木が点在し、野生動物の楽園に。',
+  life:'🌾 雨季を活かした稲作 🐄 牛の放牧 🏠 高床式の住居'},
+ {k:'BW',name:'砂漠気候',city:'カイロ(エジプト)',t:[14,15,18,22,26,28,28,28,26,24,19,15],p:[5,4,4,1,1,0,0,0,0,1,3,6],
+  feat:'降水が極端に少なく植物がほとんど育たない。昼夜の気温差(日較差)が大きい。',
+  life:'👳 日差しと砂を防ぐ長袖のゆったりした衣服 🏠 日干しれんが・厚い壁・小さな窓 🌴 オアシス農業(なつめやし)'},
+ {k:'Cs',name:'地中海性気候',city:'ローマ(イタリア)',t:[8,9,11,14,18,22,25,25,21,17,12,9],p:[80,75,65,55,35,20,10,25,65,95,110,95],
+  feat:'夏に乾燥し、冬に雨が降る。夏の強い日差しが特徴で、世界的な観光地が多い。',
+  life:'🫒 乾燥に強いオリーブ・ぶどう・オレンジの栽培(地中海式農業) 🏠 白い壁の石造りの家'},
+ {k:'Cfa',name:'温暖湿潤気候',city:'東京',t:[5,6,9,14,19,22,26,27,23,18,12,8],p:[52,56,118,125,138,168,154,168,210,198,93,51],
+  feat:'四季がはっきり。夏は高温多湿、冬は比較的低温。梅雨や台風で降水が多い。大陸東岸に分布し季節風の影響大。',
+  life:'👘 衣替えの文化 🏠 夏の蒸し暑さに対応した通気性のよい住まい 🍚 稲作がさかん'},
+ {k:'Df',name:'亜寒帯(冷帯)湿潤気候',city:'イルクーツク(ロシア)',t:[-18,-15,-7,2,10,15,18,15,9,1,-9,-16],p:[13,8,12,18,33,56,79,71,52,25,19,16],
+  feat:'冬は−20℃近い厳寒、夏は意外と暖かい。年較差が世界最大級。タイガ(針葉樹林)が広がる。',
+  life:'🧥 毛皮や厚手のコート 🏠 永久凍土を守る高床の建物・二重窓 🥔 ライ麦・じゃがいも'},
+ {k:'ET',name:'ツンドラ気候',city:'ウトキアグヴィク(アラスカ)',t:[-26,-26,-25,-17,-7,1,5,4,-1,-9,-18,-24],p:[4,4,3,4,4,8,23,26,17,12,6,5],
+  feat:'最暖月でも10℃未満。樹木は育たず、短い夏にコケ類や草が育つ。',
+  life:'🧤 毛皮の防寒着 🦌 トナカイの遊牧、狩猟・漁労 🏠 高床の住居'}
+];
+function drawHythergraph(svgId,c,hideCity){
+  const svg=document.getElementById(svgId);
+  const W=360,H=260,L=42,R=42,T=26,B=34,pw=(W-L-R)/12;
+  let s='<text x="'+(W/2)+'" y="16" text-anchor="middle" font-size="13" font-weight="bold" fill="#1f3340">'+(hideCity?'??? の雨温図':c.city+' の雨温図')+'</text>';
+  s+='<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#aab8b2"/><line x1="'+(W-R)+'" y1="'+T+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#aab8b2"/><line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#aab8b2"/>';
+  const tY=v=>T+(30-v)/60*(H-T-B);
+  for(let v=-30;v<=30;v+=10){s+='<text x="'+(L-6)+'" y="'+(tY(v)+4)+'" text-anchor="end" font-size="9" fill="#c0392b">'+v+'</text><line x1="'+L+'" y1="'+tY(v)+'" x2="'+(W-R)+'" y2="'+tY(v)+'" stroke="#eef2f0"/>';}
+  s+='<text x="12" y="'+(T-8)+'" font-size="9" fill="#c0392b">気温℃</text>';
+  const pY=v=>(H-B)-v/300*(H-T-B);
+  for(let v=0;v<=300;v+=100){s+='<text x="'+(W-R+6)+'" y="'+(pY(v)+4)+'" font-size="9" fill="#2e6fdb">'+v+'</text>';}
+  s+='<text x="'+(W-R+2)+'" y="'+(T-8)+'" font-size="9" fill="#2e6fdb">降水mm</text>';
+  c.p.forEach((v,i)=>{const x=L+i*pw+3,h=v/300*(H-T-B);s+='<rect x="'+x+'" y="'+((H-B)-h)+'" width="'+(pw-6)+'" height="'+h+'" fill="#7fb2dd" rx="2"/>';});
+  s+='<polyline points="'+c.t.map((v,i)=>(L+i*pw+pw/2)+','+tY(v)).join(' ')+'" fill="none" stroke="#d64545" stroke-width="2.5"/>';
+  c.t.forEach((v,i)=>{s+='<circle cx="'+(L+i*pw+pw/2)+'" cy="'+tY(v)+'" r="2.6" fill="#d64545"/>';});
+  for(let i=0;i<12;i++){s+='<text x="'+(L+i*pw+pw/2)+'" y="'+(H-B+14)+'" text-anchor="middle" font-size="8.5" fill="#51626d">'+(i+1)+'</text>';}
+  s+='<text x="'+(W/2)+'" y="'+(H-4)+'" text-anchor="middle" font-size="9" fill="#51626d">月</text>';
+  svg.innerHTML=s;
+}
+const cbtns=document.getElementById('climateBtns');
+climates.forEach((c,i)=>{
+  const b=document.createElement('button');b.className='chip';b.textContent=c.k+' '+c.name;
+  b.onclick=()=>selectClimate(i);cbtns.appendChild(b);
+});
+function selectClimate(i){
+  const c=climates[i];
+  cbtns.querySelectorAll('.chip').forEach((b,bi)=>b.classList.toggle('sel-u2',bi===i));
+  drawHythergraph('hgSvg',c,false);
+  document.getElementById('climateInfo').innerHTML='<h3>'+c.k+' '+c.name+'('+c.city+')</h3><p>'+c.feat+'</p><div class="life"><b>暮らしの工夫</b><br>'+c.life+'</div>';
+}
+selectClimate(4);
+/* 雨温図あてゲーム */
+let guessAns=-1,guessStreak=0,guessLock=false;
+document.getElementById('guessStart').onclick=()=>{
+  let i;do{i=Math.floor(Math.random()*climates.length);}while(i===guessAns);
+  guessAns=i;guessLock=false;
+  drawHythergraph('guessSvg',climates[i],true);
+  const opts=new Set([i]);
+  while(opts.size<4)opts.add(Math.floor(Math.random()*climates.length));
+  const arr=[...opts].sort(()=>Math.random()-.5);
+  const box=document.getElementById('guessOpts');box.innerHTML='';
+  const fb=document.getElementById('guessFb');fb.className='quiz-fb';fb.textContent='';
+  arr.forEach(ci=>{
+    const b=document.createElement('button');b.className='quiz-opt';b.textContent=climates[ci].k+' '+climates[ci].name;
+    b.onclick=()=>{
+      if(guessLock)return;guessLock=true;
+      const ok=ci===guessAns;
+      if(ok){b.classList.add('correct');guessStreak++;}
+      else{b.classList.add('wrong');guessStreak=0;
+        [...box.children].forEach(x=>{if(x.textContent.startsWith(climates[guessAns].k))x.classList.add('correct');});}
+      fb.innerHTML=(ok?'⭕ 正解!':'❌ ざんねん!')+'<span class="exp">'+climates[guessAns].city+'('+climates[guessAns].k+')でした。'+climates[guessAns].feat+'</span>';
+      fb.classList.add('show');
+      document.getElementById('guessStreak').textContent='🔥 連続正解:'+guessStreak;
+    };
+    box.appendChild(b);
+  });
+};
+makeQuiz('quizP212',[
+ {q:'ケッペンが気候区分の基準として最も重視したのは?',o:['風速','植生','人口','標高'],a:1,e:'植生(植物の分布)は気温と降水量を総合的に反映するため。記号のA〜Eは赤道から極へほぼ順に並ぶ。'},
+ {q:'赤道付近で一年中雨が多い理由は?',o:['台風が多いから','強い日射で上昇気流が起こるから(赤道低圧帯)','氷河が解けるから','偏西風のため'],a:1,e:'温められた空気が上昇して雲ができ、雨を降らせる。逆に緯度20〜30度付近は下降気流の中緯度(亜熱帯)高圧帯で乾燥し、砂漠が多い。'},
+ {q:'地中海性気候(Cs)の降水の特徴は?',o:['夏に多く冬に少ない','夏に少なく冬に多い','一年中多い','一年中ほぼゼロ'],a:1,e:'夏は中緯度高圧帯に覆われて乾燥。だからこそ乾燥に強いオリーブやぶどうの栽培が発達した。'},
+ {q:'気温の年較差が最も大きくなりやすいのは?',o:['赤道直下の島','大陸内部の高緯度地域','温帯の海沿い','熱帯の高原'],a:1,e:'海から遠い大陸内部は暖まりやすく冷えやすい(隔海度大)。シベリア内陸では年較差が60℃をこえることも。'},
+ {q:'南半球の都市の雨温図で、気温の折れ線はどんな形?',o:['山型','谷型','水平','ジグザグ'],a:1,e:'北半球と季節が逆なので、6〜8月(現地の冬)に向かって下がる谷型になる。雨温図読み取りの重要ポイント!'},
+ {q:'赤道近くのアンデス山中の都市キトが一年中春のような気候なのはなぜ?',o:['海に近いから','標高が高いから(高山気候)','氷河があるから','風が強いから'],a:1,e:'標高が100m上がると気温は約0.6℃下がる。低緯度でも高地は過ごしやすく、ラパスなどの高山都市が発達した。'}
+]);
+
+/* ================= p213 衣 ================= */
+makeMatch('clothL','clothR','clothFb',[
+ ['西アジアの砂漠','白く長袖のゆったりした衣服。日差しと砂から体を守る'],
+ ['北極圏の先住民','カリブーやアザラシの毛皮で厳しい寒さを防ぐ'],
+ ['アンデス高地','アルパカの毛のポンチョと帽子。寒さと強い紫外線に対応'],
+ ['インド','一枚布のサリー。高温多湿でも風通しがよい'],
+ ['モンゴルの草原','乗馬しやすく防寒性の高い民族衣装デール']
+],'衣服は環境への適応の知恵!');
+makeQuiz('quizP213',[
+ {q:'砂漠の人々が暑いのに長袖を着る理由は?',o:['寒いから','強い日差しと砂から肌を守るため','おしゃれのため','規則だから'],a:1,e:'直射日光と乾燥から体を守り、汗の蒸発をゆるやかにする。色は熱を反射する白系が多い。'},
+ {q:'ムスリム(イスラーム教徒)の女性が髪をおおう布の例は?',o:['サリー','ヒジャブ','ポンチョ','チマ・チョゴリ'],a:1,e:'ヒジャブなどのかぶり物は宗教にもとづく装い。社会環境(宗教)が衣服を決める例だ。'},
+ {q:'ファストファッションの普及が生んだ課題は?',o:['服が高くなった','大量廃棄や生産国の労働環境の問題','服が買えなくなった','流行がなくなった'],a:1,e:'安く速く大量に作る一方、売れ残りの廃棄や途上国の低賃金労働が問題に。エシカル消費の視点が大切。'},
+ {q:'世界中でジーンズやTシャツが着られるようになった現象を何という?',o:['衣のグローバル化','衣の砂漠化','衣の高度化','衣の空洞化'],a:0,e:'洋装の世界的普及=衣のグローバル化。一方で、儀式や祭りでは民族衣装が大切にされ続けている。'}
+]);
+
+/* ================= p214 食 ================= */
+makeMatch('foodL','foodR','foodFb',[
+ ['米','モンスーンアジアが主産地。高温多雨の夏に育つ'],
+ ['小麦','ヨーロッパ〜西アジアなど。パンや麺に加工して食べる'],
+ ['とうもろこし','メキシコなど中南米が起源。トルティーヤに'],
+ ['タロいも・ヤムいも','オセアニアや熱帯の島々の伝統的な主食'],
+ ['じゃがいも','アンデス原産。冷涼なヨーロッパにも広まった']
+],'主食の地域性は気候とセットで理解しよう!');
+makeSort('sortAgri',
+ [{label:'自給的農業',sub:'自分たちが食べる',color:'#1e8f5a',key:'self'},{label:'商業的農業',sub:'市場で売る',color:'#2e6fdb',key:'com'},{label:'企業的農業',sub:'大資本・輸出向け',color:'#7a4fc9',key:'ent'}],
+ [['焼畑農業','self','森を焼いた灰を肥料に、いも類などを栽培。熱帯の伝統農業。'],
+  ['乾燥帯の遊牧','self','水と草を求めて家畜と移動。ゲルなどの移動式住居とセット。'],
+  ['アジアの集約的稲作','self','狭い土地に多くの労働力を投入。自給的性格が強い。'],
+  ['ヨーロッパの混合農業','com','穀物栽培と家畜飼育を組み合わせて販売する。'],
+  ['地中海式農業','com','夏の乾燥に強いオリーブ・ぶどうなどを栽培して販売。'],
+  ['大都市近郊の酪農・園芸農業','com','新鮮な牛乳や野菜・花を都市の市場へ。'],
+  ['プランテーション農業','ent','カカオ・コーヒー・油やしなどを大規模単一栽培し輸出。'],
+  ['アメリカの企業的穀物農業','ent','広大な農地で機械化された小麦栽培。世界へ輸出。'],
+  ['フィードロットでの肉牛肥育','ent','大資本が穀物飼料で牛を集中肥育。']]);
+makeQuiz('quizP214',[
+ {q:'米づくりがさかんな「モンスーンアジア」の気候の特徴は?',o:['一年中乾燥','夏の季節風がもたらす高温多雨','一年中氷点下','昼夜の寒暖差のみ'],a:1,e:'夏の季節風(モンスーン)が大量の雨をもたらす。米は単位面積あたりの収量が多く、アジアの稠密な人口を支えてきた。'},
+ {q:'とうもろこしを薄く焼いた中南米の主食は?',o:['ナン','トルティーヤ','フォー','クスクス'],a:1,e:'メキシコなどのトルティーヤ。とうもろこしは中南米原産で、現在は飼料やバイオ燃料としても重要。'},
+ {q:'日本の食料自給率(カロリーベース)はおよそ?',o:['約90%','約70%','約38%','約10%'],a:2,e:'約4割弱と主要先進国で低い水準。食のグローバル化・洋風化と国内農業の課題が背景にある。'},
+ {q:'宗教と食の組み合わせで正しいのは?',o:['イスラーム−牛肉を食べない','ヒンドゥー教−豚肉のみ食べる','イスラーム−豚肉を食べない','仏教−魚だけ食べる'],a:2,e:'イスラームは豚肉と酒が禁忌(ハラールが許された食品)。ヒンドゥー教は牛を神聖視して牛肉を避ける。'},
+ {q:'「食のグローバル化」の例として適切でないのは?',o:['日本で多国籍料理店が増える','寿司が世界で人気になる','ファストフードチェーンの世界展開','各地の郷土料理が地元だけで食べ続けられる'],a:3,e:'郷土料理の継承は食の「地域性」。グローバル化と地域性は対になる概念で、両方の視点が大切。'}
+]);
+
+/* ================= p215 住 ================= */
+makeMatch('houseL','houseR','houseFb',[
+ ['熱帯(東南アジアなど)','高床式で湿気と熱気・洪水を避ける。木や葉が材料'],
+ ['乾燥帯(西アジア・北アフリカ)','日干しれんがの厚い壁と小さな窓で暑さを防ぐ'],
+ ['冷帯(シベリアのタイガ)','豊富な木材の丸太の家。永久凍土を守る高床の建物も'],
+ ['地中海沿岸','白く塗った石造りの家で強い日差しを反射'],
+ ['モンゴル高原','移動式のゲル。木の骨組みにフェルトをかぶせる']
+],'住居は「手に入る材料」×「気候への工夫」!');
+makeQuiz('quizP215',[
+ {q:'シベリアの集合住宅が高床になっている理由は?',o:['洪水を避けるため','永久凍土が建物の熱で解けて傾くのを防ぐため','風通しのため','見晴らしのため'],a:1,e:'暖房の熱が地面に伝わると永久凍土が解けて建物が傾く。床を浮かせて熱を遮断している。熱帯の高床(湿気・通風)と理由が違う点に注意!'},
+ {q:'乾燥帯で日干しれんがの家が多い理由は?',o:['木材が乏しく、雨が少ないから','雪に強いから','安く輸入できるから','法律で決まっているから'],a:0,e:'樹木が育たないため土を材料に。雨が少ないので日干しれんがでも崩れにくい。厚い壁は昼の暑さと夜の冷えを和らげる。'},
+ {q:'白川郷の合掌造りの急な屋根の理由は?',o:['日差しを反射する','豪雪を滑り落とすため','台風に強い','材料の節約'],a:1,e:'世界有数の豪雪地帯ならではの工夫。屋根裏は養蚕にも使われた。日本の住も気候への適応の宝庫。'},
+ {q:'都市化が進むと住まいはどう変化しやすい?',o:['伝統的住居だけが増える','鉄筋コンクリートの集合住宅が増える','住居がなくなる','すべて高床式になる'],a:1,e:'人口集中で土地が限られ、高層の集合住宅が増える。「住」のグローバル化・画一化と、伝統的住居の保存が課題になる。'}
+]);
+
+/* ================= p216 産業 ================= */
+makeSort('sortIndustry',
+ [{label:'第1次産業',sub:'自然から採取',color:'#1e8f5a',key:'i1'},{label:'第2次産業',sub:'加工してつくる',color:'#2e6fdb',key:'i2'},{label:'第3次産業',sub:'サービスを提供',color:'#e8702a',key:'i3'}],
+ [['稲作農家','i1','農業は第1次産業。自然に直接働きかける。'],
+  ['遠洋漁業','i1','漁業も第1次産業。'],
+  ['林業','i1','森林資源の採取は第1次産業。'],
+  ['自動車工場','i2','製造業は第2次産業の代表。'],
+  ['建設会社','i2','建設業も第2次産業。'],
+  ['パンの製造','i2','原料を加工する食品工業は第2次産業。'],
+  ['コンビニエンスストア','i3','商業・小売は第3次産業。'],
+  ['観光ガイド','i3','サービス業は第3次産業。'],
+  ['ソフトウェア開発','i3','情報通信業も第3次産業。先進国で割合が高い。']]);
+makeQuiz('quizP216',[
+ {q:'経済の発展につれて就業人口の中心が1次→2次→3次産業へ移ることを何という?',o:['産業の空洞化','産業構造の高度化','産業革命','地産地消'],a:1,e:'産業構造の高度化。先進国では第3次産業の就業者が7割をこえる国も多い。'},
+ {q:'アメリカのICT産業の一大拠点といえば?',o:['シリコンバレー','ウォール街','デトロイト','ハリウッド'],a:0,e:'サンフランシスコ近郊のシリコンバレー。大学・人材・投資が集まり、世界に影響を与える企業が次々生まれる(学習を深めよう1)。'},
+ {q:'インドのバンガロールでICT産業が発達した理由として適切なのは?',o:['石油が豊富だから','英語人材が豊富で、アメリカと昼夜が逆の時差を活かせるから','寒冷な気候だから','海に面しているから'],a:1,e:'準公用語の英語と理数系人材、米国と約半日の時差で24時間開発体制が可能に。ソフトウェア産業が急成長した。'},
+ {q:'日本の自動車メーカーが海外での現地生産を進めた背景は?',o:['日本の道路が狭いから','貿易摩擦の解消と現地市場への対応','船がなかったから','義務だったから'],a:1,e:'1980年代の貿易摩擦をきっかけに欧米で現地生産を拡大。雇用を生み、市場のニーズに合わせやすい利点も。'},
+ {q:'「世界の工場」と呼ばれた中国の近年の変化は?',o:['農業国に戻った','巨大な「世界の市場」としても重要になった','工業が消滅した','人口が10倍になった'],a:1,e:'経済成長で所得が上がり、巨大な消費市場に。賃金上昇で工場が東南アジアへ移る動きも(学習を深めよう2)。'}
+]);
+
+/* ================= p217 言語・宗教 ================= */
+makeQuiz('quizP217',[
+ {q:'民族をこえて広がる「世界宗教」の組み合わせは?',o:['キリスト教・イスラーム・仏教','ヒンドゥー教・ユダヤ教・神道','キリスト教・ヒンドゥー教・神道','イスラーム・ユダヤ教・道教'],a:0,e:'三大世界宗教。ヒンドゥー教・ユダヤ教は特定の民族と結びつく民族宗教。'},
+ {q:'世界で最もムスリム(イスラーム教徒)人口が多い国は?',o:['サウジアラビア','インドネシア','エジプト','トルコ'],a:1,e:'東南アジアのインドネシア。イスラーム=西アジアだけ、というイメージは要修正!交易を通じて広がった。'},
+ {q:'タイやミャンマーで広く信仰される仏教の宗派は?',o:['大乗仏教','上座部仏教','チベット仏教','禅宗'],a:1,e:'上座部仏教。男性が一生に一度出家する習慣がある国も。日本に伝わったのは大乗仏教。'},
+ {q:'中南米の多くの国でスペイン語が公用語なのはなぜ?',o:['気候が似ているから','かつてスペインの植民地だったから','国連が決めたから','英語より簡単だから'],a:1,e:'言語の分布には植民地支配の歴史が刻まれている。ブラジルはポルトガルの植民地だったためポルトガル語。'},
+ {q:'1つの国で複数の公用語をもつ国の例は?',o:['日本','スイス','韓国','モンゴル'],a:1,e:'スイスはドイツ語・フランス語・イタリア語・ロマンシュ語の4公用語。多民族国家では複数公用語が珍しくない。'},
+ {q:'ムスリムが1日5回の礼拝で向く方角にある聖地は?',o:['エルサレム','メッカ','バチカン','ブッダガヤ'],a:1,e:'サウジアラビアのメッカ。世界中のモスクや空港の礼拝室には方角(キブラ)が示されている。'}
+]);
+
+/* ================= p218 多文化共生 ================= */
+makeQuiz('quizP218a',[
+ {q:'ムスリムの転校生と給食や外食をするとき、まず気をつけることは?',o:['好き嫌いをなくすよう勧める','豚肉やアルコールを含まないか確認し、本人に希望を聞く','同じものを強制する','話題にしない'],a:1,e:'ハラールへの配慮が基本。何より「本人に聞く」こと。宗教の実践には個人差があるので決めつけないのが大切。'},
+ {q:'日本語が得意でない外国人住民に防災情報を伝える工夫は?',o:['難しい漢字で正確に','「やさしい日本語」・多言語表示・ピクトグラム','音を大きくする','伝えなくてよい'],a:1,e:'「高台に避難してください」→「たかい ところに にげて ください」。やさしい日本語と絵文字(ピクトグラム)は観光客にも有効。'},
+ {q:'修学旅行の班にベジタリアンの友達がいる。食事プランの立て方は?',o:['気にせず多数決','全員が食べられる選択肢のある店を調べておく','その子だけ別行動','肉を勧める'],a:1,e:'教科書のワーク7「修学旅行のプランニング」の視点。多様性に配慮した計画は、結局みんなにとって快適なプランになる。'},
+ {q:'文化の違いから誤解が生まれたとき、最初にすべきことは?',o:['SNSで拡散','相手の文化的背景を知ろうとし、対話する','無視する','自分の文化を押しつける'],a:1,e:'違い=対立ではない。背景を知り対話することが多文化共生の出発点。'}
+]);
+makeQuiz('quizP218b',[
+ {q:'「多文化共生」の説明として最も適切なのは?',o:['少数派が多数派に合わせること','文化の違いを認め合い、対等な関係で共に生きること','文化を一つに統一すること','外国人と関わらないこと'],a:1,e:'違いを豊かさととらえ、対等な構成員として共に地域をつくる考え方。'},
+ {q:'日本に住む在留外国人の出身で最も多いのは(近年)?',o:['中国','アメリカ','イギリス','ロシア'],a:0,e:'中国籍が最多で、ベトナム・韓国・フィリピンなどが続く。技能実習や留学など在留資格も多様化している。'},
+ {q:'言葉がわからなくても意味が伝わる絵記号を何という?',o:['ピクトグラム','ホログラム','モノグラム','ダイヤグラム'],a:0,e:'非常口や温泉マークなど。1964年東京五輪で大きく発展した、日本が誇るユニバーサルなデザイン。'},
+ {q:'外国にルーツをもつ人々が集まって暮らす地区(例:横浜中華街)の役割は?',o:['観光だけ','文化の発信と新しい住民の生活を支える拠点','立ち入り禁止区域','一時的な仮設地区'],a:1,e:'エスニックタウンは食や文化の発信地であり、同郷の人々の助け合いの場でもある。'}
+]);
+
+/* ================= p221 SDGs ================= */
+makeSort('sortSDGs',
+ [{label:'People',sub:'人間',color:'#d64545',key:'pe'},{label:'Prosperity',sub:'豊かさ',color:'#e8a13a',key:'pr'},{label:'Planet',sub:'地球',color:'#1e8f5a',key:'pl'},{label:'Peace',sub:'平和',color:'#2e6fdb',key:'pc'},{label:'Partnership',sub:'協働',color:'#7a4fc9',key:'pa'}],
+ [['目標1 貧困をなくそう','pe','貧困・飢餓・教育などはPeople(人間)の課題。'],
+  ['目標2 飢餓をゼロに','pe','すべての人に食料を。Peopleの課題。'],
+  ['目標4 質の高い教育をみんなに','pe','教育はあらゆる課題解決の土台。'],
+  ['目標5 ジェンダー平等を実現しよう','pe','性別による不平等の解消もPeople。'],
+  ['目標7 エネルギーをみんなに そしてクリーンに','pr','経済と暮らしの基盤=Prosperity(豊かさ)。'],
+  ['目標8 働きがいも経済成長も','pr','持続可能な経済成長はProsperity。'],
+  ['目標11 住み続けられるまちづくりを','pr','都市と居住の課題はProsperity。'],
+  ['目標13 気候変動に具体的な対策を','pl','地球環境の課題はPlanet(地球)。'],
+  ['目標14 海の豊かさを守ろう','pl','海洋環境・海洋プラスチックの問題。'],
+  ['目標15 陸の豊かさも守ろう','pl','森林・生物多様性の保全。'],
+  ['目標16 平和と公正をすべての人に','pc','紛争や不正のない社会=Peace。'],
+  ['目標17 パートナーシップで目標を達成しよう','pa','政府・企業・NGO・私たちの協働=Partnership。']]);
+makeMatch('matchL','matchR','matchFb',[
+ ['🌍 貧困問題','💡 フェアトレード商品を選ぶ(エシカル消費)'],
+ ['🌍 安全な水の不足','💡 浄水技術を途上国へ支援する'],
+ ['🌍 気候変動(地球温暖化)','💡 再生可能エネルギーへ転換する'],
+ ['🌍 教育・ジェンダー問題','💡 学校建設や識字教育を支援する'],
+ ['🌍 飢餓・食料問題','💡 食品ロスを減らす']
+],'課題解決には多様な主体の協力(マルチステークホルダー)が大切!');
+makeQuiz('quizP221',[
+ {q:'SDGsが国連で採択されたのは何年? 達成目標は何年?',o:['2000年採択・2015年目標','2015年採択・2030年目標','2020年採択・2050年目標','1992年採択・2000年目標'],a:1,e:'2015年採択、2030年が達成目標。前身のMDGs(ミレニアム開発目標)を引き継いで生まれた。'},
+ {q:'SDGsの目標はいくつ?',o:['8','17','30','100'],a:1,e:'17の目標(ゴール)と169のターゲット。'},
+ {q:'SDGsの理念を表す合言葉は?',o:['誰一人取り残さない','早い者勝ち','自国第一','成長は無限'],a:0,e:'"Leave No One Behind"。途上国だけでなく、日本を含むすべての国が取り組む点がMDGsとの大きな違い。'},
+ {q:'地球的課題の特徴として正しいのは?',o:['1つの国だけで解決できる','地域によって現れ方が異なり、課題どうしが関連し合う','地理とは無関係','すでにすべて解決済み'],a:1,e:'貧困と教育、気候変動と食料のように課題は連鎖する。だから地域性をとらえる地理の見方が武器になる。'}
+]);
+
+/* ================= p222 尊厳と平等 ================= */
+const pyrStages=[
+ {name:'富士山型(多産多死〜多産少死)',desc:'出生率も死亡率も高い段階。医療の改善で死亡率が下がると人口爆発が起こる。サブサハラ・アフリカの国々に多い形。',
+  m:[8.2,7.6,6.8,6.0,5.2,4.4,3.7,3.1,2.5,2.0,1.6,1.2,0.9,0.6,0.4,0.25,0.15]},
+ {name:'つりがね型(少産少死へ)',desc:'出生率が下がり、各世代の割合が近づく。人口増加はゆるやかに。多くの先進国が通ってきた形。',
+  m:[3.4,3.5,3.6,3.7,3.8,3.8,3.7,3.6,3.4,3.2,2.9,2.5,2.1,1.7,1.2,0.8,0.5]},
+ {name:'つぼ型(少子高齢化)',desc:'出生率が死亡率を下回り、子どもより高齢者が多い。現在の日本の形。労働力不足と社会保障の負担増が課題。',
+  m:[1.7,1.9,2.1,2.3,2.5,2.7,2.9,3.2,3.6,4.0,3.6,3.3,3.1,3.4,3.0,2.4,1.8]}
+];
+const ages=['0-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'];
+function renderPyr(val){
+  const pos=val/50,i=Math.min(1,Math.floor(pos)),t=pos-i;
+  const A=pyrStages[i].m,B=pyrStages[Math.min(2,i+1)].m;
+  const cur=A.map((v,k)=>v+(B[k]-v)*t);
+  const near=Math.round(pos);
+  document.getElementById('pyrStage').textContent=pyrStages[near].name;
+  document.getElementById('pyrDesc').textContent=pyrStages[near].desc;
+  const W=360,mid=W/2,rowH=14,top=34,scale=14;
+  let s='<text x="'+(mid-60)+'" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e6fdb">男</text><text x="'+(mid+60)+'" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#d64545">女</text><text x="'+mid+'" y="20" text-anchor="middle" font-size="10" fill="#51626d">年齢</text>';
+  cur.forEach((v,k)=>{
+    const y=top+(16-k)*rowH,w=v*scale,wf=v*scale*0.98+(k>=13?v*scale*0.18:0);
+    s+='<rect x="'+(mid-26-w)+'" y="'+y+'" width="'+w+'" height="'+(rowH-3)+'" fill="#7fa8e8" rx="2"/><rect x="'+(mid+26)+'" y="'+y+'" width="'+wf+'" height="'+(rowH-3)+'" fill="#eb9a9a" rx="2"/><text x="'+mid+'" y="'+(y+rowH-6)+'" text-anchor="middle" font-size="8" fill="#51626d">'+ages[k]+'</text>';
+  });
+  document.getElementById('pyrSvg').innerHTML=s;
+}
+document.getElementById('pyrRange').addEventListener('input',e=>renderPyr(Number(e.target.value)));
+renderPyr(0);
+makeQuiz('quizP222',[
+ {q:'世界銀行の国際貧困ライン(2022年改定)は1日あたり?',o:['2.15ドル未満','10ドル未満','50ドル未満','100ドル未満'],a:0,e:'1日2.15ドル未満で暮らす「極度の貧困」。サブサハラ・アフリカと南アジアに集中している。'},
+ {q:'現在、人口増加(人口爆発)が最も著しい地域は?',o:['ヨーロッパ','サブサハラ・アフリカ','東アジア','北アメリカ'],a:1,e:'医療の普及で死亡率が下がる一方、出生率が高いまま=多産少死の段階。教育・雇用の整備が急務。'},
+ {q:'世界の食料問題の説明として正しいのは?',o:['食料は世界中で不足している','飢餓に苦しむ地域と、食品ロス・肥満が課題の地域が共存している','すでに解決した','先進国だけの問題'],a:1,e:'生産量自体は世界人口を養える水準。「偏り」こそが問題で、フードロス削減は私たちにもできる行動。'},
+ {q:'教育とジェンダーの課題の説明で正しいのは?',o:['世界中で男女差はもうない','途上国の一部では女子の就学率が低く、識字率にも男女差がある','女子だけが学校に行ける','教育は経済と無関係'],a:1,e:'家事労働や早婚などを背景に女子の教育機会が奪われる地域がある。教育は貧困の連鎖を断つカギ。'},
+ {q:'安全な水とトイレの問題が引き起こすことは?',o:['特に影響はない','感染症の拡大や、水くみ労働による教育機会の喪失','水道料金の低下','人口の増加だけ'],a:1,e:'汚れた水は子どもの命を奪い、水くみは多くの場合女性や子どもの仕事に。日本企業の浄水技術支援も進む(教科書p.181)。'}
+]);
+
+/* ================= p223 自然との調和 ================= */
+makeSort('sortEnergy',
+ [{label:'再生可能エネルギー',sub:'くり返し利用できる',color:'#1e8f5a',key:'re'},{label:'枯渇性エネルギー',sub:'使えばなくなる',color:'#6b7f8a',key:'ex'}],
+ [['太陽光','re','クリーンだが天候に左右され、発電コストや設置場所が課題。'],
+  ['風力','re','偏西風の強いヨーロッパで普及。日本は洋上風力に期待。'],
+  ['地熱','re','火山国日本のポテンシャルは世界有数。'],
+  ['水力','re','日本で古くから利用。ダム建設は環境への影響も。'],
+  ['バイオマス','re','間伐材や家畜のふん尿などを利用。'],
+  ['石油','ex','埋蔵が西アジアに偏在。価格変動が世界経済を揺らす。'],
+  ['石炭','ex','埋蔵量は多いがCO₂排出が大きく、脱炭素で逆風。'],
+  ['天然ガス','ex','石炭・石油よりCO₂は少なめだが枯渇性。'],
+  ['ウラン(原子力)','ex','発電時のCO₂はほぼゼロだが、資源は有限で廃棄物・安全性の課題。']]);
+makeSort('sortCity',
+ [{label:'先進国の都市問題',color:'#2e6fdb',key:'dev'},{label:'発展途上国の都市問題',color:'#e8702a',key:'ing'}],
+ [['都心部の建物の老朽化と空洞化(インナーシティ問題)','dev','都心の衰退と再開発は先進国型の課題。'],
+  ['郊外への無秩序な市街地拡大(スプロール現象)','dev','モータリゼーションが進んだ先進国で発生。'],
+  ['再開発による家賃高騰で元の住民が住めなくなる','dev','ジェントリフィケーションと呼ばれる現象。'],
+  ['上下水道や住宅が追いつかずスラムが拡大','ing','農村から都市へ人口が急流入する途上国型の課題。'],
+  ['首位都市(プライメートシティ)への一極集中','ing','バンコクやマニラなど。インフラと格差の問題が集中。'],
+  ['ごみ収集や交通網などインフラの整備不足','ing','人口急増にインフラ整備が追いつかない。']]);
+makeQuiz('quizP223',[
+ {q:'スマートフォンに欠かせない希少な金属を何という?',o:['レアメタル','ベースメタル','貴金属','合金'],a:0,e:'リチウムやコバルトなど。産出国が偏るため、使用済み製品から回収する「都市鉱山」のリサイクルが注目される。'},
+ {q:'原油の埋蔵が特に集中している地域は?',o:['西アジア(ペルシア湾岸)','北ヨーロッパ','東南アジア','南極'],a:0,e:'資源の偏在は国際関係にも影響。日本は原油の9割前後を西アジアに依存している。'},
+ {q:'再生可能エネルギー普及の課題として適切なのは?',o:['資源が枯渇する','発電量が天候に左右され、コストや送電網の整備も必要','CO₂を大量に出す','技術的に不可能'],a:1,e:'安定供給(ベースロード)との組み合わせや蓄電技術がカギ。それでも世界の導入量は急拡大中。'},
+ {q:'持続可能な産業や消費をめざす考え方として、生産から廃棄までを見直すことを何という?',o:['大量生産・大量消費','循環型社会(3R)の構築','使い捨ての徹底','輸入依存'],a:1,e:'リデュース・リユース・リサイクル。資源を循環させる社会への転換が求められている。'},
+ {q:'発展途上国の大都市で人口が集中しすぎて起こる問題でないものは?',o:['スラムの拡大','交通渋滞と大気汚染','住宅不足','人口の急減'],a:3,e:'途上国の大都市は流入による急増が課題。逆に日本の地方では人口減少・過疎が課題になっている。'}
+]);
+
+/* ================= p224 地球環境 ================= */
+makeMatch('envL','envR','envFb',[
+ ['地球温暖化','パリ協定:世界の平均気温上昇を産業革命前から2℃未満(できれば1.5℃)に'],
+ ['オゾン層の破壊','モントリオール議定書でフロンガスを規制'],
+ ['熱帯林の減少','持続可能な森林管理・植林・認証制度の普及'],
+ ['砂漠化','過放牧・過耕作を見直し、緑化と適切な土地利用を進める'],
+ ['海洋プラスチックごみ','3Rの徹底・使い捨てプラスチックの削減と国際的なルールづくり']
+],'環境問題は原因も対策も国境をこえる!');
+makeQuiz('quizP224',[
+ {q:'地球温暖化の主な原因とされるのは?',o:['オゾンの増加','二酸化炭素などの温室効果ガスの増加','地軸の傾きの変化だけ','森林の増加'],a:1,e:'化石燃料の大量消費と森林破壊でCO₂が増加。海面上昇や異常気象、サンゴの白化などの影響が現れている。'},
+ {q:'2015年に採択された温暖化対策の国際的枠組みは?',o:['京都議定書','パリ協定','ラムサール条約','ワシントン条約'],a:1,e:'パリ協定。先進国だけに削減義務があった京都議定書と異なり、途上国を含むすべての国が削減目標を立てる。'},
+ {q:'熱帯林が減少する主な原因は?',o:['寒冷化','農地・牧場の開発や過度な伐採','雨が多すぎる','動物の増加'],a:1,e:'油やし農園や牧場の開発、商業伐採など。熱帯林は「地球の肺」であり生物多様性の宝庫。認証制度のある商品選びも対策の一つ。'},
+ {q:'サヘル地方などで進む砂漠化の人為的原因は?',o:['過放牧・過耕作・薪炭材の取りすぎ','植林のしすぎ','人口減少','降水量の増加'],a:0,e:'気候変動(干ばつ)に人間活動が重なって土地が劣化する。人口増加が背景にある点で、貧困問題ともつながっている。'},
+ {q:'5mm以下に細かくなったプラスチックを何という?',o:['ナノカーボン','マイクロプラスチック','バイオプラスチック','レジン'],a:1,e:'食物連鎖を通じて生物に取り込まれ、生態系への影響が懸念される。陸から川を通じて海へ──ここにも「つながり」の視点。'}
+]);
+
+/* ================= p225 平和と公正 ================= */
+makeSort('sortCoop',
+ [{label:'国連(国際機関)',color:'#2e6fdb',key:'un'},{label:'政府(国)',color:'#1e8f5a',key:'gov'},{label:'民間(NGO・企業・個人)',color:'#e8702a',key:'pri'}],
+ [['PKO(平和維持活動)で停戦を監視する','un','国連の活動。紛争地域の平和を支える。'],
+  ['UNICEFが子どもの保健・教育を支援する','un','国連児童基金。すべての子どもの命と権利を守る。'],
+  ['UNHCRが難民を保護する','un','国連難民高等弁務官事務所。難民キャンプの運営支援など。'],
+  ['ODA(政府開発援助)で道路や港を整備する','gov','政府による援助。日本のODAは世界トップクラスの規模。'],
+  ['JICA海外協力隊として技術を伝える','gov','政府機関JICAの事業。教育・農業・医療など分野は多彩。'],
+  ['国境なき医師団が紛争地で医療活動を行う','pri','国際NGO。1999年ノーベル平和賞。寄付の9割は民間から。'],
+  ['ペシャワール会がアフガニスタンで灌漑を進める','pri','日本のNGO。筑後川の「山田堰」をモデルにした取水技術で乾いた大地を緑に(教科書p.181)。'],
+  ['フェアトレードのチョコレートを選んで買う','pri','私たち個人にもできる国際協力=エシカル消費。']]);
+makeQuiz('quizP225',[
+ {q:'「民族」を分ける主な基準は?',o:['身長','言語・宗教・生活習慣などの文化','血液型','収入'],a:1,e:'文化を共有する集団が民族。1つの国に複数の民族が暮らすのが世界の普通の姿だ。'},
+ {q:'紛争などで国境をこえて逃れた人々を何という?',o:['移民','難民','観光客','留学生'],a:1,e:'迫害や紛争から逃れた人々。UNHCRが国際的に保護する。国内で避難する人は国内避難民という。'},
+ {q:'世界の紛争の背景として適切でないのは?',o:['資源をめぐる対立','宗教・民族の対立','植民地時代に引かれた人為的国境','全人類の合意'],a:3,e:'アフリカの直線的な国境は植民地時代の名残。民族の分布を無視した国境線が対立の火種になることがある。'},
+ {q:'政府が発展途上国に行う援助を何という?',o:['ODA','NGO','GDP','WTO'],a:0,e:'政府開発援助(Official Development Assistance)。資金協力と技術協力があり、日本は道路・港湾などのインフラ支援に強み。'},
+ {q:'発展途上国の生産者から適正な価格で買い取る貿易のしくみは?',o:['フリートレード','フェアトレード','バーター','ダンピング'],a:1,e:'公正な取引で生産者の自立を支える。認証ラベルのついたコーヒーやチョコが日本でも買える。'}
+]);
+
+/* ================= p311 日本の自然 ================= */
+const btnW=document.getElementById('btnWinter'),btnS=document.getElementById('btnSummer');
+function setSeason(w){
+  document.getElementById('seasonWinter').style.display=w?'':'none';
+  document.getElementById('seasonSummer').style.display=w?'none':'';
+  btnW.classList.toggle('sel-u2',w);btnS.classList.toggle('sel-u2',!w);
+}
+btnW.onclick=()=>setSeason(true);btnS.onclick=()=>setSeason(false);
+setSeason(true);
+makeMatch('jclimL','jclimR','jclimFb',[
+ ['北海道の気候','冷涼で梅雨の影響が小さく、年降水量は少なめ'],
+ ['日本海側の気候','冬の北西季節風により世界有数の豪雪地帯に'],
+ ['太平洋側の気候','夏は雨が多く蒸し暑い。冬は乾燥した晴天が続く'],
+ ['中央高地(内陸)の気候','年較差・日較差が大きく、降水量が少ない'],
+ ['瀬戸内の気候','二つの山地に挟まれ、一年を通じて温暖・少雨'],
+ ['南西諸島の気候','亜熱帯性で冬も温暖。台風の通り道にあたる']
+],'同じ日本でも気候は多彩。季節風と地形の組み合わせで説明できる!');
+makeQuiz('quizP311',[
+ {q:'本州中央部を南北に走る大地溝帯を何という?',o:['中央構造線','フォッサマグナ','日本海溝','カルデラ'],a:1,e:'フォッサマグナ。西縁が糸魚川・静岡構造線で、ここを境に東日本と西日本で地質が大きく異なる。'},
+ {q:'日本の川の特徴は?',o:['長くて流れがゆるやか','短くて急流','一年中凍っている','すべて人工河川'],a:1,e:'国土の約4分の3が山地で平野が狭いため。大雨で一気に増水し、水害が起こりやすい理由の一つ。'},
+ {q:'北陸地方が豪雪地帯になる理由の組み合わせは?',o:['南東季節風+太平洋','北西季節風+日本海の水蒸気+山地','偏西風+フォッサマグナ','台風+黒潮'],a:1,e:'冷たい北西季節風が暖流の流れる日本海で水蒸気を補給し、山地にぶつかって雪を降らせる。'},
+ {q:'6〜7月に日本列島に長雨をもたらすのは?',o:['梅雨前線','寒冷前線だけ','貿易風','フェーン現象'],a:0,e:'暖かい空気と冷たい空気がぶつかる停滞前線。秋には秋雨前線、夏から秋には台風も多くの雨をもたらす。'}
+]);
+
+/* ================= p312 変動帯と防災 ================= */
+makeSort('sortVolcano',
+ [{label:'火山の恵み',color:'#1e8f5a',key:'good'},{label:'火山の災害',color:'#d64545',key:'bad'}],
+ [['温泉','good','火山の熱が生む恵み。観光資源としても重要。'],
+  ['地熱発電','good','火山国日本のポテンシャルは世界有数の再エネ。'],
+  ['美しい景観と観光','good','富士山も阿蘇も火山。ジオパークの取り組みも。'],
+  ['長い年月をかけてできる肥沃な土壌','good','火山灰土は時間をかけて農業に適した土になる。'],
+  ['火砕流','bad','高温のガスと岩石が高速で斜面を下る。最も危険な現象の一つ。'],
+  ['溶岩流','bad','速度は遅めだが、通り道の建物や田畑を飲み込む。'],
+  ['広範囲の降灰','bad','交通・農業・健康に影響。偏西風で東側に広がりやすい。'],
+  ['融雪型火山泥流','bad','噴火の熱で雪が解けて泥流に。冬の火山の怖さ。']]);
+makeQuiz('quizP312',[
+ {q:'緊急地震速報のしくみは?',o:['揺れを予知している','先に届くP波を検知し、大きな揺れのS波の到達前に知らせる','人工衛星が揺れを止める','勘で発表している'],a:1,e:'P波(初期微動)とS波(主要動)の速度差を利用。猶予は数秒〜数十秒でも、身を守る行動には十分。'},
+ {q:'津波からの避難の鉄則は?',o:['海の様子を見に行く','車で海岸沿いを走る','すぐに、より高い所へ。戻らない','地下にもぐる'],a:2,e:'「より高く」「率先避難」「戻らない」。東日本大震災の教訓。第1波の後にさらに高い波が来ることもある。'},
+ {q:'液状化現象が起こりやすい場所は?',o:['岩盤の上','埋立地や旧河道など水を含んだ砂地盤','山頂','洞窟の中'],a:1,e:'地震の揺れで砂地盤が液体のようになり、建物が傾いたりマンホールが浮き上がったりする。土地の成り立ちを知ることが備えになる。'},
+ {q:'1995年の兵庫県南部地震(阪神・淡路大震災)のタイプは?',o:['プレート境界地震','活断層による内陸型(直下型)地震','火山性地震','人工地震'],a:1,e:'都市の直下で活断層がずれた。規模は海溝型より小さくても、震源が近いため激しい揺れと大きな被害に。'},
+ {q:'日本にある活火山の数はおよそ?',o:['約10','約50','約111','約500'],a:2,e:'約111(世界の活火山の約7%)。火山ハザードマップで火砕流や降灰の想定範囲を確認できる。'},
+ {q:'「津波」と「高潮」の違いとして正しいのは?',o:['同じもの','津波は地震など、高潮は台風の気圧低下・強風で起こる','高潮は地震で起こる','津波は川だけで起こる'],a:1,e:'原因が違う。津波=海底の地殻変動、高潮=台風の吸い上げ・吹き寄せ。三角州やゼロメートル地帯では高潮への備えも重要。'}
+]);
+
+/* ================= p313 湿潤地域と防災 ================= */
+makeQuiz('quizP313a',[
+ {q:'扇状地の中央部(扇央)で、大雨のとき特に注意すべき災害は?',o:['高潮','土石流','津波','雪崩'],a:1,e:'山から土砂が一気に流れ下るおそれ。一方、水はけのよさを活かして果樹園に利用されてきた。'},
+ {q:'河口の三角州で起こりやすい災害の組み合わせは?',o:['洪水・高潮・液状化','雪崩・凍害','土石流・落石','干ばつ・砂嵐'],a:0,e:'低くて水はけが悪く地盤も軟弱。広島市の三角州など、都市が発達しているだけに備えが重要。'},
+ {q:'昔の川の跡「旧河道」の上の土地の特徴は?',o:['水はけがよい','周囲より低く浸水しやすい・地盤が軟弱','岩盤で固い','必ず安全'],a:1,e:'地理院地図の「土地の成り立ち・土地利用」(地形分類)で確認できる。一見わからない土地の履歴を地図が教えてくれる。'},
+ {q:'台地のへり(崖の近く)で注意すべき災害は?',o:['高潮','崖崩れ','津波','液状化'],a:1,e:'台地そのものは水害に強い土地。ただし縁辺部の急斜面は大雨や地震で崩れることがある。'}
+]);
+makeMatch('lvlL','lvlR','lvlFb',[
+ ['警戒レベル1','最新の気象情報に注意し、心構えを高める'],
+ ['警戒レベル2','ハザードマップで避難行動を確認する'],
+ ['警戒レベル3','高齢者等避難:避難に時間のかかる人は避難開始'],
+ ['警戒レベル4','避難指示:危険な場所から全員避難'],
+ ['警戒レベル5','緊急安全確保:すでに災害発生。命を守る最善の行動を']
+],'レベル4までに必ず避難!');
+makeOrder('tlPool','tlAnswer','tlFb','tlReset',[
+ '【3日前】気象情報をチェックし、ハザードマップで自宅のリスクと避難先を確認する',
+ '【2日前】非常用持ち出し袋・水・食料・モバイルバッテリーを点検する',
+ '【1日前】家族と避難のタイミング・連絡方法を話し合い、家の周りの飛ばされやすい物を片づける',
+ '【当日】警戒レベル3で高齢者等は避難開始、レベル4が出たら全員が危険な場所から避難!'
+],/【.*?】/,'「早め早め」の行動が命を守る。');
+makeQuiz('quizP313b',[
+ {q:'次々と発生する積乱雲が列をなし、同じ場所に猛烈な雨を降らせ続ける現象は?',o:['線状降水帯','竜巻','フェーン現象','エルニーニョ'],a:0,e:'近年の豪雨災害の多くで発生。「顕著な大雨に関する情報」が出たら直ちに安全確保を。'},
+ {q:'川の堤防の決壊や越水による氾濫を何という?',o:['内水氾濫','外水氾濫','高潮','津波'],a:1,e:'川の水があふれるのが外水氾濫。一方、排水が追いつかず市街地に水がたまるのが内水氾濫。都市部では内水氾濫も多い。'},
+ {q:'土砂災害の前兆現象として正しいのは?',o:['斜面のひび割れ・湧き水のにごり・小石の落下','虹が出る','気温の上昇','星がよく見える'],a:0,e:'山鳴りや木の根が切れる音も危険サイン。前兆に気づいたらすぐ避難。'},
+ {q:'全国の洪水・土砂災害などのリスク情報を地図に重ねて見られる国のサイトは?',o:['重ねるハザードマップ','グルメサイト','フリマアプリ','動画サイト'],a:0,e:'ハザードマップポータルサイトの「重ねるハザードマップ」。地理院地図と同様、自宅や学校周辺をぜひ確認しよう。'},
+ {q:'避難指示などの避難情報を発令するのはどこ?',o:['市町村(自治体)','テレビ局','学校','本人の家族'],a:0,e:'避難情報は市町村が発令し、気象庁は警報など気象情報を発表する。両方を組み合わせて自分で避難を判断するのが大原則。'}
+]);
+
+/* ================= p314 災害への備え ================= */
+makeSort('sortJKK',
+ [{label:'自助',sub:'自分の命は自分で守る',color:'#1e8f5a',key:'ji'},{label:'共助',sub:'地域でみんなの命を守る',color:'#2e6fdb',key:'kyo'},{label:'公助',sub:'国・自治体が守る',color:'#7a4fc9',key:'ko'}],
+ [['家具の転倒防止器具を取りつける','ji','まず自分と家族の命を守る備え。寝室の家具配置の見直しも自助。'],
+  ['非常用持ち出し袋を準備する','ji','水・食料・モバイルバッテリーなど。自分で備えるのが自助の基本。'],
+  ['ハザードマップで自宅周辺のリスクを確認する','ji','「地理」の力が活きる自助。地理院地図でも重ねて確認できる。'],
+  ['地域の防災訓練に参加する','kyo','地域でみんなの命を守る共助。高校生も避難誘導や運営の担い手になれる。'],
+  ['避難所の運営を手伝う','kyo','石川県の高校生の事例のように、若い力は共助の大きな戦力。'],
+  ['隣近所で声をかけ合って避難する','kyo','阪神・淡路大震災では生き埋め救助の約77%が近隣住民などによるものだった。'],
+  ['自衛隊が救助活動を行う','ko','国の機関による救助は公助。消防・警察の救助活動も同じ。'],
+  ['堤防やダムを整備する','ko','国・自治体によるインフラ整備は公助の代表例。'],
+  ['気象庁が緊急地震速報を発表する','ko','国の機関による情報提供。受け取って行動するのは自助・共助の役目。']]);
+const bagItems=[
+ ['飲料水',1],['非常食(レトルト・缶詰)',1],['携帯ラジオ',1],['懐中電灯',1],
+ ['モバイルバッテリー',1],['常備薬・救急セット',1],['現金(小銭も)',1],['軍手',1],
+ ['マスク・消毒液',1],['ホイッスル(笛)',1],
+ ['ゲーム機とソフト全部',0],['ドライヤー',0],['マンガ全巻セット',0],['ろうそくとマッチ',0],['アルバム・思い出の品すべて',0]
+];
+const bagGrid=document.getElementById('pickBag');
+bagItems.sort(()=>Math.random()-.5).forEach((it,i)=>{
+  const b=document.createElement('button');b.className='pick-item';b.textContent=it[0];b.dataset.good=it[1];
+  b.onclick=()=>{if(!b.dataset.locked)b.classList.toggle('on');};
+  bagGrid.appendChild(b);
+});
+document.getElementById('pickJudge').onclick=()=>{
+  let good=0,bad=0,miss=0;
+  bagGrid.querySelectorAll('.pick-item').forEach(b=>{
+    b.dataset.locked='1';
+    const sel=b.classList.contains('on'),g=b.dataset.good==='1';
+    b.classList.remove('on');
+    if(sel&&g){b.classList.add('good');good++;}
+    else if(sel&&!g){b.classList.add('bad');bad++;}
+    else if(!sel&&g){b.classList.add('miss');miss++;}
+  });
+  const fb=document.getElementById('pickFb');
+  if(bad===0&&miss===0){fb.style.color='var(--ok)';fb.textContent='🎉 完璧な持ち出し袋! 緑=正解。停電時のろうそくは火災のもと、灯りはLEDライトで。思い出の品は事前にデータ化を。';}
+  else{fb.style.color='var(--alert)';fb.textContent='判定:必要な物 '+good+'個 ⭕ / 不要な物 '+bad+'個 ❌ / 入れ忘れ '+miss+'個(オレンジ)。持ち出し袋は「すぐ持てる重さ」も大事。リセットして再挑戦!';}
+};
+document.getElementById('pickReset').onclick=()=>{
+  bagGrid.querySelectorAll('.pick-item').forEach(b=>{delete b.dataset.locked;b.classList.remove('on','good','bad','miss');});
+  document.getElementById('pickFb').textContent='';
+};
+makeQuiz('quizP314',[
+ {q:'地震の後に津波や火災、大雨が重なるなど、複数の災害が連続・同時に起こることを何という?',o:['複合災害','単独災害','人工災害','風評被害'],a:0,e:'東日本大震災では地震+津波+原発事故が複合。避難計画も複数のシナリオで考える必要がある。'},
+ {q:'木曽川下流の低地で、集落を堤防で囲んで水害に備えた伝統的な工夫は?',o:['輪中','棚田','屋敷林','寒天干し'],a:0,e:'輪中(わじゅう)。水屋という避難用の建物も。低地に生きる先人の知恵だ(FILE15 伝統的な治水対策)。'},
+ {q:'戦国時代に武田信玄が築いたとされる治水施設「信玄堤」などの考え方は?',o:['水を完全に閉じ込める','あえて水をあふれさせ、勢いを弱めて被害を抑える','川を埋め立てる','雨を降らせない'],a:1,e:'霞堤などは水の力を受け流す発想。近年の「流域治水」にも通じる考え方として再評価されている。'},
+ {q:'地理院地図にも載っている、過去の災害の教訓を伝える石碑などを表す地図記号は?',o:['自然災害伝承碑','温泉','灯台','城跡'],a:0,e:'2019年に新設された記号。先人のメッセージを防災に活かそう。地域の伝承碑を探すのも立派な地域調査!'}
+]);
+
+/* ================= p321 地域調査 ================= */
+makeOrder('svPool','svAnswer','svFb','svReset',[
+ 'テーマ(課題)と仮説を決める',
+ '文献・統計・地理院地図などで予備調査をしてルートマップを作る',
+ '野外調査(観察・聞き取り・写真撮影)を行う',
+ '結果を分析し、統計地図やグラフに表現する',
+ '発表して意見をもらい、地域への提言につなげる'
+],null,'この流れは探究学習すべてに使える型だ!');
+makeMatch('smapL','smapR','smapFb',[
+ ['ドットマップ','人口や家畜など「分布」を点の集まりで表す'],
+ ['階級区分図','人口密度や割合を色の濃淡で塗り分ける'],
+ ['図形表現図','生産量など「絶対量」を円などの大きさで表す'],
+ ['流線図','人や物の「移動」を矢印の向きと太さで表す'],
+ ['メッシュマップ','地域を等しい網目に区切って統計を表す']
+],'「何を表したいか」で地図を選ぶのが統計地図のコツ!');
+makeQuiz('quizP321',[
+ {q:'地域調査で最初にすべきことは?',o:['いきなり現地へ行く','テーマと仮説を立てる','発表資料を作る','打ち上げの計画'],a:1,e:'問い(テーマ)と仮説があるから、何を観察・質問すべきかが決まる。仮説は調査の羅針盤。'},
+ {q:'割合(例:高齢者率)を市町村ごとに比べたいとき、適した統計地図は?',o:['階級区分図','流線図','ドットマップ','路線図'],a:0,e:'割合・密度は色の濃淡で塗り分ける階級区分図。絶対量(人口そのもの)なら図形表現図が適する。使い分けがポイント!'},
+ {q:'過去と現在の土地利用の変化を調べたいとき、地理院地図で使える機能は?',o:['年代別の空中写真を並べて比較','天気予報','音楽再生','オンライン会議'],a:0,e:'「年代別の写真」レイヤーと「並べて比較」ツール。宅地化や工場跡地の変化が一目でわかる。'},
+ {q:'聞き取り調査のマナーとして正しいのは?',o:['アポなしで長時間ねばる','目的を伝えて許可を取り、相手の都合に合わせ、お礼を伝える','黙って録音する','答えを誘導する'],a:1,e:'調査は地域の方々の協力があってこそ。成果を地域に発信・提言できれば、学びはさらに価値あるものになる。'},
+ {q:'調査結果の発表・提言の例として、教科書で紹介されている高校生の活動は?',o:['ハザードマップを高齢者に伝わるよう改善する','災害を予知する','堤防を自分たちで建設する','何もしない'],a:0,e:'地理を学んだ高校生は、ハザードマップと地域の人をつなぐ存在になれる(p.215)。学会発表や市民への提言を行う高校もある。'},
+ {q:'人口や産業など国の統計データをウェブで入手できる政府の統計ポータルは?',o:['e-Stat','フリマサイト','動画サイト','ゲーム攻略サイト'],a:0,e:'政府統計の総合窓口e-Stat。地図で見る統計(jSTAT MAP)やRESASと合わせ、地域調査の強力な味方になる。'}
+]);
+</script>
+</body>
+</html>
