@@ -220,6 +220,33 @@ input[type=range]{width:100%;accent-color:var(--u2)}
 .meter .mfill{height:100%;border-radius:7px;transition:width .25s}
 .relg{cursor:pointer}.relg:hover{opacity:.75}
 .msel{cursor:pointer}.msel:hover{opacity:.8}
+
+.casemap svg{display:block;width:100%;border:2px solid var(--line);border-radius:14px;background:#e4f0fa}
+.case-pt{cursor:pointer}
+.case-pt circle{transition:r .15s}
+.case-pt.active circle.dot{stroke-width:3}
+.case-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.case-chip{border:2px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink)}
+.case-info{background:var(--paper);border-radius:12px;padding:12px 16px;margin-top:10px;font-size:.86rem;line-height:1.8}
+.case-info b{font-size:.95rem}
+
+/* ===== フッター・ポリシー ===== */
+footer .cc{margin:10px 0 6px;font-size:.8rem;color:#51626d}
+footer .cc a{color:var(--u1);font-weight:700;text-decoration:none}
+footer .cc a:hover{text-decoration:underline}
+footer .flinks{margin-top:8px}
+footer .flinks button{background:none;border:none;color:var(--u1);font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;margin:0 8px}
+.policy-overlay{position:fixed;inset:0;background:rgba(31,51,64,.55);display:none;z-index:60;overflow:auto;padding:28px 14px}
+.policy-overlay.open{display:block}
+.policy-box{max-width:760px;margin:0 auto;background:#fff;border-radius:18px;padding:30px 28px 36px;position:relative;line-height:1.9}
+.policy-box h2{font-size:1.15rem;font-weight:800;margin:26px 0 10px;color:var(--ink);border-left:5px solid var(--u3);padding-left:12px}
+.policy-box h2:first-of-type{margin-top:4px}
+.policy-box h3{font-size:.95rem;font-weight:800;margin:16px 0 4px;color:#3a6b53}
+.policy-box p{font-size:.88rem;margin-bottom:10px}
+.policy-box a{color:var(--u1);font-weight:700}
+.policy-close{position:absolute;top:14px;right:14px;border:2px solid var(--line);background:#fff;border-radius:99px;width:36px;height:36px;font-size:1rem;font-weight:800;cursor:pointer;color:var(--ink)}
+.policy-close:hover{border-color:var(--ink)}
+.policy-note{background:var(--paper);border-radius:12px;padding:12px 16px;font-size:.85rem;margin:10px 0}
 footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 .reset-link{background:none;border:none;color:var(--u1);font:inherit;font-weight:700;cursor:pointer;text-decoration:underline}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
@@ -251,8 +278,13 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 </nav>
 
 <div class="chipbar cb1 active" id="chips1">
-  <button class="pagechip active" data-page="p11">1章 球面上の世界と地図</button>
-  <button class="pagechip" data-page="p12">2章 国家の結びつきとグローバル化</button>
+  <span class="chiplabel">▼ 1章 球面上の世界と地図</span>
+  <button class="pagechip active" data-page="p11">球面上の世界</button>
+  <button class="pagechip" data-page="p11b">地図の世界</button>
+  <span class="chiplabel">▼ 2章 国家の結びつきとグローバル化する世界</span>
+  <button class="pagechip" data-page="p12">国家と国家群</button>
+  <button class="pagechip" data-page="p12b">交通・通信</button>
+  <button class="pagechip" data-page="p12c">貿易・人の移動</button>
 </div>
 <div class="chipbar cb2" id="chips2">
   <span class="chiplabel">▼ 1章 生活文化の多様性と国際理解</span>
@@ -285,12 +317,10 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 
 <!-- ===================== 1編1章 ===================== -->
 <section class="page active" id="p11">
-  <div class="crumb">第1編 地図や地理情報システムでとらえる現代世界 > 1章</div>
-  <div class="pagetitle">球面上の世界と地図<span class="pgref">📖 教科書 p.6–27</span></div>
-  <p class="pagelead">地球上の位置の表し方、時差のしくみ、世界地図の見方、そしてGIS・地理院地図の活用まで──地理の学びの「道具箱」をそろえる章。</p>
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">なぜ、どんな世界地図も「正しくない」のだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置や分布</b><br>球面を平面にすると何が起こる? 「目的に合った地図」とはどういうことか、学びながら考えよう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「時差シミュレーター/GISレイヤー体験」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「投影法カード・地図の仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b1">土台</span>🧭 地理の「5つのレンズ」─ 1年間ずっと使う見方・考え方</h2>
+  <div class="crumb">第1編 地図や地理情報システムでとらえる現代世界 > 1章 球面上の世界と地図</div>
+  <div class="pagetitle">球面上の世界<span class="pgref">📖 教科書 p.6–9</span></div>
+  <p class="pagelead">地球上の位置の表し方(緯度・経度)と、世界の時差のしくみ。丸い地球を「使いこなす」ための、地理1年間の出発点。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">地球が丸いことを、私たちはどれだけ「使いこなして」いるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置や分布</b><br>緯度・経度・時差 ─ 当たり前すぎて意識しない「地球のものさし」が、飛行機の運航からスマホの地図まで現代社会を支えている。</div></div></div><details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「時差シミュレーター/対蹠点ツアー」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「地軸と季節のカード」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b1">土台</span>🧭 地理の「5つのレンズ」─ 1年間ずっと使う見方・考え方</h2>
 <p class="desc">地理の学びとは、社会の出来事を<b>「位置や空間的な広がり」に着目してとらえ、地域の環境条件や地域間の結び付きの中で、人間の営みと関連付けて考える</b>こと(学習指導要領)。そのための5つのレンズがこれ。各ページ冒頭の問いの🔍タグは、このレンズのどれを使うかの合図だ。</p>
 <div class="vocab">
 <div><b>🔍① 位置や分布</b>「それは<b>どこ</b>にある? <b>どう広がって</b>いる?」─ 地図に落とすと規則性が見えてくる。</div>
@@ -299,9 +329,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <div><b>🔍④ 空間的相互依存作用</b>「他の場所と<b>どう結びついて</b>いる?」─ 貿易・人の移動・情報。グローバル化を読むカギ。</div>
 <div><b>🔍⑤ 地域</b>「共通の特色でまとまる<b>範囲はどこまで</b>?」─ 校区から地球まで、スケールを変えて見る。</div>
 </div>
-<div class="hint"><b>使い方のコツ:</b>ニュースを見たら「どこ?(①)」「どんな所?(②)」「環境とどう関係?(③)」「どこと繋がる?(④)」と4連発で問うてみよう。それだけで世界の解像度が一段上がる。</div></div></div>
-
-  <div class="card">
+<div class="hint"><b>使い方のコツ:</b>ニュースを見たら「どこ?(①)」「どんな所?(②)」「環境とどう関係?(③)」「どこと繋がる?(④)」と4連発で問うてみよう。それだけで世界の解像度が一段上がる。</div></div><div class="card"><h2><span class="badge b1">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">360°÷24h</div><div class="nl">経度15°=1時間。時差計算の魔法の式</div></div><div><div class="nv">東経135°</div><div class="nl">日本標準時子午線(兵庫県明石市)</div></div><div><div class="nv">23.4°</div><div class="nl">地軸の傾き。季節と白夜を生むふしぎな角度</div></div></div></div><div class="card">
     <h2><span class="badge b1">基礎</span>📐 位置と時差のキホン</h2>
     <div class="keybox">地球上の位置は<b>緯度</b>(赤道が0°、南北90°まで)と<b>経度</b>(本初子午線が0°、東西180°まで)で表す。地球は24時間で360°自転するから、<b>経度15°で1時間</b>の時差。日本の標準時子午線は<b>東経135°</b>(兵庫県明石市)。経度180°付近には<b>日付変更線</b>が引かれている。</div><figure class="model"><svg viewBox="0 0 700 330" role="img" aria-label="緯度と経度の模式図">
 <rect width="700" height="330" fill="#fbfdfc"/>
@@ -347,9 +375,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <text x="12" y="82" font-size="10" fill="#51626d">→ 標高・海との距離・海流が次のカギ(2節へ)</text>
 </g>
 </svg><figcaption>【模式図】緯度・経度と時差のしくみ(▶ 教科書 p.6–9)</figcaption></figure>
-  </div>
-
-  <div class="card">
+  </div><div class="card">
     <h2><span class="badge b1">体験</span>🌏 時差シミュレーター <span class="ref">▶ p.8–9・ワーク1</span></h2>
     <p class="desc">2つの都市を選んで、いまこの瞬間の現地時刻を比べよう。海外との「ちょうどよい通話時間帯」を探すのも面白い。</p>
     <div class="row">
@@ -362,8 +388,33 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
     </div>
     <div class="hint"><b>考えよう:</b>サマータイムを採用している国では、この計算とずれることがある。また、西経の都市と比べると日付が変わるのはなぜだろう?</div>
   </div>
+<div class="card"><h2><span class="badge b1">体験</span>🔄 対蹠点ツアー ─ 地球の裏側へワープ! <span class="ref">▶ p.6–7</span></h2>
+<p class="desc">ある地点の正反対側を<b>対蹠点(たいせきてん)</b>という。都市を選んで地球の裏側へワープしてみよう。計算式は「緯度の南北を反転、経度は180°−|経度|で東西反転」。</p>
+<div class="simbox"><div class="row"><select id="antiSel"></select></div><div class="simout" id="antiOut"></div></div>
+<div class="hint"><b>考えよう:</b>日本の裏側が「ブラジル」とよく言われるが、正確には少しずれて大西洋の上。陸地の対蹠点が陸地である確率は実はとても低い ─ 地球の表面の7割が海だからだ。</div></div>
+<div class="card"><h2><span class="badge b1">体験</span>🌗 地軸と季節のカード ─ タップ! <span class="ref">▶ p.6–7</span></h2>
+<p class="desc">「なぜ季節があるの?」「白夜って何?」── 答えはぜんぶ、地軸の傾き23.4°がにぎっている。</p>
+<div class="flip-grid">
+<div class="flip f1" role="button" tabindex="0"><div class="flip-inner">
+<div class="face front"><h3>なぜ季節がある?</h3><div class="big">🌍↗️</div><p>地球は傾いたまま太陽のまわりを回っている。</p><span class="tapnote">タップして答え →</span></div>
+<div class="face back"><h3>地軸の傾き23.4°が原因</h3><ul><li>傾いたまま公転するので、太陽の高さと昼の長さが変化</li><li>夏=太陽が高く昼が長い、冬=その逆</li></ul><span class="tapnote">← もどる</span></div></div></div>
+<div class="flip f1" role="button" tabindex="0"><div class="flip-inner">
+<div class="face front"><h3>白夜と極夜</h3><div class="big">🌞🌚</div><p>北極圏では夏に太陽が沈まない日がある。</p><span class="tapnote">タップして答え →</span></div>
+<div class="face back"><h3>高緯度だけの現象</h3><ul><li>緯度66.6°以上(極圏)では、夏は太陽が沈まない<b>白夜</b>、冬は昇らない<b>極夜</b>に</li><li>北欧の夏の観光資源にもなっている</li></ul><span class="tapnote">← もどる</span></div></div></div>
+<div class="flip f1" role="button" tabindex="0"><div class="flip-inner">
+<div class="face front"><h3>南半球の12月は?</h3><div class="big">🎄🏖️</div><p>オーストラリアのクリスマスは…</p><span class="tapnote">タップして答え →</span></div>
+<div class="face back"><h3>真夏! 季節が逆</h3><ul><li>北半球が太陽に傾くとき、南半球は離れる=季節が反対</li><li>雨温図の「谷型」、農産物の<b>端境期輸出</b>(かぼちゃ等)の理由</li></ul><span class="tapnote">← もどる</span></div></div></div>
+</div></div>
+<div class="card"><h2><span class="badge b1">事例</span>🌏 話題の現場</h2><p class="desc">本初子午線の天文台から赤道直下の高山都市まで ─ 世界の「位置」と「時差」の基準になってきた現場を地図でたどろう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p11"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://eco.mtk.nao.ac.jp/koyomi/" target="_blank" rel="noopener">国立天文台 暦計算室</a><a href="https://www.am12.jp/" target="_blank" rel="noopener">明石市立天文科学館(時のまち)</a><a href="https://www.nhk.or.jp/kokokoza/chirisougou/" target="_blank" rel="noopener">NHK高校講座 地理総合</a></div><div class="card"><h2><span class="badge b1">確認</span>✏️ チェッククイズ</h2><div id="quizP11"></div></div><div class="card"><h2><span class="badge b1">+α</span>📚 球面上の世界 用語ミニ辞典 <span class="ref">▶ p.6–9</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>緯度</b>赤道を0°として南北90°まで。気候のものさしにもなる。</div><div><b>経度</b>本初子午線を0°として東西180°まで。時差のものさし。</div><div><b>本初子午線</b>経度0°。ロンドン旧グリニッジ天文台を通る。</div><div><b>日付変更線</b>経度180°付近。西から東へこえると日付を1日もどす。</div><div><b>対蹠点</b>地球の正反対の地点。時差12時間・季節も逆。</div><div><b>白夜・極夜</b>極圏(緯度66.6°以上)で太陽が沈まない/昇らない現象。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「地球が丸い」証拠を、このページで学んだことから3つ挙げて、小学生に説明するつもりで話してみよう。時差・対蹠点・季節 ─ ぜんぶ丸い地球の上で起きていることだ。</div>
+</section>
 
-  <div class="card">
+<section class="page" id="p11b">
+  <div class="crumb">第1編 地図や地理情報システムでとらえる現代世界 > 1章 球面上の世界と地図</div>
+  <div class="pagetitle">地図の世界<span class="pgref">📖 教科書 p.10–23</span></div>
+  <p class="pagelead">世界地図の見方・使い方から、デジタル地図・GIS・地理院地図の活用まで。「地図にだまされない」目と「地図を使いこなす」手を育てる。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">完璧な世界地図が存在しないのに、なぜ私たちは地図を信じて使えるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置や分布・目的に応じた活用</b><br>すべての地図はどこかが「ウソ」。だからこそ「何のための地図か」を見抜く力が必要になる。紙からデジタルへ、地図の進化もたどろう。</div></div></div><details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「GISレイヤー重ね合わせ体験」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「投影法カード・地図の仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b1">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">2万5千分の1</div><div class="nl">国土の基本となる地形図の縮尺。分母が小さい=詳しい</div></div><div><div class="nv">1,300か所</div><div class="nl">GNSSで地殻変動を監視する電子基準点の数</div></div><div><div class="nv">1枚</div><div class="nl">地理院地図はシームレス ─ 全国がつながった1枚の地図</div></div></div></div><div class="card"><h2><span class="badge b1">基礎</span>🗺️ 地図のキホン</h2>
+<div class="keybox">球面を平面にすると必ず<b>ひずみ</b>が生まれる。だから地図は「面積」「角度」「距離・方位」のどれを正しくするかで使い分ける。地図には地形や道路を幅広く表す<b>一般図</b>と、テーマを絞った<b>主題図</b>があり、現代はデジタル化で<b>GIS</b>(地理情報システム)が地図を「重ねて分析する道具」へ進化させた。国土地理院の<b>地理院地図</b>はその代表で、誰でも無料で使える。</div></div>
+<div class="card">
     <h2><span class="badge b1">体験</span>🗺️ 地図投影法くらべ ─ カードをタップ! <span class="ref">▶ p.10–13</span></h2>
     <p class="desc">球面を平面にすると必ず「ひずみ」が生まれる。<b>何を正しく表すか</b>で図法を使い分けよう。</p>
     <div class="flip-grid">
@@ -392,15 +443,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="card">
+  </div><div class="card">
     <h2><span class="badge b1">体験</span>🧭 一般図?主題図? 地図の仕分け <span class="ref">▶ p.14–15・ワーク2</span></h2>
     <p class="desc">地図には、地形や道路などを幅広く表す<b>一般図</b>と、特定のテーマを表す<b>主題図</b>がある。表示される地図を仕分けよう。</p>
     <div id="sortMapType"></div>
-  </div>
-
-  <div class="card">
+  </div><div class="card">
     <h2><span class="badge b1">体験</span>🛰️ GISレイヤー重ね合わせ体験 <span class="ref">▶ p.16–23</span></h2>
     <p class="desc">GIS(地理情報システム)の武器は情報を「重ねる」こと。架空の「みなと町」でレイヤーをON/OFFして避難について考えよう。地理院地図でも同じことができる。</p>
     <div class="gis-wrap">
@@ -437,26 +484,17 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
       </div>
     </div>
     <div class="hint"><b>考えよう:</b>3つ全部ONにすると、「川沿い会館」の問題点が見えてくる。実際の<b>地理院地図</b>では「標高・土地の凹凸」「土地の成り立ち」「災害伝承・避難場所」などのレイヤーを重ねられ、断面図・3D・計測のツールも使える。</div>
-  </div>
-
-  <div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地理院地図</a><a href="https://www.gsi.go.jp/CHIRIKYOUIKU/index.html" target="_blank" rel="noopener">国土地理院 地理教育の道具箱</a><a href="https://www.nhk.or.jp/kokokoza/chirisougou/" target="_blank" rel="noopener">NHK高校講座 地理総合</a></div>
-  <div class="card">
-    <h2><span class="badge b1">確認</span>✏️ 章末チェッククイズ</h2>
-    <div id="quizP11"></div>
-  </div>
-<div class="card"><h2><span class="badge b1">+α</span>📚 地図・GIS 用語ミニ辞典 <span class="ref">▶ p.6–27</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>本初子午線</b>経度0°の線。ロンドン旧グリニッジ天文台を通る。</div><div><b>日付変更線</b>経度180°付近。西から東へこえると日付を1日もどす。</div><div><b>GIS(地理情報システム)</b>位置情報をもつデータを地図上で重ね、分析するしくみ。</div><div><b>GNSS</b>人工衛星で位置を測るしくみの総称。GPSやみちびきなど。</div><div><b>地理院地図</b>国土地理院のウェブ地図。標高・地形分類・災害情報を重ねられる。</div><div><b>縮尺</b>実際の距離を縮めた割合。分母が小さいほど詳しい地図。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「正しい地図」は存在しない。では<b>悪い地図</b>とは何だろう? 目的に合わない地図を選ぶとどんな失敗が起こるか、旅行・防災・物流の3つの場面で具体的に説明してみよう。</div>
+  </div><div class="card"><h2><span class="badge b1">事例</span>🌏 話題の現場</h2><p class="desc">歩いて日本地図をつくった男、図法のひずみで巨大に見える島、宇宙から位置を測る種子島 ─ 地図づくりの歴史と最前線の現場へ。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p11b"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">国土地理院 地理院地図</a><a href="https://www.gsi.go.jp/CHIRIKYOUIKU/index.html" target="_blank" rel="noopener">国土地理院 地理教育の道具箱</a><a href="https://www.gsi.go.jp/MUSEUM/" target="_blank" rel="noopener">地図と測量の科学館(つくば)</a></div><div class="card"><h2><span class="badge b1">確認</span>✏️ チェッククイズ</h2><div id="quizP11b"></div></div><div class="card"><h2><span class="badge b1">+α</span>📚 地図・GIS 用語ミニ辞典 <span class="ref">▶ p.10–23</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>縮尺</b>実際の距離を縮めた割合。分母が小さいほど詳しい地図。</div><div><b>一般図と主題図</b>幅広く表すのが一般図、テーマを絞るのが主題図。</div><div><b>GIS(地理情報システム)</b>位置情報をもつデータを地図上で重ね、分析するしくみ。</div><div><b>GNSS</b>人工衛星で位置を測るしくみの総称。GPSやみちびきなど。</div><div><b>地理院地図</b>国土地理院のウェブ地図。標高・地形分類・災害情報を重ねられる。</div><div><b>電子基準点</b>GNSS受信機を備えた基準点。地殻変動の監視にも活躍。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「正しい地図」は存在しない。では<b>悪い地図えらび</b>とは何だろう? 目的に合わない地図を選ぶとどんな失敗が起こるか、旅行・防災・物流の3つの場面で具体的に説明してみよう。</div>
 </section>
 
 <!-- ===================== 1編2章 ===================== -->
 <section class="page" id="p12">
-  <div class="crumb">第1編 地図や地理情報システムでとらえる現代世界 > 2章</div>
-  <div class="pagetitle">国家の結びつきとグローバル化する世界<span class="pgref">📖 教科書 p.28–43</span></div>
-  <p class="pagelead">国家の領域と国境、日本の領土をめぐる問題、国家をこえた結びつき(ASEAN・EU)、交通・通信の発達と貿易・人の移動を学ぶ章。</p>
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">交通・通信がこれほど発達した世界で、なぜ「国境」は今も重要なのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用</b><br>結びつきが強まるほど、領域やルールの問題も浮かび上がる。グローバル化の光と影を見ていこう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「領域たんけん図/輸送モード比較ラボ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「地域組織マッチング・交通仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約447万km²</div><div class="nl">日本の領海+排他的経済水域(国土の約12倍・世界有数)</div></div><div><div class="nv">約99.6%</div><div class="nl">貿易量(重量)に占める海上輸送の割合</div></div><div><div class="nv">約14,000隻</div><div class="nl">日本に出入りする外航コンテナ船などの規模感</div></div></div></div></div>
-
-  <div class="card">
+  <div class="crumb">第1編 > 2章 国家の結びつきとグローバル化する世界</div>
+  <div class="pagetitle">国家と国家群<span class="pgref">📖 教科書 p.28–35</span></div>
+  <p class="pagelead">国家の領域と国境、日本の領域と領土をめぐる問題、そしてASEAN・EUなど国家をこえた結びつき。世界の「単位」とその連携を学ぶ。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">200近い国に分かれた世界が、なぜ「まとまろう」ともするのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域(国家のまとまり)・空間的相互依存</b><br>国境で区切ることと、国境をこえて手を結ぶこと ─ 一見正反対の動きが同時に進むのが現代の世界。両方のしくみを知ろう。</div></div></div><details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「国家の領域たんけん図」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「地域組織マッチング・領土カード」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b1">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約447万km²</div><div class="nl">日本の領海+排他的経済水域(国土の約12倍・世界有数)</div></div><div><div class="nv">193か国</div><div class="nl">国際連合の加盟国数</div></div><div><div class="nv">27か国</div><div class="nl">EU加盟国数。共通通貨ユーロで結びつく</div></div></div></div><div class="card"><h2><span class="badge b1">基礎</span>🚩 国家のキホン</h2>
+<div class="keybox">国家は<b>領域・国民・主権</b>の3要素で成り立つ。領域は<b>領土・領海・領空</b>からなり、国境には山脈や川を利用した<b>自然的国境</b>と、緯線・経線などで引いた<b>人為的国境</b>がある(アフリカに直線国境が多いのは植民地時代の名残)。一方で現代は、EUやASEANのように国家が<b>地域的にまとまる(国家群)</b>動きも加速している。</div></div>
+<div class="card">
     <h2><span class="badge b1">体験</span>🚩 国家の領域たんけん図 ─ タップして調べよう <span class="ref">▶ p.28–31</span></h2>
     <p class="desc">国家は「領域・国民・主権」の3要素で成り立つ。下の断面図の各部分をタップすると解説が出るよ。</p>
     <div class="diagram-wrap">
@@ -500,26 +538,60 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
     </div>
     <div class="hint"><b>考えよう:</b>国土面積では世界60位ほどの日本が、領海+排他的経済水域の広さでは<b>世界有数</b>になるのはなぜ?(ヒント:離島の存在)</div>
   </div>
-
-  <div class="card">
+<div class="card"><h2><span class="badge b1">体験</span>🗾 日本の領域カード ─ タップして確認! <span class="ref">▶ p.30–31</span></h2>
+<p class="desc">日本の領域をめぐる問題は、位置と経緯を正確に知ることが出発点。3枚のカードで確認しよう。</p>
+<div class="flip-grid">
+<div class="flip f1" role="button" tabindex="0"><div class="flip-inner">
+<div class="face front"><h3>北方領土</h3><div class="big">🏝️</div><p>択捉島・国後島・色丹島・歯舞群島。</p><span class="tapnote">タップ →</span></div>
+<div class="face back"><h3>日本固有の領土</h3><ul><li>第二次世界大戦後にソ連が占拠し、現在も<b>ロシアが不法に占拠</b></li><li>択捉島は日本最北端。返還交渉が続く</li></ul><span class="tapnote">← もどる</span></div></div></div>
+<div class="flip f1" role="button" tabindex="0"><div class="flip-inner">
+<div class="face front"><h3>竹島</h3><div class="big">🪨</div><p>島根県隠岐の島町に属する島。</p><span class="tapnote">タップ →</span></div>
+<div class="face back"><h3>日本固有の領土</h3><ul><li>1905年に島根県へ編入。1952年以降<b>韓国が不法に占拠</b></li><li>日本は国際司法裁判所への付託を提案している</li></ul><span class="tapnote">← もどる</span></div></div></div>
+<div class="flip f1" role="button" tabindex="0"><div class="flip-inner">
+<div class="face front"><h3>尖閣諸島</h3><div class="big">🌊</div><p>沖縄県石垣市に属する島々。</p><span class="tapnote">タップ →</span></div>
+<div class="face back"><h3>日本が有効に支配する固有の領土</h3><ul><li>歴史的にも国際法上も日本固有の領土で、<b>解決すべき領有権の問題はそもそも存在しない</b></li><li>周辺海域では中国公船の活動が課題に</li></ul><span class="tapnote">← もどる</span></div></div></div>
+</div></div>
+<div class="card">
     <h2><span class="badge b1">体験</span>🤝 地域組織マッチング <span class="ref">▶ p.32–35</span></h2>
     <p class="desc">国家をこえた結びつきが世界各地で進んでいる。組織名と説明をタップしてつなげよう。</p>
     <div class="match-wrap"><div class="match-col" id="orgL"></div><div class="match-col" id="orgR"></div></div>
     <div class="sort-fb" id="orgFb"></div>
-  </div>
+  </div><div class="card"><h2><span class="badge b1">事例</span>🌏 話題の現場</h2><p class="desc">満潮時にわずかに残る島が生む広大な海、植民地時代の直線が今も残る国境 ─ 「国の輪郭」が決まる現場をたどろう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p12"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.mofa.go.jp/mofaj/area/nihonnoryodo/" target="_blank" rel="noopener">外務省 日本の領土をめぐる情勢</a><a href="https://www.unic.or.jp/" target="_blank" rel="noopener">国連広報センター</a></div><div class="card"><h2><span class="badge b1">確認</span>✏️ チェッククイズ</h2><div id="quizP12"></div></div><div class="card"><h2><span class="badge b1">+α</span>📚 国家と国家群 用語ミニ辞典 <span class="ref">▶ p.28–35</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>主権</b>他国に干渉されず国を治める最高の権力。国家3要素の一つ。</div><div><b>排他的経済水域(EEZ)</b>基線から200海里。水産・鉱産資源の権利が沿岸国に。</div><div><b>接続水域</b>領海の外側、基線から24海里。密輸などを取り締まれる。</div><div><b>自然的国境</b>山脈・河川・湖など自然を利用した国境。</div><div><b>人為的国境</b>緯線・経線などで人工的に引いた国境。アフリカに多い。</div><div><b>国家群</b>EU・ASEANなど、国家をこえた地域的なまとまり。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>国境は「壁」だろうか「接点」だろうか? EUのように国境を開く動きと、領域を厳格に守る動き ─ 両方が必要とされる理由を、自分の言葉で説明してみよう。</div>
+</section>
 
-  <div class="card">
+<section class="page" id="p12b">
+  <div class="crumb">第1編 > 2章 国家の結びつきとグローバル化する世界</div>
+  <div class="pagetitle">交通・通信<span class="pgref">📖 教科書 p.36–39</span></div>
+  <p class="pagelead">交通機関の発達で「縮む世界」、情報・通信で「一体化する世界」。距離の意味を変えた2つの革命を体感する。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">地球の大きさは変わらないのに、なぜ世界は「縮んだ」と言えるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用・時間距離</b><br>カギは「時間距離」という考え方。移動と通信の技術が、地図上の距離とは別の「近さ」をつくり出した。</div></div></div><details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「縮む世界タイムマシン/輸送モード比較ラボ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「交通仕分けゲーム」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b1">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約99%</div><div class="nl">大陸間のインターネット通信のうち海底ケーブルが担う割合</div></div><div><div class="nv">約14時間</div><div class="nl">東京〜ロンドンの直行便(かつて船で約50日)</div></div><div><div class="nv">0.1秒以下</div><div class="nl">海底ケーブルが光で情報を運ぶ日米間の時間</div></div></div></div><div class="card"><h2><span class="badge b1">基礎</span>🚄 交通・通信のキホン</h2>
+<div class="keybox">交通の発達は移動にかかる時間=<b>時間距離</b>を縮めてきた。ジェット機・新幹線・高速道路、そして<b>LCC</b>(格安航空)は移動を身近に。一方、通信は<b>海底ケーブル</b>と人工衛星で世界を一体化し、ICTの発達で「移動しない交流」(オンライン会議・ネット通販)まで生んだ。ただし恩恵には地域差がある ─ 交通網・通信網から取り残される地域の問題(<b>デジタルデバイド</b>)も忘れずに。</div></div>
+<div class="card"><h2><span class="badge b1">体験</span>⏳ 縮む世界タイムマシン ─ 東京→ロンドンの旅 <span class="ref">▶ p.36–37</span></h2>
+<p class="desc">年代を選ぶと、東京からロンドンまでの所要時間と「体感的な世界の大きさ」が変わる。地球は同じ大きさなのに…!</p>
+<div class="simbox"><div class="row" id="shrinkBtns"></div>
+<div style="text-align:center;margin-top:10px"><svg id="shrinkSvg" viewBox="0 0 300 170" style="max-width:300px"><circle id="shrinkC" cx="150" cy="85" r="75" fill="#7fa8e8" opacity=".8"/><text x="150" y="90" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">地球</text></svg></div>
+<div class="simout" id="shrinkOut"></div></div>
+<div class="hint"><b>用語:</b>このように移動時間で測った「近さ」を<b>時間距離</b>という。リニア中央新幹線やオンライン会議は、時間距離をさらに縮める挑戦だ。</div></div>
+<div class="card"><h2><span class="badge b1">体験</span>🚚 輸送モード比較ラボ ─ この荷物、何で運ぶのが正解? <span class="ref">▶ p.36–41</span></h2><p class="desc">貨物を選ぶと、海上・航空・陸上で運んだ場合の「時間・費用・CO2」を比較できる(数値はモデル)。最適な手段は貨物によって変わることを体感しよう。</p><div class="simbox"><div class="row"><select id="cargoSel"></select></div><div class="meter" id="transBars"></div><div class="simout" id="transNote"></div></div><div class="hint"><b>考えよう:</b>「速さ」と「安さ」はトレードオフ。あなたがスマホメーカーの物流担当なら、新製品の発売日にどう間に合わせる?</div></div><div class="card">
     <h2><span class="badge b1">体験</span>🚢 この貨物、どの交通機関で運ぶ? <span class="ref">▶ p.36–41</span></h2>
     <p class="desc">交通機関には得意・不得意がある。貨物や移動の場面を、最も適した輸送手段に仕分けよう。</p>
     <div id="sortTransport"></div>
-  </div>
+  </div><div class="card"><h2><span class="badge b1">事例</span>🌏 話題の現場</h2><p class="desc">世界の船が行き交う細い海峡、情報の99%が通る海の底、砂漠に生まれたハブ空港 ─ 「縮む世界」を支える現場へ。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p12b"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.soumu.go.jp/johotsusintokei/whitepaper/" target="_blank" rel="noopener">総務省 情報通信白書</a><a href="https://www.mlit.go.jp/" target="_blank" rel="noopener">国土交通省</a></div><div class="card"><h2><span class="badge b1">確認</span>✏️ チェッククイズ</h2><div id="quizP12b"></div></div><div class="card"><h2><span class="badge b1">+α</span>📚 交通・通信 用語ミニ辞典 <span class="ref">▶ p.36–39</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>時間距離</b>移動にかかる時間で測った距離。交通の発達で縮む。</div><div><b>ハブ空港</b>乗り継ぎの拠点となる空港。仁川・ドバイなど。</div><div><b>LCC</b>格安航空会社。人の国際移動を一気に身近にした。</div><div><b>コンテナ</b>規格化された輸送箱。船↔トラック↔鉄道の積み替えを効率化。</div><div><b>海底ケーブル</b>大陸間のネット通信の9割超を支える光ファイバー。</div><div><b>デジタルデバイド</b>情報通信を使える人・地域とそうでない人・地域の格差。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>「距離は死んだ」と言われることがある。本当だろうか? オンラインで済むことと、それでも人が移動する(会いに行く・現地へ行く)ことを2つずつ挙げ、距離の意味を考えてみよう。</div>
+</section>
 
-  <div class="card"><h2><span class="badge b1">体験</span>🚚 輸送モード比較ラボ ─ この荷物、何で運ぶのが正解? <span class="ref">▶ p.36–41</span></h2><p class="desc">貨物を選ぶと、海上・航空・陸上で運んだ場合の「時間・費用・CO2」を比較できる(数値はモデル)。最適な手段は貨物によって変わることを体感しよう。</p><div class="simbox"><div class="row"><select id="cargoSel"></select></div><div class="meter" id="transBars"></div><div class="simout" id="transNote"></div></div><div class="hint"><b>考えよう:</b>「速さ」と「安さ」はトレードオフ。あなたがスマホメーカーの物流担当なら、新製品の発売日にどう間に合わせる?</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.mofa.go.jp/mofaj/area/nihonnoryodo/" target="_blank" rel="noopener">外務省 日本の領土をめぐる情勢</a><a href="https://www.customs.go.jp/toukei/info/" target="_blank" rel="noopener">税関 貿易統計</a></div>
-  <div class="card">
-    <h2><span class="badge b1">確認</span>✏️ 章末チェッククイズ</h2>
-    <div id="quizP12"></div>
-  </div>
-<div class="card"><h2><span class="badge b1">+α</span>📚 グローバル化 用語ミニ辞典 <span class="ref">▶ p.28–43</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>排他的経済水域(EEZ)</b>基線から200海里。水産・鉱産資源の権利が沿岸国に。</div><div><b>ハブ空港</b>乗り継ぎの拠点となる空港。仁川・ドバイなど。</div><div><b>コンテナ</b>規格化された輸送箱。船↔トラック↔鉄道の積み替えを効率化。</div><div><b>LCC</b>格安航空会社。人の国際移動を一気に身近にした。</div><div><b>海底ケーブル</b>大陸間のインターネット通信の9割以上を支える。</div><div><b>多国籍企業</b>複数の国に拠点をもち、世界規模で活動する企業。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>国境の意味は「消えた」のではなく「変わった」。ヒト・モノ・カネ・情報のうち、国境をこえやすいものとこえにくいものは何か。理由とともに順位づけしてみよう。</div>
+<section class="page" id="p12c">
+  <div class="crumb">第1編 > 2章 国家の結びつきとグローバル化する世界</div>
+  <div class="pagetitle">貿易・人の移動<span class="pgref">📖 教科書 p.40–43</span></div>
+  <p class="pagelead">拡大する世界の貿易と物流、そして観光・労働・学びで国境をこえる人々。モノとヒトの流れから、グローバル化の実像をつかむ。</p>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">あなたの持ち物と教室の仲間 ─ 10年後、どちらがもっと「国際的」になっているだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用</b><br>モノの流れ(貿易)とヒトの流れ(移動)はグローバル化の両輪。日本の貿易相手の交代劇と、急増するインバウンドの今を見よう。</div></div></div><details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「日本の貿易相手タイムライン」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「ヒト・モノ・カネ・情報の仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b1">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約3,700万人</div><div class="nl">訪日外国人旅行者数(2024年・過去最多水準)</div></div><div><div class="nv">約2.8億人</div><div class="nl">世界の国際移民(国連推計・概数)</div></div><div><div class="nv">第1位</div><div class="nl">日本の貿易相手国・中国(輸出入総額)</div></div></div></div><div class="card"><h2><span class="badge b1">基礎</span>📦 貿易と人の移動のキホン</h2>
+<div class="keybox">かつての日本は原料を輸入し製品を輸出する<b>加工貿易</b>の国だったが、現地生産の拡大で機械類や部品を相互にやり取りする<b>水平分業</b>へ変化し、最大の貿易相手も<b>アメリカから中国へ</b>交代した。人の移動も活発化し、訪日観光(<b>インバウンド</b>)は過去最多を更新。一方で観光地の混雑(<b>オーバーツーリズム</b>)や、海外で働く人々の<b>送金</b>が母国の経済を支える現象など、新しい課題と姿が生まれている。</div></div>
+<div class="card"><h2><span class="badge b1">体験</span>📈 日本の貿易相手タイムライン ─ 主役交代の瞬間 <span class="ref">▶ p.40–41</span></h2>
+<p class="desc">年代ボタンを押すと、日本の輸出に占めるアメリカと中国の割合(概数・モデル値)が変わる。「主役交代」はいつ起きた?</p>
+<div class="simbox"><div class="row" id="tradeBtns"></div><div class="meter" id="tradeBars"></div><div class="simout" id="tradeNote"></div></div>
+<div class="hint"><b>考えよう:</b>貿易相手の変化は、工場の立地(2編6節)や国際関係とつながっている。1つのグラフの裏に「世界の構造変化」が見える。</div></div>
+<div class="card"><h2><span class="badge b1">体験</span>🔀 国境をこえるのは何? ヒト・モノ・カネ・情報 仕分けゲーム <span class="ref">▶ p.40–43</span></h2>
+<p class="desc">グローバル化とは「4つの流れ」が国境をこえて活発になること。表示される事例を正しく仕分けよう。</p>
+<div id="sortMove"></div></div>
+<div class="card"><h2><span class="badge b1">事例</span>🌏 話題の現場</h2><p class="desc">世界の雑貨が集まる巨大市場、送金が国を支える島国、観光客であふれる古都 ─ モノとヒトの流れの現場をたどる。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p12c"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.customs.go.jp/toukei/info/" target="_blank" rel="noopener">税関 貿易統計</a><a href="https://statistics.jnto.go.jp/" target="_blank" rel="noopener">日本政府観光局(JNTO)統計</a><a href="https://www.jetro.go.jp/" target="_blank" rel="noopener">JETRO(日本貿易振興機構)</a></div><div class="card"><h2><span class="badge b1">確認</span>✏️ チェッククイズ</h2><div id="quizP12c"></div></div><div class="card"><h2><span class="badge b1">+α</span>📚 貿易・人の移動 用語ミニ辞典 <span class="ref">▶ p.40–43</span></h2><p class="desc">テスト前の最終チェックに。意味を言えるか確かめよう。</p><div class="vocab"><div><b>加工貿易</b>原料を輸入し、製品に加工して輸出する貿易。かつての日本型。</div><div><b>水平分業</b>各国が部品や工程を分担し合う国際分業。現代の主流。</div><div><b>サプライチェーン</b>原料から消費者まで、生産・物流のつながり全体。</div><div><b>インバウンド</b>海外から日本を訪れる旅行(者)。地域経済の新しい柱。</div><div><b>オーバーツーリズム</b>観光客の集中で住民生活や環境に支障が出る問題。</div><div><b>多国籍企業</b>複数の国に拠点をもち、世界規模で活動する企業。</div></div></div><div class="think"><b>Think! 冒頭の問いに戻ろう ─ </b>国境の意味は「消えた」のではなく「変わった」。ヒト・モノ・カネ・情報のうち、国境をこえやすいものとこえにくいものは何か。理由とともに順位づけしてみよう。</div>
 </section>
 
 <!-- ===================== 2編1章1節 地形 ===================== -->
@@ -528,7 +600,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">人々の生活の舞台となる地形<span class="pgref">📖 教科書 p.46–53</span></div>
   <p class="pagelead">世界的視野から見た大地形、河川がつくる地形、海岸の地形、そして気候の影響を強く受けた地形(FILE5)まで──「舞台」としての地形を知る。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">同じ地球の上なのに、なぜ場所によって地形がまったく違うのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>自然環境(地形)・規模(スケール)</b><br>大地形(プレート)→小地形(川・海岸)→気候地形と、スケールを変えながら「土地のなりたち」を読み解こう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「流れる水のはたらきシミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「プレートカード・地形マッチング・気候地形仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「流れる水のはたらきシミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「プレートカード・地形マッチング・気候地形仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b2">基礎</span>🌋 大地形のキホン</h2>
@@ -641,6 +715,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 
   <div class="card"><h2><span class="badge b2">体験</span>🌊 流れる水のはたらきシミュレーター <span class="ref">▶ p.48–49</span></h2><p class="desc">川の流速を変えると、れき(石)・砂・泥の動きが変わる。「速い流れ=侵食・運搬」「遅い流れ=堆積」を確かめ、扇状地や三角州ができる理由につなげよう。</p><div class="simbox"><input type="range" id="flowRange" min="0" max="100" value="50" aria-label="流速"><div class="row" style="justify-content:space-between;font-size:.78rem;color:#51626d"><span>ゆるやか(下流・河口)</span><span>急流(上流・大雨時)</span></div><div class="simout" id="flowOut"></div></div><div class="hint"><b>つなげよう:</b>山地から平地に出ると流速が急に落ちる→重い「れき」から順に堆積→扇状地。河口ではさらに細かい泥まで堆積→三角州。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://gbank.gsj.jp/geonavi/" target="_blank" rel="noopener">産総研 地質図Navi</a><a href="https://www.jishin.go.jp/" target="_blank" rel="noopener">地震調査研究推進本部</a></div>
   <div class="card"><h2><span class="badge b2">思考</span>🧭 見方・考え方トレーニング ─ 「地理の問い」を立てる目 <span class="ref">▶ 5つのレンズ</span></h2><p class="desc">知識を覚えるだけでは地理ではない。事象を見て<b>地理的な問いを立て、地理的に説明する</b>練習をしよう。</p><div id="trainMikata1"></div></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">大地が裂け、ぶつかり、流水にけずられる ─ プレートと川がつくった「地球の彫刻」の代表作を巡ろう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p211"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP211"></div>
@@ -654,7 +729,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">人々の生活に彩りを与える気候<span class="pgref">📖 教科書 p.54–63</span></div>
   <p class="pagelead">気温・降水量・風という気候要素から、ケッペンの気候区分、各気候帯の暮らしまで。雨温図を「読む目」を鍛える節。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">緯度がほぼ同じでも、気候が大きく違う場所があるのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>分布とその要因</b><br>東京とローマ、カイロはほぼ同じ緯度帯。大気大循環・海との距離・地形…要因を組み合わせて説明できるようになろう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「気候ナビ/標高と気温の計算ラボ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「雨温図あてゲーム」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「気候ナビ/標高と気温の計算ラボ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「雨温図あてゲーム」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b2">基礎</span>🌍 気候のキホン</h2>
@@ -717,6 +794,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b2">体験</span>🏔️ 標高と気温の計算ラボ <span class="ref">▶ p.54–55</span></h2><p class="desc">気温は標高が100m上がるごとに約0.6℃下がる(気温の逓減)。スライダーで山を登り、ふもと30℃の真夏日に山頂が何℃になるか確かめよう。</p><div class="simbox"><input type="range" id="altRange" min="0" max="3776" step="50" value="0" aria-label="標高"><div class="row" style="justify-content:space-between;font-size:.78rem;color:#51626d"><span>0m(ふもと30℃)</span><span>3,776m(富士山頂)</span></div><div class="simout" id="altOut"></div></div><div class="hint"><b>つなげよう:</b>これが赤道直下でも高山都市(キト・ラパス)が過ごしやすい理由=高山気候。緯度だけでなく標高も気候因子だ。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.jma.go.jp/" target="_blank" rel="noopener">気象庁(世界・日本の気候データ)</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">数年雨が降らない砂漠から、太陽が昇らない極夜の町まで ─ 気候区分の「ものさし」になる極端な現場を体感しよう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p212"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP212"></div>
@@ -730,7 +808,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">「衣」から見る世界<span class="pgref">📖 教科書 p.64–69</span></div>
   <p class="pagelead">衣服は自然環境(暑さ・寒さ・日差し)への適応であり、宗教や文化の表現でもある。そしていま、「衣」のグローバル化が進む。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">人はなぜ「その服」を着るのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>人間と自然環境との関わり・文化</b><br>自然への適応と、宗教・伝統という2つのレンズで世界の衣服を見てみよう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「砂漠旅行の服装シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「環境と衣服のマッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「砂漠旅行の服装シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「環境と衣服のマッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b2">基礎</span>👕 衣服を決める2つの環境</h2>
@@ -746,6 +826,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 
   <div class="card"><h2><span class="badge b2">体験</span>🧳 砂漠旅行の服装シミュレーター ─ 8月のカイロへ! <span class="ref">▶ p.64–67</span></h2><p class="desc">8月のカイロは日中40℃近く、強烈な日差し、夜は意外と冷える。スーツケースに入れるべきものを選んで(複数)、判定ボタンを押そう。</p><div class="pick-grid" id="pickDesert"></div><div class="row" style="margin-top:12px"><button class="chip" id="desertJ">判定する!</button><button class="chip" id="desertR">リセット</button></div><div class="sort-fb" id="desertFb"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.env.go.jp/policy/sustainable_fashion/" target="_blank" rel="noopener">環境省 サステナブルファッション</a></div>
   <div class="card"><h2><span class="badge b2">体験</span>🔄 伝統⇄変容 仕分けチャレンジ <span class="ref">▶ p.68 「衣」のグローバル化</span></h2><p class="desc">昔ながらの姿か、グローバル化・社会の変化による「変容」か。仕分けながら、生活文化が動いていることを実感しよう。</p><div class="keybox" style="margin-bottom:12px">📖 <b>大事な視点:生活文化は「変わる」</b>。生活文化は地理的環境の影響を受けて多様になると同時に、グローバル化や社会の変化によって<b>変容</b>する(これも教科書・指導要領の重要ポイント)。「伝統=止まった過去」ではなく、「いまも変わり続けるもの」として見よう。</div><div id="sortHenyoI"></div><div class="hint"><b>考えよう:</b>変容は「伝統の消滅」だろうか? 民族衣装が晴れ着として「選ばれて」残るのは、むしろ価値の変化かもしれない。</div></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">砂漠の白い長衣の合理性から、私たちの服が縫われ・手放され・たどり着く現場まで ─ 「衣」のいまを世界規模で追う。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p213"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP213"></div>
@@ -759,8 +840,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">「食」から見る世界<span class="pgref">📖 教科書 p.70–79</span></div>
   <p class="pagelead">主食の地域性、食べ方の多様性、農業形態、そして食のグローバル化。「いただきます」の向こう側に世界が見える。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">あなたの今日の一食は、世界のどこと、どうつながっているだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用</b><br>主食の地域性から食のグローバル化まで。「いただきます」の向こう側を地図でたどろう。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「バーチャルウォーター計算機」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「主食マッチング・農業仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">38%</div><div class="nl">日本の食料自給率(カロリーベース・概数)</div></div><div><div class="nv">約20,600L</div><div class="nl">牛肉1kgの生産に必要な水(バーチャルウォーター)</div></div><div><div class="nv">約470万t</div><div class="nl">日本の年間食品ロス(おにぎり約1億個分/日)</div></div></div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🍙 食のキホン</h2><div class="keybox">主食は<b>米・小麦・とうもろこし</b>の三大穀物といも類が中心。何が主食になるかは<b>気候</b>(育つ作物)で決まり、どう食べるかは<b>文化</b>(調理・宗教)で決まる。流通の発達で食はグローバル化する一方、<b>食料自給率</b>や<b>フードロス</b>という新しい課題も生まれた。</div></div>
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">38%</div><div class="nl">日本の食料自給率(カロリーベース・概数)</div></div><div><div class="nv">約20,600L</div><div class="nl">牛肉1kgの生産に必要な水(バーチャルウォーター)</div></div><div><div class="nv">約470万t</div><div class="nl">日本の年間食品ロス(おにぎり約1億個分/日)</div></div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🍙 食のキホン</h2><div class="keybox">主食は<b>米・小麦・とうもろこし</b>の三大穀物といも類が中心。何が主食になるかは<b>気候</b>(育つ作物)で決まり、どう食べるかは<b>文化</b>(調理・宗教)で決まる。流通の発達で食はグローバル化する一方、<b>食料自給率</b>や<b>フードロス</b>という新しい課題も生まれた。</div></div>
 
   <div class="card">
     <h2><span class="badge b2">体験</span>🍚 世界の主食マッチング <span class="ref">▶ p.70–75</span></h2>
@@ -778,6 +862,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="card"><h2><span class="badge b2">体験</span>💧 バーチャルウォーター計算機 ─ 今日のランチの「見えない水」 <span class="ref">▶ p.70–79</span></h2><p class="desc">メニューを選ぶと、その食材の生産に使われた水(バーチャルウォーター)の合計が表示される。輸入食料が多い日本は、実は大量の「水」を輸入しているのと同じだ。</p><div class="simbox"><div class="pick-grid" id="vwList"></div><div class="simout" id="vwTotal"></div></div><div class="hint"><b>考えよう:</b>牛肉の数字が大きいのはなぜ?(ヒント:牛が食べる飼料の栽培にも水が必要)</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.env.go.jp/water/virtual_water/" target="_blank" rel="noopener">環境省 バーチャルウォーター</a><a href="https://www.maff.go.jp/j/zyukyu/zikyu_ritu/012.html" target="_blank" rel="noopener">農林水産省 食料自給率</a></div>
   <div class="card"><h2><span class="badge b2">思考</span>🧭 見方・考え方トレーニング ─ 食卓から世界へ「結びつき」をたどる <span class="ref">▶ レンズ④空間的相互依存</span></h2><p class="desc">「食」はレンズ④(空間的相互依存作用)の最高の練習台。一杯のどんぶりの向こうに世界が見えるか?</p><div id="trainMikata2"></div></div>
   <div class="card"><h2><span class="badge b2">体験</span>🔄 伝統⇄変容 仕分けチャレンジ <span class="ref">▶ p.74–79 食べ物の伝播/「食」のグローバル化</span></h2><p class="desc">昔ながらの姿か、グローバル化・社会の変化による「変容」か。仕分けながら、生活文化が動いていることを実感しよう。</p><div class="keybox" style="margin-bottom:12px">📖 <b>大事な視点:生活文化は「変わる」</b>。生活文化は地理的環境の影響を受けて多様になると同時に、グローバル化や社会の変化によって<b>変容</b>する(これも教科書・指導要領の重要ポイント)。「伝統=止まった過去」ではなく、「いまも変わり続けるもの」として見よう。</div><div id="sortHenyoF"></div><div class="hint"><b>考えよう:</b>カリフォルニアロールは「正しくない寿司」? それとも「文化が伝播し現地化した好例」? 食の変容に正解はあるか議論してみよう。</div></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">米・小麦・とうもろこし・いも、4つの主食の「ふるさと」と、世界の食卓を支える(そして揺らす)生産の現場へ。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p214"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP214"></div>
@@ -791,7 +876,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">「住」から見る世界<span class="pgref">📖 教科書 p.80–89</span></div>
   <p class="pagelead">住居は「その土地で手に入る材料」と「気候への工夫」のかたまり。世界の住まいから環境適応の知恵を読み取ろう。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">世界の家の形を決めているのは、いったい「何」だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>人間と自然環境との関わり</b><br>ヒント:①その土地で手に入る材料 ②気候への工夫 ③社会の変化。3つの視点で住まいを観察しよう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「世界の家づくり設計チャレンジ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「住まいマッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div><figure class="model"><svg viewBox="0 0 700 330" role="img" aria-label="高床式住居の2つの理由">
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「世界の家づくり設計チャレンジ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「住まいマッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><figure class="model"><svg viewBox="0 0 700 330" role="img" aria-label="高床式住居の2つの理由">
 <rect width="700" height="330" fill="#fbfdfc"/>
 <rect x="0" y="0" width="700" height="30" fill="#1f3340"/><text x="14" y="20" font-size="13" font-weight="bold" fill="#fff">🏠 比較模式図|同じ「高床」でも理由がちがう!</text>
 <defs><marker id="aD3" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#2e6fdb"/></marker></defs>
@@ -834,6 +921,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 
   <div class="card"><h2><span class="badge b2">体験</span>🏗️ 世界の家づくり設計チャレンジ <span class="ref">▶ p.80–85</span></h2><p class="desc">建てる地域を選び、その環境に合った工夫を<b>3つ</b>選んで「設計審査」を受けよう。地域を変えると正解も変わる!</p><div class="row" id="houseRegions"></div><div class="pick-grid" id="housePick"></div><div class="row" style="margin-top:12px"><button class="chip" id="houseJ">設計審査を受ける!</button></div><div class="sort-fb" id="houseFb"></div></div>
   <div class="card"><h2><span class="badge b2">体験</span>🔄 伝統⇄変容 仕分けチャレンジ <span class="ref">▶ p.84–85 社会の変化と「住」</span></h2><p class="desc">昔ながらの姿か、グローバル化・社会の変化による「変容」か。仕分けながら、生活文化が動いていることを実感しよう。</p><div class="keybox" style="margin-bottom:12px">📖 <b>大事な視点:生活文化は「変わる」</b>。生活文化は地理的環境の影響を受けて多様になると同時に、グローバル化や社会の変化によって<b>変容</b>する(これも教科書・指導要領の重要ポイント)。「伝統=止まった過去」ではなく、「いまも変わり続けるもの」として見よう。</div><div id="sortHenyoH"></div><div class="hint"><b>考えよう:</b>世界中の都市の景観が似てくる(均質化)一方で、伝統家屋は観光資源に。「便利さ」と「らしさ」のバランスをどう取る?</div></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">土のマンション、豪雪の合掌造り、凍土の上の高床 ─ 環境が生んだ住まいの傑作と、変わりゆく暮らしの現場を巡る。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p215"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP215"></div>
@@ -847,7 +935,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">暮らしを豊かにする産業<span class="pgref">📖 教科書 p.90–101</span></div>
   <p class="pagelead">産業の発展と生活の変化、自動車・ICT産業のグローバル化、地場産業の挑戦。アメリカと中国の事例(学習を深めよう)にも対応。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">産業が発展すると、人々の暮らしの何が変わり、何が課題になるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域の変容</b><br>農業中心の社会から、工場、そしてICTへ。アメリカと中国の事例から変化の光と影をとらえよう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「工場立地シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「産業仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「工場立地シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「産業仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b2">基礎</span>🏭 産業のキホン</h2>
@@ -877,6 +967,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b2">体験</span>🏭 工場立地シミュレーター ─ あなたは社長だ! <span class="ref">▶ p.90–97</span></h2><p class="desc">工場をどこに建てるかは、産業の性質で決まる。業種を選び、最適な立地を選択して経営判断を下そう。</p><div class="simbox"><div class="row"><select id="indSel"></select></div><div class="quiz-opts" id="locOpts" style="margin-top:10px"></div><div class="sort-fb" id="locFb"></div></div><div class="hint"><b>用語:</b>原料の重量が減る産業は<b>原料指向</b>(セメント)、新鮮さ・重さが増す産業は<b>市場指向</b>(ビール)、軽くて高価なら<b>空港・高速道路指向</b>(IC)。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://resas.go.jp/" target="_blank" rel="noopener">RESAS 地域経済分析システム</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">漁村から40年でハイテク都市になった街、自動車の都の栄枯盛衰 ─ 産業が都市の運命を変えた現場を見比べよう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p216"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP216"></div>
@@ -890,7 +981,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">世界の言語・宗教と人々の生活<span class="pgref">📖 教科書 p.102–117</span></div>
   <p class="pagelead">言語と宗教は生活文化の核。世界宗教の分布と教え、暮らしへの影響(食・祈り・祭り)を学び、互いを尊重する土台をつくる。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">宗教や言語を知ることが、なぜ「世界を理解する」ことにつながるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>文化の多様性</b><br>食・祈り・祭り・休日…宗教は暮らしの設計図。違いの背景を知れば、ニュースの見え方が変わる。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「世界の宗教分布マップ(タップ式)」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「宗教カード図鑑」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div><div class="card"><h2><span class="badge b2">基礎</span>🗣️ 言語のキホン</h2><div class="keybox">世界には約<b>7,000</b>の言語がある。国が公の場で使うと定めた言語が<b>公用語</b>で、スイスのように複数もつ国も多い。母語人口の最大は<b>中国語</b>、最も広い地域で使われるのは<b>英語</b>。中南米のスペイン語・ポルトガル語のように、言語分布には<b>植民地支配の歴史</b>が刻まれている。</div></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「世界の宗教分布マップ(タップ式)」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「宗教カード図鑑」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b2">基礎</span>🗣️ 言語のキホン</h2><div class="keybox">世界には約<b>7,000</b>の言語がある。国が公の場で使うと定めた言語が<b>公用語</b>で、スイスのように複数もつ国も多い。母語人口の最大は<b>中国語</b>、最も広い地域で使われるのは<b>英語</b>。中南米のスペイン語・ポルトガル語のように、言語分布には<b>植民地支配の歴史</b>が刻まれている。</div></div>
 
   <div class="card">
     <h2><span class="badge b2">体験</span>🕌 世界の宗教カード図鑑 ─ タップ! <span class="ref">▶ p.104–111</span></h2>
@@ -942,6 +1035,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <g font-size="9" fill="#1f3340"><text x="20" y="292">■キリスト教系 ■イスラーム系 ■ヒンドゥー系 ■仏教・伝統系 ■混在 ※多数派の概略</text></g>
 </svg></div><div class="diagram-info" id="relInfo"><h3>タップしてみよう</h3>地域をタップすると、主な宗教と暮らしへの影響が表示されます。実際にはどの地域にも複数の宗教が共存していることに注意!</div></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.mofa.go.jp/mofaj/area/" target="_blank" rel="noopener">外務省 国・地域情報</a></div>
   <div class="card"><h2><span class="badge b2">体験</span>🔄 伝統⇄変容 仕分けチャレンジ <span class="ref">▶ p.106–111 宗教の伝播/生活の中の宗教</span></h2><p class="desc">昔ながらの姿か、グローバル化・社会の変化による「変容」か。仕分けながら、生活文化が動いていることを実感しよう。</p><div class="keybox" style="margin-bottom:12px">📖 <b>大事な視点:生活文化は「変わる」</b>。生活文化は地理的環境の影響を受けて多様になると同時に、グローバル化や社会の変化によって<b>変容</b>する(これも教科書・指導要領の重要ポイント)。「伝統=止まった過去」ではなく、「いまも変わり続けるもの」として見よう。</div><div id="sortHenyoR"></div><div class="hint"><b>考えよう:</b>飛行機とインターネットは宗教の実践をどう変えた? 変わったのは「手段」で、変わらないのは何だろう。</div></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">1km四方に3宗教の聖地が同居する街、海を渡って広がった信仰 ─ 祈りが暮らしと政治と地理を動かす現場。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p217"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(言語・宗教)</h2>
     <div id="quizP217"></div>
@@ -955,7 +1049,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">多文化共生に向けて<span class="pgref">📖 教科書 p.118–121</span></div>
   <p class="pagelead">多様性に富んだ世界の人々との共生。違いを「困りごと」ではなく「豊かさ」に変えるには? 修学旅行プランニングのワーク(ワーク7)にもつながる節。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">文化の違いは「壁」だろうか、それとも「豊かさ」だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>多様性と共生</b><br>ここまで学んだ衣食住・宗教の知識を、実際の場面で使ってみよう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「やさしい日本語 翻訳マッチング」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「シナリオクイズ」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「やさしい日本語 翻訳マッチング」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「シナリオクイズ」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b2">体験</span>🌈 多文化共生 こんなときどうする? シナリオクイズ <span class="ref">▶ p.118–121・ワーク7</span></h2>
@@ -964,6 +1060,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b2">体験</span>🈂️ 「やさしい日本語」翻訳マッチング <span class="ref">▶ p.118–121</span></h2><p class="desc">災害時、外国人住民に届く言葉は「正確な日本語」より「やさしい日本語」。左の表現を、伝わる言いかえとつなげよう。</p><div class="match-wrap"><div class="match-col" id="yasaL"></div><div class="match-col" id="yasaR"></div></div><div class="sort-fb" id="yasaFb"></div><div class="hint"><b>コツ:</b>①短く ②一文一義 ③漢語→和語(避難→にげる) ④曖昧表現を避ける。これは高齢者や子どもにも伝わるユニバーサルな技術だ。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.bunka.go.jp/seisaku/kokugo_nihongo/kyoiku/92484001.html" target="_blank" rel="noopener">文化庁 やさしい日本語</a><a href="https://www.moj.go.jp/isa/" target="_blank" rel="noopener">出入国在留管理庁</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">住民の2割が外国籍の町、半数が海外生まれの大都市 ─ 多文化共生を「日常」にしている現場から知恵を学ぶ。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p218"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP218b"></div>
@@ -977,7 +1074,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">持続可能な社会を目指して(SDGs)<span class="pgref">📖 教科書 p.124–127</span></div>
   <p class="pagelead">2015年に国連で採択されたSDGs(持続可能な開発目標)は17の目標からなり、2030年までの達成を目指す。地球的課題を「地理的にとらえる」入口の節。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">「誰一人取り残さない」世界は、きれいごとだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>持続可能性</b><br>SDGsを「暗記する目標」ではなく「使う道具」に。課題どうしのつながりを地理的に見抜こう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「マイ・アクション診断」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「5つのP仕分け・課題マッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「マイ・アクション診断」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「5つのP仕分け・課題マッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b2">基礎</span>🎯 SDGsのキホン</h2>
@@ -1027,6 +1126,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b2">体験</span>✅ マイ・アクション診断 ─ あなたはもうSDGsに参加している? <span class="ref">▶ p.124–127</span></h2><p class="desc">ふだんの行動でしていることを全部タップして「診断」を押そう。あなたの行動がどの目標につながっているかが見える。</p><div class="pick-grid" id="actPick"></div><div class="row" style="margin-top:12px"><button class="chip" id="actJ">診断する!</button></div><div class="sort-fb" id="actFb"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.mofa.go.jp/mofaj/gaiko/oda/sdgs/index.html" target="_blank" rel="noopener">外務省 JAPAN SDGs Action Platform</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">SDGsが採択された国連の議場から、海面上昇の最前線の島、日本の技術が水を変えた村まで ─ 目標が「現実」になる場所。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p221"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP221"></div>
@@ -1040,8 +1140,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">すべての人々の尊厳と平等が守られた社会に向けて<span class="pgref">📖 教科書 p.128–145</span></div>
   <p class="pagelead">貧困・人口・食料・水・健康福祉・教育とジェンダー。「People(人間)」に関わる課題を、データと人口ピラミッドから考える。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">貧困や人口の問題は、遠い国の「他人事」だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>空間的相互依存作用・公正</b><br>人口ピラミッドと人口転換モデルという「2つの武器」で、世界と日本の課題を同じ土俵で考えよう。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「「支える人」シミュレーター/人口ピラミッド」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「節末クイズ」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約82億人</div><div class="nl">世界人口(2025年・国連推計)</div></div><div><div class="nv">約29%</div><div class="nl">日本の高齢化率(65歳以上の割合)</div></div><div><div class="nv">2.15ドル</div><div class="nl">1日あたりの国際貧困ライン(世界銀行)</div></div></div></div></div><figure class="model"><svg viewBox="0 0 720 340" role="img" aria-label="人口転換モデル">
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約82億人</div><div class="nl">世界人口(2025年・国連推計)</div></div><div><div class="nv">約29%</div><div class="nl">日本の高齢化率(65歳以上の割合)</div></div><div><div class="nv">2.15ドル</div><div class="nl">1日あたりの国際貧困ライン(世界銀行)</div></div></div></div><figure class="model"><svg viewBox="0 0 720 340" role="img" aria-label="人口転換モデル">
 <rect width="720" height="340" fill="#fbfdfc"/>
 <rect x="0" y="0" width="720" height="30" fill="#1f3340"/><text x="14" y="20" font-size="13" font-weight="bold" fill="#fff">👥 モデル図|人口転換 ─ 出生率と死亡率の「すれ違い」が歴史をつくる</text>
 <rect x="60" y="46" width="150" height="214" fill="#f4f1ea"/><rect x="360" y="46" width="150" height="214" fill="#f4f1ea"/>
@@ -1079,6 +1182,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b2">体験</span>👨‍👩‍👧 「支える人」シミュレーター ─ 高齢者1人を現役何人で? <span class="ref">▶ p.132–135</span></h2><p class="desc">スライダーで年代を動かすと、65歳以上1人を支える現役世代(15〜64歳)の人数が変わる。「肩車社会」とは何かを実感しよう(概数)。</p><div class="simbox"><input type="range" id="depRange" min="0" max="5" step="1" value="0" aria-label="年代"><div class="row" style="justify-content:space-between;font-size:.78rem;color:#51626d"><span>1970年</span><span>2070年(推計)</span></div><div class="simout" id="depOut"></div></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.stat.go.jp/data/sekai/" target="_blank" rel="noopener">総務省統計局 世界の統計</a><a href="https://tokyo.unfpa.org/" target="_blank" rel="noopener">国連人口基金(UNFPA)東京事務所</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">出生率が世界最高水準の国と、世界最速で高齢化が進む国 ─ 人口問題の「両極」の現場を同じ地図で見比べよう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p222"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(貧困・食料・健康・教育)</h2>
     <div id="quizP222"></div>
@@ -1092,8 +1196,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">自然と調和した豊かな社会に向けて<span class="pgref">📖 教科書 p.146–161</span></div>
   <p class="pagelead">持続可能な産業、限りある資源、エネルギー問題、都市・居住問題。「Prosperity(豊かさ)」をどう持続可能にするかを考える節。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">経済の豊かさと地球の限界は、両立できるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>持続可能性・トレードオフ</b><br>エネルギーも都市も「便利さ」と「持続可能性」のせめぎ合い。仕分けゲームでその構図をつかもう。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「エネルギーミックス・シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「エネルギー・都市仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約13%</div><div class="nl">日本のエネルギー自給率(主要国で最低水準)</div></div><div><div class="nv">約8割</div><div class="nl">日本の化石燃料への依存度</div></div><div><div class="nv">約2割</div><div class="nl">日本の発電に占める再生可能エネルギー(概数)</div></div></div></div></div><div class="card"><h2><span class="badge b2">基礎</span>⛏️ 資源のキホン</h2><div class="keybox">鉱産資源・エネルギー資源は<b>偏在</b>している(石油は西アジア、レアメタルは特定の国に集中)。資源に乏しい日本は輸入に依存し、<b>エネルギー自給率</b>は1割程度。だからこそ再生可能エネルギーの拡大と<b>循環型社会(3R)</b>への転換が重要になる。</div></div>
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約13%</div><div class="nl">日本のエネルギー自給率(主要国で最低水準)</div></div><div><div class="nv">約8割</div><div class="nl">日本の化石燃料への依存度</div></div><div><div class="nv">約2割</div><div class="nl">日本の発電に占める再生可能エネルギー(概数)</div></div></div></div><div class="card"><h2><span class="badge b2">基礎</span>⛏️ 資源のキホン</h2><div class="keybox">鉱産資源・エネルギー資源は<b>偏在</b>している(石油は西アジア、レアメタルは特定の国に集中)。資源に乏しい日本は輸入に依存し、<b>エネルギー自給率</b>は1割程度。だからこそ再生可能エネルギーの拡大と<b>循環型社会(3R)</b>への転換が重要になる。</div></div>
 
   <div class="card">
     <h2><span class="badge b2">体験</span>⚡ エネルギー仕分けゲーム ─ 再生可能? 枯渇性? <span class="ref">▶ p.148–153</span></h2>
@@ -1116,6 +1223,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <div class="meter" id="mixOut"></div>
 <div class="sort-fb" id="mixComment"></div></div><div class="hint"><b>正解は1つではない。</b>どの指標を優先するかは社会の選択。これが「エネルギーのトリレンマ」だ。下のリンクで日本の実際の議論を読んでみよう。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.enecho.meti.go.jp/about/special/johoteikyo/energyissue2025_1.html" target="_blank" rel="noopener">資源エネルギー庁 日本のエネルギー問題(特集)</a><a href="https://www.enecho.meti.go.jp/about/whitepaper/" target="_blank" rel="noopener">資源エネルギー庁 エネルギー白書</a></div>
   <div class="card"><h2><span class="badge b2">思考</span>🧭 見方・考え方トレーニング ─ 「考察」から「構想」へ <span class="ref">▶ 課題の解決を構想する</span></h2><p class="desc">指導要領は「考察(なぜ?を説明する)」の先に「<b>構想(どうすべき?を判断する)</b>」を求めている。その違いを体感しよう。</p><div id="trainMikata3"></div></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">世界最大級の油田、EV時代のリチウム塩湖、沈みゆく首都の移転 ─ 資源とエネルギーと都市の「いま」が動く現場。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p223"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(資源・エネルギー・都市)</h2>
     <div id="quizP223"></div>
@@ -1129,8 +1237,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">現役世代と将来世代のための地球<span class="pgref">📖 教科書 p.162–171</span></div>
   <p class="pagelead">地球温暖化、陸の環境問題(森林破壊・砂漠化)、海の環境問題、生物多様性。「Planet(地球)」を将来世代に引き継ぐために。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">なぜ地球環境問題は、一国だけでは絶対に解決できないのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地球的規模の相互依存</b><br>原因の場所と被害の場所がずれる──そこに環境問題の難しさがある。模式図でしくみから理解しよう。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「移動手段CO2くらべ」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「環境問題マッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">+1.1℃超</div><div class="nl">世界平均気温の上昇(産業革命前比・概数)</div></div><div><div class="nv">約10億t</div><div class="nl">日本の年間温室効果ガス排出量(CO2換算・概数)</div></div><div><div class="nv">2050年</div><div class="nl">日本がカーボンニュートラルを目指す年</div></div></div></div></div><figure class="model"><svg viewBox="0 0 720 340" role="img" aria-label="温室効果の模式図">
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">+1.1℃超</div><div class="nl">世界平均気温の上昇(産業革命前比・概数)</div></div><div><div class="nv">約10億t</div><div class="nl">日本の年間温室効果ガス排出量(CO2換算・概数)</div></div><div><div class="nv">2050年</div><div class="nl">日本がカーボンニュートラルを目指す年</div></div></div></div><figure class="model"><svg viewBox="0 0 720 340" role="img" aria-label="温室効果の模式図">
 <rect width="720" height="340" fill="#fbfdfc"/>
 <rect x="0" y="0" width="720" height="30" fill="#1f3340"/><text x="14" y="20" font-size="13" font-weight="bold" fill="#fff">🌡️ 比較模式図|温室効果 ─ 「毛布」がほどよい地球と、厚すぎる地球</text>
 <defs><marker id="aE1" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#d64545"/></marker></defs>
@@ -1168,6 +1279,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b2">体験</span>🚄 移動手段CO2くらべ ─ 東京→大阪、何で行く? <span class="ref">▶ p.162–163</span></h2><p class="desc">同じ約500kmの移動でも、手段によって1人あたりCO2排出量は大きく違う(概算)。ボタンで選んで比べてみよう。</p><div class="row" id="co2Btns"></div><div class="meter" id="co2Bars"></div><div class="simout" id="co2Note"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://ondankataisaku.env.go.jp/carbon_neutral/" target="_blank" rel="noopener">環境省 脱炭素ポータル</a><a href="https://www.data.jma.go.jp/cpdinfo/" target="_blank" rel="noopener">気象庁 地球温暖化情報</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">湖がほぼ消えたアラル海、緑の長城で砂漠化と戦うサヘル ─ 授業で必ず学ぶ環境問題の定番事例を、位置とセットで。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p224"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP224"></div>
@@ -1181,8 +1293,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">平和で公正な社会に向けて<span class="pgref">📖 教科書 p.172–189</span></div>
   <p class="pagelead">世界の民族と民族問題、紛争、難民、そして国際協力とパートナーシップ。教科書p.180-181の「国際協力」の主体を整理する節。</p>
 <div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">紛争のニュースを「地理の目」で見ると、何が見えてくるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置・歴史的背景・公正</b><br>資源の分布、植民地時代の国境、民族のモザイク。背景を知ることが平和への第一歩だ。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「国際協力 予算配分シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「主体の仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">1.2億人超</div><div class="nl">紛争などで故郷を追われた人(2024年・UNHCR)</div></div><div><div class="nv">約190</div><div class="nl">国連加盟国数(193か国)</div></div><div><div class="nv">1999年</div><div class="nl">国境なき医師団のノーベル平和賞受賞年</div></div></div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🌍 民族・紛争のキホン</h2><div class="keybox"><b>民族</b>は言語・宗教・生活習慣などの文化を共有する集団。世界のほとんどの国は<b>多民族国家</b>だ。紛争の背景には資源・宗教対立・<b>植民地時代に引かれた人為的国境</b>などが複雑にからむ。紛争から逃れた<b>難民</b>は世界で1億人をこえ、UNHCRや各国・NGOが支援している。</div></div>
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">1.2億人超</div><div class="nl">紛争などで故郷を追われた人(2024年・UNHCR)</div></div><div><div class="nv">約190</div><div class="nl">国連加盟国数(193か国)</div></div><div><div class="nv">1999年</div><div class="nl">国境なき医師団のノーベル平和賞受賞年</div></div></div></div><div class="card"><h2><span class="badge b2">基礎</span>🌍 民族・紛争のキホン</h2><div class="keybox"><b>民族</b>は言語・宗教・生活習慣などの文化を共有する集団。世界のほとんどの国は<b>多民族国家</b>だ。紛争の背景には資源・宗教対立・<b>植民地時代に引かれた人為的国境</b>などが複雑にからむ。紛争から逃れた<b>難民</b>は世界で1億人をこえ、UNHCRや各国・NGOが支援している。</div></div>
 
   <div class="card">
     <h2><span class="badge b2">体験</span>🕊️ 国際協力の主体 仕分けゲーム <span class="ref">▶ p.178–183・ワーク9</span></h2>
@@ -1195,6 +1310,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <div class="simout">残り:<span id="aidLeft">100</span>ポイント</div>
 <div class="row" style="margin-top:6px"><button class="chip" id="aidJ">この配分で決定!</button><button class="chip" id="aidR">リセット</button></div>
 <div class="sort-fb" id="aidFb"></div></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.unhcr.org/jp/" target="_blank" rel="noopener">UNHCR(国連難民高等弁務官事務所)日本</a><a href="https://www.jica.go.jp/" target="_blank" rel="noopener">JICA(国際協力機構)</a></div>
+  <div class="card"><h2><span class="badge b2">事例</span>🌏 話題の現場</h2><p class="desc">世界最大級の難民キャンプ、日本人医師が砂漠を緑に変えた大地 ─ 紛争と平和、そして協力の最前線へ。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p225"></div></div>
   <div class="card">
     <h2><span class="badge b2">確認</span>✏️ 節末チェッククイズ(民族・紛争・難民・国際協力)</h2>
     <div id="quizP225"></div>
@@ -1208,8 +1324,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">人々の暮らしを取り巻く自然環境<span class="pgref">📖 教科書 p.192–197</span></div>
   <p class="pagelead">変動帯に位置する日本の地形、季節風がつくる日本の気候。災害の多さは、豊かな自然の裏返しでもある。</p>
 <div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">災害大国・日本に、人々はなぜ暮らし続けてきたのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>人間と自然環境との関わり</b><br>変動帯の地形と季節風の気候は、災害と恵みの両方をもたらす。日本の自然の「二面性」をとらえよう。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「季節風/フェーン現象シミュレーター」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「日本の気候マッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約75%</div><div class="nl">国土に占める山地・丘陵の割合</div></div><div><div class="nv">約1割</div><div class="nl">世界のM6以上の地震のうち日本周辺で起こる割合(概数)</div></div><div><div class="nv">111</div><div class="nl">日本の活火山の数</div></div></div></div></div><div class="card"><h2><span class="badge b3">基礎</span>🌀 日本の気候を動かす4つの主役</h2><div class="vocab"><div><b>季節風(モンスーン)</b>冬は北西から、夏は南東から。日本の降水の主役。</div><div><b>梅雨前線・秋雨前線</b>暖気と寒気の境目に停滞し、長雨をもたらす。</div><div><b>台風</b>夏〜秋に接近・上陸。大雨・暴風・高潮の複合リスク。</div><div><b>海流(黒潮・親潮)</b>暖流と寒流が気候と豊かな漁場をつくる。</div></div></div>
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">約75%</div><div class="nl">国土に占める山地・丘陵の割合</div></div><div><div class="nv">約1割</div><div class="nl">世界のM6以上の地震のうち日本周辺で起こる割合(概数)</div></div><div><div class="nv">111</div><div class="nl">日本の活火山の数</div></div></div></div><div class="card"><h2><span class="badge b3">基礎</span>🌀 日本の気候を動かす4つの主役</h2><div class="vocab"><div><b>季節風(モンスーン)</b>冬は北西から、夏は南東から。日本の降水の主役。</div><div><b>梅雨前線・秋雨前線</b>暖気と寒気の境目に停滞し、長雨をもたらす。</div><div><b>台風</b>夏〜秋に接近・上陸。大雨・暴風・高潮の複合リスク。</div><div><b>海流(黒潮・親潮)</b>暖流と寒流が気候と豊かな漁場をつくる。</div></div></div>
 
   <div class="card">
     <h2><span class="badge b2">基礎</span>🗾 日本の地形のキホン</h2>
@@ -1274,6 +1393,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b3">体験</span>🌡️ フェーン現象シミュレーター ─ 山をこえた風はなぜ熱い? <span class="ref">▶ p.196–197</span></h2><p class="desc">湿った風は山を上るとき100mごとに約0.5℃下がりながら雨を降らせ、乾いて山を下りるときは100mごとに約1.0℃上がる。山の高さを変えて風下の気温を確かめよう(風上のふもとは25℃)。</p><div class="simbox"><input type="range" id="foehnRange" min="0" max="3000" step="100" value="1500" aria-label="山の高さ"><div class="row" style="justify-content:space-between;font-size:.78rem;color:#51626d"><span>0m</span><span>3,000m</span></div><div class="simout" id="foehnOut"></div></div><div class="hint"><b>つなげよう:</b>これが日本海側の熱波や、冬の太平洋側の「からっ風」の正体の一つ。豪雪(風上の雨・雪)とセットの現象だ。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.jma.go.jp/" target="_blank" rel="noopener">気象庁</a></div>
+  <div class="card"><h2><span class="badge b3">事例</span>🌏 話題の現場</h2><p class="desc">世界有数の豪雪のまち、ため池1万か所のまち、やませの吹く海岸 ─ 日本の自然の多様さが暮らしを形づくる現場。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p311"></div></div>
   <div class="card">
     <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP311"></div>
@@ -1287,7 +1407,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">変動帯の自然と防災(地震・火山)<span class="pgref">📖 教科書 p.198–207</span></div>
   <p class="pagelead">プレート境界地震と活断層地震、火山の災害と恵み。地形図の読み取り(FILE11)ともつながる、防災学習の核となる節。</p>
 <div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">地震や噴火そのものは止められないのに、なぜ被害は減らせるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>防災・減災</b><br>しくみを知る→危険な場所を知る→行動を決める。科学と地理の知識が命を守る武器になる。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「緊急地震速報・猶予時間計算機」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「地震カード・火山仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div><div class="card"><h2><span class="badge b3">基礎</span>📏 マグニチュードと震度のちがい</h2><div class="keybox"><b>マグニチュード(M)</b>は地震そのものの規模(エネルギー)で1つの地震に1つ。<b>震度</b>は各地点での揺れの強さで場所ごとに違う(0〜7の10段階)。Mが小さくても、震源が近い直下型では大きな震度になる。</div><figure class="model"><svg viewBox="0 0 720 300" role="img" aria-label="海溝型地震と津波の発生(3コマ)">
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「緊急地震速報・猶予時間計算機」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「地震カード・火山仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details><div class="card"><h2><span class="badge b3">基礎</span>📏 マグニチュードと震度のちがい</h2><div class="keybox"><b>マグニチュード(M)</b>は地震そのものの規模(エネルギー)で1つの地震に1つ。<b>震度</b>は各地点での揺れの強さで場所ごとに違う(0〜7の10段階)。Mが小さくても、震源が近い直下型では大きな震度になる。</div><figure class="model"><svg viewBox="0 0 720 300" role="img" aria-label="海溝型地震と津波の発生(3コマ)">
 <rect width="720" height="300" fill="#fbfdfc"/>
 <rect x="0" y="0" width="720" height="30" fill="#1f3340"/><text x="14" y="20" font-size="13" font-weight="bold" fill="#fff">🌊 模式図|海溝型地震と津波 ─ 3コマでわかる発生のしくみ</text>
 <defs><marker id="aE2" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#2e6fdb"/></marker></defs>
@@ -1350,6 +1472,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b3">体験</span>⏱️ 緊急地震速報・猶予時間計算機 <span class="ref">▶ p.198–201</span></h2><p class="desc">速報はP波(約7km/s)を検知してS波(約4km/s)の到達前に知らせるしくみ。震源からの距離を変えて、「何秒の猶予」があるか計算しよう(検知・発表に約5秒かかる想定)。</p><div class="simbox"><input type="range" id="eewRange" min="20" max="300" step="10" value="100" aria-label="震源距離"><div class="row" style="justify-content:space-between;font-size:.78rem;color:#51626d"><span>20km(直下)</span><span>300km</span></div><div class="simout" id="eewOut"></div></div><div class="hint"><b>考えよう:</b>直下型で猶予が「0秒」になるのはなぜ? だからこそ、日ごろの家具固定(自助)が決定的に重要になる。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.jishin.go.jp/" target="_blank" rel="noopener">地震調査研究推進本部</a><a href="https://www.data.jma.go.jp/svd/eew/data/nc/" target="_blank" rel="noopener">気象庁 緊急地震速報</a><a href="https://www.nhk.or.jp/kokokoza/chirisougou/" target="_blank" rel="noopener">NHK高校講座 地理総合</a></div>
+  <div class="card"><h2><span class="badge b3">事例</span>🌏 話題の現場</h2><p class="desc">1995年の神戸、2011年の三陸沖、火山と生きる鹿児島 ─ 教訓が刻まれた現場の位置と出来事を、確かに覚えておこう。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p312"></div></div>
   <div class="card">
     <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP312"></div>
@@ -1363,8 +1486,11 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">湿潤地域の自然と防災(大雨・水害)<span class="pgref">📖 教科書 p.208–213</span></div>
   <p class="pagelead">大雨による災害とその備え。水害ハザードマップの読み取り(ワーク11)、マイ・タイムライン作成(ワーク12)に対応する節。</p>
 <div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">同じ大雨でも、被害が出る場所と出ない場所があるのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>土地の成り立ちとリスク</b><br>答えは「地形」にある。模式断面図とハザードマップで、雨の行き先を読めるようになろう。</div></div>
+
+
+</div>
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「避難ミッション(地図で避難先を選べ!)」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「警戒レベル・マイタイムライン」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
-<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">5段階</div><div class="nl">大雨・洪水の警戒レベル</div></div><div><div class="nv">レベル4</div><div class="nl">全員避難のリミット(5を待たない!)</div></div><div><div class="nv">約7割</div><div class="nl">水害リスクのある低地などに住む日本の人口の割合(概数)</div></div></div></div></div><figure class="model"><svg viewBox="0 0 740 430" role="img" aria-label="水害リスクの模式断面図">
+<div class="card"><h2><span class="badge b2">データ</span>📊 数字でつかむ</h2><div class="numbox"><div><div class="nv">5段階</div><div class="nl">大雨・洪水の警戒レベル</div></div><div><div class="nv">レベル4</div><div class="nl">全員避難のリミット(5を待たない!)</div></div><div><div class="nv">約7割</div><div class="nl">水害リスクのある低地などに住む日本の人口の割合(概数)</div></div></div></div><figure class="model"><svg viewBox="0 0 740 430" role="img" aria-label="水害リスクの模式断面図">
 <rect width="740" height="430" fill="#fbfdfc"/>
 <rect x="0" y="0" width="740" height="30" fill="#1f3340"/><text x="14" y="20" font-size="13" font-weight="bold" fill="#fff">⚠️ 模式断面図|同じ雨でも運命が分かれる ─ 地形と水害リスク(高さは強調)</text>
 <rect x="20" y="120" width="700" height="190" fill="#f4f1ea"/>
@@ -1468,6 +1594,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <g class="msel" data-ok="2"><text x="395" y="78" font-size="22" text-anchor="middle">🏫</text><text x="395" y="94" font-size="10.5" font-weight="bold" fill="#1f3340" text-anchor="middle">東中学校(高台・遠い)</text></g>
 </svg></div><div class="sort-fb" id="msFb" style="margin-top:10px"></div><div class="hint"><b>原則:</b>「近い」より「安全」。浸水域を通らない経路か、移動時間は十分かまで考えるのが本当の避難計画。実際の自宅で同じ作業を「重ねるハザードマップ」でやってみよう。</div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://disaportal.gsi.go.jp/" target="_blank" rel="noopener">ハザードマップポータルサイト</a><a href="https://www.jma.go.jp/bosai/risk/" target="_blank" rel="noopener">気象庁 キキクル(危険度分布)</a></div>
   <div class="card"><h2><span class="badge b3">思考</span>🧭 見方・考え方トレーニング ─ 災害を「地理の目」で見る <span class="ref">▶ レンズ③人間と自然環境</span></h2><p class="desc">災害=自然現象×社会の条件。ハザードマップから問いを立て、地形と関連付けて説明できれば、防災は「自分の力」になる。</p><div id="trainMikata4"></div></div>
+  <div class="card"><h2><span class="badge b3">事例</span>🌏 話題の現場</h2><p class="desc">ハザードマップの想定どおりに水が来た町、新幹線が水没した夜 ─ 近年の水害の現場が「早めの避難」の意味を教えてくれる。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p313"></div></div>
   <div class="card">
     <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ</h2>
     <div id="quizP313b"></div>
@@ -1481,7 +1608,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">自然災害への備え<span class="pgref">📖 教科書 p.214–217</span></div>
   <p class="pagelead">自助・共助・公助、複合災害、伝統的な治水の知恵。「地理」を学んだ高校生だからこそできる備えと貢献を考える、防災学習の総まとめ。</p>
 <div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">「備える」とは、モノをそろえることだけだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>自助・共助・公助</b><br>モノ・情報・人のつながり。3つの備えのバランスを、ゲームを通して点検しよう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「非常用持ち出し袋/災害用伝言ダイヤル体験」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「自助共助公助仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「非常用持ち出し袋/災害用伝言ダイヤル体験」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「自助共助公助仕分け」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b3">体験</span>🤲 自助・共助・公助 仕分けゲーム <span class="ref">▶ p.214–215</span></h2>
@@ -1530,6 +1659,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 <text x="190" y="290" font-size="10" font-weight="bold" fill="#51626d">👀 どちらも「水と戦う」のではなく「水と付き合う」発想。SDGsの時代に再評価されている</text>
 </svg><figcaption>【模式図】左:霞堤(武田信玄の信玄堤などに見られる、切れ目で水の勢いを弱める堤防) 右:輪中(木曽川下流の低地で集落を堤防で囲み、水屋を備えた)</figcaption></figure></div>
   <div class="card"><h2><span class="badge b3">体験</span>📞 災害用伝言ダイヤル「171」体験 ─ 使い方を並べ替えよう <span class="ref">▶ p.214–215</span></h2><p class="desc">災害時は電話がつながりにくくなる。家族との安否確認に使う「171」の手順を正しい順にタップして並べよう(毎月1日・15日などに体験利用できる)。</p><div class="tl-pool" id="d171Pool"></div><div style="margin-top:14px;font-weight:800;font-family:'M PLUS Rounded 1c'">操作の手順</div><div class="tl-answer" id="d171Answer"></div><div class="sort-fb" id="d171Fb"></div><button class="chip" id="d171Reset" style="margin-top:10px">やり直す</button></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.bousai.go.jp/" target="_blank" rel="noopener">内閣府 防災情報のページ</a><a href="https://www.kantei.go.jp/jp/headline/bousai/sonae.html" target="_blank" rel="noopener">首相官邸 災害に対するご家庭での備え</a></div>
+  <div class="card"><h2><span class="badge b3">事例</span>🌏 話題の現場</h2><p class="desc">稲むらの火、輪中の水屋、信玄堤、そして釜石の中高生 ─ 先人と先輩たちの「備え」が実際に命を守った現場。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p314"></div></div>
   <div class="card">
     <h2><span class="badge b3">確認</span>✏️ 節末チェッククイズ(複合災害・伝統的治水)</h2>
     <div id="quizP314"></div>
@@ -1543,7 +1673,9 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   <div class="pagetitle">地域調査の方法と地域の展望<span class="pgref">📖 教科書 p.220–227</span></div>
   <p class="pagelead">1年間の学びの集大成。テーマ設定から野外調査、統計地図での表現、発表まで──「地理の力」で自分の生活圏を調べ、未来を展望しよう。</p>
 <div class="toi t3"><div class="qmark">Q</div><div><div class="qtext">地理の力で、自分の町の「10年後」をどう描けるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域の課題と展望</b><br>1年間で手に入れた道具(地図・GIS・統計・防災の知識)を総動員して、生活圏の調査に挑もう。</div></div>
-<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「統計地図トレーナー」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「調査手順並べ替え・統計地図マッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details></div>
+
+</div>
+<details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol><li><b>下ごしらえ:</b>冒頭の「問い」を読んで、いまの自分の予想をノートに1行書こう。間違っていてOK、あとで成長を確かめる材料になる。</li><li><b>味見:</b>基礎キーボックスと模式図をじっくり見て、全体像をつかもう。教科書の該当ページ(タイトル横の📖)も開くと理解が2倍に。</li><li><b>メインディッシュ:</b>体験ワーク「統計地図トレーナー」で実際に手を動かそう。「おっ」と思った気づきを2つメモ。</li><li><b>仕上げ:</b>「調査手順並べ替え・統計地図マッチング」とクイズで腕試し。まちがえた問題こそ宝物 ─ 解説を最後まで読もう。</li><li><b>盛り付け:</b>Think! の問いに自分の言葉で答えよう。最初の予想と比べて、考えはどう変わった?</li></ol></details>
 
   <div class="card">
     <h2><span class="badge b3">体験</span>🚶 地域調査の手順 並べ替えチャレンジ <span class="ref">▶ p.220–227・ワーク13</span></h2>
@@ -1590,6 +1722,7 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
   </div>
 
   <div class="card"><h2><span class="badge b3">体験</span>🧪 統計地図トレーナー ─ この調査、どの地図で表す? <span class="ref">▶ p.14–15</span></h2><p class="desc">調査の場面を読んで、最適な統計地図を選ぶ実戦トレーニング。地図えらびを間違えると、正しいデータでも誤解を生む!</p><div id="trainSmap"></div></div><div class="reflinks"><b>🔗 もっと深く学ぶ(信頼できる情報源)</b><a href="https://www.e-stat.go.jp/" target="_blank" rel="noopener">e-Stat 政府統計の総合窓口</a><a href="https://jstatmap.e-stat.go.jp/" target="_blank" rel="noopener">jSTAT MAP(統計を地図に)</a><a href="https://resas.go.jp/" target="_blank" rel="noopener">RESAS</a><a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">地理院地図</a></div>
+  <div class="card"><h2><span class="badge b3">事例</span>🌏 話題の現場</h2><p class="desc">教科書の街歩きの舞台・函館から、高校生が学会発表までした飯田、そして最後はあなたの生活圏へ ─ 調査はここから始まる。 地図上の点(または下のボタン)をタップ。位置は概略。</p><div class="casemap" id="cm_p321"></div></div>
   <div class="card">
     <h2><span class="badge b3">確認</span>✏️ 最終チェッククイズ(地域調査の達人)</h2>
     <div id="quizP321"></div>
@@ -1605,14 +1738,75 @@ footer{text-align:center;font-size:.78rem;color:#6b7f8a;padding:20px 16px 40px}
 </main>
 
 <footer>
-  地理総合 インタラクティブ・ラボ 年間版|教科書(第一学習社『地理総合』)の目次構成に対応した補助教材<br>
-  <button class="reset-link" onclick="location.reload()">すべてリセットして最初から</button>
+  <div>地理総合 インタラクティブ・ラボ 年間版|教科書(第一学習社『地理総合』)の単元構成に対応した学習補助教材</div>
+  <div class="cc">
+    © Takayuki Arai|この教材は <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="license noopener">クリエイティブ・コモンズ 表示–非営利 4.0 国際ライセンス(CC BY-NC 4.0)</a> の下に提供されています。<br>
+    クレジット(Takayuki Arai)を表示すれば、非営利の範囲で自由に共有・改変して利用できます。
+  </div>
+  <div class="flinks">
+    <button onclick="openPolicy('pol-site')">サイトポリシー</button>|
+    <button onclick="openPolicy('pol-priv')">プライバシーポリシー</button>|
+    <button class="reset-link" onclick="location.reload()">すべてリセットして最初から</button>
+  </div>
 </footer>
+
+<div class="policy-overlay" id="policyOverlay" role="dialog" aria-modal="true" aria-label="サイトポリシーとプライバシーポリシー">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePolicy()" aria-label="閉じる">✕</button>
+
+    <h2 id="pol-site">📖 サイトポリシー</h2>
+    <p>このウェブ教材「地理総合 インタラクティブ・ラボ」は、高校の「地理総合」を学ぶみなさんの<b>学習の手助け</b>と、先生方の<b>授業づくり・教材研究</b>のお役に立つことを目的に作られています。細かい規約でガチガチに縛るつもりはありません。<b>信頼してお渡ししますので、学びのために気持ちよく使ってください。</b>それがこのサイトのいちばんのお願いです。</p>
+
+    <h3>使い方について</h3>
+    <p>授業での利用、家庭学習、リンクの共有、印刷、学校の実情に合わせた手直し ─ どれも歓迎です。ライセンスは <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener">CC BY-NC 4.0</a>(クレジット:Takayuki Arai)です。むずかしく聞こえますが、要するに「<b>作者名を書いてくれれば、お金もうけ以外には自由に使ってOK</b>」という意味です。営利目的での販売・再配布だけはご遠慮ください。</p>
+
+    <h3>内容の正確さについて</h3>
+    <p>内容はできるだけ正確に作っていますが、教材の性質上、統計には<b>概数やモデル値</b>(学習用に単純化した数値)が含まれます。また世界の状況は日々変わります。レポートや探究で使うときは、各ページの「🔗 もっと深く学ぶ」のリンク先(政府機関などの一次情報)や教科書・資料集で最新の数値を確かめる ─ それ自体が大切な地理の学習です。もし誤りを見つけたら、それはあなたの読み取る力が育った証拠。先生やまわりの人と共有してもらえたらうれしいです。</p>
+
+    <div class="policy-note">⚠️ <b>防災に関する大切なお願い:</b>このサイトの防災コンテンツは「学ぶため」のものです。実際に災害が迫っているときの避難の判断は、必ずお住まいの<b>市町村の避難情報</b>と<b>気象庁の最新情報</b>(キキクル・警報など)にもとづいて行ってください。</div>
+
+    <h3>外部リンクについて</h3>
+    <p>リンク先は政府機関・国際機関・公共放送など信頼できるサイトを選んでいますが、リンク先の内容はそれぞれの運営者に属します。ページの移転などでリンクが切れていたら、サイト名で検索してみてください。</p>
+
+    <h3>免責について</h3>
+    <p>この教材は善意で公開している学習用コンテンツであり、利用にともなって生じた不都合について大きな責任を負うことはできません。ただし、よりよい教材にしていく努力はこれからも続けます。</p>
+
+    <h2 id="pol-priv">🔒 プライバシーポリシー</h2>
+    <p>結論からいうと、<b>このサイトはあなたの個人情報を集めません。</b>安心して使ってください。</p>
+
+    <h3>データの扱い</h3>
+    <p>この教材は1つのHTMLファイルだけで動いており、サーバーにデータを送る仕組みを持っていません。クイズの解答、シミュレーターの操作、Think!への考え ─ すべて<b>あなたの端末の画面の中だけ</b>で完結し、ページを閉じたり再読み込みしたりすると消えます(だから安心して間違えられます)。Cookieやアクセス解析ツールも使っていません。</p>
+
+    <h3>外部サービスについて</h3>
+    <p>文字のデザイン(ウェブフォント)を Google Fonts から読み込んでいるため、ページを開くとブラウザがGoogleのサーバーと通信します(通信にともないIPアドレス等が送信されます)。また「🔗 もっと深く学ぶ」などの外部リンク先では、それぞれのサイトのプライバシーポリシーが適用されます。</p>
+
+    <h3>学校で使うとき</h3>
+    <p>先生がThink!の回答などを提出物として集める場合は、各学校のルール(学習支援システムやフォームの利用方針)に従ってください。このサイト自体は、誰が・いつ・どう使ったかを一切記録していません。</p>
+
+    <p style="margin-top:18px;color:#51626d;font-size:.8rem">最終更新:2026年6月|文言は学習目的にふさわしい範囲で、予告なく見直すことがあります。</p>
+  </div>
+</div>
+
+<script>
+function openPolicy(anchor){
+  const ov=document.getElementById('policyOverlay');
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+  const el=document.getElementById(anchor);
+  if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),60);
+}
+function closePolicy(){
+  document.getElementById('policyOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('policyOverlay').addEventListener('click',e=>{if(e.target.id==='policyOverlay')closePolicy();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePolicy();});
+</script>
 
 <script>
 /* ================= ナビゲーション ================= */
 const pages=[
- ['p11','1編1章 球面上の世界と地図'],['p12','1編2章 結びつく世界'],
+ ['p11','1編1章 球面上の世界'],['p11b','1編1章 地図の世界'],['p12','1編2章 国家と国家群'],['p12b','1編2章 交通・通信'],['p12c','1編2章 貿易・人の移動'],
  ['p211','2編1章1節 地形'],['p212','2編1章2節 気候'],['p213','2編1章3節 衣'],['p214','2編1章4節 食'],['p215','2編1章5節 住'],['p216','2編1章6節 産業'],['p217','2編1章7節 言語・宗教'],['p218','2編1章8節 多文化共生'],
  ['p221','2編2章1節 SDGs'],['p222','2編2章2節 尊厳と平等'],['p223','2編2章3節 自然との調和'],['p224','2編2章4節 地球環境'],['p225','2編2章5節 平和と公正'],
  ['p311','3編1章1節 日本の自然'],['p312','3編1章2節 変動帯と防災'],['p313','3編1章3節 湿潤地域と防災'],['p314','3編1章4節 災害への備え'],['p321','3編2章 地域調査']
@@ -1800,14 +1994,6 @@ makeSort('sortMapType',
   document.getElementById(cb).addEventListener('change',e=>{document.getElementById(g).style.display=e.target.checked?'':'none';});
 });
 
-makeQuiz('quizP11',[
- {q:'経度0°の本初子午線が通る都市は?',o:['パリ','ロンドン','ニューヨーク','カイロ'],a:1,e:'ロンドン郊外の旧グリニッジ天文台を通る。ここを基準に東経・西経を180°ずつに分ける。'},
- {q:'日本の標準時子午線は?',o:['東経120°','東経135°','東経140°','東経150°'],a:1,e:'兵庫県明石市などを通る東経135°。135÷15=9なので、日本はロンドンより9時間進んでいる。'},
- {q:'地球上のある地点の正反対側の地点を何という?',o:['対蹠点','回帰点','極点','基準点'],a:0,e:'対蹠点(たいせきてん)。日本の対蹠点は南アメリカ大陸の沖合。時差はちょうど12時間になる。'},
- {q:'2万5千分の1地形図と20万分の1地勢図、同じ範囲をより詳しく表せるのは?',o:['2万5千分の1','20万分の1','どちらも同じ','縮尺と詳しさは無関係'],a:0,e:'分母が小さいほど縮尺が大きく、詳しい地図になる。地理院地図はシームレスにズームできるのが強み。'},
- {q:'地理院地図の「ツール」でできないことは?',o:['距離や面積の計測','断面図の作成','3D表示','天気予報の発表'],a:3,e:'計測・断面図・並べて比較・3Dなどができる。天気予報は気象庁の仕事。函館山の断面図づくりは教科書ワーク3にも登場。'},
- {q:'スマートフォンの地図アプリで現在地がわかるのは、何のおかげ?',o:['GNSS(人工衛星による測位)','携帯電話の基地局情報だけで測っている','地図会社の社員が手動で更新している','端末内の方位磁針と歩数計だけ'],a:0,e:'GPSやみちびきなどのGNSS。位置情報はナビ・防災・物流・スポーツまで社会を支える基盤になっている(▶p.16-19)。'}
-]);
 
 /* ================= p12 結びつく世界 ================= */
 const terrTexts={
@@ -1839,13 +2025,6 @@ makeSort('sortTransport',
   ['生花や高級食材など鮮度が命の品','air','スピード勝負の貨物は航空輸送の出番。'],
   ['都市の通勤・通学の大量輸送','land','定時性に優れた鉄道は大量輸送が得意。環境負荷も小さい。'],
   ['家の玄関まで荷物を届ける宅配便','land','戸口から戸口へ(ドア・ツー・ドア)は自動車の独壇場。']]);
-makeQuiz('quizP12',[
- {q:'国家の3要素に含まれないものは?',o:['領域','国民','主権','宗教'],a:3,e:'国家は領域・国民・主権で成り立つ。領域は領土・領海・領空からなる。'},
- {q:'排他的経済水域(EEZ)の範囲は基線から?',o:['12海里','24海里','200海里','370海里'],a:2,e:'200海里(約370km)。水産・鉱産資源の権利が沿岸国に認められる。領海は12海里。'},
- {q:'北方領土に含まれない島は?',o:['択捉島','国後島','色丹島','竹島'],a:3,e:'北方領土は択捉島・国後島・色丹島・歯舞群島。日本固有の領土だがロシアが不法に占拠している。竹島(島根県)は韓国が不法占拠している、別の領土問題。'},
- {q:'コンテナ輸送が世界の貿易を変えた理由は?',o:['船そのものの速度が大幅に上がったから','規格統一で積み替えが効率化したから','港の数が世界的に増えたから','運べる貨物の種類が減って単純になったから'],a:1,e:'大きさが規格化されたコンテナは、船・トラック・鉄道の間の積み替えがスムーズ。輸送コストを劇的に下げた。'},
- {q:'多くの路線が乗り入れ、乗り継ぎの拠点となる空港を何という?',o:['ハブ空港','フィーダー空港(ハブに接続する支線側の空港)','地方管理空港','貨物専用空港'],a:0,e:'自転車の車輪の中心(ハブ)にたとえた呼び名。仁川(韓国)やドバイなどが代表例。'}
-]);
 
 /* ================= p211 地形 ================= */
 makeMatch('riverL','riverR','riverFb',[
@@ -2821,5 +3000,328 @@ makeSort('sortHenyoR',
   ['英語が国境をこえる共通語(リンガフランカ)になる','h','ICTとグローバル化で加速。一方で消滅の危機にある言語も多い。']]);
 </script>
 
+<script>
+const WORLD_OPEN='<svg viewBox="0 0 720 318" role="img" aria-label="世界の事例マップ"><rect width="720" height="318" fill="#e4f0fa"/><rect x="0" y="300" width="720" height="18" fill="#eef4f8"/><text x="320" y="313" font-size="9" fill="#8a9aa4">南極大陸</text><path d="M24,48 L80,40 L116,38 L170,36 L204,36 L236,60 L250,76 L230,90 L210,100 L198,118 L198,130 L180,122 L166,128 L166,138 L172,148 L194,162 L176,150 L150,134 L126,114 L112,96 L104,76 L70,60 L30,60 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M256,60 L300,44 L320,28 L296,14 L244,28 L250,48 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M204,164 L236,158 L260,180 L290,194 L282,210 L264,232 L244,248 L230,264 L218,284 L212,272 L218,240 L220,216 L206,200 L200,186 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M340,108 L342,94 L360,82 L376,68 L384,50 L412,38 L480,40 L560,36 L640,36 L700,46 L716,52 L684,64 L676,76 L660,62 L644,72 L630,92 L620,96 L612,110 L602,120 L580,140 L572,160 L566,176 L558,164 L556,148 L542,136 L536,138 L520,154 L514,164 L504,140 L492,130 L480,132 L472,128 L470,146 L450,156 L438,138 L428,124 L432,108 L420,108 L404,104 L396,100 L384,92 L368,94 L360,102 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M326,150 L326,138 L340,118 L348,110 L380,106 L400,116 L424,118 L428,124 L434,144 L446,158 L462,158 L440,188 L430,224 L422,240 L398,250 L384,216 L378,182 L372,172 L344,170 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M448,204 L460,212 L454,230 L446,220 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M588,224 L604,208 L624,202 L644,202 L652,218 L666,234 L660,254 L640,256 L624,244 L594,250 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M550,170 L568,186 L572,192 L556,176 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M578,178 L594,172 L598,182 L588,188 L580,184 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M622,182 L642,184 L660,198 L646,196 L628,188 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M620,118 L624,114 L630,112 L640,110 L642,98 L644,90 L640,96 L634,106 L626,110 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M350,80 L354,68 L348,64 L344,72 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M706,250 L712,256 L700,272 L694,270 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><line x1="0" y1="180" x2="720" y2="180" stroke="#d64545" stroke-width="1" stroke-dasharray="6 5" opacity=".6"/><text x="6" y="176" font-size="8.5" fill="#c0392b">赤道</text>';
+const JAPAN_OPEN='<svg viewBox="0 0 720 560" role="img" aria-label="日本の事例マップ"><rect width="720" height="560" fill="#e4f0fa"/><path d="M469.2,72.8 L493.0,15.6 L544,13.0 L605.2,49.4 L673.2,52.0 L656.2,72.8 L595.0,106.6 L537.2,88.4 L496.4,111.8 L472.6,91.0 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M506.6,117.0 L530.4,143.0 L540.6,171.6 L510.0,200.2 L506.6,236.6 L496.4,265.2 L469.2,288.6 L438.6,296.4 L414.8,296.4 L374.0,293.8 L370.6,306.8 L333.2,327.6 L309.4,314.6 L295.8,301.6 L255.0,301.6 L217.6,304.2 L170.0,312.0 L166.6,304.2 L207.4,275.6 L248.2,273.0 L329.8,273.0 L343.4,267.8 L363.8,223.6 L385.9,221.0 L380.8,239.2 L418.2,210.6 L459.0,202.8 L476.0,158.6 L472.6,130.0 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M204.0,330.2 L231.2,345.8 L278.8,332.8 L295.8,306.8 L258.4,304.2 L217.6,309.4 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M125.8,330.2 L149.6,314.6 L170.0,322.4 L200.6,332.8 L187.0,379.6 L159.8,390.0 L142.8,382.2 L122.4,348.4 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><path d="M54.4,504.4 L74.8,499.2 L68.0,514.8 L54.4,517.4 Z" fill="#ddd6c2" stroke="#b3a98e" stroke-width="1"/><text x="600" y="540" font-size="9" fill="#8a9aa4">※輪郭・位置は概略</text>';
+function caseMap(id, base, accent, cases){
+  const root=document.getElementById(id); if(!root)return;
+  const proj = base==='japan' ? (lo,la)=>[(lo-126)*34,(46-la)*26] : (lo,la)=>[(lo+180)*2,(90-la)*2];
+  let svg = (base==='japan'?JAPAN_OPEN:WORLD_OPEN);
+  cases.forEach((c,i)=>{
+    const [x,y]=proj(c.lon,c.lat);
+    svg+='<g class="case-pt" data-i="'+i+'"><circle class="halo" cx="'+x+'" cy="'+y+'" r="13" fill="'+accent+'" opacity=".18"/>'
+       +'<circle class="dot" cx="'+x+'" cy="'+y+'" r="8.5" fill="'+accent+'" stroke="#fff" stroke-width="2"/>'
+       +'<text x="'+x+'" y="'+(y+3.5)+'" font-size="9.5" font-weight="bold" fill="#fff" text-anchor="middle" pointer-events="none">'+(i+1)+'</text></g>';
+  });
+  svg+='</svg>';
+  let chips='<div class="case-chips">';
+  cases.forEach((c,i)=>{chips+='<button class="case-chip" data-i="'+i+'">'+(i+1)+' '+c.n+'</button>';});
+  chips+='</div>';
+  root.innerHTML=svg+chips+'<div class="case-info"></div>';
+  const info=root.querySelector('.case-info');
+  function sel(i){
+    const c=cases[i];
+    root.querySelectorAll('.case-pt').forEach(g=>{
+      const on=Number(g.dataset.i)===i;
+      g.classList.toggle('active',on);
+      g.querySelector('.dot').setAttribute('r',on?11:8.5);
+    });
+    root.querySelectorAll('.case-chip').forEach(ch=>{
+      const on=Number(ch.dataset.i)===i;
+      ch.style.background=on?accent:'#fff';ch.style.color=on?'#fff':'';ch.style.borderColor=on?accent:'';
+    });
+    info.innerHTML='<b>'+(i+1)+' '+c.n+'</b>('+c.w+')<br>'+c.t;
+  }
+  root.addEventListener('click',e=>{
+    const g=e.target.closest('.case-pt')||e.target.closest('.case-chip');
+    if(g)sel(Number(g.dataset.i));
+  });
+  sel(0);
+}
+/* ===== 各節の事例データ ===== */
+caseMap('cm_p11','world','#2e6fdb',[
+ {n:'旧グリニッジ天文台',w:'イギリス・ロンドン',lat:51.5,lon:-0.1,t:'経度0°=本初子午線の基準点。1884年の国際会議でここが世界の経度の出発点に決まった。床に引かれた子午線をまたいで「東半球と西半球に同時に立つ」観光が人気。'},
+ {n:'明石市',w:'日本・兵庫県',lat:34.65,lon:135.0,t:'東経135°の標準時子午線が通る「時のまち」。日本標準時(JST)の基準。135÷15=9だから日本はロンドンより9時間進む ─ 時差計算の出発点となる場所。'},
+ {n:'キリバス',w:'太平洋の島国',lat:1.5,lon:173,t:'国土が日付変更線をまたいでいたため、1995年に線を東へ大きく曲げて国内の日付を統一。2000年には「世界で最初に新年を迎える国」として注目された。日付変更線が人間の都合で動く実例。'},
+ {n:'アレクサンドリア',w:'エジプト',lat:31.2,lon:29.9,t:'約2200年前、エラトステネスが太陽の角度の違いから地球の大きさをほぼ正確に計算した地。「緯度の違い=太陽の高さの違い」という地理の原点がここにある。'},
+ {n:'キト',w:'エクアドル',lat:-0.2,lon:-78.5,t:'赤道(エクアドルはスペイン語で「赤道」の意)直下の首都。緯度0°なのに標高約2,850mのため一年中春のような高山気候。「緯度だけでは気候は決まらない」ことを教えてくれる都市。'}
+]);
+caseMap('cm_p211','world','#e8702a',[
+ {n:'ヒマラヤ山脈(エベレスト)',w:'ネパール・中国',lat:28.0,lon:86.9,t:'インド亜大陸がユーラシアに衝突してできた世界最高峰(8,849m)。山頂付近からアンモナイトの化石が見つかる=ここがかつて海だった証拠。今も年に数mmずつ高くなっている。'},
+ {n:'アイスランド',w:'北大西洋',lat:64.9,lon:-18.5,t:'大西洋中央海嶺(広がる境界)が海面上に顔を出した珍しい島。大地の裂け目「ギャオ」では、北米プレートとユーラシアプレートの間に立てる。火山と氷河が同居する「火と氷の国」。'},
+ {n:'サンアンドレアス断層',w:'アメリカ・カリフォルニア',lat:35.5,lon:-119.8,t:'ずれる境界の代表。太平洋プレートと北米プレートが横にすれ違い、ロサンゼルスとサンフランシスコは少しずつ近づいている。大地震が繰り返し発生してきた。'},
+ {n:'グランドキャニオン',w:'アメリカ・アリゾナ',lat:36.1,lon:-112.1,t:'コロラド川が数百万年かけて大地をけずった深さ約1,800mの大峡谷。「流れる水が地形をつくる」侵食のスケールを実感できる世界遺産。'},
+ {n:'桂林(タワーカルスト)',w:'中国',lat:25.3,lon:110.3,t:'石灰岩が雨水に溶かされてできた塔状の奇峰群。温暖多雨な気候が溶食を強めた結果で、山水画の世界そのもの。日本の秋吉台と同じ「カルスト地形」の豪華版。'},
+ {n:'ソグネフィヨルド',w:'ノルウェー',lat:61.0,lon:7.0,t:'氷河がけずったU字谷に海水が入り込んだ、奥行き200km超の入り江。水深が深く波静かでサーモン養殖がさかん。氷河地形と人の暮らしの結びつきの好例。'},
+ {n:'グレートバリアリーフ',w:'オーストラリア',lat:-18.0,lon:147.0,t:'全長2,000km超の世界最大のサンゴ礁。近年は海水温の上昇でサンゴの白化が深刻化 ─ 地形の単元と地球環境問題がつながる場所でもある。'}
+]);
+caseMap('cm_p212','world','#e8702a',[
+ {n:'シンガポール',w:'東南アジア',lat:1.35,lon:103.8,t:'熱帯雨林気候(Af)。年較差はわずか2℃ほどで毎日のようにスコール。国全体が「常夏」だが、屋内は冷房が効きすぎて上着が必要なことも ─ 気候と現代の暮らしのギャップも面白い。'},
+ {n:'アタカマ砂漠',w:'チリ',lat:-24.0,lon:-69.3,t:'「世界一乾燥した場所」。沖を流れる寒流(ペルー海流)が大気を安定させ雨雲ができない海岸砂漠。数年間雨ゼロの観測所も。乾燥と晴天を活かし世界最大級の天文台が集まる。'},
+ {n:'ローマ',w:'イタリア',lat:41.9,lon:12.5,t:'地中海性気候(Cs)。夏はカラッと晴れて乾燥、冬に雨。だからこそオリーブ・ぶどう・トマトの食文化が育った。東京とほぼ同緯度なのに夏の空気がまるで違う理由は大気大循環にある。'},
+ {n:'イルクーツク',w:'ロシア・シベリア',lat:52.3,lon:104.3,t:'亜寒帯(Df)。1月平均−18℃、7月は+18℃と年較差約36℃。海から遠い大陸内部(隔海度大)の宿命。タイガと永久凍土の世界で、人々は厳寒に適応して暮らす。'},
+ {n:'ウトキアグヴィク(旧バロー)',w:'アメリカ・アラスカ',lat:71.3,lon:-156.8,t:'ツンドラ気候(ET)。冬は太陽が昇らない極夜が約2か月続く。樹木は育たず、先住民イヌピアットは狩猟と現代生活を組み合わせて暮らす。'},
+ {n:'ラパス',w:'ボリビア',lat:-16.5,lon:-68.1,t:'標高約3,600m、世界最高所の首都機能をもつ都市。低緯度なのに涼しい高山気候(H)で、すり鉢状の地形では「標高が低い谷底ほど高級住宅地」という逆転現象も起こる。'}
+]);
+caseMap('cm_p213','world','#e8702a',[
+ {n:'リヤド',w:'サウジアラビア',lat:24.7,lon:46.7,t:'男性の白い長衣「トーブ」は強烈な日差しを反射し、ゆったりした形が風を通す砂漠仕様。宗教(イスラーム)と環境(乾燥帯)の両方が衣服を形づくる代表例。'},
+ {n:'クスコ(アンデス高地)',w:'ペルー',lat:-13.5,lon:-72.0,t:'標高3,400m。アルパカの毛のポンチョと帽子は、急な寒さと強い紫外線への適応。一枚布をかぶる形は着脱が簡単で、寒暖差の激しい高山の暮らしにぴったり。'},
+ {n:'イカルイト(北極圏)',w:'カナダ',lat:63.7,lon:-68.5,t:'イヌイットの伝統的なカリブー(トナカイ)やアザラシの毛皮服は、−40℃でも体温を守るハイテク衣料。現代はダウンと併用され、伝統技術が見直されている。'},
+ {n:'ムンバイ',w:'インド',lat:19.1,lon:72.9,t:'一枚布のサリーは高温多湿でも風を通し、洗いやすく、体型の変化にも対応できる合理的な衣服。色や着方に地域差があり、「衣の多様性」の宝庫。'},
+ {n:'ダッカ',w:'バングラデシュ',lat:23.8,lon:90.4,t:'「世界の縫製工場」。私たちのファストファッションの多くがここで作られる。2013年のラナプラザビル崩落事故(死者1,100人超)は、安い服の裏側の労働環境を世界に問いかけた。'},
+ {n:'アクラ(カンタマント市場)',w:'ガーナ',lat:5.6,lon:-0.2,t:'先進国から輸出された古着の巨大集積地。リユースは資源循環の一方、売れ残りの大量廃棄や現地繊維産業の衰退という課題も。あなたの手放した服の「その後」がここにある。'}
+]);
+caseMap('cm_p214','world','#e8702a',[
+ {n:'長江中下流域',w:'中国',lat:30.0,lon:112.0,t:'約1万年前に稲作が始まったとされる地域のひとつ。米はモンスーンの雨とともにアジア全体へ広がり、世界人口の半分を支える主食になった。'},
+ {n:'オアハカ(メソアメリカ)',w:'メキシコ',lat:17.0,lon:-96.7,t:'とうもろこしの原産地。先住民が数千年かけて改良した品種は、大航海時代に世界へ伝播。トルティーヤの食文化は今もこの土地の誇り。'},
+ {n:'チチカカ湖周辺(アンデス)',w:'ペルー・ボリビア',lat:-15.7,lon:-69.5,t:'じゃがいもの原産地。寒さに強いいもは16世紀にヨーロッパへ渡り、冷涼な土地の人口を支えた。「食べ物の伝播」が世界史を動かした代表例。'},
+ {n:'肥沃な三日月地帯',w:'イラク〜シリア',lat:36.0,lon:40.0,t:'約1万年前に小麦の農耕が始まった人類史の転換点。小麦はパン・パスタ・ナンへ姿を変え、乾燥に強い作物として世界へ広がった。'},
+ {n:'グレートプレーンズ',w:'アメリカ中西部',lat:38.0,lon:-100.5,t:'地平線まで続く企業的穀物農業の大地。円形の畑はセンターピボット灌漑の跡。少人数+大型機械で世界へ輸出する「食のグローバル化」の心臓部。地下水の枯渇が課題。'},
+ {n:'コートジボワール',w:'西アフリカ',lat:7.0,lon:-5.5,t:'カカオ生産世界一。チョコレートの原料は熱帯のプランテーションから。価格の低迷や児童労働が課題で、フェアトレードを選ぶことが私たちにできる行動になる。'}
+]);
+caseMap('cm_p215','world','#e8702a',[
+ {n:'サナア旧市街',w:'イエメン',lat:15.4,lon:44.2,t:'日干しれんがと石でできた高層住宅群(世界遺産)。木が乏しい乾燥地で、土を材料に数百年住み継がれてきた「土のマンション」。厚い壁が昼の灼熱と夜の冷えをやわらげる。'},
+ {n:'白川郷',w:'日本・岐阜県',lat:36.3,lon:136.9,t:'世界有数の豪雪に適応した合掌造り(世界遺産)。約60度の急屋根が雪を落とし、屋根裏では養蚕を営んだ。「気候+生業」が家の形を決めた日本の代表例。'},
+ {n:'ウランバートル',w:'モンゴル',lat:47.9,lon:106.9,t:'都市郊外に遊牧をやめた人々の「ゲル地区」が拡大。伝統住居ゲルにソーラーパネルと衛星アンテナが載る風景は、伝統と変容が同居する現代そのもの。冬の石炭暖房による大気汚染が課題。'},
+ {n:'ヤクーツク',w:'ロシア・シベリア',lat:62.0,lon:129.7,t:'永久凍土の上に立つ世界一寒い大都市(1月平均約−40℃)。建物は高床式で、暖房の熱が凍土を溶かして傾くのを防ぐ。温暖化による凍土融解が新たな脅威に。'},
+ {n:'カッパドキア',w:'トルコ',lat:38.6,lon:34.8,t:'火山灰が固まった軟らかい岩をくり抜いた洞窟住居。夏涼しく冬暖かい天然の断熱性能。地形・地質がそのまま住まいになった例。現在は洞窟ホテルとして観光資源に。'},
+ {n:'香港',w:'中国',lat:22.3,lon:114.2,t:'狭い土地と山がちな地形に人口が集中し、世界有数の超高層・高密度住宅都市に。土地の制約が住まいの形を垂直に変えた、都市化時代の「住」の象徴。'}
+]);
+caseMap('cm_p216','world','#e8702a',[
+ {n:'シリコンバレー',w:'アメリカ・カリフォルニア',lat:37.4,lon:-122.1,t:'スタンフォード大学を核に、人材・投資・起業文化が集積したICT産業の世界的中心。GAFAの本社が並ぶ。「集積が集積を呼ぶ」産業立地の現代版。'},
+ {n:'バンガロール',w:'インド',lat:12.97,lon:77.6,t:'「インドのシリコンバレー」。英語人材+理数教育+米国と約半日の時差を武器に、ソフトウェア開発の世界拠点へ。高原の涼しい気候も立地要因のひとつ。'},
+ {n:'深圳',w:'中国',lat:22.55,lon:114.05,t:'40年で漁村から人口1,700万超のハイテク都市へ。「世界の工場」から、ドローンやEVを生むイノベーション都市に変貌。中国の産業構造の高度化を体現する街。'},
+ {n:'豊田市',w:'日本・愛知県',lat:35.08,lon:137.15,t:'自動車産業の企業城下町。約3万点の部品を支える関連工場が集積。市名が企業名に変わった(1959年)ほど、産業と都市が一体化した例。'},
+ {n:'鯖江市',w:'日本・福井県',lat:35.95,lon:136.18,t:'国産眼鏡フレームの9割超を生産する地場産業のまち。雪に閉ざされる冬の副業から始まり、チタン加工の技術で世界ブランドへ。グローバル化の中で「地域の強み」を磨いた好例。'},
+ {n:'デトロイト',w:'アメリカ・ミシガン',lat:42.33,lon:-83.05,t:'20世紀の自動車産業の都。海外との競争と産業構造の変化で人口は最盛期の3分の1に(ラストベルト)。産業の盛衰が都市の運命を左右することを示す教訓の地。近年は再生の動きも。'}
+]);
+caseMap('cm_p217','world','#e8702a',[
+ {n:'メッカ',w:'サウジアラビア',lat:21.4,lon:39.8,t:'イスラーム最大の聖地。世界中のムスリムが1日5回ここへ向かって礼拝し、毎年200万人規模が大巡礼(ハッジ)に集う。飛行機の時代になり巡礼は大規模化した。'},
+ {n:'エルサレム',w:'イスラエル・パレスチナ',lat:31.78,lon:35.22,t:'ユダヤ教・キリスト教・イスラームの3宗教の聖地が旧市街1km四方に同居する世界でも特別な都市。だからこそ帰属をめぐる対立も続く ─ 宗教と政治と地理が交差する場所。'},
+ {n:'ヴァラナシ',w:'インド',lat:25.3,lon:83.0,t:'ヒンドゥー教徒が聖なるガンジス川で沐浴する祈りの都。生と死が川辺に同居する光景は、宗教が暮らしの隅々まで息づくことを教えてくれる。'},
+ {n:'ブッダガヤ',w:'インド',lat:24.7,lon:84.99,t:'釈迦が悟りを開いた仏教誕生の地。仏教はここからスリランカ経由で東南アジアへ(上座部)、シルクロード経由で中国・日本へ(大乗)と、二つのルートで伝播した。'},
+ {n:'バチカン市国',w:'イタリア・ローマ市内',lat:41.9,lon:12.45,t:'世界最小の独立国にして、約14億人のカトリック教徒の中心。宗教が「国家」の形をとった唯一の例で、ローマ教皇の言葉は国際社会にも影響力をもつ。'},
+ {n:'ジャカルタ',w:'インドネシア',lat:-6.2,lon:106.8,t:'世界最大のムスリム人口国(約2.4億人の約9割)の首都。イスラームは商人の交易とともに海を渡って東南アジアへ広がった ─ 「宗教の伝播ルート」を物語る国。'}
+]);
+caseMap('cm_p218','world','#e8702a',[
+ {n:'横浜中華街',w:'日本・神奈川県',lat:35.44,lon:139.65,t:'開港(1859年)とともに形成された日本最大のエスニックタウン。食文化の発信地であり、同郷の人々が支え合う拠点でもあった。160年かけて観光と共生のモデルに。'},
+ {n:'大泉町',w:'日本・群馬県',lat:36.25,lon:139.4,t:'住民の約2割が外国籍(ブラジル籍など)の「日本一外国人比率が高い町」のひとつ。多言語の行政サービスや学校での日本語支援など、多文化共生の最前線。'},
+ {n:'新大久保',w:'日本・東京都',lat:35.70,lon:139.70,t:'コリアンタウンとして発展し、今ではネパール・ベトナムなど多国籍の店がひしめく。若者の「推し活」が文化の壁を軽々とこえていく、変化し続ける共生の街。'},
+ {n:'トロント',w:'カナダ',lat:43.7,lon:-79.4,t:'住民の約半数が海外生まれという世界屈指の多文化都市。同化ではなく多様性をモザイクのように活かす政策で知られ、200以上の民族が暮らす。'},
+ {n:'シンガポール',w:'東南アジア',lat:1.35,lon:103.8,t:'中華系・マレー系・インド系などが暮らす多民族国家。公用語は4つ(英語・中国語・マレー語・タミル語)。住宅団地に民族比率を定めるなど、共生を「制度」で支える国。'}
+]);
+caseMap('cm_p221','world','#e8702a',[
+ {n:'国連本部(ニューヨーク)',w:'アメリカ',lat:40.75,lon:-73.97,t:'2015年、193か国の全会一致でSDGsが採択された場所。「誰一人取り残さない」の合言葉はここから世界へ。'},
+ {n:'ツバル',w:'南太平洋',lat:-8.5,lon:179.2,t:'平均海抜約2mの島国。海面上昇と高潮で国土水没の危機に直面し、「気候難民」「デジタル国家構想」が現実の議論に。気候変動の最前線として国際会議で声を上げ続ける。'},
+ {n:'エチオピア',w:'東アフリカ',lat:9.0,lon:38.7,t:'教科書にも載る、日本企業が浄水技術で安全な水を支援する国(p.181)。納豆のネバネバ成分由来の浄水剤など、日本の技術がSDGs目標6に貢献している。'},
+ {n:'バングラデシュ',w:'南アジア',lat:23.7,lon:90.4,t:'ムハマド・ユヌス氏が創設したグラミン銀行の国。貧しい人々(特に女性)への無担保少額融資(マイクロファイナンス)で貧困脱出を支え、2006年ノーベル平和賞。'},
+ {n:'パリ',w:'フランス',lat:48.85,lon:2.35,t:'2015年、すべての国が温室効果ガス削減に取り組む「パリ協定」が採択された都市。SDGs(同年採択)と並ぶ、持続可能な社会づくりの二本柱が生まれた年だった。'}
+]);
+caseMap('cm_p222','world','#e8702a',[
+ {n:'ニアメ(サヘル地域)',w:'ニジェール',lat:13.5,lon:2.1,t:'合計特殊出生率が世界最高水準(6前後)の国の首都。人口爆発の一方で教育・雇用が追いつかず、若年人口の急増が貧困の連鎖に。教育、特に女子教育が最大のカギとされる。'},
+ {n:'ヨハネスブルク',w:'南アフリカ共和国',lat:-26.2,lon:28.0,t:'教科書の事例地域(p.144)。アパルトヘイト(人種隔離政策)撤廃から30年たっても、居住地や所得の格差が地図上にくっきり残る。「不平等の地理」を学ぶ象徴的な都市。'},
+ {n:'ケララ州',w:'インド南部',lat:9.0,lon:76.7,t:'識字率がインド平均を大きく上回る州。教育、特に女性の教育への投資が、出生率の低下と健康指標の改善につながった ─ 「教育は最強の開発政策」を示す実例。'},
+ {n:'東京(日本)',w:'日本',lat:35.68,lon:139.76,t:'世界最速級で少子高齢化が進む国の首都。高齢化率約29%、出生率1.2前後。「人口減少社会をどう設計するか」で世界が日本に注目している ─ 私たち自身が当事者の課題。'},
+ {n:'ラゴス',w:'ナイジェリア',lat:6.5,lon:3.4,t:'アフリカ最大級の都市。ナイジェリアは2050年に世界3位の人口大国になると予測される。若い人口は成長のエンジンにも、インフラ不足の重荷にもなる ─ 分かれ道は教育と雇用。'}
+]);
+caseMap('cm_p223','world','#e8702a',[
+ {n:'ガワール油田(ペルシア湾岸)',w:'サウジアラビア',lat:25.4,lon:49.6,t:'世界最大級の油田。ペルシア湾岸に原油の埋蔵が集中する「資源の偏在」が、世界のパワーバランスと日本のエネルギー安全保障を左右してきた。'},
+ {n:'アタカマ(リチウム三角地帯)',w:'チリ・ボリビア・アルゼンチン',lat:-23.5,lon:-68.3,t:'EVや蓄電池に不可欠なリチウムの一大産地。塩湖のかん水から採取する。脱炭素時代の「新しい資源の偏在」と、採掘による水資源への影響という新たな課題も。'},
+ {n:'レイキャビク',w:'アイスランド',lat:64.1,lon:-21.9,t:'電力のほぼ100%を水力と地熱でまかなう国の首都。火山国の「地の利」を活かした再エネ先進国。同じ火山国の日本にとって大きなヒント。'},
+ {n:'エスビェア(北海沿岸)',w:'デンマーク',lat:55.5,lon:8.45,t:'洋上風力発電の世界的拠点港。偏西風が安定して吹く北海の環境条件を活かす。デンマークは電力の5割超を風力でまかなう ─ 「地域の条件に合う再エネ」の好例。'},
+ {n:'ジャカルタ→ヌサンタラ',w:'インドネシア',lat:-6.2,lon:106.8,t:'教科書の事例(p.160)。過密・渋滞・地盤沈下(海面上昇も加わり水没リスク)に直面した首都を、カリマンタン島の新都市ヌサンタラへ移転中。都市問題への国家規模の挑戦。'}
+]);
+caseMap('cm_p224','world','#e8702a',[
+ {n:'アラル海',w:'カザフスタン・ウズベキスタン',lat:45.0,lon:60.0,t:'「20世紀最大の環境破壊」。綿花栽培のため流入河川から大量取水した結果、かつて世界4位の湖がほぼ消滅(面積約1/10に)。干上がった湖底から塩と農薬の砂嵐が舞い、漁業の町は砂漠の中に取り残された。'},
+ {n:'サヘル地域',w:'マリ・ニジェールなど',lat:16.0,lon:0.0,t:'サハラ砂漠南縁で進む砂漠化の最前線。干ばつに、人口増加による過放牧・過耕作・薪の取りすぎが重なって土地が劣化。アフリカ諸国は植林帯「グレート・グリーン・ウォール」計画で対抗中。'},
+ {n:'アマゾン(マナウス周辺)',w:'ブラジル',lat:-3.1,lon:-60.0,t:'「地球の肺」と呼ばれる世界最大の熱帯林。牧場・大豆畑・道路の開発で森林減少が続く。CO2の吸収源であり生物多様性の宝庫である森を、経済とどう両立させるかが世界の課題。'},
+ {n:'スバールバル諸島',w:'ノルウェー(北極圏)',lat:78.0,lon:16.0,t:'温暖化が世界平均の数倍の速さで進む北極圏。海氷と氷河の融解が進み、ホッキョクグマの生息地が縮小。万一に備え世界の種子を保存する「種子の貯蔵庫」もここにある。'},
+ {n:'太平洋ごみベルト',w:'北太平洋',lat:32.0,lon:-145.0,t:'海流が集めたプラスチックごみが漂う広大な海域。細かく砕けたマイクロプラスチックは魚や海鳥の体内からも見つかる。陸の暮らしのごみが、川を通って外洋まで旅をした結果。'},
+ {n:'カリマンタン(ボルネオ島)',w:'インドネシア・マレーシア',lat:0.5,lon:114.0,t:'油やし(パーム油)農園の開発で熱帯林と泥炭地が減少。泥炭火災は大量のCO2と煙害(ヘイズ)を生む。パーム油はお菓子や洗剤に ─ 私たちの買い物とつながる環境問題。'}
+]);
+caseMap('cm_p225','world','#e8702a',[
+ {n:'ジュネーブ',w:'スイス',lat:46.2,lon:6.15,t:'UNHCR(国連難民高等弁務官事務所)や赤十字国際委員会の本部がある「国際協力の首都」。永世中立国スイスの都市が、対立する国々の対話の場を提供してきた。'},
+ {n:'ジュバ',w:'南スーダン',lat:4.85,lon:31.6,t:'2011年に独立した世界で最も新しい国の首都。その後の内戦で数百万人が難民・国内避難民に。日本も自衛隊のPKO部隊やJICAの支援を派遣してきた、国際協力の現場。'},
+ {n:'コックスバザール',w:'バングラデシュ',lat:21.4,lon:92.0,t:'ミャンマーから逃れたロヒンギャの人々約100万人が暮らす世界最大級の難民キャンプ。受け入れ国も豊かではない中、UNHCRやNGO、そして日本の支援も続く。'},
+ {n:'ジャララバード周辺',w:'アフガニスタン',lat:34.4,lon:70.45,t:'教科書p.181の事例。中村哲医師率いるペシャワール会が、福岡県の山田堰をモデルに用水路を建設。砂漠化した大地を緑の農地に変え、65万人の暮らしを支えた「日本発の国際協力」。'},
+ {n:'キーウ',w:'ウクライナ',lat:50.45,lon:30.5,t:'2022年からのロシアによる侵攻で、欧州で第二次大戦後最大規模の難民が発生。エネルギーや穀物の価格高騰が世界中の食卓に波及し、「遠い戦争」が存在しないことを示した。'}
+]);
+caseMap('cm_p311','japan','#1e8f5a',[
+ {n:'糸魚川(フォッサマグナ)',w:'新潟県',lat:37.0,lon:137.86,t:'東日本と西日本の地質の境目、糸魚川・静岡構造線の北の起点。フォッサマグナミュージアムでは2つのプレートの境界を見学できる。日本列島の「継ぎ目」のまち。'},
+ {n:'十日町(豪雪地帯)',w:'新潟県',lat:37.13,lon:138.75,t:'年間降雪量10mをこえることもある世界有数の豪雪地。北西季節風×暖かい日本海×山地の三点セットの産物。雪を資源に変える雪まつりや雪室(天然冷蔵庫)の文化も。'},
+ {n:'高松(瀬戸内の少雨)',w:'香川県',lat:34.34,lon:134.05,t:'中国山地と四国山地に挟まれ、夏も冬も季節風の雨が届きにくい少雨地帯。古くから1万か所をこえるため池を築いて水を確保。讃岐うどんも少雨に強い小麦の文化。'},
+ {n:'宮古(やませと三陸)',w:'岩手県',lat:39.64,lon:141.95,t:'初夏に吹く冷たく湿った北東風「やませ」が日照を奪い、冷害をもたらしてきた太平洋側の地。寒流(親潮)の上を渡る風が原因 ─ 海流と気候と農業がつながる場所。'},
+ {n:'甲府(内陸の盆地)',w:'山梨県',lat:35.66,lon:138.57,t:'中央高地の盆地気候。降水が少なく日照が長く、夏は暑く冬は冷える。この気候と扇状地の水はけが、ぶどう・ももの果樹王国を生んだ。'},
+ {n:'那覇(亜熱帯)',w:'沖縄県',lat:26.21,lon:127.68,t:'南西諸島の気候。冬でも平均17℃前後と温暖だが、台風の通り道。伝統的な家は低い屋根・石垣・防風林で暴風に備えてきた。サンゴ礁の海とともにある暮らし。'}
+]);
+caseMap('cm_p312','japan','#1e8f5a',[
+ {n:'神戸(阪神・淡路大震災)',w:'兵庫県・1995年',lat:34.69,lon:135.19,t:'都市直下の活断層地震(M7.3)。建物倒壊と火災で6,400人以上が犠牲に。生き埋めからの救助の約77%は近隣住民による ─ 「共助」の重要性と耐震化の教訓を残した。'},
+ {n:'三陸沖(東日本大震災)',w:'宮城県沖・2011年',lat:38.3,lon:142.4,t:'M9.0の海溝型(プレート境界)地震。巨大津波が沿岸を襲い、関連死を含め2万人以上が犠牲に。「揺れたら高台へ」「想定にとらわれない」という教訓が全国の防災を変えた。'},
+ {n:'熊本(熊本地震)',w:'熊本県・2016年',lat:32.8,lon:130.7,t:'活断層(布田川・日奈久断層帯)による地震。震度7が2回という観測史上初の事態で、「最初の揺れが最大とは限らない」ことを示した。'},
+ {n:'雲仙普賢岳',w:'長崎県・1991年',lat:32.76,lon:130.3,t:'大火砕流が発生し43人が犠牲に。「火砕流」の恐ろしさを日本社会が知った災害。以後、火山ハザードマップ整備と警戒区域設定が進んだ。'},
+ {n:'御嶽山',w:'長野・岐阜県境・2014年',lat:35.89,lon:137.48,t:'前兆の少ない水蒸気噴火が登山客を襲い、戦後最悪の火山災害に(死者・行方不明63人)。「活火山に登る」ことのリスクと情報確認の大切さを問いかけた。'},
+ {n:'桜島',w:'鹿児島県',lat:31.58,lon:130.66,t:'年間数百回噴火する活火山と約60万人都市・鹿児島市が向かい合う。克灰袋・降灰予報・避難訓練 ─ 火山と「共に生きる」知恵が日常に組み込まれた世界的にも珍しい場所。'}
+]);
+caseMap('cm_p313','japan','#1e8f5a',[
+ {n:'倉敷市真備町',w:'岡山県・2018年西日本豪雨',lat:34.65,lon:133.7,t:'堤防決壊で町の3割が浸水し51人が犠牲に。浸水範囲はハザードマップの想定とほぼ一致していた ─ 「マップを見る」から「マップで行動を決める」への転換を迫った災害。'},
+ {n:'千曲川(長野市穂保)',w:'長野県・2019年台風19号',lat:36.65,lon:138.19,t:'堤防が決壊し新幹線車両基地まで水没。広域に同時多発した氾濫は、地球温暖化時代の「これまでの想定をこえる雨」を象徴した。'},
+ {n:'球磨川(人吉市)',w:'熊本県・2020年7月豪雨',lat:32.22,lon:130.75,t:'線状降水帯による記録的な雨で日本三大急流が氾濫。流域全体で水を受け止める「流域治水」へ国の方針が大きく動くきっかけになった。'},
+ {n:'鬼怒川(常総市)',w:'茨城県・2015年',lat:36.1,lon:139.99,t:'堤防決壊で市域の3分の1が浸水。逃げ遅れによる救助要請が相次ぎ、「タイムラインに沿った早めの避難」の重要性が叫ばれる転機に ─ マイ・タイムライン誕生の背景。'},
+ {n:'紀伊半島(那智勝浦町など)',w:'和歌山県ほか・2011年台風12号',lat:33.6,lon:135.94,t:'記録的大雨で深層崩壊(山が深い所から崩れる現象)が多発。土砂が川をせき止める天然ダムも発生し、土砂災害の怖さを示した。'}
+]);
+caseMap('cm_p314','japan','#1e8f5a',[
+ {n:'広川町(稲むらの火)',w:'和歌山県・1854年',lat:34.03,lon:135.17,t:'安政南海地震の津波の夜、濱口梧陵が稲むらに火を放って村人を高台へ導いた逸話の地。その後私財で築いた堤防は90年後の津波からも村を守った。「伝承と備え」の原点。'},
+ {n:'海津市(輪中地帯)',w:'岐阜県',lat:35.22,lon:136.63,t:'木曽三川が集まる海抜ゼロメートル地帯。集落を堤防で囲む輪中と、石垣の上の水屋で水と共に生きてきた。治水神社には宝暦治水で犠牲となった薩摩藩士が祀られる。'},
+ {n:'信玄堤(甲斐市)',w:'山梨県',lat:35.67,lon:138.48,t:'戦国時代に武田信玄が釜無川に築いたとされる治水施設群。霞堤や聖牛(木組み)で水の勢いを受け流す発想は、約470年後の今も現役で、「流域治水」の先駆と再評価される。'},
+ {n:'釜石市(津波避難教育)',w:'岩手県・2011年',lat:39.27,lon:141.88,t:'日頃の防災教育を受けた小中学生たちが率先して高台へ走り、多くの命が助かった(釜石の出来事)。「想定を信じるな・最善を尽くせ・率先避難者たれ」の3原則は全国の手本に。'},
+ {n:'広島市(土砂災害)',w:'広島県・2014年',lat:34.47,lon:132.5,t:'花こう岩が風化した「まさ土」の斜面に宅地が広がる地形条件下で、深夜の豪雨により同時多発の土石流が発生(犠牲者77人)。土砂災害警戒区域の指定と避難情報の改善が進む契機に。'}
+]);
+caseMap('cm_p321','japan','#1e8f5a',[
+ {n:'函館市',w:'北海道',lat:41.77,lon:140.73,t:'教科書ワーク3「地図を使って街を歩こう」の舞台。路面電車・坂・洋館・砂州の上の市街地 ─ 地形と歴史が景観に刻まれた、地域調査の練習に最適な街。'},
+ {n:'飯田市(高校生の探究)',w:'長野県',lat:35.51,lon:137.82,t:'教科書p.215で紹介。地元の高校生が地震時の市民の意識・行動を調査・分析し、学会発表や市民への提言まで行った ─ 「高校生が地域の担い手になる」実例。'},
+ {n:'浦安市(液状化の検証)',w:'千葉県',lat:35.65,lon:139.9,t:'東日本大震災で埋立地の広範囲が液状化。年代別空中写真で「いつ海だった場所か」を重ねると被害分布とほぼ一致 ─ 地理院地図を使った地域調査の定番テーマ。'},
+ {n:'直島(地域の再生)',w:'香川県',lat:34.46,lon:133.99,t:'過疎化が進んだ瀬戸内の島が、現代アートを核に世界中から人が訪れる島へ。「地域資源の再発見」による地域づくりの成功例として調査・比較の題材になる。'},
+ {n:'あなたの生活圏',w:'例:神奈川県央(厚木周辺)',lat:35.44,lon:139.36,t:'最後のフィールドはあなたの町。通学路の地形、駅前の変化、ハザードマップ、商店街 ─ 1年間の道具(地図・GIS・統計・防災)を総動員して、自分の生活圏の調査テーマを立てよう!'}
+]);
+
+</script>
+<script>
+/* ===== 第1編 再編成:クイズ・事例・新ワーク ===== */
+makeQuiz('quizP11',[
+ {q:'経度0°の本初子午線が通る都市は?',o:['パリ(かつて独自の子午線を主張)','ロンドン','ニューヨーク','北京'],a:1,e:'1884年の国際会議でロンドン旧グリニッジ天文台経由に決定。実はフランスは長くパリ子午線を使い続けた ─ 「基準」も国際政治の産物だった。'},
+ {q:'日本の標準時子午線は?',o:['東経120°','東経135°','東経140°','東経150°'],a:1,e:'兵庫県明石市などを通る東経135°。135÷15=9で、日本はロンドンより9時間進む。'},
+ {q:'地球上のある地点の正反対側の地点を何という?',o:['対蹠点','回帰点','子午点','基準点'],a:0,e:'対蹠点(たいせきてん)。時差はちょうど12時間、季節も逆になる。日本の対蹠点は南大西洋の海上。'},
+ {q:'北極圏で夏に太陽が沈まない現象とその原因の組み合わせは?',o:['白夜 ─ 地軸が23.4°傾いたまま公転するから','白夜 ─ 地球が完全な球ではないから','極夜 ─ 月の引力のため','オーロラ ─ 太陽風のため'],a:0,e:'地軸の傾きが原因。同じ理由で冬は太陽が昇らない極夜になる。季節・白夜・南北の季節逆転はすべて23.4°の傾きが生む。'},
+ {q:'東京(東経135°基準)から西のドバイ(東経60°基準)へ行くと、時計は?',o:['5時間すすめる','5時間もどす','12時間もどす','変えなくてよい'],a:1,e:'経度差75°÷15=5時間。西へ行くほど時刻は遅れるので5時間もどす。「東ほど時刻が進む」が大原則。'}
+]);
+makeQuiz('quizP11b',[
+ {q:'2万5千分の1地形図と20万分の1地勢図、同じ範囲をより詳しく表せるのは?',o:['2万5千分の1','20万分の1','どちらも同じ','縮尺と詳しさは無関係'],a:0,e:'分母が小さいほど縮尺が大きく詳しい。地理院地図はズームで縮尺をシームレスに切り替えられる。'},
+ {q:'メルカトル図法の世界地図の弱点は?',o:['角度が不正確になる','高緯度ほど面積が拡大して見える','距離がすべて正確すぎる','南半球が描けない'],a:1,e:'グリーンランドがアフリカ大陸並みに見えるのが典型(実際は約14分の1)。「地図にだまされない」第一歩。'},
+ {q:'人口分布図・天気図・ハザードマップに共通する地図の分類は?',o:['一般図','主題図','地形図','海図'],a:1,e:'特定のテーマを表すのが主題図。地形・道路などを幅広く表す地形図・地勢図は一般図。'},
+ {q:'スマートフォンの地図アプリで現在地がわかるのは、何のおかげ?',o:['GNSS(人工衛星による測位)','携帯電話の基地局情報だけで測っている','地図会社の社員が手動で更新している','端末内の方位磁針と歩数計だけ'],a:0,e:'GPSやみちびきなどのGNSS。全国約1,300か所の電子基準点は地殻変動の監視にも使われている。'},
+ {q:'地理院地図の「ツール」でできないことは?',o:['距離や面積の計測','断面図の作成','3D表示','天気予報の発表'],a:3,e:'計測・断面図・並べて比較・3Dなどができる。天気予報は気象庁の仕事。函館山の断面図づくりは教科書ワーク3にも登場。'}
+]);
+makeQuiz('quizP12',[
+ {q:'国家の3要素に含まれないものは?',o:['領域','国民','主権','宗教'],a:3,e:'国家は領域・国民・主権で成り立つ。領域は領土・領海・領空からなる。'},
+ {q:'排他的経済水域(EEZ)の範囲は基線から?',o:['12海里','24海里','200海里','370海里'],a:2,e:'200海里(約370km)。水産・鉱産資源の権利が沿岸国に認められる。領海は12海里、接続水域は24海里。'},
+ {q:'北方領土に含まれない島は?',o:['択捉島','国後島','色丹島','竹島'],a:3,e:'北方領土は択捉・国後・色丹・歯舞。ロシアが不法に占拠。竹島(島根県)は韓国が不法占拠している別の問題。'},
+ {q:'アフリカ大陸に直線的な国境が多い理由は?',o:['砂漠で目印がないから','植民地時代に緯線・経線で人為的に引かれたから','地震で動いたから','住民の投票で決めたから'],a:1,e:'19世紀末の列強による分割の名残。民族の分布を無視した人為的国境は、独立後の紛争の火種にもなった(2編5節へつながる)。'},
+ {q:'「国家群」の説明として正しいのは?',o:['一つの国の中の都市の集まり','EUやASEANのような国家をこえた地域的なまとまり','国連の別名','多国籍企業の連合'],a:1,e:'経済や安全保障のため国家がまとまる動き。EUは通貨まで共通化、ASEANは経済共同体を形成 ─ 国境で分かれつつ、結びつく世界。'}
+]);
+makeQuiz('quizP12b',[
+ {q:'コンテナ輸送が世界の貿易を変えた理由は?',o:['船そのものの速度が大幅に上がったから','規格統一で積み替えが効率化したから','港の数が世界的に増えたから','運べる貨物の種類が減って単純になったから'],a:1,e:'規格化で船↔トラック↔鉄道の積み替えがスムーズになり、輸送コストが劇的に低下。グローバル化の縁の下の力持ち。'},
+ {q:'多くの路線が乗り入れ、乗り継ぎの拠点となる空港を何という?',o:['ハブ空港','フィーダー空港(ハブに接続する支線側の空港)','地方管理空港','貨物専用空港'],a:0,e:'車輪の中心(ハブ)にたとえた呼び名。仁川やドバイが代表。日本の地方空港から仁川経由で世界へ、という流れも多い。'},
+ {q:'大陸間のインターネット通信の大部分を支えているのは?',o:['通信衛星','海底ケーブル','飛行機による記録媒体の輸送','短波ラジオ'],a:1,e:'約99%が海底の光ファイバーケーブル経由。衛星は補完役。「クラウド」も実体は海の底のケーブルでつながっている。'},
+ {q:'「時間距離」の説明として正しいのは?',o:['移動にかかる時間で測った距離','時差のこと','地図上の直線距離','標準時の差'],a:0,e:'交通の発達で時間距離は縮む。東京〜ロンドンは船の約50日からジェット機の約14時間へ ─ 地球は同じ大きさなのに世界は「縮んだ」。'},
+ {q:'トラック輸送の一部を鉄道や船に切り替える取り組みを何という?',o:['モーダルシフト','パークアンドライド','ハブアンドスポーク','ジャストインタイム'],a:0,e:'CO2削減とドライバー不足対策を兼ねる物流の工夫。交通の単元は環境問題(2編4節)ともつながっている。'}
+]);
+makeQuiz('quizP12c',[
+ {q:'かつての日本の「原料を輸入し製品を輸出する」貿易の形を何という?',o:['加工貿易','中継貿易','水平分業','三角貿易'],a:0,e:'高度成長期の日本型。現在は部品や製品を相互にやり取りする水平分業へ変化し、輸入品目も機械類が上位に。'},
+ {q:'現在、日本の最大の貿易相手国(輸出入総額)は?',o:['アメリカ','中国','韓国','オーストラリア'],a:1,e:'2000年代後半にアメリカから中国へ交代。ただし輸出はアメリカと拮抗しており、米中2本柱が日本経済の現実。'},
+ {q:'「インバウンド」が指すものは?',o:['日本人の海外旅行','海外から日本への旅行(者)','国内の修学旅行','輸入品の検査'],a:1,e:'2024年は約3,700万人と過去最多水準。地域経済の柱になる一方、京都などではオーバーツーリズムも課題に。'},
+ {q:'フィリピンなどで、海外で働く人々からの送金が果たす役割は?',o:['国の経済を支える重要な収入源','ごくわずかで影響はない','法律で禁止されている','政府の予算をすべてまかなう'],a:0,e:'フィリピンでは海外労働者の送金がGDPの約1割。人の移動はお金の流れとセット ─ 「出稼ぎ」が国を支える構造がある。'},
+ {q:'観光客が集中しすぎて住民の生活や環境に支障が出る問題を何という?',o:['オーバーツーリズム','エコツーリズム','グリーンツーリズム','マイクロツーリズム'],a:0,e:'バスに乗れない、ごみが増えるなどの問題。観光の恩恵と負担をどう両立させるかは「構想」の問い ─ あなたの町ならどうする?'}
+]);
+caseMap('cm_p12','world','#2e6fdb',[
+ {n:'沖ノ鳥島',w:'日本最南端・東京都',lat:20.4,lon:136.1,t:'満潮時にわずかに顔を出すサンゴ礁の島。この島があることで国土面積を上回る約40万km²の排他的経済水域が確保されるため、護岸工事で保全されている。「小さな島の大きな価値」の象徴。'},
+ {n:'択捉島(北方領土)',w:'日本固有の領土',lat:45.0,lon:147.8,t:'日本最北端の島。国後・色丹・歯舞とともに日本固有の領土だが、戦後ソ連が占拠し、現在もロシアが不法に占拠している。粘り強い返還交渉が続く。'},
+ {n:'竹島',w:'島根県隠岐の島町',lat:37.24,lon:131.87,t:'1905年に島根県へ編入された日本固有の領土。1952年以降、韓国が不法に占拠。日本は国際司法裁判所での解決を提案している ─ 「法の支配」による平和的解決の試み。'},
+ {n:'尖閣諸島',w:'沖縄県石垣市',lat:25.75,lon:123.5,t:'歴史的にも国際法上も日本固有の領土で、日本が有効に支配しており、解決すべき領有権の問題はそもそも存在しない。周辺海域では中国公船の活動が続き、海上保安庁が警備にあたる。'},
+ {n:'ブリュッセル',w:'ベルギー',lat:50.85,lon:4.35,t:'EU(ヨーロッパ連合)の本部所在地。27か国が国境をこえて人・モノ・カネ・サービスを自由に動かす「国家群」の中心地。国境の検問なしで隣国へ行ける世界がここにある。'},
+ {n:'ジャカルタ(ASEAN事務局)',w:'インドネシア',lat:-6.2,lon:106.8,t:'東南アジア10か国が加盟するASEANの事務局所在地。多様な宗教・言語・政治体制の国々が「ゆるやかに」まとまる、EUとは異なる結びつきのモデル。'}
+]);
+caseMap('cm_p11b','world','#2e6fdb',[
+ {n:'つくば市(国土地理院)',w:'茨城県',lat:36.1,lon:140.08,t:'日本の地図づくりの総本山・国土地理院の本院がある街。併設の「地図と測量の科学館」では日本列島の巨大空中写真の上を歩ける。地理院地図はここから全国へ配信されている。'},
+ {n:'佐原(伊能忠敬の出発点)',w:'千葉県香取市',lat:35.89,lon:140.5,t:'55歳から17年かけて全国を歩き、驚異的に正確な日本地図を作った伊能忠敬が暮らした町。歩測と天体観測だけで作った地図は、衛星時代の地図と重ねてもほぼズレない。'},
+ {n:'ルペルモンデ(メルカトル生誕地)',w:'ベルギー',lat:51.06,lon:4.17,t:'1512年、地図学者メルカトルが生まれた町。彼の図法は大航海時代の船乗りの命綱(等角航路が直線になる)となり、500年たった今もウェブ地図の標準として生き続けている。'},
+ {n:'グリーンランド',w:'デンマーク領',lat:72.0,lon:-40.0,t:'メルカトル図法では「アフリカ大陸級」に見えるが、実際の面積はアフリカの約14分の1。地図のひずみを体感できる最高の教材。地球儀やThe True Size系のサイトで確かめよう。'},
+ {n:'アフリカ大陸',w:'「本当の大きさ」の主役',lat:2.0,lon:20.0,t:'実はアメリカ・中国・インド・西欧主要国がすっぽり収まる広さ(約3,000万km²)。メルカトル図法が高緯度を拡大するため、私たちはアフリカを「小さく」誤解しがちだ。'},
+ {n:'種子島宇宙センター',w:'鹿児島県',lat:30.4,lon:131.0,t:'準天頂衛星「みちびき」などを打ち上げてきた日本のロケット発射場。みちびきは日本の真上付近に長くとどまり、GPSを補ってセンチメートル級の測位を可能にする ─ 地図の未来を支える島。'}
+]);
+caseMap('cm_p12b','world','#2e6fdb',[
+ {n:'マラッカ海峡',w:'マレーシア・インドネシア間',lat:2.5,lon:101.5,t:'太平洋とインド洋を結ぶ世界有数のチョークポイント。日本へ向かう原油タンカーの大半がここを通る。日本の暮らしはこの細い海峡に支えられている。'},
+ {n:'スエズ運河',w:'エジプト',lat:30.5,lon:32.3,t:'2021年に大型コンテナ船が座礁して6日間封鎖されると世界の物流が大混乱に。1か所の停止が世界に波及する「空間的相互依存」の生きた教材。'},
+ {n:'パナマ運河',w:'パナマ',lat:9.1,lon:-79.7,t:'太平洋と大西洋の近道。近年は干ばつによる水不足で通航制限が起こり、気候変動が物流ルートを揺さぶる時代になった。'},
+ {n:'ドバイ国際空港',w:'アラブ首長国連邦',lat:25.25,lon:55.36,t:'ヨーロッパ・アジア・アフリカの結節点というを位置を活かした世界最大級のハブ空港。「乗り継ぎの十字路」が砂漠の都市を世界都市に変えた。'},
+ {n:'千倉(海底ケーブル陸揚げ地)',w:'千葉県南房総市',lat:34.95,lon:139.95,t:'太平洋を横断してきた海底ケーブルが日本に上陸する地点のひとつ。あなたが見る海外の動画も、ほぼこの「海の底の糸」を通ってくる ─ 通信の世界の意外な現場。'},
+ {n:'シンガポール港',w:'シンガポール',lat:1.26,lon:103.83,t:'世界最大級のコンテナ取扱量を誇る中継貿易港。マラッカ海峡の出口という位置を活かし、小さな都市国家が世界物流のハブになった。'}
+]);
+caseMap('cm_p12c','world','#2e6fdb',[
+ {n:'ロッテルダム(ユーロポート)',w:'オランダ',lat:51.9,lon:4.48,t:'ライン川の河口に位置するEUの玄関港。内陸の工業地帯と海をつなぐ位置が、ヨーロッパ最大の貿易港を生んだ。「川と海の出会う場所」は昔も今も物流の一等地。'},
+ {n:'義烏(イーウー)',w:'中国・浙江省',lat:29.31,lon:120.07,t:'7万をこえる店舗がひしめく世界最大級の雑貨卸売市場。100円ショップの商品の多くがここから世界へ。義烏発の貨物列車はヨーロッパまで直行する(中欧班列)。'},
+ {n:'マニラ',w:'フィリピン',lat:14.6,lon:121.0,t:'看護師・船員・家事労働者など約1,000万人が海外で働き、その送金がGDPの約1割を支える。「人の移動」がそのまま国の経済構造になっている代表例。'},
+ {n:'ティフアナ/サンディエゴ',w:'メキシコ・アメリカ国境',lat:32.52,lon:-117.04,t:'世界で最も通過者の多い陸上国境のひとつ。毎日数万人が通勤・通学で国境をこえる一方、移民をめぐる壁の建設も ─ 国境の「接点」と「壁」の両面が見える街。'},
+ {n:'京都',w:'日本',lat:35.01,lon:135.77,t:'インバウンド急増の光と影が交差する古都。観光消費は地域の柱になる一方、市バスの混雑など住民生活への影響(オーバーツーリズム)も。観光と暮らしの両立を「構想」する最前線。'},
+ {n:'仁川国際空港',w:'韓国',lat:37.46,lon:126.44,t:'東アジア有数のハブ空港。日本の地方空港と世界を「仁川経由」で結ぶ路線網をもち、日本の空港との競争と連携の相手でもある。'}
+]);
+/* 対蹠点ツアー */
+(function(){
+  const sel=document.getElementById('antiSel');if(!sel)return;
+  const D=[
+   ['東京','北緯35.7°・東経139.7°','南緯35.7°・西経40.3°','南大西洋のど真ん中。「日本の裏はブラジル」とよく言うが、正確には海の上! 最寄りの陸はブラジル〜アルゼンチン沖。'],
+   ['ロンドン','北緯51.5°・経度0°','南緯51.5°・経度180°付近','ニュージーランド南東の海。近くの島の名はずばり「アンティポディーズ(対蹠)諸島」!'],
+   ['マドリード','北緯40.4°・西経3.7°','南緯40.4°・東経176.3°','ニュージーランド北島の沖。スペインとNZはほぼ「裏表」の関係にある。'],
+   ['ジャカルタ','南緯6.2°・東経106.8°','北緯6.2°・西経73.2°','コロンビアの首都ボゴタの近く! 大都市どうしがほぼ裏表になる、世界でも珍しい組み合わせ。'],
+   ['ブエノスアイレス','南緯34.6°・西経58.4°','北緯34.6°・東経121.6°','上海の沖合(東シナ海)。アルゼンチンと中国東部が裏表だ。'],
+   ['ホノルル','北緯21.3°・西経157.9°','南緯21.3°・東経22.1°','アフリカ南部・ボツワナの大地。常夏の島の裏側はサバナの草原だった。']];
+  D.forEach((d,i)=>sel.add(new Option(d[0],i)));
+  function render(){
+    const d=D[sel.value];
+    document.getElementById('antiOut').innerHTML='📍 '+d[0]+'('+d[1]+')<br>⬇️ 緯度の南北を反転・経度は180°−|経度|<br>🌏 対蹠点:<span style="color:var(--u1)">'+d[2]+'</span><br><span style="font-size:.85rem;font-weight:500">'+d[3]+'</span><br><span style="font-size:.8rem;color:#51626d">対蹠点とは時差12時間・季節も逆!</span>';
+  }
+  sel.onchange=render;render();
+})();
+/* 縮む世界 */
+(function(){
+  const box=document.getElementById('shrinkBtns');if(!box)return;
+  const E=[
+   ['1850年ごろ','帆船で約50日',75,'風まかせの航海。世界一周は命がけの大事業だった。'],
+   ['1935年ごろ','船と鉄道で約15日',55,'シベリア鉄道経由が最速ルート。それでも2週間の旅。'],
+   ['1960年ごろ','プロペラ機・南回りで約50時間',38,'何度も給油しながら飛ぶ空の旅。運賃は庶民に手が届かない高さ。'],
+   ['現在','直行便で約14時間',22,'ジェット機と北極回りルート。LCCの登場で運賃も身近に。'],
+   ['オンライン','会議なら約1秒',8,'海底ケーブルが光速で結ぶ。「移動しない交流」の時代へ。']];
+  E.forEach((e,i)=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=e[0];
+    b.onclick=()=>{
+      box.querySelectorAll('.chip').forEach(x=>x.classList.toggle('sel-u2',x===b));
+      document.getElementById('shrinkC').setAttribute('r',e[2]);
+      document.getElementById('shrinkOut').innerHTML='東京→ロンドン:<span style="color:var(--u1)">'+e[1]+'</span><br><span style="font-size:.85rem;font-weight:500">'+e[3]+'</span>';
+    };
+    box.appendChild(b);
+  });
+  box.querySelectorAll('.chip')[3].click();
+})();
+/* 貿易相手タイムライン */
+(function(){
+  const box=document.getElementById('tradeBtns');if(!box)return;
+  const E=[
+   ['1960年',27,1,'高度経済成長期。繊維など軽工業品の最大のお得意先はアメリカ。中国との貿易はごくわずかだった。'],
+   ['1990年',32,2,'自動車・電機の対米輸出が拡大し貿易摩擦の時代に。現地生産が進むきっかけになった。'],
+   ['2010年',15,19,'2000年代後半、ついに主役交代。「世界の工場」中国が最大の貿易相手国に。部品を送り製品を受け取る水平分業が深化。'],
+   ['2023年',20,18,'輸出ではアメリカと中国がほぼ拮抗する2本柱に。一国依存のリスク(経済安全保障)も議論されるように。']];
+  E.forEach((e,i)=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=e[0];
+    b.onclick=()=>{
+      box.querySelectorAll('.chip').forEach(x=>x.classList.toggle('sel-u2',x===b));
+      document.getElementById('tradeBars').innerHTML=meterRow('対アメリカ輸出',e[1],40,'#2e6fdb','%')+meterRow('対中国輸出',e[2],40,'#d64545','%');
+      document.getElementById('tradeNote').innerHTML='<span style="font-size:.85rem;font-weight:500">'+e[3]+'(輸出に占める割合・概数)</span>';
+    };
+    box.appendChild(b);
+  });
+  box.querySelector('.chip').click();
+})();
+/* ヒトモノカネ情報 仕分け */
+if(document.getElementById('sortMove')){
+makeSort('sortMove',
+ [{label:'ヒト',color:'#e8702a',key:'h'},{label:'モノ',color:'#2e6fdb',key:'m'},{label:'カネ',color:'#1e8f5a',key:'k'},{label:'情報',color:'#7a4fc9',key:'j'}],
+ [['コンテナ船で運ばれる自動車部品','m','水平分業の主役。部品が国境を何度もこえて1台の車になる。'],
+  ['スマホに使うレアメタルの輸入','m','資源の偏在(2編3節)とつながるモノの流れ。'],
+  ['訪日外国人観光客','h','インバウンド。2024年は約3,700万人と過去最多水準。'],
+  ['技能実習生として来日して働く','h','労働力の国際移動。日本の産業を支える存在になっている。'],
+  ['海外で働く人が母国の家族へ送金する','k','フィリピンなどでは送金がGDPの約1割を支える。'],
+  ['日本企業が海外に工場を建てる(直接投資)','k','カネの移動がモノの流れ(現地生産)を生み出す。'],
+  ['海外ドラマをネットで動画配信','j','海底ケーブルが支える情報の流れ。文化のグローバル化でもある。'],
+  ['国境をこえたオンラインゲームの対戦','j','遊びも情報の国際移動。eスポーツは新しい国際交流の形に。']]);}
+</script>
 </body>
 </html>
