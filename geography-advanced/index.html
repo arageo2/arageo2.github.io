@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地理探究13｜自給的農業 — 伝統と変容</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#26221c;
+  --ink-soft:#5a5347;
+  --paper:#f2efe4;
+  --card:#fbf9f1;
+  --line:#d8d2bf;
+  --steppe:#b8862c;       /* 遊牧：乾いた草原の金 */
+  --steppe-sky:#6fa8c9;
+  --ember:#c1492a;        /* 焼畑：火入れの朱 */
+  --forest:#3e6b45;
+  --paddy:#4f7d3a;        /* 稲作：水田の緑 */
+  --paddy-water:#5a8fa3;
+  --ok:#2e7d4f;
+  --ng:#b3402a;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(38,34,28,.08);
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;
+}
+h1,h2,h3,.serif{font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:3px solid var(--steppe-sky);outline-offset:2px;
+}
+
+/* ===== ナビ ===== */
+.nav{
+  position:sticky;top:0;z-index:50;background:rgba(38,34,28,.96);
+  display:flex;align-items:center;gap:.25rem;overflow-x:auto;
+  padding:.5rem .9rem;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.nav .brand{color:#f2efe4;font-size:.78rem;letter-spacing:.12em;white-space:nowrap;margin-right:.6rem;opacity:.85}
+.nav a{
+  color:#f2efe4;text-decoration:none;font-size:.85rem;font-weight:700;
+  padding:.55rem .85rem;border-radius:999px;white-space:nowrap;min-height:44px;display:flex;align-items:center;
+}
+.nav a:hover{background:rgba(242,239,228,.15)}
+.nav a .dot{width:.55em;height:.55em;border-radius:50%;display:inline-block;margin-right:.4em}
+
+.wrap{max-width:880px;margin:0 auto;padding:0 1.1rem}
+
+/* ===== ヒーロー ===== */
+.hero{
+  background:linear-gradient(180deg,#2c2820 0%,#3a3326 100%);
+  color:#f2efe4;padding:3.2rem 0 3.6rem;position:relative;overflow:hidden;
+}
+.hero .eyebrow{font-size:.8rem;letter-spacing:.25em;color:#cdbf95;font-weight:700}
+.hero h1{font-size:clamp(1.9rem,5.5vw,3rem);font-weight:800;margin:.5rem 0 .3rem;letter-spacing:.04em}
+.hero .sub{color:#d8d2bf;font-size:1rem;max-width:36em}
+.q-card{
+  margin-top:1.8rem;background:#f2efe4;color:var(--ink);border-radius:var(--radius);
+  padding:1.3rem 1.4rem;box-shadow:0 6px 24px rgba(0,0,0,.3);
+  border-left:8px solid var(--ember);
+}
+.q-card .label{font-size:.78rem;font-weight:700;letter-spacing:.2em;color:var(--ember)}
+.q-card .q{font-size:clamp(1.15rem,3.4vw,1.5rem);font-weight:800;font-family:"Shippori Mincho B1",serif;margin-top:.2rem}
+.q-card .hint{font-size:.88rem;color:var(--ink-soft);margin-top:.5rem}
+
+/* CSSで描く「写真」 */
+.photo{
+  margin-top:1.6rem;background:#fff;padding:.7rem .7rem 0;
+  border-radius:6px;box-shadow:0 8px 26px rgba(0,0,0,.35);
+  max-width:430px;transform:rotate(-1.2deg);
+}
+.photo .scene{
+  height:170px;border-radius:3px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#9cc3da 0 55%, #c4a44e 55% 100%);
+}
+.photo .sun{position:absolute;top:16px;right:24px;width:34px;height:34px;border-radius:50%;background:#f6e7b0;box-shadow:0 0 22px #f6e7b0}
+.photo .ger{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  width:110px;height:48px;background:#f4efe2;border-radius:8px 8px 4px 4px;
+}
+.photo .ger::before{
+  content:"";position:absolute;left:-8px;right:-8px;top:-26px;height:30px;
+  background:#e8e1cd;clip-path:polygon(8% 100%,50% 0,92% 100%);
+}
+.photo .ger::after{
+  content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:22px;height:26px;background:#7a5a36;border-radius:4px 4px 0 0;
+}
+.photo .cap{
+  font-size:.85rem;color:#444;padding:.55rem .2rem .65rem;text-align:center;
+  font-family:"Shippori Mincho B1",serif;
+}
+.photo .stamp{
+  display:inline-block;margin-left:.4em;color:var(--ember);font-weight:800;
+  border:2px solid var(--ember);border-radius:4px;padding:0 .35em;transform:rotate(-3deg);font-size:.8rem;
+}
+
+/* ===== セクション共通 ===== */
+section.unit{padding:3rem 0 2.4rem}
+.horizon{height:64px;border-radius:var(--radius) var(--radius) 0 0;position:relative;overflow:hidden}
+.unit-head{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:1.4rem;
+}
+.unit-head .meta{padding:1.1rem 1.3rem 1.2rem}
+.unit-head .num{font-size:.78rem;letter-spacing:.22em;font-weight:700}
+.unit-head h2{font-size:clamp(1.5rem,4.5vw,2.1rem);font-weight:800;letter-spacing:.03em}
+.unit-head .where{font-size:.9rem;color:var(--ink-soft)}
+
+/* 地平線バンド：草原 */
+.hz-steppe{background:linear-gradient(180deg,#aacde0 0 58%,#c8a94f 58% 78%,#a98c34 78% 100%)}
+.hz-steppe::after{content:"";position:absolute;left:12%;bottom:14px;width:46px;height:18px;background:#f4efe2;border-radius:5px 5px 2px 2px}
+/* 地平線バンド：焼畑 */
+.hz-burn{background:linear-gradient(180deg,#e8b58a 0 40%,#c1492a 40% 58%,#3e6b45 58% 100%)}
+.hz-burn::after{content:"";position:absolute;right:14%;bottom:10px;width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:30px solid #28452e}
+/* 地平線バンド：棚田 */
+.hz-paddy{background:repeating-linear-gradient(180deg,#5a8fa3 0 10px,#4f7d3a 10px 22px)}
+.hz-paddy::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 0 60%,rgba(255,255,255,.18) 60% 62%,transparent 62% 100%)}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.25rem 1.3rem;margin-bottom:1.2rem;
+}
+.card h3{font-size:1.12rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.5em}
+.tag{
+  font-size:.72rem;font-weight:700;letter-spacing:.12em;color:#fff;
+  border-radius:999px;padding:.18em .8em;white-space:nowrap;
+}
+.t-know{background:var(--ink-soft)}
+.t-act{background:var(--steppe-sky)}
+.t-think{background:var(--ember)}
+ul.pts{list-style:none}
+ul.pts li{padding-left:1.3em;position:relative;margin:.35rem 0}
+ul.pts li::before{content:"●";position:absolute;left:0;top:0;font-size:.7em;line-height:2.6;color:var(--accent,var(--steppe))}
+.kw{font-weight:700;background:linear-gradient(transparent 62%,rgba(184,134,44,.35) 62%)}
+.note{font-size:.85rem;color:var(--ink-soft)}
+
+/* ===== 伝統⇄変容トグル（シグネチャ） ===== */
+.tt{margin:1.4rem 0 1rem}
+.tt-switch{
+  display:flex;background:#e6e0cd;border-radius:999px;padding:5px;gap:5px;
+  max-width:420px;margin:0 auto;border:1px solid var(--line);
+}
+.tt-switch button{
+  flex:1;border:none;border-radius:999px;padding:.7rem .5rem;min-height:48px;
+  font-size:1rem;font-weight:800;color:var(--ink-soft);background:transparent;
+  font-family:"Shippori Mincho B1",serif;letter-spacing:.1em;transition:all .25s;
+}
+.tt-switch button[aria-pressed="true"]{background:var(--accent,var(--steppe));color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.tt-panels{position:relative;margin-top:1rem}
+.tt-panel{display:none}
+.tt-panel.show{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tt-panel .card{border-top:5px solid var(--accent,var(--steppe))}
+.henyo .card{border-top-color:#6b6155}
+
+/* WORKボックス */
+.work{
+  border:2px dashed var(--accent,var(--steppe));border-radius:var(--radius);
+  padding:1.1rem 1.2rem;margin:1rem 0;background:rgba(255,255,255,.5);
+}
+.work .wt{font-weight:800;letter-spacing:.08em;color:var(--accent,var(--steppe));font-size:.95rem}
+.work textarea{
+  width:100%;margin-top:.6rem;border:1px solid var(--line);border-radius:8px;
+  padding:.7rem;font-family:inherit;font-size:.95rem;min-height:84px;background:#fff;resize:vertical;
+}
+
+/* ===== マッチング活動 ===== */
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0 1rem;min-height:52px;padding:.5rem;border-radius:10px;background:#eee8d6}
+.chip{
+  border:2px solid var(--steppe);background:#fff;color:var(--ink);
+  border-radius:999px;padding:.45rem 1rem;font-size:.95rem;font-weight:700;min-height:44px;
+  transition:transform .15s, box-shadow .15s;
+}
+.chip.sel{background:var(--steppe);color:#fff;transform:scale(1.06);box-shadow:0 3px 10px rgba(184,134,44,.4)}
+.chip.good{border-color:var(--ok);background:#e2f1e7;color:var(--ok)}
+.chip.bad{border-color:var(--ng);background:#f8e4de;color:var(--ng)}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+@media(max-width:640px){.zones{grid-template-columns:1fr}}
+.zone{
+  border:2px solid var(--line);border-radius:12px;background:#fff;min-height:130px;
+  padding:.6rem;display:flex;flex-direction:column;gap:.4rem;
+}
+.zone.zone-hot{border-color:var(--steppe-sky);box-shadow:0 0 0 3px rgba(111,168,201,.3)}
+.zone h4{font-size:.92rem;text-align:center;padding:.3rem;border-radius:8px;color:#fff}
+.zone .zchips{display:flex;flex-wrap:wrap;gap:.4rem;flex:1;align-content:flex-start}
+.z-dry h4{background:var(--steppe)}
+.z-alp h4{background:#7c6f9b}
+.z-cold h4{background:#4a7d99}
+.btnrow{display:flex;gap:.6rem;margin-top:.9rem;flex-wrap:wrap}
+.btn{
+  border:none;border-radius:999px;padding:.65rem 1.5rem;font-size:.97rem;font-weight:800;
+  background:var(--ink);color:#fff;min-height:48px;
+}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn:hover{opacity:.88}
+.verdict{margin-top:.8rem;font-weight:800;min-height:1.6em}
+.verdict.good{color:var(--ok)} .verdict.bad{color:var(--ng)}
+
+/* ===== 焼畑サイクル ===== */
+.cycle{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:.8rem 0}
+@media(max-width:640px){.cycle{grid-template-columns:repeat(2,1fr)}}
+.stage{
+  border:2px solid var(--line);border-radius:12px;background:#fff;padding:.8rem .6rem;
+  text-align:center;font-weight:700;font-size:.92rem;position:relative;min-height:64px;
+}
+.stage small{display:block;font-weight:500;font-size:.75rem;color:var(--ink-soft);margin-top:.2rem}
+.stage.active{border-color:var(--ember);background:#fdeee8}
+.stage::after{
+  content:"→";position:absolute;right:-15px;top:50%;transform:translateY(-50%);
+  color:var(--ink-soft);font-weight:800;z-index:2;
+}
+.stage:last-child::after{content:"↺";right:auto;left:50%;top:auto;bottom:-24px;transform:translateX(-50%)}
+@media(max-width:640px){.stage::after,.stage:last-child::after{content:""}}
+.stage-desc{
+  margin-top:1.4rem;background:#fff;border-left:5px solid var(--ember);
+  border-radius:0 10px 10px 0;padding:.8rem 1rem;min-height:4.4em;font-size:.95rem;
+}
+
+/* スライダー共通 */
+.sim{background:#fff;border-radius:12px;border:1px solid var(--line);padding:1.1rem 1.2rem;margin-top:1rem}
+.sim label{font-weight:800;display:block;margin-bottom:.3rem}
+.sim input[type=range]{width:100%;accent-color:var(--ember);height:2.2rem}
+.meter{height:18px;border-radius:999px;background:#e6e0cd;overflow:hidden;margin:.45rem 0 .2rem}
+.meter>div{height:100%;border-radius:999px;transition:width .3s, background .3s}
+.sim .big{font-size:1.4rem;font-weight:800;font-family:"Shippori Mincho B1",serif}
+.judge{font-weight:800;margin-top:.6rem;padding:.55rem .9rem;border-radius:8px;background:#eee8d6}
+.judge.ok{background:#e2f1e7;color:var(--ok)}
+.judge.warn{background:#fbf0d8;color:#9a6b12}
+.judge.ng{background:#f8e4de;color:var(--ng)}
+
+/* 降水量バンド */
+.rainband{
+  height:46px;border-radius:10px;overflow:hidden;display:flex;margin:.7rem 0 .2rem;
+  border:1px solid var(--line);position:relative;
+}
+.rainband .rb{display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:800}
+.rb1{width:31.25%;background:#b8862c}
+.rb2{width:31.25%;background:#a8893e;background:#bfa14a}
+.rb2{background:#8f7a2e}
+.rb3{width:37.5%;background:#4f7d3a}
+.rainmark{
+  position:absolute;top:-6px;bottom:-6px;width:4px;background:var(--ink);border-radius:2px;
+  transform:translateX(-2px);transition:left .15s;
+}
+.rainout{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin-top:.5rem}
+
+/* 比較バー */
+.cmp{margin:.5rem 0}
+.cmp .row{display:grid;grid-template-columns:9.5em 1fr;align-items:center;gap:.7rem;margin:.5rem 0}
+.cmp .bar{height:22px;border-radius:999px;background:#e6e0cd;overflow:hidden}
+.cmp .bar>div{height:100%;border-radius:999px}
+
+/* ===== まとめ・クイズ ===== */
+.reveal{margin-top:.8rem}
+.reveal .body{display:none;margin-top:.9rem;border-top:1px dashed var(--line);padding-top:.9rem;animation:fadein .3s}
+.reveal.open .body{display:block}
+.quiz .qitem{border-bottom:1px dashed var(--line);padding:1rem 0}
+.quiz .qitem:last-of-type{border-bottom:none}
+.quiz .qq{font-weight:800;margin-bottom:.6rem}
+.quiz .opts{display:flex;flex-direction:column;gap:.45rem}
+.quiz .opts button{
+  text-align:left;border:2px solid var(--line);background:#fff;border-radius:10px;
+  padding:.65rem .9rem;font-size:.95rem;min-height:48px;
+}
+.quiz .opts button:hover{border-color:var(--ink-soft)}
+.quiz .opts button.good{border-color:var(--ok);background:#e2f1e7;font-weight:800}
+.quiz .opts button.bad{border-color:var(--ng);background:#f8e4de}
+.quiz .fb{font-size:.88rem;margin-top:.5rem;font-weight:700;min-height:1.4em}
+.quiz .fb.good{color:var(--ok)} .quiz .fb.bad{color:var(--ng)}
+.score{
+  text-align:center;font-family:"Shippori Mincho B1",serif;font-size:1.3rem;font-weight:800;
+  margin-top:1rem;padding:.9rem;border-radius:12px;background:#eee8d6;
+}
+
+footer{background:#26221c;color:#cdc6b4;text-align:center;font-size:.82rem;padding:1.6rem 1rem;margin-top:3rem}
+
+/* セクション別アクセント */
+#yuboku{--accent:var(--steppe)}
+#yakihata{--accent:var(--ember)}
+#inasaku{--accent:var(--paddy)}
+#matome{--accent:#6b6155}
+section .num{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="単元ナビ">
+  <span class="brand">地理探究 13</span>
+  <a href="#toi">今日の問い</a>
+  <a href="#yuboku"><span class="dot" style="background:var(--steppe)"></span>遊牧</a>
+  <a href="#yakihata"><span class="dot" style="background:var(--ember)"></span>焼畑</a>
+  <a href="#inasaku"><span class="dot" style="background:var(--paddy)"></span>集約的稲作</a>
+  <a href="#matome">まとめ</a>
+</nav>
+
+<header class="hero" id="toi">
+  <div class="wrap">
+    <p class="eyebrow">地理探究 13 ｜ 系統地理：農業【教89-90】【資88-90】</p>
+    <h1>自給的農業 — 伝統と変容</h1>
+    <p class="sub">農産物をおもに<strong>自家消費</strong>するために生産する農業。各地の自然条件に適応した伝統的農業が多い。——しかし、その「伝統」は今、大きく揺れている。</p>
+
+    <div class="photo" role="img" aria-label="草原に建つゲルのイラスト写真">
+      <div class="scene"><div class="sun"></div><div class="ger"></div></div>
+      <div class="cap">「モンゴルの遊牧民のくらし」<span class="stamp">撮影年：？？？？</span></div>
+    </div>
+
+    <div class="q-card">
+      <p class="label">今日の問い</p>
+      <p class="q">「自給的農業」の写真に潜む誤解とは？</p>
+      <p class="hint">上の写真は50年前のもの？ それとも今年のもの？——見分けがつかないこと自体に、ヒントが隠れています。授業の最後にもう一度この問いに戻ります。</p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1. 遊牧 ============ -->
+<section class="unit" id="yuboku">
+  <div class="wrap">
+    <div class="unit-head">
+      <div class="horizon hz-steppe" aria-hidden="true"></div>
+      <div class="meta">
+        <p class="num">１｜YUBOKU</p>
+        <h2>遊牧</h2>
+        <p class="where">中央アジアの乾燥帯など【資88】</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-know">知識</span>遊牧とはどんな牧畜か</h3>
+      <ul class="pts">
+        <li><span class="kw">農耕に不向きな自然環境</span>で生きるため、<span class="kw">草と水を求めて</span>家畜とともに移動生活する<span class="kw">粗放的牧畜</span>。</li>
+        <li>古代〜中世には<span class="kw">交易の担い手</span>。文化の橋渡し役として活躍。</li>
+        <li>主食は家畜の<span class="kw">乳や肉</span>。移動式の住居（例：モンゴルの<span class="kw">ゲル</span>）。</li>
+        <li>自然環境により家畜が異なる【資322】→ 下の活動で確かめよう。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-act">活動A</span>家畜マッチング：どの環境でどの家畜？</h3>
+      <p class="note">① 家畜のチップをタップ → ② 当てはまる環境のボックスをタップ。全部置いたら「答え合わせ」。</p>
+      <div class="pool" id="pool" aria-label="家畜チップ置き場"></div>
+      <div class="zones">
+        <div class="zone z-dry" data-zone="dry"><h4>乾燥地域</h4><div class="zchips"></div></div>
+        <div class="zone z-alp" data-zone="alp"><h4>高山地域</h4><div class="zchips"></div></div>
+        <div class="zone z-cold" data-zone="cold"><h4>寒冷地域</h4><div class="zchips"></div></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn" id="matchCheck">答え合わせ</button>
+        <button class="btn ghost" id="matchReset">リセット</button>
+      </div>
+      <p class="verdict" id="matchVerdict" aria-live="polite"></p>
+    </div>
+
+    <!-- 伝統⇄変容トグル -->
+    <div class="tt">
+      <div class="tt-switch" role="group" aria-label="伝統と変容の切り替え">
+        <button aria-pressed="true" data-tt="dento" data-group="g1">伝統</button>
+        <button aria-pressed="false" data-tt="henyo" data-group="g1">変容</button>
+      </div>
+      <div class="tt-panels" id="g1">
+        <div class="tt-panel dento show">
+          <div class="card">
+            <h3><span class="tag t-know">伝統</span>草原に生きる——モンゴルの遊牧生活</h3>
+            <ul class="pts">
+              <li>季節ごとに牧草地を移動。家財一式とゲルを解体して運ぶ。</li>
+              <li>羊・ヤギ・馬・牛・ラクダの「五畜」を組み合わせ、乳製品・肉・燃料（家畜の糞）まで暮らしを支える。</li>
+              <li>馬は移動手段であり、財産であり、文化の象徴。</li>
+            </ul>
+            <div class="work">
+              <p class="wt">【WORK1】動画でフィールドワーク</p>
+              <p class="note">【資料1】「伝統的ゲルと遊牧民のくらし」「ゲルで暮らす家族」「ゲル生活体験」の3本を視聴し、生活用品・移動手段・食事などで気づいたことをメモしよう。</p>
+              <textarea placeholder="例：ゲルの中に太陽光パネル付きのテレビがあった…？"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="tt-panel henyo">
+          <div class="card">
+            <h3><span class="tag t-think">変容</span>揺らぐ伝統——定住化する遊牧民</h3>
+            <ul class="pts">
+              <li>映画『大地と白い雲』：遊牧民であることに<strong>誇り</strong>を持ちながら、伝統が崩れる中でこれまでの役割を果たせなくなる夫チョクトと、草原での暮らしを望む妻サロール。<strong>急速な生活様式・価値観の変化</strong>に遊牧民が適応できないジレンマを描く。</li>
+              <li>モンゴルの首都<span class="kw">ウランバートル郊外</span>には、定住化した元遊牧民の<span class="kw">ゲル地区</span>が拡大。</li>
+              <li><span class="kw">夜間光データ</span>を使うと、都市への人口集中＝定住化の広がりを宇宙から「見る」ことができる。</li>
+            </ul>
+            <div class="work">
+              <p class="wt">【WORK1つづき】考えよう</p>
+              <p class="note">都市に定住化した元遊牧民は、何をして生計を立てているのだろうか。想像して書こう。（ヒント：遊牧で培った技能は都市で活きる？）</p>
+              <textarea placeholder="例：建設業や運輸業？ 観光客向けのゲル体験？…"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. 焼畑 ============ -->
+<section class="unit" id="yakihata">
+  <div class="wrap">
+    <div class="unit-head">
+      <div class="horizon hz-burn" aria-hidden="true"></div>
+      <div class="meta">
+        <p class="num">２｜YAKIHATA</p>
+        <h2>焼畑農業</h2>
+        <p class="where">東南アジア・アフリカの熱帯など【資89】</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-know">知識</span>なぜ「焼く」のか</h3>
+      <ul class="pts">
+        <li>熱帯地域の<span class="kw">粗放的農業</span>。熱帯雨林は農地が無く、土壌は<span class="kw">酸性</span>でやせている。</li>
+        <li>そこで森林を焼き払い、<span class="kw">草木灰</span>を肥料（＋酸性の中和）として耕作する。</li>
+        <li><span class="kw">キャッサバ</span>（タピオカの原料）・ヤムイモ・タロイモなどを生産。</li>
+      </ul>
+      <div class="work">
+        <p class="wt">【WORK2】キャッサバを知る</p>
+        <p class="note">【資料1】タンザニアの伝統的キャッサバ料理 ／【資料2】キャッサバからタピオカをつくる——を視聴。「自給用」と「換金用」で同じ作物の役割がどう違うかに注目しよう。</p>
+        <textarea placeholder="気づいたことをメモ"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-act">活動B</span>焼畑のサイクルをたどる</h3>
+      <p class="note">各段階をタップして説明を読もう。</p>
+      <div class="cycle" id="cycle">
+        <button class="stage active" data-i="0">🌲 伐採・火入れ<small>森を焼く</small></button>
+        <button class="stage" data-i="1">🌱 耕作<small>数年間</small></button>
+        <button class="stage" data-i="2">🚶 移動・放棄<small>地力低下</small></button>
+        <button class="stage" data-i="3">🌳 森林回復<small>数十年</small></button>
+      </div>
+      <div class="stage-desc" id="stageDesc" aria-live="polite"></div>
+
+      <div class="sim">
+        <label for="fallow">休閑シミュレーター：森を休ませる年数 = <span class="big" id="fallowVal">30</span> 年</label>
+        <input type="range" id="fallow" min="3" max="40" value="30" step="1">
+        <p class="note" style="margin-top:.5rem">森林の回復度</p>
+        <div class="meter"><div id="forestBar"></div></div>
+        <p class="note">土地の地力（肥沃さ）</p>
+        <div class="meter"><div id="soilBar"></div></div>
+        <p class="judge" id="fallowJudge" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div class="tt">
+      <div class="tt-switch" role="group" aria-label="伝統と変容の切り替え">
+        <button aria-pressed="true" data-tt="dento" data-group="g2">伝統</button>
+        <button aria-pressed="false" data-tt="henyo" data-group="g2">変容</button>
+      </div>
+      <div class="tt-panels" id="g2">
+        <div class="tt-panel dento show">
+          <div class="card">
+            <h3><span class="tag t-know">伝統</span>森と共存する循環システム</h3>
+            <p>火入れした土地で<strong>数年間</strong>耕作し、地力が落ちたら移動して新たに火入れ。放棄地は<strong>数十年かけて森林が自然回復</strong>する。十分な休閑期間さえあれば、森を破壊せず利用し続けられる<strong>持続可能なしくみ</strong>だった。</p>
+          </div>
+        </div>
+        <div class="tt-panel henyo">
+          <div class="card">
+            <h3><span class="tag t-think">変容</span>短くなるサイクル、戻らない森</h3>
+            <p>近年、<span class="kw">人口増加</span>と<span class="kw">換金作物栽培</span>の拡大により、休閑期間が足りないまま再び火入れする<span class="kw">サイクルの短期間化</span>が進行。森林が回復する前に焼かれ、<span class="kw">環境悪化</span>（森林破壊・土壌劣化）が問題になっている。上のシミュレーターで休閑年数を短くして、何が起きるか確かめよう。</p>
+            <div class="work">
+              <p class="wt">考えよう</p>
+              <p class="note">「焼畑＝環境破壊」と単純に言えるだろうか？ 伝統的な焼畑と現代の焼畑の違いをふまえて自分の考えを書こう。</p>
+              <textarea placeholder="自分の考え"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 集約的稲作・畑作 ============ -->
+<section class="unit" id="inasaku">
+  <div class="wrap">
+    <div class="unit-head">
+      <div class="horizon hz-paddy" aria-hidden="true"></div>
+      <div class="meta">
+        <p class="num">３｜INASAKU</p>
+        <h2>集約的稲作・畑作</h2>
+        <p class="where">アジアなど【資89】</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-know">知識</span>多くの人口を支えてきた農業</h3>
+      <ul class="pts">
+        <li>村や家族などの<span class="kw">小規模集団</span>で行う<span class="kw">労働集約的農業</span>。</li>
+        <li>伝統的で<span class="kw">資本集約度は低い</span>が、<span class="kw">労働集約度は高い</span>ため土地あたりの生産量が多い。</li>
+        <li>→ アジアの<span class="kw">多くの人口を支えてきた</span>。</li>
+      </ul>
+      <div class="cmp" aria-hidden="true">
+        <div class="row"><span>労働集約度</span><div class="bar"><div style="width:88%;background:var(--paddy)"></div></div></div>
+        <div class="row"><span>資本集約度</span><div class="bar"><div style="width:22%;background:#9aa48e"></div></div></div>
+      </div>
+      <p class="note">※「労働集約」＝人手をたくさんかける／「資本集約」＝機械や設備にお金をかける</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-act">活動C</span>雨の量が農業を決める——降水量スライダー</h3>
+      <p class="note">スライダーを動かして、年降水量と農業の関係をつかもう。</p>
+      <div class="sim">
+        <label for="rain">年降水量 = <span class="big" id="rainVal">1200</span> mm</label>
+        <input type="range" id="rain" min="0" max="1600" value="1200" step="50" style="accent-color:var(--paddy)">
+        <div class="rainband" aria-hidden="true">
+          <div class="rb rb1">〜500mm</div><div class="rb rb2">500〜1000mm</div><div class="rb rb3">1000mm〜</div>
+          <div class="rainmark" id="rainMark"></div>
+        </div>
+        <div class="rainout">
+          <span class="big" id="rainZone" style="font-size:1.25rem"></span>
+          <span class="note" id="rainNote"></span>
+        </div>
+      </div>
+      <p class="note" style="margin-top:.7rem">💡 日本の米はほぼ国内生産でまかなわれている（米の自給率はほぼ100%近く）。雨が多いモンスーンアジアだからこそ。</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-think">変容への視点</span>緑の革命とそのあと</h3>
+      <p>集約的稲作の地域でも、高収量品種・化学肥料・灌漑の導入（緑の革命）や機械化、商業化が進み、「自給的」だった農業が<strong>市場向け農業へと変容</strong>しつつある地域がある。三つの農業すべてに共通するのは——<strong>「伝統」は静止画ではない</strong>ということ。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ まとめ ============ -->
+<section class="unit" id="matome">
+  <div class="wrap">
+    <div class="unit-head">
+      <div class="horizon" style="background:linear-gradient(180deg,#2c2820 0 55%,#6b6155 55% 100%)" aria-hidden="true"></div>
+      <div class="meta">
+        <p class="num">まとめ｜MATOME</p>
+        <h2>今日の問いに戻る</h2>
+        <p class="where">「自給的農業」の写真に潜む誤解とは？</p>
+      </div>
+    </div>
+
+    <div class="card reveal" id="ansCard">
+      <h3><span class="tag t-think">思考</span>まず自分の言葉で答えてから、解答例を開こう</h3>
+      <textarea style="width:100%;border:1px solid var(--line);border-radius:8px;padding:.7rem;font-family:inherit;font-size:.95rem;min-height:90px;background:#fff" placeholder="冒頭の「撮影年：？？？？」の写真を思い出して…"></textarea>
+      <div class="btnrow"><button class="btn" id="ansBtn">解答例を開く</button></div>
+      <div class="body">
+        <p><strong>誤解：</strong>ゲルや焼畑の写真は「昔から変わらない暮らし」「時間が止まった世界」という印象を与えがち。しかし実際には——遊牧民は<strong>都市へ定住化</strong>し、焼畑は<strong>換金作物と人口増加でサイクルが崩れ</strong>、稲作地域も<strong>商業化・機械化</strong>が進む。つまり自給的農業は<strong>今まさに急速に変容している現在進行形の世界</strong>であり、「伝統的＝遅れた・不変の農業」という見方こそが写真に潜む誤解である。写真は一瞬を切り取るが、変化は写らない。</p>
+      </div>
+    </div>
+
+    <div class="card quiz" id="quiz">
+      <h3><span class="tag t-act">理解度チェック</span>5問クイズ</h3>
+      <div id="quizBody"></div>
+      <div class="score" id="scoreBox" hidden></div>
+      <div class="btnrow"><button class="btn ghost" id="quizReset">もう一度挑戦</button></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="tag t-think">振り返り</span>3つの観点で書こう</h3>
+      <div class="work" style="--accent:#6b6155">
+        <p class="wt">① 今日いちばん「なるほど」と思ったこと</p>
+        <textarea></textarea>
+        <p class="wt" style="margin-top:.8rem">② まだ疑問に思うこと・調べてみたいこと</p>
+        <textarea></textarea>
+        <p class="wt" style="margin-top:.8rem">③ 「伝統と変容」というキーワードを使って今日の学びを一文で</p>
+        <textarea></textarea>
+      </div>
+      <p class="note">※ 入力内容はこのページを閉じると消えます。提出が必要な場合は、書いた内容を学習支援アプリ等にコピーして提出しましょう。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  地理探究 13「自給的農業」｜伝統と変容を読み解く ＜教科書 p.89-90／資料集 p.88-90, p.322＞
+</footer>
+
+<script>
+/* ===== 伝統⇄変容トグル ===== */
+document.querySelectorAll('.tt-switch button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const group=document.getElementById(btn.dataset.group);
+    btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn));
+    group.querySelectorAll('.tt-panel').forEach(p=>{
+      p.classList.toggle('show',p.classList.contains(btn.dataset.tt));
+    });
+  });
+});
+
+/* ===== 活動A：家畜マッチング ===== */
+const animals=[
+  {n:'ヤギ',z:'dry'},{n:'羊',z:'dry'},{n:'馬',z:'dry'},{n:'ラクダ',z:'dry'},
+  {n:'リャマ',z:'alp'},{n:'アルパカ',z:'alp'},{n:'ヤク',z:'alp'},
+  {n:'トナカイ',z:'cold'}
+];
+const pool=document.getElementById('pool');
+let selChip=null;
+function buildPool(){
+  pool.innerHTML='';
+  document.querySelectorAll('.zone .zchips').forEach(z=>z.innerHTML='');
+  document.getElementById('matchVerdict').textContent='';
+  document.getElementById('matchVerdict').className='verdict';
+  selChip=null;
+  [...animals].sort(()=>Math.random()-.5).forEach(a=>{
+    const c=document.createElement('button');
+    c.className='chip';c.textContent=a.n;c.dataset.z=a.z;
+    c.addEventListener('click',()=>selectChip(c));
+    pool.appendChild(c);
+  });
+}
+function selectChip(c){
+  if(selChip)selChip.classList.remove('sel');
+  if(selChip===c){selChip=null;setZoneHot(false);return}
+  selChip=c;c.classList.add('sel');setZoneHot(true);
+}
+function setZoneHot(on){
+  document.querySelectorAll('.zone').forEach(z=>z.classList.toggle('zone-hot',on));
+}
+document.querySelectorAll('.zone').forEach(z=>{
+  z.addEventListener('click',()=>{
+    if(!selChip)return;
+    selChip.classList.remove('sel');
+    z.querySelector('.zchips').appendChild(selChip);
+    selChip=null;setZoneHot(false);
+  });
+});
+document.getElementById('matchCheck').addEventListener('click',()=>{
+  const v=document.getElementById('matchVerdict');
+  if(pool.querySelector('.chip')){v.textContent='まだ置いていない家畜があります。すべて環境に置いてから答え合わせしよう。';v.className='verdict bad';return}
+  let ok=0;
+  document.querySelectorAll('.zone').forEach(z=>{
+    z.querySelectorAll('.chip').forEach(c=>{
+      const good=c.dataset.z===z.dataset.zone;
+      c.classList.remove('good','bad');
+      c.classList.add(good?'good':'bad');
+      if(good)ok++;
+    });
+  });
+  if(ok===animals.length){v.textContent='🎉 全問正解！ 乾燥にはラクダ、高山にはヤク、寒冷にはトナカイ——環境が家畜を決める。';v.className='verdict good'}
+  else{v.textContent=`正解 ${ok}／${animals.length}。赤いチップをタップして置き直し、もう一度挑戦！`;v.className='verdict bad'}
+});
+document.getElementById('matchReset').addEventListener('click',buildPool);
+buildPool();
+
+/* ===== 活動B：焼畑サイクル ===== */
+const stageTexts=[
+  '【伐採・火入れ】森林を切り倒して焼く。灰（草木灰）がやせた酸性土壌の肥料となり、酸性を中和する。',
+  '【耕作】火入れした土地でキャッサバ・ヤムイモ・タロイモなどを数年間栽培する。',
+  '【移動・放棄】数年で地力（土地の養分）が低下。その土地を放棄し、別の場所へ移動して新たに火入れする。',
+  '【森林回復】放棄された土地は数十年かけて自然に森林へ戻る。十分に休ませることがこのシステムの生命線。'
+];
+const stages=document.querySelectorAll('.stage');
+const stageDesc=document.getElementById('stageDesc');
+function setStage(i){
+  stages.forEach((s,j)=>s.classList.toggle('active',i===j));
+  stageDesc.textContent=stageTexts[i];
+}
+stages.forEach(s=>s.addEventListener('click',()=>setStage(+s.dataset.i)));
+setStage(0);
+
+const fallow=document.getElementById('fallow');
+function updFallow(){
+  const y=+fallow.value;
+  document.getElementById('fallowVal').textContent=y;
+  const forest=Math.min(y/30,1);
+  const soil=Math.min(y/25,1);
+  const fb=document.getElementById('forestBar'),sb=document.getElementById('soilBar');
+  fb.style.width=(forest*100)+'%';
+  fb.style.background=forest>=.8?'#3e6b45':forest>=.4?'#9a8a2e':'#b3402a';
+  sb.style.width=(soil*100)+'%';
+  sb.style.background=soil>=.8?'#4f7d3a':soil>=.4?'#b8862c':'#b3402a';
+  const j=document.getElementById('fallowJudge');
+  if(y>=20){j.textContent='✅ 持続可能：森も地力も十分に回復。伝統的な焼畑のサイクル。';j.className='judge ok'}
+  else if(y>=8){j.textContent='⚠️ 注意：回復しきる前の火入れ。地力低下と森林の劣化が進み始める。';j.className='judge warn'}
+  else{j.textContent='🛑 サイクル崩壊：森が回復できず、土壌劣化・森林破壊が深刻化。現代の焼畑が抱える問題。';j.className='judge ng'}
+}
+fallow.addEventListener('input',updFallow);
+updFallow();
+
+/* ===== 活動C：降水量スライダー ===== */
+const rain=document.getElementById('rain');
+function updRain(){
+  const v=+rain.value;
+  document.getElementById('rainVal').textContent=v;
+  document.getElementById('rainMark').style.left=(v/1600*100)+'%';
+  const z=document.getElementById('rainZone'),n=document.getElementById('rainNote');
+  if(v<500){z.textContent='農耕不適（遊牧など）';z.style.color='var(--steppe)';n.textContent='雨が少なすぎて作物が育たない。家畜とともに移動する遊牧の世界。'}
+  else if(v<1000){z.textContent='畑作（小麦）';z.style.color='#8f7a2e';n.textContent='小麦などの畑作が可能になる降水量。'}
+  else{z.textContent='稲作（米）';z.style.color='var(--paddy)';n.textContent='水を大量に必要とする稲作が可能。モンスーンアジアの主役。'}
+}
+rain.addEventListener('input',updRain);
+updRain();
+
+/* ===== 解答例リビール ===== */
+document.getElementById('ansBtn').addEventListener('click',()=>{
+  const c=document.getElementById('ansCard');
+  c.classList.toggle('open');
+  document.getElementById('ansBtn').textContent=c.classList.contains('open')?'解答例を閉じる':'解答例を開く';
+});
+
+/* ===== 理解度チェック ===== */
+const quizData=[
+  {q:'Q1. 寒冷地域の遊牧で飼育される代表的な家畜は？',o:['ラクダ','トナカイ','ヤク'],a:1,
+   fb:'トナカイは寒冷地域。ラクダは乾燥地域、ヤクは高山地域。'},
+  {q:'Q2. 焼畑農業で森林を焼く目的として最も適切なのは？',o:['害虫を完全に駆除するため','草木灰を肥料にし、酸性土壌を改良するため','木材を販売するため'],a:1,
+   fb:'熱帯のやせた酸性土壌を、灰の養分と中和作用で耕作可能にする。'},
+  {q:'Q3. 近年、焼畑のサイクルが短期間化している原因は？',o:['人口増加と換金作物栽培','地球の寒冷化','遊牧民の増加'],a:0,
+   fb:'人口増加と換金作物栽培の拡大で休閑期間が足りなくなり、環境悪化が進んでいる。'},
+  {q:'Q4. 稲作（米）が可能になる年降水量の目安は？',o:['500mm以上','1000mm以上','2000mm以上'],a:1,
+   fb:'〜500mmは農耕不適（遊牧など）、500〜1000mmは畑作（小麦）、1000mm〜で稲作。'},
+  {q:'Q5. アジアの集約的稲作の特徴として正しいのは？',o:['資本集約度が高く、労働集約度が低い','労働集約度が高く、多くの人口を支えてきた','大規模な企業的農業である'],a:1,
+   fb:'小規模集団による労働集約的農業。土地生産性が高く、多くの人口を支えてきた。'}
+];
+const quizBody=document.getElementById('quizBody');
+let answered;
+function buildQuiz(){
+  quizBody.innerHTML='';answered=0;
+  document.getElementById('scoreBox').hidden=true;
+  quizData.forEach((d,i)=>{
+    const item=document.createElement('div');item.className='qitem';
+    item.innerHTML=`<p class="qq">${d.q}</p>`;
+    const opts=document.createElement('div');opts.className='opts';
+    const fb=document.createElement('p');fb.className='fb';
+    d.o.forEach((t,j)=>{
+      const b=document.createElement('button');b.textContent=t;
+      b.addEventListener('click',()=>{
+        if(item.dataset.done)return;
+        item.dataset.done='1';answered++;
+        const good=j===d.a;
+        b.classList.add(good?'good':'bad');
+        if(!good)opts.children[d.a].classList.add('good');
+        item.dataset.ok=good?'1':'0';
+        fb.textContent=(good?'⭕ 正解！ ':'❌ ')+d.fb;
+        fb.className='fb '+(good?'good':'bad');
+        if(answered===quizData.length)showScore();
+      });
+      opts.appendChild(b);
+    });
+    item.appendChild(opts);item.appendChild(fb);
+    quizBody.appendChild(item);
+  });
+}
+function showScore(){
+  const ok=[...quizBody.querySelectorAll('.qitem')].filter(i=>i.dataset.ok==='1').length;
+  const box=document.getElementById('scoreBox');
+  const msg=ok===5?'すばらしい！「伝統と変容」マスター！':ok>=3?'よくできました。間違えた問題の解説を読み直そう。':'もう一度、各セクションに戻って確認してから再挑戦！';
+  box.textContent=`結果：${ok} ／ 5 問正解 — ${msg}`;
+  box.hidden=false;
+}
+document.getElementById('quizReset').addEventListener('click',buildQuiz);
+buildQuiz();
+</script>
+</body>
+</html>
