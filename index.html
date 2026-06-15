@@ -1,17 +1,282 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>あらじお地理教材ラボ</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あらじお蔵 ｜ 高校地理のインタラクティブ教材</title>
+<meta name="description" content="高校地理のインタラクティブ教材を公開しています。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f1e8;       /* 温かみのある紙色 */
+    --surface:#fffdf7;     /* カード面 */
+    --forest:#1d3a28;      /* 最も濃い緑 */
+    --pine:#2d5b3d;        /* 主たる緑 */
+    --pine-soft:#3f6e4f;
+    --moss:#79977c;        /* 補助の緑 */
+    --line:#d7dcc8;        /* 罫線 */
+    --line-soft:#e4e7d8;
+    --ink:#26302a;
+    --muted:#5c6a5b;
+    --maxw:1000px;
+    --serif:"Shippori Mincho",serif;
+    --sans:"Zen Kaku Gothic New",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .serif{font-family:var(--serif)}
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.26em;font-weight:700;
+    color:var(--pine);display:inline-flex;align-items:center;gap:.8em;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--pine)}
+
+  /* ── ヘッダー ── */
+  header.site{
+    background:rgba(244,241,232,.88);backdrop-filter:saturate(180%) blur(8px);
+    border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;
+  }
+  .site-inner{max-width:var(--maxw);margin:0 auto;padding:15px 28px;display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo .mark{width:34px;height:34px;flex-shrink:0}
+  .logo .name{font-family:var(--serif);font-weight:700;font-size:1.28rem;color:var(--forest);letter-spacing:.04em}
+  .site-nav{display:flex;gap:30px;font-size:.9rem;font-weight:500;color:var(--muted)}
+  .site-nav a{position:relative;padding:2px 0}
+  .site-nav a::after{content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;background:var(--pine);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+  .site-nav a:hover{color:var(--pine)}
+  .site-nav a:hover::after{transform:scaleX(1)}
+
+  /* ── 導入 ── */
+  .intro{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .intro-inner{position:relative;z-index:2;padding:74px 28px 66px;max-width:var(--maxw);margin:0 auto}
+  .intro h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.2rem,5vw,3.1rem);color:var(--forest);letter-spacing:.05em;margin:18px 0 0}
+  .intro .rule{width:46px;height:3px;background:var(--pine);margin:22px 0 20px;border-radius:2px}
+  .intro p{max-width:54ch;color:var(--muted);font-size:1.04rem}
+  .intro .meta{display:flex;gap:30px;margin-top:28px;flex-wrap:wrap}
+  .intro .meta b{font-family:var(--serif);font-size:1.5rem;color:var(--pine);font-weight:700;margin-right:.3em}
+  .intro .meta span{font-size:.86rem;color:var(--muted);display:inline-flex;align-items:baseline}
+  .intro .meta .note{align-items:center;padding-left:30px;border-left:1px solid var(--line);color:var(--pine);font-weight:500}
+  /* 等高線モチーフ */
+  .contour{position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:520px;height:520px;z-index:1;opacity:.5;pointer-events:none}
+  .contour svg{width:100%;height:100%}
+
+  /* ── セクション ── */
+  section{padding:70px 0}
+  .sec-head{margin-bottom:34px}
+  .sec-head h2{font-family:var(--serif);font-weight:700;font-size:1.6rem;color:var(--forest);margin:12px 0 6px;letter-spacing:.03em}
+  .sec-head p{color:var(--muted);font-size:.95rem}
+
+  /* ── 教材カード ── */
+  .material{
+    background:var(--surface);border:1px solid var(--line);border-radius:3px;
+    display:grid;grid-template-columns:1.5fr 1fr;overflow:hidden;
+    box-shadow:0 18px 40px -32px rgba(29,58,40,.55);
+  }
+  .material-body{padding:36px 38px}
+  .material .tag{font-size:.74rem;letter-spacing:.18em;font-weight:700;color:var(--pine)}
+  .material h3{font-family:var(--serif);font-weight:700;font-size:1.5rem;color:var(--forest);margin:10px 0 12px;line-height:1.4}
+  .material .info{font-size:.84rem;color:var(--muted);padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line-soft)}
+  .material .lead{color:var(--ink);font-size:.97rem;margin-bottom:26px}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;
+    font-weight:700;font-size:1rem;padding:13px 30px;border-radius:3px;transition:background .2s,transform .2s;
+  }
+  .btn:hover{background:var(--forest);transform:translateX(2px)}
+  .btn svg{width:16px;height:16px}
+  /* カード右の図版パネル */
+  .material-fig{background:var(--forest);position:relative;display:grid;place-items:center;overflow:hidden}
+  .material-fig::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:30px 30px}
+  .material-fig svg{position:relative;width:78%;color:rgba(220,232,221,.85)}
+
+  /* ── 教材の構成(目次) ── */
+  .toc{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .toc-row{display:grid;grid-template-columns:170px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--line-soft);align-items:start}
+  .toc-row:last-child{border-bottom:none}
+  .toc-vol{display:flex;flex-direction:column;gap:4px}
+  .toc-vol .v{font-family:var(--serif);font-weight:700;font-size:1.05rem;color:var(--pine);letter-spacing:.06em}
+  .toc-vol .vt{font-weight:700;color:var(--forest);font-size:1.02rem;line-height:1.5}
+  .toc-items{display:flex;flex-wrap:wrap;gap:9px;padding-top:3px}
+  .toc-items span{font-size:.86rem;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 14px}
+
+  /* ── 進め方(プロセス) ── */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:s}
+  .step{position:relative;padding:0 18px;counter-increment:s}
+  .step:first-child{padding-left:0}
+  .step .no{
+    font-family:var(--serif);font-weight:700;font-size:1.1rem;color:#fff;
+    width:38px;height:38px;border-radius:50%;background:var(--pine);
+    display:grid;place-items:center;margin-bottom:14px;position:relative;z-index:2;
+  }
+  .step::after{content:"";position:absolute;top:19px;left:38px;right:-1px;height:1px;background:var(--line);z-index:1}
+  .step:last-child::after{display:none}
+  .step h4{font-weight:700;color:var(--forest);font-size:1rem;margin-bottom:5px}
+  .step p{font-size:.85rem;color:var(--muted);line-height:1.7}
+
+  /* ── フッター ── */
+  footer{background:var(--forest);color:#c2d2c3;padding:40px 0 34px;font-size:.88rem}
+  .foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:center}
+  .foot-inner .name{font-family:var(--serif);font-weight:700;font-size:1.2rem;color:#fff;letter-spacing:.04em}
+  .foot-links{display:flex;gap:26px}
+  .foot-links a{color:#c2d2c3;transition:color .2s}
+  .foot-links a:hover{color:#fff}
+  .copy{margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);font-size:.8rem;color:#9bb09c}
+
+  @media(max-width:820px){
+    .material{grid-template-columns:1fr}
+    .material-fig{display:none}
+    .steps{grid-template-columns:1fr 1fr;gap:26px 16px}
+    .step{padding:0}
+    .step::after{display:none}
+    .contour{opacity:.28;right:-160px}
+  }
+  @media(max-width:560px){
+    .wrap,.intro-inner,.site-inner{padding-left:20px;padding-right:20px}
+    .site-nav{display:none}
+    .toc-row{grid-template-columns:1fr;gap:12px}
+    .steps{grid-template-columns:1fr}
+    section{padding:54px 0}
+    .material-body{padding:28px 24px}
+  }
+</style>
 </head>
 <body>
-  <h1>あらじお地理教材ラボ</h1>
-  <p>高校地理のインタラクティブ教材を公開しています。</p>
 
-  <h2>教材一覧</h2>
-  <ul>
-    <li><a href="./geography-basic/">地理総合 インタラクティブ・ラボ</a></li>
-  </ul>
+<!-- ヘッダー -->
+<header class="site">
+  <div class="site-inner">
+    <a class="logo" href="#top">
+      <svg class="mark" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="8" fill="#2d5b3d"/>
+        <circle cx="20" cy="20" r="11" stroke="#fffdf7" stroke-width="1.6"/>
+        <path d="M9 20h22M20 9c3 3.2 3 18.8 0 22M20 9c-3 3.2-3 18.8 0 22" stroke="#fffdf7" stroke-width="1.6"/>
+      </svg>
+      <span class="name">あらじお蔵</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#materials">教材</a>
+      <a href="#structure">教材の構成</a>
+      <a href="#flow">進め方</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 導入 -->
+<div class="intro" id="top">
+  <div class="contour" aria-hidden="true">
+    <svg viewBox="0 0 400 400" fill="none" stroke="var(--moss)" stroke-width="1">
+      <path d="M200 60c70 0 130 55 130 140s-60 140-130 140-130-55-130-140S130 60 200 60Z" opacity=".5"/>
+      <path d="M200 95c54 0 100 45 100 105s-46 105-100 105-100-45-100-105S146 95 200 95Z" opacity=".6"/>
+      <path d="M200 130c40 0 72 32 72 70s-32 70-72 70-72-32-72-70 32-70 72-70Z" opacity=".7"/>
+      <path d="M200 165c24 0 44 20 44 45s-20 45-44 45-44-20-44-45 20-45 44-45Z" opacity=".85"/>
+      <circle cx="200" cy="210" r="14" opacity="1"/>
+    </svg>
+  </div>
+  <div class="intro-inner">
+    <span class="eyebrow">高校地理 教材アーカイブ</span>
+    <h1>あらじお蔵</h1>
+    <div class="rule"></div>
+    <p>高校地理のインタラクティブ教材を公開しています。授業でも自宅学習でも、自由にお使いください。</p>
+  </div>
+</div>
+
+<!-- 教材 -->
+<section id="materials">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Materials</span>
+      <h2>教材</h2>
+      <p>現在公開している教材です。</p>
+    </div>
+
+    <div class="material">
+      <div class="material-body">
+        <span class="tag">地理総合</span>
+        <h3>インタラクティブ・ラボ</h3>
+        <p class="lead">緯度・経度や地図の読み方から、世界の生活文化、地球的課題、日本の自然と防災まで。各ページにシミュレーターや確認クイズなどの操作教材を用意し、1年間の学習をサポートします。</p>
+        <a class="btn" href="https://arageo2.github.io/geography-basic/">
+          地理総合
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="material-fig" aria-hidden="true">
+        <svg viewBox="-60 -60 120 120" fill="none" stroke="currentColor" stroke-width="1.3">
+          <circle r="50"/>
+          <ellipse rx="50" ry="20"/><ellipse rx="50" ry="38"/>
+          <ellipse rx="20" ry="50"/><ellipse rx="38" ry="50"/>
+          <line x1="-50" y1="0" x2="50" y2="0"/><line x1="0" y1="-50" x2="0" y2="50"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 教材の構成(目次) -->
+<section class="toc" id="structure">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Contents</span>
+      <h2>教材の構成</h2>
+      <p>「地理総合」で扱う主な学習内容です。</p>
+    </div>
+
+    <div class="toc-row">
+      <div class="toc-vol"><span class="v">第1編</span><span class="vt">地図やGISでとらえる現代世界</span></div>
+      <div class="toc-items"><span>球面上の世界と地図</span><span>地図とGIS</span><span>国家の結びつき</span><span>交通・通信</span><span>貿易・人の移動</span></div>
+    </div>
+    <div class="toc-row">
+      <div class="toc-vol"><span class="v">第2編</span><span class="vt">国際理解と国際協力</span></div>
+      <div class="toc-items"><span>地形・気候</span><span>衣・食・住</span><span>言語・宗教</span><span>多文化共生</span><span>SDGsと地球的課題</span></div>
+    </div>
+    <div class="toc-row">
+      <div class="toc-vol"><span class="v">第3編</span><span class="vt">持続可能な地域づくり</span></div>
+      <div class="toc-items"><span>日本の自然と防災</span><span>変動帯と防災</span><span>災害への備え</span><span>生活圏の調査</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 進め方 -->
+<section id="flow">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How to use</span>
+      <h2>各ページの進め方</h2>
+      <p>各ページは次の流れで学習を進められます。</p>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="no">1</div><h4>問い</h4><p>テーマに対する自分の予想を持つ。</p></div>
+      <div class="step"><div class="no">2</div><h4>基礎・模式図</h4><p>用語と仕組みを図で確認する。</p></div>
+      <div class="step"><div class="no">3</div><h4>体験ワーク</h4><p>シミュレーターなどを操作する。</p></div>
+      <div class="step"><div class="no">4</div><h4>確認クイズ</h4><p>理解度を確かめる。</p></div>
+      <div class="step"><div class="no">5</div><h4>用語チェック</h4><p>ミニ辞典で最終確認をする。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer>
+  <div class="wrap foot-inner">
+    <span class="name">あらじお蔵</span>
+    <nav class="foot-links">
+      <a href="#materials">教材</a>
+      <a href="#structure">教材の構成</a>
+      <a href="https://arageo2.github.io/geography-basic/">地理総合</a>
+    </nav>
+  </div>
+  <div class="wrap copy">© <span id="yr"></span> あらじお蔵</div>
+</footer>
+
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 </body>
 </html>
