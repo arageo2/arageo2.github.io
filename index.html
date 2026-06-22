@@ -1,395 +1,579 @@
-$ cat /home/user/arageo2.github.io/index.html
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>あらじお蔵 ｜ 高校地理のインタラクティブ教材</title>
-<meta name="description" content="高校地理のインタラクティブ教材を公開しています。">
+<meta name="description" content="高校地理を体験しながら学べるインタラクティブ教材サイト。地理総合・地理探究（系統地理／地誌）・テーマ別教材を公開しています。">
+
+<!-- OGP（SNS・検索で共有されたときの表示） -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="あらじお蔵">
+<meta property="og:title" content="あらじお蔵 ｜ 高校地理のインタラクティブ教材">
+<meta property="og:description" content="世界を読み解く目を育てる、体験型の高校地理教材。問い → 体験 → 確認の流れで楽しく学べます。">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://arageo2.github.io/">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --paper:#f4f1e8;       /* 温かみのある紙色 */
-    --surface:#fffdf7;     /* カード面 */
-    --forest:#1d3a28;      /* 最も濃い緑 */
-    --pine:#2d5b3d;        /* 主たる緑 */
-    --pine-soft:#3f6e4f;
-    --moss:#79977c;        /* 補助の緑 */
-    --line:#d7dcc8;        /* 罫線 */
-    --line-soft:#e4e7d8;
-    --ink:#26302a;
-    --muted:#5c6a5b;
-    --maxw:1000px;
-    --serif:"Shippori Mincho",serif;
-    --sans:"Zen Kaku Gothic New",system-ui,sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:var(--sans);
-    background:var(--paper);
-    color:var(--ink);
-    line-height:1.9;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
-  .serif{font-family:var(--serif)}
-  .eyebrow{
-    font-size:.72rem;letter-spacing:.26em;font-weight:700;
-    color:var(--pine);display:inline-flex;align-items:center;gap:.8em;
-  }
-  .eyebrow::before{content:"";width:22px;height:1px;background:var(--pine)}
+/* =========================================================
+   あらじお蔵 ─ トップページ（母艦ベースページ）
+   ・既存の子ページと統一した「紙＋緑」の世界観
+   ・4つの教材は「地形の凡例色」で識別
+   ・カードは1ブロック複製するだけで増やせる構造
+   ========================================================= */
 
-  /* ── ヘッダー ── */
-  header.site{
-    background:rgba(244,241,232,.88);backdrop-filter:saturate(180%) blur(8px);
-    border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;
-  }
-  .site-inner{max-width:var(--maxw);margin:0 auto;padding:15px 28px;display:flex;align-items:center;justify-content:space-between}
-  .logo{display:flex;align-items:center;gap:11px}
-  .logo .mark{width:34px;height:34px;flex-shrink:0}
-  .logo .name{font-family:var(--serif);font-weight:700;font-size:1.28rem;color:var(--forest);letter-spacing:.04em}
-  .site-nav{display:flex;gap:30px;font-size:.9rem;font-weight:500;color:var(--muted)}
-  .site-nav a{position:relative;padding:2px 0}
-  .site-nav a::after{content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;background:var(--pine);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
-  .site-nav a:hover{color:var(--pine)}
-  .site-nav a:hover::after{transform:scaleX(1)}
+:root{
+  /* 基調（既存サイトを継承） */
+  --paper:#f4f1e8;       /* 背景：温かみのある紙色 */
+  --paper-deep:#ece7d8;  /* 一段沈んだ紙色 */
+  --surface:#fffdf7;     /* カード面 */
+  --ink:#26302a;         /* 本文 */
+  --muted:#5c6a5b;       /* 補助テキスト */
+  --forest:#1d3a28;      /* 最も濃い緑（見出し） */
+  --pine:#2d5b3d;        /* あらじお蔵の主たる緑 */
+  --line:#d7dcc8;        /* 罫線 */
+  --line-soft:#e6e4d6;
 
-  /* ── 導入 ── */
-  .intro{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-  .intro-inner{position:relative;z-index:2;padding:74px 28px 66px;max-width:var(--maxw);margin:0 auto}
-  .intro h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.2rem,5vw,3.1rem);color:var(--forest);letter-spacing:.05em;margin:18px 0 0}
-  .intro .rule{width:46px;height:3px;background:var(--pine);margin:22px 0 20px;border-radius:2px}
-  .intro p{max-width:54ch;color:var(--muted);font-size:1.04rem}
-  .intro .meta{display:flex;gap:30px;margin-top:28px;flex-wrap:wrap}
-  .intro .meta b{font-family:var(--serif);font-size:1.5rem;color:var(--pine);font-weight:700;margin-right:.3em}
-  .intro .meta span{font-size:.86rem;color:var(--muted);display:inline-flex;align-items:baseline}
-  .intro .meta .note{align-items:center;padding-left:30px;border-left:1px solid var(--line);color:var(--pine);font-weight:500}
-  /* 等高線モチーフ */
-  .contour{position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:520px;height:520px;z-index:1;opacity:.5;pointer-events:none}
-  .contour svg{width:100%;height:100%}
+  /* 4つの世界の識別色（地形の凡例＝植生・大地・水） */
+  --c-basic:#3e7d54;     /* 地理総合：若葉の緑 */
+  --c-sys:#9a6a2c;       /* 系統地理：大地の金茶 */
+  --c-reg:#2f6d6a;       /* 地誌：藍緑 */
+  --c-thm:#3b6e8f;       /* テーマ別：海の青 */
 
-  /* ── セクション ── */
-  section{padding:70px 0}
-  .sec-head{margin-bottom:34px}
-  .sec-head h2{font-family:var(--serif);font-weight:700;font-size:1.6rem;color:var(--forest);margin:12px 0 6px;letter-spacing:.03em}
-  .sec-head p{color:var(--muted);font-size:.95rem}
+  --maxw:1060px;
+  --serif:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  --radius:16px;
+  --shadow:0 10px 30px -18px rgba(29,58,40,.45);
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+.serif{font-family:var(--serif)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+:focus-visible{outline:3px solid #6fa8c9;outline-offset:3px;border-radius:4px}
 
-  /* ── 教材カード ── */
-  .material{
-    background:var(--surface);border:1px solid var(--line);border-radius:3px;
-    display:grid;grid-template-columns:1.5fr 1fr;overflow:hidden;
-    box-shadow:0 18px 40px -32px rgba(29,58,40,.55);
-  }
-  .material-body{padding:36px 38px}
-  .material .tag{font-size:.74rem;letter-spacing:.18em;font-weight:700;color:var(--pine)}
-  .material h3{font-family:var(--serif);font-weight:700;font-size:1.5rem;color:var(--forest);margin:10px 0 12px;line-height:1.4}
-  .material .info{font-size:.84rem;color:var(--muted);padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line-soft)}
-  .material .lead{color:var(--ink);font-size:.97rem;margin-bottom:26px}
-  .btn{
-    display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;
-    font-weight:700;font-size:1rem;padding:13px 30px;border-radius:3px;transition:background .2s,transform .2s;
-  }
-  .btn:hover{background:var(--forest);transform:translateX(2px)}
-  .btn svg{width:16px;height:16px}
-  /* カード右の図版パネル */
-  .material-fig{background:var(--forest);position:relative;display:grid;place-items:center;overflow:hidden}
-  .material-fig::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:30px 30px}
-  .material-fig svg{position:relative;width:78%;color:rgba(220,232,221,.85)}
+/* 共通の小見出し（コンパス記号つき） */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.7em;
+  font-size:.72rem;font-weight:700;letter-spacing:.24em;
+  color:var(--pine);
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor}
 
-  /* ── 教材の構成(目次) ── */
-  .toc{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .toc-row{display:grid;grid-template-columns:170px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--line-soft);align-items:start}
-  .toc-row:last-child{border-bottom:none}
-  .toc-vol{display:flex;flex-direction:column;gap:4px}
-  .toc-vol .v{font-family:var(--serif);font-weight:700;font-size:1.05rem;color:var(--pine);letter-spacing:.06em}
-  .toc-vol .vt{font-weight:700;color:var(--forest);font-size:1.02rem;line-height:1.5}
-  .toc-items{display:flex;flex-wrap:wrap;gap:9px;padding-top:3px}
-  .toc-items span{font-size:.86rem;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 14px}
+/* ===== ヘッダー ===== */
+header.site{
+  position:sticky;top:0;z-index:60;
+  background:rgba(244,241,232,.86);
+  backdrop-filter:saturate(160%) blur(10px);
+  -webkit-backdrop-filter:saturate(160%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.site-inner{
+  max-width:var(--maxw);margin:0 auto;padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.brand{display:flex;align-items:center;gap:11px;min-height:40px}
+.brand .mark{width:34px;height:34px;flex:none;color:var(--pine)}
+.brand .name{font-family:var(--serif);font-weight:800;font-size:1.3rem;color:var(--forest);letter-spacing:.04em}
+.site-nav{display:flex;gap:24px;font-size:.86rem;font-weight:500;color:var(--muted)}
+.site-nav a{position:relative;padding:4px 0}
+.site-nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1.5px;background:var(--pine);transition:width .25s}
+.site-nav a:hover{color:var(--forest)}
+.site-nav a:hover::after{width:100%}
+.nav-toggle{display:none}
 
-  /* ── 進め方(プロセス) ── */
-  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:s}
-  .step{position:relative;padding:0 18px;counter-increment:s}
-  .step:first-child{padding-left:0}
-  .step .no{
-    font-family:var(--serif);font-weight:700;font-size:1.1rem;color:#fff;
-    width:38px;height:38px;border-radius:50%;background:var(--pine);
-    display:grid;place-items:center;margin-bottom:14px;position:relative;z-index:2;
-  }
-  .step::after{content:"";position:absolute;top:19px;left:38px;right:-1px;height:1px;background:var(--line);z-index:1}
-  .step:last-child::after{display:none}
-  .step h4{font-weight:700;color:var(--forest);font-size:1rem;margin-bottom:5px}
-  .step p{font-size:.85rem;color:var(--muted);line-height:1.7}
+/* ===== ヒーロー：索引図 ===== */
+.hero{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 120% at 80% 0%, #f7f5ec 0%, var(--paper) 45%, var(--paper-deep) 100%);
+  border-bottom:1px solid var(--line);
+}
+.hero .map-field{
+  position:absolute;inset:0;color:var(--pine);
+  opacity:.16;pointer-events:none;
+}
+.hero .graticule{animation:drift 38s linear infinite}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(-60px,-30px)}}
+.hero-inner{position:relative;max-width:var(--maxw);margin:0 auto;padding:84px 24px 92px}
+.hero .coord{
+  font-size:.74rem;letter-spacing:.22em;font-weight:700;color:var(--pine);
+  display:inline-flex;align-items:center;gap:.7em;margin-bottom:22px;
+}
+.hero .coord::before{content:"◎";font-size:1em;letter-spacing:0}
+.hero h1{
+  font-family:var(--serif);font-weight:800;color:var(--forest);
+  font-size:clamp(2.1rem,5.4vw,3.5rem);line-height:1.3;letter-spacing:.02em;
+  max-width:18em;
+}
+.hero h1 em{font-style:normal;color:var(--pine);position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.08em;height:.34em;background:rgba(62,125,84,.22);z-index:-1}
+.hero p.lead{
+  margin-top:24px;max-width:34em;font-size:1.06rem;color:#41503f;line-height:2;
+}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.legend .pin{
+  display:inline-flex;align-items:center;gap:.5em;
+  font-size:.78rem;font-weight:700;color:#42513f;
+  background:var(--surface);border:1px solid var(--line);
+  padding:.4em .9em;border-radius:999px;
+}
+.legend .pin i{width:10px;height:10px;border-radius:50%;background:var(--d, var(--pine))}
+.scrollcue{margin-top:40px;font-size:.8rem;color:var(--muted);display:inline-flex;align-items:center;gap:.5em}
+.scrollcue span{animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
-  /* ── フッター ── */
-  footer{background:var(--forest);color:#c2d2c3;padding:40px 0 34px;font-size:.88rem}
-  .foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:center}
-  .foot-inner .name{font-family:var(--serif);font-weight:700;font-size:1.2rem;color:#fff;letter-spacing:.04em}
-  .foot-links{display:flex;gap:26px}
-  .foot-links a{color:#c2d2c3;transition:color .2s}
-  .foot-links a:hover{color:#fff}
-  .copy{margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);font-size:.8rem;color:#9bb09c}
+/* ===== セクション共通 ===== */
+.band{padding:74px 0}
+.band.alt{background:var(--paper-deep);border-block:1px solid var(--line)}
+.sec-head{max-width:42em;margin-bottom:40px}
+.sec-head h2{font-family:var(--serif);font-weight:800;color:var(--forest);font-size:clamp(1.6rem,3.6vw,2.2rem);margin:.5rem 0 .6rem;letter-spacing:.02em}
+.sec-head p{color:var(--muted);font-size:.98rem}
 
-  @media(max-width:820px){
-    .material{grid-template-columns:1fr}
-    .material-fig{display:none}
-    .steps{grid-template-columns:1fr 1fr;gap:26px 16px}
-    .step{padding:0}
-    .step::after{display:none}
-    .contour{opacity:.28;right:-160px}
-  }
-  @media(max-width:560px){
-    .wrap,.intro-inner,.site-inner{padding-left:20px;padding-right:20px}
-    .site-nav{display:none}
-    .toc-row{grid-template-columns:1fr;gap:12px}
-    .steps{grid-template-columns:1fr}
-    section{padding:54px 0}
-    .material-body{padding:28px 24px}
-  }
+/* ===== 4つの世界（メインカード） ===== */
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.field{
+  --c:var(--pine);
+  position:relative;display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .25s, box-shadow .25s, border-color .25s;
+}
+.field:hover{transform:translateY(-5px);box-shadow:0 20px 38px -20px rgba(29,58,40,.5);border-color:color-mix(in srgb, var(--c) 40%, var(--line))}
+.field .bar{height:6px;background:var(--c)}
+.field .corner{position:absolute;top:6px;right:0;width:120px;height:120px;color:var(--c);opacity:.1;pointer-events:none;transition:opacity .25s, transform .25s}
+.field:hover .corner{opacity:.18;transform:scale(1.08) rotate(-4deg)}
+.field .body{padding:26px 26px 8px;display:flex;flex-direction:column;gap:14px;flex:1}
+.field .topline{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.field .fno{font-size:.72rem;font-weight:700;letter-spacing:.2em;color:var(--c)}
+.status{font-size:.7rem;font-weight:700;letter-spacing:.08em;padding:.32em .8em;border-radius:999px}
+.status.open{color:#fff;background:var(--c)}
+.status.open::before{content:"▶ ";font-size:.8em}
+.status.soon{color:var(--muted);background:transparent;border:1px solid var(--line)}
+
+.field h3{font-size:1.32rem;font-weight:800;color:var(--ink);letter-spacing:.02em}
+.field .desc{font-size:.92rem;color:#46554a;line-height:1.95}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.tags span{
+  font-size:.74rem;font-weight:600;color:var(--c);
+  background:color-mix(in srgb, var(--c) 10%, var(--surface));
+  border:1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  padding:.28em .7em;border-radius:7px;
+}
+.field .go{
+  margin:18px 26px 26px;align-self:flex-start;
+  display:inline-flex;align-items:center;gap:.5em;
+  font-weight:700;font-size:.92rem;color:#fff;background:var(--c);
+  padding:.7em 1.3em;border-radius:10px;
+  transition:gap .2s, filter .2s;
+}
+.field:hover .go{gap:.9em;filter:brightness(1.05)}
+.field .go svg{width:18px;height:18px}
+
+/* ===== 個別教材・新着（成長領域） ===== */
+.minis{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.mini{
+  --c:var(--pine);
+  display:flex;flex-direction:column;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  box-shadow:var(--shadow);transition:transform .2s, box-shadow .2s;
+}
+.mini:hover{transform:translateY(-3px);box-shadow:0 16px 30px -18px rgba(29,58,40,.5)}
+.mini .bar{height:5px;background:var(--c)}
+.mini .mbody{padding:16px 18px;flex:1}
+.mini .mcat{font-size:.7rem;font-weight:700;letter-spacing:.14em;color:var(--c)}
+.mini h4{font-family:var(--serif);font-size:1.05rem;color:var(--forest);font-weight:800;margin:7px 0}
+.mini p{font-size:.84rem;color:var(--muted);line-height:1.7}
+.mini .mfoot{padding:10px 18px;border-top:1px solid var(--line-soft);font-size:.78rem;font-weight:700;color:var(--c)}
+.mini.ghost{border-style:dashed;background:transparent;box-shadow:none;display:grid;place-items:center;min-height:150px;text-align:center;color:var(--muted)}
+.mini.ghost:hover{transform:none}
+.mini.ghost .g{padding:20px;font-size:.86rem;line-height:1.7}
+
+/* ===== 学び方（進め方） ===== */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:step}
+.flow .step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 16px}
+.flow .step .n{
+  width:30px;height:30px;border-radius:50%;background:var(--pine);color:#fff;
+  display:grid;place-items:center;font-family:var(--serif);font-weight:800;margin-bottom:10px;
+}
+.flow .step h4{font-size:.98rem;color:var(--forest);margin-bottom:4px}
+.flow .step p{font-size:.8rem;color:var(--muted);line-height:1.6}
+.flow-note{margin-top:22px;font-size:.88rem;color:var(--muted);text-align:center}
+
+/* ===== このサイトについて（ポリシー導線） ===== */
+.about-band{background:var(--forest);color:#dfe6d8;padding:60px 0}
+.about-band h2{font-family:var(--serif);color:#fff;font-size:1.6rem;font-weight:800;margin-bottom:14px}
+.about-band p{font-size:.95rem;line-height:2;color:#cfd8c6;max-width:50em}
+.about-band a.cc-link{color:#bfe0c4;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.about-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.about-actions button{
+  font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;
+  background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.28);
+  padding:.7em 1.3em;border-radius:10px;transition:background .2s;
+}
+.about-actions button:hover{background:rgba(255,255,255,.16)}
+
+/* ===== フッター ===== */
+footer{background:#16271c;color:#9fb09c;padding:36px 0 44px;font-size:.84rem}
+footer .foot-inner{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between}
+footer .foot-links{display:flex;flex-wrap:wrap;gap:18px}
+footer .foot-links a:hover{color:#dbe6d6;text-decoration:underline}
+footer .cc{margin-top:20px;font-size:.78rem;line-height:1.8;color:#7e9079}
+footer .cc a{color:#bfe0c4;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+
+/* ===== ポリシーオーバーレイ ===== */
+.policy-overlay{
+  position:fixed;inset:0;z-index:100;display:none;
+  background:rgba(22,39,28,.55);backdrop-filter:blur(3px);
+  padding:5vh 16px;overflow-y:auto;
+}
+.policy-overlay.open{display:block}
+.policy-box{
+  max-width:680px;margin:0 auto;background:var(--surface);
+  border-radius:18px;padding:38px 32px 44px;position:relative;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.5);
+}
+.policy-close{
+  position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--line);background:var(--paper);font-size:1.1rem;cursor:pointer;color:var(--ink);
+}
+.policy-close:hover{background:var(--paper-deep)}
+.policy-box h2{font-family:var(--serif);color:var(--forest);font-size:1.4rem;margin:28px 0 12px}
+.policy-box h2:first-of-type{margin-top:0}
+.policy-box h3{font-size:1rem;color:var(--pine);margin:18px 0 6px}
+.policy-box p{font-size:.9rem;line-height:1.9;color:#3a4a3e;margin-bottom:8px}
+.policy-box a{color:var(--c-thm);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.policy-note{background:#fdf3ec;border:1.5px solid #e7c4ad;border-radius:12px;padding:12px 16px;font-size:.86rem;line-height:1.8;color:#7a3d1f;margin:14px 0}
+.policy-updated{margin-top:20px;color:var(--muted);font-size:.78rem}
+
+/* ===== レスポンシブ ===== */
+@media(max-width:780px){
+  .fields{grid-template-columns:1fr}
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .site-nav{display:none}
+  .hero-inner{padding:60px 24px 70px}
+  .band{padding:56px 0}
+}
+@media(max-width:430px){
+  .flow{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
 
-<!-- ヘッダー -->
+<!-- ===================== ヘッダー ===================== -->
 <header class="site">
   <div class="site-inner">
-    <a class="logo" href="#top">
-      <svg class="mark" viewBox="0 0 40 40" fill="none">
-        <rect width="40" height="40" rx="8" fill="#2d5b3d"/>
-        <circle cx="20" cy="20" r="11" stroke="#fffdf7" stroke-width="1.6"/>
-        <path d="M9 20h22M20 9c3 3.2 3 18.8 0 22M20 9c-3 3.2-3 18.8 0 22" stroke="#fffdf7" stroke-width="1.6"/>
+    <a class="brand" href="#top" aria-label="あらじお蔵 トップへ">
+      <svg class="mark" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <circle cx="20" cy="20" r="17"/>
+        <path d="M20 3v34M3 20h34" stroke-width="1"/>
+        <path d="M20 8 L24 20 L20 32 L16 20 Z" fill="currentColor" stroke="none"/>
+        <circle cx="20" cy="20" r="2.4" fill="#fffdf7" stroke="none"/>
       </svg>
       <span class="name">あらじお蔵</span>
     </a>
-    <nav class="site-nav">
-      <a href="#materials">教材</a>
-      <a href="#individual">個別教材</a>
-      <a href="#structure">教材の構成</a>
-      <a href="#flow">進め方</a>
+    <nav class="site-nav" aria-label="教材ナビ">
+      <a href="#fields">教材</a>
+      <a href="#minis">個別教材</a>
+      <a href="#flow">学び方</a>
+      <a href="#about">このサイトについて</a>
     </nav>
   </div>
 </header>
 
-<!-- 導入 -->
-<div class="intro" id="top">
-  <div class="contour" aria-hidden="true">
-    <svg viewBox="0 0 400 400" fill="none" stroke="var(--moss)" stroke-width="1">
-      <path d="M200 60c70 0 130 55 130 140s-60 140-130 140-130-55-130-140S130 60 200 60Z" opacity=".5"/>
-      <path d="M200 95c54 0 100 45 100 105s-46 105-100 105-100-45-100-105S146 95 200 95Z" opacity=".6"/>
-      <path d="M200 130c40 0 72 32 72 70s-32 70-72 70-72-32-72-70 32-70 72-70Z" opacity=".7"/>
-      <path d="M200 165c24 0 44 20 44 45s-20 45-44 45-44-20-44-45 20-45 44-45Z" opacity=".85"/>
-      <circle cx="200" cy="210" r="14" opacity="1"/>
-    </svg>
+<!-- ===================== ヒーロー（索引図） ===================== -->
+<section class="hero" id="top">
+  <svg class="map-field" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="graticule" fill="none" stroke="currentColor" stroke-width="1">
+      <!-- 経緯線（グラティキュール） -->
+      <path d="M0 80H1260M0 160H1260M0 240H1260M0 320H1260M0 400H1260M0 480H1260"/>
+      <path d="M120 0V560M260 0V560M400 0V560M540 0V560M680 0V560M820 0V560M960 0V560M1100 0V560"/>
+    </g>
+    <g fill="none" stroke="currentColor" stroke-width="1.4">
+      <!-- 等高線（地形のうねり） -->
+      <path d="M-20 360 C220 300 380 420 620 340 S980 220 1240 320"/>
+      <path d="M-20 320 C240 260 410 380 660 290 S1000 180 1240 270"/>
+      <path d="M-20 280 C260 220 440 340 700 240 S1020 140 1240 230"/>
+    </g>
+  </svg>
+
+  <div class="hero-inner">
+    <span class="coord serif">あらじお蔵 ─ Geography Interactive Lab</span>
+    <h1>高校地理の基本を、<br><em>楽しく</em>学ぶ。</h1>
+    <p class="lead">地理総合と地理探究の全分野を、基礎レベルを中心にわかりやすく網羅。シミュレーターや確認クイズで手を動かしながら学べる、高校地理の学習サイトです。授業・自習・教材研究にお役立てください。</p>
+
+    <div class="legend">
+      <span class="pin" style="--d:var(--c-basic)"><i></i>地理総合</span>
+      <span class="pin" style="--d:var(--c-sys)"><i></i>系統地理</span>
+      <span class="pin" style="--d:var(--c-reg)"><i></i>地誌</span>
+      <span class="pin" style="--d:var(--c-thm)"><i></i>テーマ別</span>
+    </div>
+
+    <a class="scrollcue" href="#fields">4つの教材を見る <span>↓</span></a>
   </div>
-  <div class="intro-inner">
-    <span class="eyebrow">高校地理 教材アーカイブ</span>
-    <h1>あらじお蔵</h1>
-    <div class="rule"></div>
-    <p>高校地理のインタラクティブ教材を公開しています。授業でも自宅学習でも、自由にお使いください。</p>
+</section>
+
+<!-- ===================== 4つの世界 ===================== -->
+<main>
+<section class="band" id="fields">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">EXPLORE</span>
+      <h2>4つの教材</h2>
+      <p>学びたい分野を選んで、気になるところから始めてみてください。</p>
+    </div>
+
+    <div class="fields">
+
+      <!-- ▼ 教材カードの型：style="--c:〇〇" の色だけ変えれば新しい世界を増やせます -->
+
+      <!-- ① 地理総合 -->
+      <article class="field" style="--c:var(--c-basic)">
+        <div class="bar"></div>
+        <svg class="corner" viewBox="-60 -60 120 120" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <circle r="50"/><ellipse rx="50" ry="20"/><ellipse rx="20" ry="50"/>
+          <line x1="-50" y1="0" x2="50" y2="0"/><line x1="0" y1="-50" x2="0" y2="50"/>
+        </svg>
+        <div class="body">
+          <div class="topline">
+            <span class="fno">FIELD 01 ／ 必修</span>
+            <span class="status open">公開中</span>
+          </div>
+          <h3>地理総合</h3>
+          <p class="desc">地理総合で学ぶ「グローバルに繋がる世界」「生活文化の多様性」「地球的課題」「防災」「地域調査」を、わかりやすく学べるページです。シミュレーターや確認クイズで手を動かしながら、1年間の学びをまるごと体験できます。</p>
+          <div class="tags"><span>時差シミュレーター</span><span>宗教分布マップ</span><span>SDGs診断</span><span>確認クイズ</span></div>
+        </div>
+        <a class="go" href="/geography-basic/">地理総合をひらく
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- ② 地理探究（系統地理） -->
+      <article class="field" style="--c:var(--c-sys)">
+        <div class="bar"></div>
+        <svg class="corner" viewBox="-60 -60 120 120" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M-50 0 C-30-40 30-40 50 0 S30 40-50 0Z"/>
+          <path d="M-30 0 C-18-24 18-24 30 0 S18 24-30 0Z"/>
+          <line x1="-50" y1="0" x2="50" y2="0"/><line x1="0" y1="-50" x2="0" y2="50"/>
+        </svg>
+        <div class="body">
+          <div class="topline">
+            <span class="fno">FIELD 02 ／ 探究</span>
+            <span class="status open">公開中</span>
+          </div>
+          <h3>地理探究 ─ 系統地理</h3>
+          <p class="desc">地形・気候・植生という自然のしくみから、エネルギー・農業・工業・人口・都市まで。世界を「テーマ」で切り分け、「なぜそうなるのか」を体系的に解き明かします。</p>
+          <div class="tags"><span>チューネンの立地モデル</span><span>農業地域カード</span><span>フードマイレージ計算</span><span>確認クイズ</span></div>
+        </div>
+        <a class="go" href="/geography-advanced/">系統地理をひらく
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- ③ 地理探究（地誌） -->
+      <article class="field" style="--c:var(--c-reg)">
+        <div class="bar"></div>
+        <svg class="corner" viewBox="-60 -60 120 120" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <circle r="48"/>
+          <path d="M-48 0 Q-20-30 0-10 Q20 10 48 0"/><path d="M-48 0 Q-20 30 0 10 Q20-10 48 0"/>
+          <path d="M-20-48 Q0-20 10 0 Q20 20 20 48"/><path d="M20-48 Q0-20-10 0 Q-20 20-20 48"/>
+        </svg>
+        <div class="body">
+          <div class="topline">
+            <span class="fno">FIELD 03 ／ 探究</span>
+            <span class="status open">公開中</span>
+          </div>
+          <h3>地理探究 ─ 地誌</h3>
+          <p class="desc">系統地理で学んだ「しくみ」を、地域ごとの物語として読み直します。世界の全地域を網羅し、それぞれの地域に中心テーマを設けて、動態地誌の視点から探究します。</p>
+          <div class="tags"><span>地域別ラボ</span><span>キーワードカード</span><span>仕分け・マッチング</span><span>確認クイズ</span></div>
+        </div>
+        <a class="go" href="/geography-advanced/regional/">地誌をひらく
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- ④ テーマ別教材 -->
+      <article class="field" style="--c:var(--c-thm)">
+        <div class="bar"></div>
+        <svg class="corner" viewBox="-60 -60 120 120" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <rect x="-42" y="-42" width="84" height="84" rx="4"/>
+          <rect x="-26" y="-26" width="52" height="52" rx="3"/>
+          <line x1="-50" y1="0" x2="50" y2="0"/><line x1="0" y1="-50" x2="0" y2="50"/>
+        </svg>
+        <div class="body">
+          <div class="topline">
+            <span class="fno">FIELD 04 ／ 副教材</span>
+            <span class="status open">公開中</span>
+          </div>
+          <h3>テーマ別教材</h3>
+          <p class="desc">授業のテーマに合わせて単発で使える補助教材です。地図・グラフ・シミュレーターなど、いつもの授業に「ひとつ足す」ための部品箱。新しい教材を随時追加していきます。</p>
+          <div class="tags"><span>日本の農業地図</span><span>随時追加</span></div>
+        </div>
+        <a class="go" href="/thematic/">テーマ別教材をひらく
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 個別教材・新着 ===================== -->
+<section class="band alt" id="minis">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">PICK UP</span>
+      <h2>個別教材・新着</h2>
+      <p>特定のテーマに特化した単発教材です。ここから少しずつ増えていきます。</p>
+    </div>
+
+    <div class="minis">
+      <!-- ▼ 新しい個別教材は、この .mini ブロックを複製して追加 -->
+      <a class="mini" href="/geography-advanced/japan-agriculture1/" style="--c:var(--c-sys)">
+        <div class="bar"></div>
+        <div class="mbody">
+          <span class="mcat">地図教材</span>
+          <h4>日本の農業地図</h4>
+          <p>日本各地の農業地帯・主要産物を地図上でインタラクティブに確認できる教材。</p>
+        </div>
+        <div class="mfoot">→ ひらく</div>
+      </a>
+
+      <!-- 成長領域：教材が増えるまでのプレースホルダー -->
+      <div class="mini ghost"><div class="g">🌱<br>新しい教材を準備中</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 学び方 ===================== -->
+<section class="band" id="flow">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">HOW TO LEARN</span>
+      <h2>どのページも、同じ流れで深く学べる</h2>
+      <p>覚えるだけでは地理になりません。「問い」を立て、手を動かし、自分の言葉で説明する ─ その往復をくり返します。</p>
+    </div>
+
+    <div class="flow">
+      <div class="step"><div class="n serif">1</div><h4>問い</h4><p>テーマへの予想を、まず1行書く。間違ってOK。</p></div>
+      <div class="step"><div class="n serif">2</div><h4>基礎・模式図</h4><p>用語としくみを図で確認する。</p></div>
+      <div class="step"><div class="n serif">3</div><h4>体験ワーク</h4><p>シミュレーターなどを実際に操作する。</p></div>
+      <div class="step"><div class="n serif">4</div><h4>確認クイズ</h4><p>理解度を確かめる。間違いこそ宝物。</p></div>
+      <div class="step"><div class="n serif">5</div><h4>Think!</h4><p>最初の問いに、自分の言葉で答える。</p></div>
+    </div>
+    <p class="flow-note">※ 各ページには「用語ミニ辞典」や「もっと深く学ぶ（一次情報リンク）」も用意しています。</p>
+  </div>
+</section>
+</main>
+
+<!-- ===================== このサイトについて（ポリシー導線） ===================== -->
+<section class="about-band" id="about">
+  <div class="wrap">
+    <h2>このサイトについて</h2>
+    <p>「あらじお蔵」は、高校地理を学ぶみなさんの学習の手助けと、先生方の授業づくり・教材研究のお役に立つことを目的に公開しています。すべての教材は <a class="cc-link" href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="license noopener">クリエイティブ・コモンズ 表示–非営利 4.0 国際ライセンス（CC BY-NC 4.0）</a> の下で提供しています。クレジット（Takayuki Arai）を表示すれば、非営利の範囲で自由に共有・改変して利用できます。</p>
+    <div class="about-actions">
+      <button onclick="openPolicy('pol-site')">📖 サイトポリシーを読む</button>
+      <button onclick="openPolicy('pol-priv')">🔒 プライバシーポリシーを読む</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== フッター ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <span class="serif" style="font-size:1.1rem;color:#dbe6d6;font-weight:800">あらじお蔵</span>
+      <nav class="foot-links" aria-label="フッターナビ">
+        <a href="/geography-basic/">地理総合</a>
+        <a href="/geography-advanced/">系統地理</a>
+        <a href="/geography-advanced/regional/">地誌</a>
+        <a href="/thematic/">テーマ別教材</a>
+        <button onclick="openPolicy('pol-site')" style="background:none;border:none;color:inherit;font:inherit;cursor:pointer;text-decoration:underline">サイトポリシー</button>
+        <button onclick="openPolicy('pol-priv')" style="background:none;border:none;color:inherit;font:inherit;cursor:pointer;text-decoration:underline">プライバシーポリシー</button>
+      </nav>
+    </div>
+    <div class="cc">
+      © <span id="yr"></span> Takayuki Arai｜この教材は <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="license noopener">CC BY-NC 4.0</a> の下に提供されています。<br>
+      クレジット（Takayuki Arai）を表示すれば、非営利の範囲で自由に共有・改変して利用できます。
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== ポリシーオーバーレイ ===================== -->
+<div class="policy-overlay" id="policyOverlay" role="dialog" aria-modal="true" aria-label="サイトポリシーとプライバシーポリシー">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePolicy()" aria-label="閉じる">✕</button>
+
+    <h2 id="pol-site">📖 サイトポリシー</h2>
+    <p>このウェブ教材サイト「あらじお蔵」は、高校地理を学ぶみなさんの<b>学習の手助け</b>と、先生方の<b>授業づくり・教材研究</b>のお役に立つことを目的に作られています。細かい規約でガチガチに縛るつもりはありません。<b>信頼してお渡ししますので、学びのために気持ちよく使ってください。</b>それがこのサイトのいちばんのお願いです。</p>
+
+    <h3>使い方とライセンスについて</h3>
+    <p>授業での利用、家庭学習、リンクの共有、印刷、学校の実情に合わせた手直し ─ どれも歓迎です。ライセンスは <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener">CC BY-NC 4.0</a>（クレジット:Takayuki Arai）です。むずかしく聞こえますが、要するに「<b>作者名を書いてくれれば、お金もうけ以外には自由に使ってOK</b>」という意味です。営利目的での販売・再配布だけはご遠慮ください。</p>
+
+    <h3>内容の正確さについて</h3>
+    <p>内容はできるだけ正確に作っていますが、教材の性質上、統計には<b>概数やモデル値</b>（学習用に単純化した数値）が含まれます。また世界の状況は日々変わります。レポートや探究で使うときは、各ページの「🔗 もっと深く学ぶ」のリンク先（政府機関などの一次情報）や教科書・資料集で最新の数値を確かめる ─ それ自体が大切な地理の学習です。もし誤りを見つけたら、それはあなたの読み取る力が育った証拠。先生やまわりの人と共有してもらえたらうれしいです。</p>
+
+    <div class="policy-note">⚠️ <b>防災に関する大切なお願い:</b> このサイトの防災コンテンツは「学ぶため」のものです。実際に災害が迫っているときの避難の判断は、必ずお住まいの<b>市町村の避難情報</b>と<b>気象庁の最新情報</b>（キキクル・警報など）にもとづいて行ってください。</div>
+
+    <h3>外部リンクについて</h3>
+    <p>リンク先は政府機関・国際機関・公共放送など信頼できるサイトを選んでいますが、リンク先の内容はそれぞれの運営者に属します。ページの移転などでリンクが切れていたら、サイト名で検索してみてください。</p>
+
+    <h3>免責について</h3>
+    <p>この教材は善意で公開している学習用コンテンツであり、利用にともなって生じた不都合について大きな責任を負うことはできません。ただし、よりよい教材にしていく努力はこれからも続けます。</p>
+
+    <h2 id="pol-priv">🔒 プライバシーポリシー</h2>
+    <p>結論からいうと、<b>このサイトはあなたの個人情報を集めません。</b>安心して使ってください。</p>
+
+    <h3>データの扱い</h3>
+    <p>各教材は基本的に1つのHTMLファイルだけで動いており、サーバーにデータを送る仕組みを持っていません。クイズの解答、シミュレーターの操作、Think!への考え ─ すべて<b>あなたの端末の画面の中だけ</b>で完結し、ページを閉じたり再読み込みしたりすると消えます（だから安心して間違えられます）。Cookieやアクセス解析ツールも使っていません。</p>
+
+    <h3>外部サービスについて</h3>
+    <p>文字のデザイン（ウェブフォント）を Google Fonts から読み込んでいるため、ページを開くとブラウザがGoogleのサーバーと通信します（通信にともないIPアドレス等が送信されます）。また「🔗 もっと深く学ぶ」などの外部リンク先では、それぞれのサイトのプライバシーポリシーが適用されます。</p>
+
+    <h3>学校で使うとき</h3>
+    <p>先生がThink!の回答などを提出物として集める場合は、各学校のルール（学習支援システムやフォームの利用方針）に従ってください。このサイト自体は、誰が・いつ・どう使ったかを一切記録していません。</p>
+
+    <p class="policy-updated">最終更新:2026年6月｜文言は学習目的にふさわしい範囲で、予告なく見直すことがあります。</p>
   </div>
 </div>
 
-<!-- 教材 -->
-<section id="materials">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Materials</span>
-      <h2>教材</h2>
-      <p>現在公開している教材です。</p>
-    </div>
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
 
-    <div class="material">
-      <div class="material-body">
-        <span class="tag">地理総合</span>
-        <h3>インタラクティブ・ラボ</h3>
-        <p class="lead">緯度・経度や地図の読み方から、世界の生活文化、地球的課題、日本の自然と防災まで。各ページにシミュレーターや確認クイズなどの操作教材を用意し、1年間の学習をサポートします。</p>
-        <a class="btn" href="https://arageo2.github.io/geography-basic/">
-          地理総合
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="material-fig" aria-hidden="true">
-        <svg viewBox="-60 -60 120 120" fill="none" stroke="currentColor" stroke-width="1.3">
-          <circle r="50"/>
-          <ellipse rx="50" ry="20"/><ellipse rx="50" ry="38"/>
-          <ellipse rx="20" ry="50"/><ellipse rx="38" ry="50"/>
-          <line x1="-50" y1="0" x2="50" y2="0"/><line x1="0" y1="-50" x2="0" y2="50"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="material" style="margin-top:28px">
-      <div class="material-body">
-        <span class="tag">地理探究（系統地理）</span>
-        <h3>インタラクティブ・ラボ</h3>
-        <p class="lead">自然地理・資源と産業・人口と都市を軸に、系統地理の各単元をシミュレーターや体験ワークで深く探究します。単元ごとに順次公開します。</p>
-        <a class="btn" href="https://arageo2.github.io/geography-advanced/" style="background:#5a4e38">
-          系統地理
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="material-fig" aria-hidden="true" style="background:#2c2820">
-        <svg viewBox="-60 -60 120 120" fill="none" stroke="rgba(220,210,185,.8)" stroke-width="1.3">
-          <path d="M-50 0 C-30-40 30-40 50 0 S30 40-50 0Z"/>
-          <path d="M-35 0 C-20-28 20-28 35 0 S20 28-35 0Z"/>
-          <path d="M-18 0 C-10-14 10-14 18 0 S10 14-18 0Z"/>
-          <line x1="-50" y1="0" x2="50" y2="0"/>
-          <line x1="0" y1="-50" x2="0" y2="50"/>
-          <circle cx="0" cy="0" r="4" fill="rgba(220,210,185,.8)"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="material" style="margin-top:28px">
-      <div class="material-body">
-        <span class="tag">地理探究（地誌）</span>
-        <h3>インタラクティブ・ラボ</h3>
-        <p class="lead">東・東南アジア、南・西アジア、アフリカ、ヨーロッパ、アメリカ大陸、日本の地誌を地域ごとに探究します。各地域の自然・産業・文化・課題を体験的に学べます。</p>
-        <a class="btn" href="https://arageo2.github.io/geography-advanced/regional/" style="background:#2d4a31">
-          地誌
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="material-fig" aria-hidden="true" style="background:#1e3226">
-        <svg viewBox="-60 -60 120 120" fill="none" stroke="rgba(180,210,185,.8)" stroke-width="1.3">
-          <circle r="48"/>
-          <path d="M-48 0 Q-20-30 0-10 Q20 10 48 0"/>
-          <path d="M-48 0 Q-20 30 0 10 Q20-10 48 0"/>
-          <path d="M-20-48 Q0-20 10 0 Q20 20 20 48"/>
-          <path d="M20-48 Q0-20-10 0 Q-20 20-20 48"/>
-          <circle cx="0" cy="0" r="6" fill="rgba(180,210,185,.8)"/>
-        </svg>
-      </div>
-    <div class="material" style="margin-top:28px">
-      <div class="material-body">
-        <span class="tag">テーマ別教材</span>
-        <h3>単発・補助教材</h3>
-        <p class="lead">授業のテーマに合わせた単発の補助教材です。地図・グラフ・シミュレーターなど、各授業の副教材として使えます。日本の農業地図など随時追加します。</p>
-        <a class="btn" href="https://arageo2.github.io/thematic/" style="background:#3a4e5a">
-          テーマ別教材
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="material-fig" aria-hidden="true" style="background:#1e2c35">
-        <svg viewBox="-60 -60 120 120" fill="none" stroke="rgba(160,200,220,.8)" stroke-width="1.3">
-          <rect x="-40" y="-40" width="80" height="80" rx="4"/>
-          <rect x="-28" y="-28" width="56" height="56" rx="3"/>
-          <rect x="-16" y="-16" width="32" height="32" rx="2"/>
-          <line x1="-50" y1="0" x2="50" y2="0"/>
-          <line x1="0" y1="-50" x2="0" y2="50"/>
-          <circle cx="0" cy="0" r="5" fill="rgba(160,200,220,.8)"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 個別教材 -->
-<section id="individual" style="padding-top:0;padding-bottom:70px">
-  <div class="wrap">
-    <div class="sec-head" style="margin-bottom:24px">
-      <span class="eyebrow">Individual Materials</span>
-      <h2>個別教材</h2>
-      <p>特定のテーマに特化した単発の補助教材です。</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
-
-      <a href="https://arageo2.github.io/geography-advanced/japan-agriculture1/" style="display:block;background:var(--surface);border:1px solid var(--line);border-radius:3px;overflow:hidden;box-shadow:0 8px 22px -14px rgba(29,58,40,.4);transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 14px 30px -12px rgba(29,58,40,.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 22px -14px rgba(29,58,40,.4)'">
-        <div style="height:5px;background:#b8862c"></div>
-        <div style="padding:18px 20px">
-          <span style="font-size:.72rem;letter-spacing:.18em;font-weight:700;color:var(--pine)">地図教材</span>
-          <h4 style="font-family:var(--serif);font-size:1.05rem;color:var(--forest);margin:8px 0 8px;font-weight:700">日本の農業地図</h4>
-          <p style="font-size:.86rem;color:var(--muted);line-height:1.7">日本各地の農業地帯・主要産物を地図上で確認できるインタラクティブ教材。</p>
-        </div>
-        <div style="padding:10px 20px 14px;border-top:1px solid var(--line-soft);font-size:.78rem;color:var(--pine);font-weight:700">→ 開く</div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- 教材の構成(目次) -->
-<section class="toc" id="structure">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Contents</span>
-      <h2>教材の構成</h2>
-      <p>各教材で扱う主な学習内容です。</p>
-    </div>
-
-    <p style="font-size:.8rem;font-weight:700;letter-spacing:.18em;color:var(--pine);margin-bottom:14px">— 地理総合</p>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第1編</span><span class="vt">地図やGISでとらえる現代世界</span></div>
-      <div class="toc-items"><span>球面上の世界と地図</span><span>地図とGIS</span><span>国家の結びつき</span><span>交通・通信</span><span>貿易・人の移動</span></div>
-    </div>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第2編</span><span class="vt">国際理解と国際協力</span></div>
-      <div class="toc-items"><span>地形・気候</span><span>衣・食・住</span><span>言語・宗教</span><span>多文化共生</span><span>SDGsと地球的課題</span></div>
-    </div>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第3編</span><span class="vt">持続可能な地域づくり</span></div>
-      <div class="toc-items"><span>日本の自然と防災</span><span>変動帯と防災</span><span>災害への備え</span><span>生活圏の調査</span></div>
-    </div>
-
-    <p style="font-size:.8rem;font-weight:700;letter-spacing:.18em;color:var(--pine);margin:28px 0 14px">— 地理探究・系統地理（順次公開）</p>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第1編</span><span class="vt">自然地理</span></div>
-      <div class="toc-items"><span>地形の成り立ち</span><span>気候の分布</span><span>植生・土壌</span></div>
-    </div>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第2編</span><span class="vt">資源と産業</span></div>
-      <div class="toc-items"><span>エネルギー資源</span><span>水産業・林業</span><span>企業的農業</span><span style="border-color:var(--pine);color:var(--pine);font-weight:700">✓ 自給的農業</span><span>工業</span><span>貿易・サービス業</span></div>
-    </div>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第3編</span><span class="vt">人口・都市・生活文化</span></div>
-      <div class="toc-items"><span>人口の推移と分布</span><span>都市の発展と課題</span><span>生活文化と民族・宗教</span></div>
-    </div>
-
-    <p style="font-size:.8rem;font-weight:700;letter-spacing:.18em;color:var(--pine);margin:28px 0 14px">— 地理探究・地誌（順次公開）</p>
-    <div class="toc-row">
-      <div class="toc-vol"><span class="v">第1編</span><span class="vt">現代世界の地誌</span></div>
-      <div class="toc-items"><span>東・東南アジア</span><span>南・西アジア</span><span>アフリカ</span><span>ヨーロッパ</span><span>アメリカ大陸</span><span>日本の地誌</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 進め方 -->
-<section id="flow">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">How to use</span>
-      <h2>各ページの進め方</h2>
-      <p>各ページは次の流れで学習を進められます。</p>
-    </div>
-
-    <div class="steps">
-      <div class="step"><div class="no">1</div><h4>問い</h4><p>テーマに対する自分の予想を持つ。</p></div>
-      <div class="step"><div class="no">2</div><h4>基礎・模式図</h4><p>用語と仕組みを図で確認する。</p></div>
-      <div class="step"><div class="no">3</div><h4>体験ワーク</h4><p>シミュレーターなどを操作する。</p></div>
-      <div class="step"><div class="no">4</div><h4>確認クイズ</h4><p>理解度を確かめる。</p></div>
-      <div class="step"><div class="no">5</div><h4>用語チェック</h4><p>ミニ辞典で最終確認をする。</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- フッター -->
-<footer>
-  <div class="wrap foot-inner">
-    <span class="name">あらじお蔵</span>
-    <nav class="foot-links">
-      <a href="#materials">教材</a>
-      <a href="https://arageo2.github.io/geography-basic/">地理総合</a>
-      <a href="https://arageo2.github.io/geography-advanced/">系統地理</a>
-      <a href="https://arageo2.github.io/geography-advanced/regional/">地誌</a>
-    </nav>
-  </div>
-  <div class="wrap copy">© <span id="yr"></span> あらじお蔵</div>
-</footer>
-
-<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+  function openPolicy(anchor){
+    const ov = document.getElementById('policyOverlay');
+    ov.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const el = document.getElementById(anchor);
+    if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+  function closePolicy(){
+    document.getElementById('policyOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // 背景クリック・Escで閉じる
+  document.getElementById('policyOverlay').addEventListener('click', e=>{
+    if(e.target.id === 'policyOverlay') closePolicy();
+  });
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closePolicy(); });
+</script>
 </body>
 </html>
