@@ -1,1 +1,409 @@
+$ cat /home/user/arageo2.github.io/geography-advanced/index.html
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地理探究（系統地理）インタラクティブ・ラボ | あらじお蔵</title>
+<meta name="description" content="高校地理探究・系統地理のインタラクティブ教材。自然地理・資源と産業・人口と都市の各単元を体験的に学べます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#26221c;
+  --ink-soft:#5a5347;
+  --paper:#f2efe4;
+  --card:#fbf9f1;
+  --line:#d8d2bf;
+  --gold:#b8862c;
+  --forest:#3e6b45;
+  --ember:#c1492a;
+  --paddy:#4f7d3a;
+  --ocean:#3b6e8f;
+  --purple:#6b5fa0;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(38,34,28,.08);
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;
+}
+h1,h2,h3,.serif{font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible{outline:3px solid #6fa8c9;outline-offset:2px}
+
+/* ===== ナビ ===== */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(38,34,28,.96);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;
+}
+.topnav .home{
+  color:#cdbf95;font-size:.8rem;letter-spacing:.1em;font-weight:700;
+  padding:.5rem .85rem;border-radius:999px;border:1px solid rgba(205,191,149,.35);
+  display:flex;align-items:center;gap:.4em;min-height:44px;
+}
+.topnav .home:hover{background:rgba(205,191,149,.15)}
+.topnav .label{color:rgba(242,239,228,.7);font-size:.78rem;letter-spacing:.12em;margin-left:.3rem}
+
+/* ===== ヒーロー ===== */
+.hero{
+  background:linear-gradient(160deg,#2c2820 0%,#3a3326 60%,#2d3b2a 100%);
+  color:#f2efe4;padding:3.6rem 0 4rem;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 75% 40%, rgba(63,107,69,.25) 0, transparent 52%),
+    radial-gradient(circle at 20% 80%, rgba(184,134,44,.15) 0, transparent 40%);
+}
+.hero-inner{position:relative;max-width:960px;margin:0 auto;padding:0 1.2rem}
+.eyebrow{font-size:.78rem;letter-spacing:.28em;color:#cdbf95;font-weight:700}
+.hero h1{font-size:clamp(2rem,5.5vw,3.2rem);font-weight:800;margin:.55rem 0 .35rem;letter-spacing:.04em}
+.hero .sub{color:#d8d2bf;font-size:1rem;max-width:40em;line-height:1.85}
+.hero .meta-row{display:flex;gap:2rem;margin-top:1.6rem;flex-wrap:wrap}
+.hero .mitem{display:flex;flex-direction:column;gap:.1rem}
+.hero .mitem .mv{font-family:"Shippori Mincho B1",serif;font-size:1.6rem;font-weight:800;color:#f2efe4}
+.hero .mitem .ml{font-size:.78rem;color:#a09580;letter-spacing:.1em}
+.hero .notice{
+  margin-top:1.6rem;background:rgba(255,255,255,.07);border:1px solid rgba(205,191,149,.3);
+  border-radius:10px;padding:.9rem 1.1rem;font-size:.85rem;color:#cdbf95;max-width:52em;
+}
+.hero .notice strong{color:#f2efe4}
+
+/* ===== 章ナビ ===== */
+.chapter-nav{
+  background:var(--card);border-bottom:1px solid var(--line);
+  position:sticky;top:52px;z-index:40;
+}
+.chapter-nav-inner{
+  max-width:960px;margin:0 auto;padding:0 1.2rem;
+  display:flex;gap:.25rem;overflow-x:auto;padding-top:.5rem;padding-bottom:.5rem;
+}
+.cnav-btn{
+  border:none;background:transparent;font-family:inherit;font-size:.82rem;font-weight:700;
+  color:var(--ink-soft);padding:.55rem 1rem;border-radius:999px;cursor:pointer;
+  white-space:nowrap;min-height:40px;border-bottom:3px solid transparent;
+}
+.cnav-btn:hover{background:rgba(38,34,28,.06)}
+.cnav-btn.active{color:var(--ink);border-bottom-color:var(--gold)}
+
+/* ===== メイン ===== */
+.main{max-width:960px;margin:0 auto;padding:2.4rem 1.2rem 4rem}
+
+/* ===== 章ヘッダー ===== */
+.chapter{margin-bottom:3rem}
+.chapter-head{
+  display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;
+  padding-bottom:.9rem;border-bottom:2px solid var(--line);
+}
+.chapter-num{
+  font-family:"Shippori Mincho B1",serif;font-size:.78rem;font-weight:800;
+  letter-spacing:.2em;color:#fff;background:var(--accent,var(--gold));
+  border-radius:999px;padding:.28em 1em;white-space:nowrap;
+}
+.chapter-head h2{font-size:1.25rem;font-weight:800;letter-spacing:.03em}
+
+/* ===== 単元グリッド ===== */
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+
+/* ===== 単元カード ===== */
+.unit-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .18s, box-shadow .18s;
+}
+.unit-card:not(.disabled):hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(38,34,28,.12)}
+.unit-card.disabled{opacity:.62}
+.unit-card .card-accent{height:5px;background:var(--accent,var(--gold))}
+.unit-card .card-body{padding:1.1rem 1.2rem;flex:1;display:flex;flex-direction:column;gap:.5rem}
+.unit-card .unit-num{font-size:.72rem;font-weight:700;letter-spacing:.18em;color:var(--accent,var(--gold))}
+.unit-card h3{font-size:1.05rem;font-weight:800;letter-spacing:.02em;line-height:1.4}
+.unit-card .unit-sub{font-size:.82rem;color:var(--ink-soft);line-height:1.6;flex:1}
+.unit-card .card-footer{
+  padding:.75rem 1.2rem;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(38,34,28,.02);font-size:.78rem;
+}
+.status-open{
+  display:inline-flex;align-items:center;gap:.4em;
+  color:#fff;background:var(--accent,var(--gold));
+  border-radius:999px;padding:.3em .9em;font-weight:700;font-size:.78rem;
+}
+.status-open::before{content:"▶";font-size:.65em}
+.status-soon{
+  display:inline-flex;align-items:center;gap:.4em;
+  color:var(--ink-soft);background:rgba(38,34,28,.07);
+  border-radius:999px;padding:.3em .9em;font-weight:700;font-size:.78rem;
+}
+.unit-ref{color:var(--ink-soft);font-size:.74rem}
+
+/* ===== フッター ===== */
+footer{
+  background:#26221c;color:#a09580;
+  text-align:center;font-size:.82rem;padding:2rem 1rem 2.6rem;
+}
+footer a{color:#cdbf95;font-weight:700}
+footer a:hover{text-decoration:underline}
+footer .foot-top{display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;flex-wrap:wrap}
+footer .copy{margin-top:.8rem;color:#6b6155;font-size:.76rem}
+
+@media(max-width:600px){
+  .unit-grid{grid-template-columns:1fr}
+  .hero .meta-row{gap:1.2rem}
+  .main{padding:1.8rem .9rem 3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- トップナビ -->
+<nav class="topnav" aria-label="サイトナビ">
+  <a class="home" href="/">← あらじお蔵</a>
+  <span class="label">地理探究 — 系統地理</span>
+</nav>
+
+<!-- ヒーロー -->
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">GEOGRAPHY ADVANCED — INTERACTIVE LAB</p>
+    <h1>地理探究（系統地理）インタラクティブ・ラボ</h1>
+    <p class="sub">自然地理・資源と産業・人口と都市の各単元を「問い → 体験ワーク → クイズ」の流れで探究します。地図・自然環境・農林水産業・工業・人口・都市・生活文化を幅広くカバーします。</p>
+    <div class="meta-row">
+      <div class="mitem"><span class="mv">公開中</span><span class="ml">UNITS AVAILABLE</span></div>
+      <div class="mitem"><span class="mv">順次追加</span><span class="ml">RELEASING</span></div>
+    </div>
+    <p class="notice">
+      📖 <strong>第一学習社『地理探究』</strong> に準拠。教科書・資料集のページ番号は各単元に表示しています。
+    </p>
+  </div>
+</header>
+
+<!-- 章ナビ -->
+<nav class="chapter-nav" aria-label="章の切り替え">
+  <div class="chapter-nav-inner">
+    <button class="cnav-btn active" onclick="scrollToChapter('ch1')">第1編 自然地理</button>
+    <button class="cnav-btn" onclick="scrollToChapter('ch2')">第2編 資源と産業</button>
+    <button class="cnav-btn" onclick="scrollToChapter('ch3')">第3編 人口・都市・生活文化</button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- ===== 第1編 自然地理 ===== -->
+  <div class="chapter" id="ch1" style="--accent:#3b6e8f">
+    <div class="chapter-head">
+      <span class="chapter-num">第1編</span>
+      <h2>自然地理</h2>
+    </div>
+    <div class="unit-grid">
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">01 ｜ LANDFORMS</p>
+          <h3>地形の成り立ち</h3>
+          <p class="unit-sub">プレートテクトニクス・大地形・小地形の形成メカニズムを体験的に学ぶ。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.8–25</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">02 ｜ CLIMATE</p>
+          <h3>気候の成り立ちと分布</h3>
+          <p class="unit-sub">大気大循環・気候区分・ケッペンの気候区を地図上で確認する。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.26–45</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">03 ｜ BIOMES</p>
+          <h3>植生・土壌と環境</h3>
+          <p class="unit-sub">バイオーム分布と気候の関係、土壌の種類と農業適性を探る。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.46–57</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第2編 資源と産業 ===== -->
+  <div class="chapter" id="ch2" style="--accent:var(--gold)">
+    <div class="chapter-head">
+      <span class="chapter-num">第2編</span>
+      <h2>資源と産業</h2>
+    </div>
+    <div class="unit-grid">
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">10 ｜ ENERGY</p>
+          <h3>エネルギー資源と鉱産資源</h3>
+          <p class="unit-sub">化石燃料・再生可能エネルギーの分布と国際的な取引の仕組みを学ぶ。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.68–85</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">11 ｜ FISHING &amp; FORESTRY</p>
+          <h3>水産業・林業</h3>
+          <p class="unit-sub">世界の漁場分布と森林資源の利用・管理の現状と課題を探る。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.86–88</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">12 ｜ COMMERCIAL AGR.</p>
+          <h3>企業的・商業的農業</h3>
+          <p class="unit-sub">プランテーション農業、混合農業、地中海式農業など商業的農業の地域比較。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.89–90</span>
+        </div>
+      </div>
+
+      <!-- 公開済み：単元13 -->
+      <a class="unit-card" href="13/">
+        <div class="card-accent" style="background:var(--ember)"></div>
+        <div class="card-body">
+          <p class="unit-num" style="color:var(--ember)">13 ｜ SUBSISTENCE AGR.</p>
+          <h3>自給的農業 — 伝統と変容</h3>
+          <p class="unit-sub">遊牧・焼畑・集約的稲作の仕組みと現代的な変容を、シミュレーターや活動で体験的に学ぶ。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-open" style="background:var(--ember)">公開中</span>
+          <span class="unit-ref">教 p.89–90 ／ 資 p.88–90</span>
+        </div>
+      </a>
+
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">14 ｜ INDUSTRY</p>
+          <h3>工業の立地と変化</h3>
+          <p class="unit-sub">工業立地論から多国籍企業・グローバルサプライチェーンまでを学ぶ。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.96–115</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">15 ｜ TRADE &amp; SERVICE</p>
+          <h3>貿易・サービス業</h3>
+          <p class="unit-sub">国際貿易の構造、観光・金融・情報産業などサービス業の地域差を探る。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.116–131</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第3編 人口・都市・生活文化 ===== -->
+  <div class="chapter" id="ch3" style="--accent:var(--purple)">
+    <div class="chapter-head">
+      <span class="chapter-num">第3編</span>
+      <h2>人口・都市・生活文化</h2>
+    </div>
+    <div class="unit-grid">
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">16 ｜ POPULATION</p>
+          <h3>人口の推移と分布</h3>
+          <p class="unit-sub">人口転換モデル・人口ピラミッドで世界の人口動態を比較する。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.134–149</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">17 ｜ CITIES</p>
+          <h3>都市の発展と課題</h3>
+          <p class="unit-sub">都市の内部構造・都市問題・インナーシティと郊外化を探る。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.150–167</span>
+        </div>
+      </div>
+      <div class="unit-card disabled">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <p class="unit-num">18 ｜ CULTURE</p>
+          <h3>生活文化と民族・宗教</h3>
+          <p class="unit-sub">言語・宗教・民族の分布と、文化的背景が生活に与える影響を学ぶ。</p>
+        </div>
+        <div class="card-footer">
+          <span class="status-soon">準備中</span>
+          <span class="unit-ref">教 p.168–185</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <a href="/">あらじお蔵 トップ</a>
+    <a href="/geography-basic/">地理総合</a>
+    <a href="/geography-advanced/regional/">地理探究・地誌</a>
+  </div>
+  <div>地理探究（系統地理）インタラクティブ・ラボ ｜ あらじお蔵</div>
+  <div class="copy">© <span id="yr"></span> あらじお蔵</div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+function scrollToChapter(id){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.cnav-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+/* スクロールで章ナビをハイライト */
+const chapters = ['ch1','ch2','ch3'];
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx = chapters.indexOf(e.target.id);
+      document.querySelectorAll('.cnav-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+    }
+  });
+},{rootMargin:'-30% 0px -60% 0px'});
+chapters.forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el)});
+</script>
+</body>
+</html>
