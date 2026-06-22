@@ -1,1 +1,225 @@
 
+$ cat /home/user/arageo2.github.io/thematic/index.html
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テーマ別教材 | あらじお蔵</title>
+<meta name="description" content="高校地理のテーマ別補助教材。農業・食料、地図、グラフなど授業テーマに合わせた単発教材を公開しています。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#26221c;
+  --ink-soft:#5a5347;
+  --paper:#f2efe4;
+  --card:#fbf9f1;
+  --line:#d8d2bf;
+  --ocean:#3b6e8f;
+  --teal:#2e6b7a;
+  --gold:#b8862c;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(38,34,28,.08);
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;
+}
+h1,h2,h3,.serif{font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible{outline:3px solid #6fa8c9;outline-offset:2px}
+
+/* ===== ナビ ===== */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(30,44,53,.97);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;
+}
+.topnav .home{
+  color:#9fc8dc;font-size:.8rem;letter-spacing:.1em;font-weight:700;
+  padding:.5rem .85rem;border-radius:999px;border:1px solid rgba(159,200,220,.35);
+  display:flex;align-items:center;gap:.4em;min-height:44px;
+}
+.topnav .home:hover{background:rgba(159,200,220,.12)}
+.topnav .label{color:rgba(242,239,228,.65);font-size:.78rem;letter-spacing:.12em;margin-left:.3rem}
+
+/* ===== ヒーロー ===== */
+.hero{
+  background:linear-gradient(160deg,#1e2c35 0%,#243545 60%,#1e2c2e 100%);
+  color:#f2efe4;padding:3.6rem 0 4rem;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 72% 38%, rgba(46,107,122,.3) 0, transparent 52%),
+    radial-gradient(circle at 18% 75%, rgba(59,110,143,.18) 0, transparent 40%);
+}
+.hero-inner{position:relative;max-width:960px;margin:0 auto;padding:0 1.2rem}
+.eyebrow{font-size:.78rem;letter-spacing:.28em;color:#9fc8dc;font-weight:700}
+.hero h1{font-size:clamp(2rem,5.5vw,3.2rem);font-weight:800;margin:.55rem 0 .35rem;letter-spacing:.04em}
+.hero .sub{color:#c8d8e0;font-size:1rem;max-width:40em;line-height:1.85}
+.hero .notice{
+  margin-top:1.6rem;background:rgba(255,255,255,.07);border:1px solid rgba(159,200,220,.3);
+  border-radius:10px;padding:.9rem 1.1rem;font-size:.85rem;color:#9fc8dc;max-width:52em;
+}
+.hero .notice strong{color:#f2efe4}
+
+/* ===== セクションナビ ===== */
+.section-nav{
+  background:var(--card);border-bottom:1px solid var(--line);
+  position:sticky;top:52px;z-index:40;
+}
+.section-nav-inner{
+  max-width:960px;margin:0 auto;padding:0 1.2rem;
+  display:flex;gap:.25rem;overflow-x:auto;padding-top:.5rem;padding-bottom:.5rem;
+}
+.snav-btn{
+  border:none;background:transparent;font-family:inherit;font-size:.82rem;font-weight:700;
+  color:var(--ink-soft);padding:.55rem 1rem;border-radius:999px;cursor:pointer;
+  white-space:nowrap;min-height:40px;border-bottom:3px solid transparent;
+}
+.snav-btn:hover{background:rgba(38,34,28,.06)}
+.snav-btn.active{color:var(--ink);border-bottom-color:var(--ocean)}
+
+/* ===== メイン ===== */
+.main{max-width:960px;margin:0 auto;padding:2.4rem 1.2rem 4rem}
+
+/* ===== セクションヘッダー ===== */
+.tsec{margin-bottom:3rem}
+.tsec-head{
+  display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;
+  padding-bottom:.9rem;border-bottom:2px solid var(--line);
+}
+.tsec-label{
+  font-family:"Shippori Mincho B1",serif;font-size:.78rem;font-weight:800;
+  letter-spacing:.2em;color:#fff;background:var(--ocean);
+  border-radius:999px;padding:.28em 1em;white-space:nowrap;
+}
+.tsec-head h2{font-size:1.25rem;font-weight:800;letter-spacing:.03em}
+
+/* ===== 教材グリッド ===== */
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+
+/* ===== 教材カード ===== */
+.mat-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .18s, box-shadow .18s;
+}
+.mat-card:not(.disabled):hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(38,34,28,.12)}
+.mat-card.disabled{opacity:.62}
+.mat-card .card-accent{height:5px;background:var(--ocean)}
+.mat-card .card-body{padding:1.1rem 1.2rem;flex:1;display:flex;flex-direction:column;gap:.5rem}
+.mat-card .mat-cat{font-size:.72rem;font-weight:700;letter-spacing:.18em;color:var(--ocean)}
+.mat-card h3{font-size:1.05rem;font-weight:800;letter-spacing:.02em;line-height:1.4}
+.mat-card .mat-sub{font-size:.82rem;color:var(--ink-soft);line-height:1.6;flex:1}
+.mat-card .card-footer{
+  padding:.75rem 1.2rem;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(38,34,28,.02);font-size:.78rem;
+}
+.badge-open{
+  display:inline-flex;align-items:center;gap:.4em;
+  color:#fff;background:var(--ocean);
+  border-radius:999px;padding:.3em .9em;font-weight:700;font-size:.78rem;
+}
+.badge-open::before{content:"▶";font-size:.65em}
+.badge-soon{
+  display:inline-flex;align-items:center;gap:.4em;
+  color:var(--ink-soft);background:rgba(38,34,28,.07);
+  border-radius:999px;padding:.3em .9em;font-weight:700;font-size:.78rem;
+}
+
+/* ===== フッター ===== */
+footer{
+  background:#1e2c35;color:#7aacbf;
+  text-align:center;font-size:.82rem;padding:2rem 1rem 2.6rem;
+}
+footer a{color:#9fc8dc;font-weight:700}
+footer a:hover{text-decoration:underline}
+footer .foot-top{display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;flex-wrap:wrap}
+footer .copy{margin-top:.8rem;color:#4a6a78;font-size:.76rem}
+
+@media(max-width:600px){
+  .mat-grid{grid-template-columns:1fr}
+  .main{padding:1.8rem .9rem 3rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="サイトナビ">
+  <a class="home" href="/">← あらじお蔵</a>
+  <span class="label">テーマ別教材</span>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">THEMATIC MATERIALS</p>
+    <h1>テーマ別教材</h1>
+    <p class="sub">授業のテーマに合わせた単発の補助教材です。地図・グラフ・シミュレーターなど、各授業の副教材として随時追加します。</p>
+    <p class="notice">
+      💡 <strong>使い方：</strong>各授業のテーマに合わせて補助的に使える教材です。教科書の該当ページと組み合わせてご活用ください。
+    </p>
+  </div>
+</header>
+
+<nav class="section-nav" aria-label="セクション切り替え">
+  <div class="section-nav-inner">
+    <button class="snav-btn active" onclick="scrollToSection('sec-agri')">農業・食料</button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="tsec" id="sec-agri">
+    <div class="tsec-head">
+      <span class="tsec-label">農業・食料</span>
+      <h2>農業・食料</h2>
+    </div>
+    <div class="mat-grid">
+
+      <a class="mat-card" href="/geography-advanced/japan-agriculture1/">
+        <div class="card-accent" style="background:var(--gold)"></div>
+        <div class="card-body">
+          <p class="mat-cat" style="color:var(--gold)">地図教材</p>
+          <h3>日本の農業地図</h3>
+          <p class="mat-sub">日本各地の農業地帯・主要産物を地図上でインタラクティブに確認できる教材。農業地域の分布と特色を視覚的に把握できます。</p>
+        </div>
+        <div class="card-footer">
+          <span class="badge-open" style="background:var(--gold)">公開中</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <a href="/">あらじお蔵 トップ</a>
+    <a href="/geography-basic/">地理総合</a>
+    <a href="/geography-advanced/">地理探究</a>
+  </div>
+  <div>テーマ別教材 ｜ あらじお蔵</div>
+  <div class="copy">© <span id="yr"></span> あらじお蔵</div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+function scrollToSection(id){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.snav-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
