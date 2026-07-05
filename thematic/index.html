@@ -1,13 +1,10 @@
-
-$ cat /home/user/arageo2.github.io/thematic/index.html
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>テーマ別教材 | あらじお蔵</title>
-<meta name="description" content="高校地理のテーマ別補助教材。農業・食料、地図、グラフなど授業テーマに合わせた単発教材を公開しています。">
+<meta name="description" content="高校地理のテーマ別補助教材。農業・食料、工業・産業、人口・都市など、授業テーマに合わせた単発教材を公開しています。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
@@ -135,6 +132,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #6fa8c9;outline-offset:2p
   color:var(--ink-soft);background:rgba(38,34,28,.07);
   border-radius:999px;padding:.3em .9em;font-weight:700;font-size:.78rem;
 }
+.new-tag{
+  display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.1em;
+  color:#fff;background:#c0552f;padding:.14em .5em;border-radius:5px;margin-left:.5em;vertical-align:middle;
+}
 
 /* ===== フッター ===== */
 footer{
@@ -163,7 +164,7 @@ footer .copy{margin-top:.8rem;color:#4a6a78;font-size:.76rem}
   <div class="hero-inner">
     <p class="eyebrow">THEMATIC MATERIALS</p>
     <h1>テーマ別教材</h1>
-    <p class="sub">授業のテーマに合わせた単発の補助教材です。地図・グラフ・シミュレーターなど、各授業の副教材として随時追加します。</p>
+    <p class="sub">授業のテーマに合わせた単発の補助教材です。地図・シミュレーター・3D教材など、各授業の副教材として随時追加します。</p>
     <p class="notice">
       💡 <strong>使い方：</strong>各授業のテーマに合わせて補助的に使える教材です。教科書の該当ページと組み合わせてご活用ください。
     </p>
@@ -173,14 +174,17 @@ footer .copy{margin-top:.8rem;color:#4a6a78;font-size:.76rem}
 <nav class="section-nav" aria-label="セクション切り替え">
   <div class="section-nav-inner">
     <button class="snav-btn active" onclick="scrollToSection('sec-agri')">農業・食料</button>
+    <button class="snav-btn" onclick="scrollToSection('sec-industry')">工業・産業</button>
+    <button class="snav-btn" onclick="scrollToSection('sec-urban')">人口・都市</button>
   </div>
 </nav>
 
 <main class="main">
 
+  <!-- ===== 農業・食料 ===== -->
   <div class="tsec" id="sec-agri">
     <div class="tsec-head">
-      <span class="tsec-label">農業・食料</span>
+      <span class="tsec-label" style="background:var(--gold)">農業・食料</span>
       <h2>農業・食料</h2>
     </div>
     <div class="mat-grid">
@@ -194,6 +198,52 @@ footer .copy{margin-top:.8rem;color:#4a6a78;font-size:.76rem}
         </div>
         <div class="card-footer">
           <span class="badge-open" style="background:var(--gold)">公開中</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===== 工業・産業 ===== -->
+  <div class="tsec" id="sec-industry">
+    <div class="tsec-head">
+      <span class="tsec-label" style="background:var(--teal)">工業・産業</span>
+      <h2>工業・産業</h2>
+    </div>
+    <div class="mat-grid">
+
+      <a class="mat-card" href="/thematic/industrial01/">
+        <div class="card-accent" style="background:var(--teal)"></div>
+        <div class="card-body">
+          <p class="mat-cat" style="color:var(--teal)">3D教材<span class="new-tag">NEW</span></p>
+          <h3>工業立地論を3Dで学ぶ</h3>
+          <p class="mat-sub">工業立地論を3Dアニメーションで視覚的に学べる教材。工場の立地がどう決まるのか、その考え方を立体的にとらえられます。</p>
+        </div>
+        <div class="card-footer">
+          <span class="badge-open" style="background:var(--teal)">公開中</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===== 人口・都市 ===== -->
+  <div class="tsec" id="sec-urban">
+    <div class="tsec-head">
+      <span class="tsec-label" style="background:var(--ocean)">人口・都市</span>
+      <h2>人口・都市</h2>
+    </div>
+    <div class="mat-grid">
+
+      <a class="mat-card" href="/thematic/urban-problems/">
+        <div class="card-accent" style="background:var(--ocean)"></div>
+        <div class="card-body">
+          <p class="mat-cat" style="color:var(--ocean)">シミュレーター<span class="new-tag">NEW</span></p>
+          <h3>都市問題シミュレーター</h3>
+          <p class="mat-sub">発展途上国のプッシュ型と先進国のプル型、2つの人口移動モデルを左右で比較。スラムの形成過程や再開発（ジェントリフィケーション）のちがいを可視化します。</p>
+        </div>
+        <div class="card-footer">
+          <span class="badge-open" style="background:var(--ocean)">公開中</span>
         </div>
       </a>
 
