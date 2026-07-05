@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBAN PROBLEMS 2D ― 都市問題シミュレーター</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#10151C; --panel:#161D26; --line:#2B3A49; --txt:#E8EEF4; --dim:#8FA0B0;
+  --dvp:#FF7A45; --dev:#57A7E8; --gold:#F2C14E; --teal:#5FD3BE; --red:#E0574B; --ok:#7BC47F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);
+  color:var(--txt);font-family:'Noto Sans JP',sans-serif}
+.dot{font-family:'DotGothic16',monospace}
+
+#app{display:flex;flex-direction:column;height:100%}
+
+/* ── ヘッダ ── */
+header{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:1px solid var(--line);flex:0 0 auto}
+header h1{font-family:'DotGothic16';font-size:clamp(14px,1.8vw,19px);letter-spacing:.1em}
+header h1 span{color:var(--gold)}
+header .sub{font-size:10px;color:var(--dim);letter-spacing:.18em}
+#tabs{display:flex;gap:6px}
+.tab{font-family:'DotGothic16';font-size:clamp(11px,1.3vw,13.5px);letter-spacing:.06em;
+  background:var(--panel);border:1px solid var(--line);color:var(--dim);
+  padding:9px 16px;cursor:pointer;transition:.15s}
+.tab:hover{color:var(--txt)}
+.tab.on{color:#10151C;font-weight:700}
+.tab.on.t-dvp{background:var(--dvp);border-color:var(--dvp)}
+.tab.on.t-dev{background:var(--dev);border-color:var(--dev)}
+.tab.on.t-cmp{background:var(--gold);border-color:var(--gold)}
+.tab:focus-visible{outline:2px solid var(--gold)}
+
+/* ── メイン ── */
+main{flex:1 1 auto;display:flex;gap:12px;padding:12px 16px;min-height:0}
+#maps{flex:1 1 auto;display:flex;gap:12px;min-width:0}
+.mapbox{flex:1 1 0;display:flex;flex-direction:column;min-width:0}
+.mapbox .cap{font-family:'DotGothic16';font-size:12px;letter-spacing:.12em;
+  padding:0 2px 6px;display:flex;justify-content:space-between;align-items:baseline}
+.mapbox .cap .k{color:var(--dim);font-size:10px;letter-spacing:.08em}
+#box-dvp .cap b{color:var(--dvp)} #box-dev .cap b{color:var(--dev)}
+.cwrap{flex:1;position:relative;background:#0B0F14;border:1px solid var(--line);min-height:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ── サイドパネル ── */
+aside{flex:0 0 300px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.card{background:var(--panel);border:1px solid var(--line);padding:12px 14px}
+.card .tag{font-family:'DotGothic16';font-size:11px;letter-spacing:.14em;color:var(--dim)}
+.card .ttl{font-size:14px;font-weight:900;line-height:1.45;margin:5px 0 8px}
+.card .body{font-size:12px;line-height:1.85;color:#C9D4DE}
+.card .body b{color:var(--gold)}
+.card.c-dvp{border-top:3px solid var(--dvp)} .card.c-dvp .tag{color:var(--dvp)}
+.card.c-dev{border-top:3px solid var(--dev)} .card.c-dev .tag{color:var(--dev)}
+.meter{margin-top:9px}
+.meter .lab{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:3px;letter-spacing:.06em}
+.meter .lab .val{font-family:'DotGothic16';color:var(--txt)}
+.meter .bar{height:7px;background:#0E141B;border:1px solid var(--line)}
+.meter .fill{height:100%;width:0%;transition:width 1s cubic-bezier(.4,0,.2,1)}
+/* 比較表 */
+#cmp table{width:100%;border-collapse:collapse;font-size:11px;line-height:1.55}
+#cmp th,#cmp td{border:1px solid var(--line);padding:6px 7px;text-align:left;vertical-align:top}
+#cmp th{font-family:'DotGothic16';font-weight:400;letter-spacing:.06em;background:#0E141B;white-space:nowrap}
+#cmp thead th:nth-child(2){color:var(--dvp)} #cmp thead th:nth-child(3){color:var(--dev)}
+#legendCard .li{display:flex;gap:8px;align-items:center;font-size:11px;color:#C9D4DE;padding:2.5px 0}
+#legendCard .sw{width:14px;height:14px;flex:0 0 auto;border:1px solid rgba(255,255,255,.18)}
+#legendCard .arw{width:14px;height:3px;flex:0 0 auto;border-radius:2px}
+.note{font-size:9.5px;color:#5E6E7C;line-height:1.6}
+
+/* ── フッタ(フェーズ) ── */
+footer{flex:0 0 auto;display:flex;justify-content:center;gap:8px;
+  padding:10px 16px 14px;border-top:1px solid var(--line)}
+.ph{width:clamp(130px,16vw,185px);background:var(--panel);border:1px solid var(--line);
+  padding:8px 11px;cursor:pointer;text-align:left;color:var(--txt);font-family:inherit;transition:.15s}
+.ph:hover{border-color:var(--dim)}
+.ph.on{border-color:var(--gold);background:rgba(242,193,78,.08)}
+.ph .no{font-family:'DotGothic16';font-size:10px;color:var(--dim);letter-spacing:.16em}
+.ph.on .no{color:var(--gold)}
+.ph .nm{font-size:12.5px;font-weight:900;margin-top:2px}
+.ph:focus-visible,#autoBtn:focus-visible{outline:2px solid var(--gold)}
+#autoBtn{font-family:'DotGothic16';font-size:12.5px;letter-spacing:.1em;background:var(--gold);
+  color:#10151C;border:none;padding:0 18px;cursor:pointer;font-weight:700}
+#autoBtn.playing{background:var(--red);color:#fff}
+
+@media(max-width:900px){
+  aside{flex:0 0 220px}
+  .ph{width:auto;flex:1}
+}
+@media(max-width:700px){
+  main{flex-direction:column;overflow-y:auto}
+  #maps{min-height:52vh}
+  aside{flex:0 0 auto;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div>
+    <h1>URBAN <span>PROBLEMS</span> 2D</h1>
+    <div class="sub">都市問題シミュレーター ― プッシュ型 と プル型</div>
+  </div>
+  <div id="tabs">
+    <button class="tab t-dvp" data-m="dvp">発展途上国モデル</button>
+    <button class="tab t-dev" data-m="dev">先進国モデル</button>
+    <button class="tab t-cmp on" data-m="cmp">左右で比較</button>
+  </div>
+</header>
+
+<main>
+  <div id="maps">
+    <div class="mapbox" id="box-dvp">
+      <div class="cap"><b>■ 発展途上国モデル</b><span class="k">プッシュ型の人口移動</span></div>
+      <div class="cwrap"><canvas id="c-dvp"></canvas></div>
+    </div>
+    <div class="mapbox" id="box-dev">
+      <div class="cap"><b>■ 先進国モデル</b><span class="k">プル型の人口移動</span></div>
+      <div class="cwrap"><canvas id="c-dev"></canvas></div>
+    </div>
+  </div>
+
+  <aside id="side">
+    <div class="card c-dvp" id="info-dvp">
+      <div class="tag">発展途上国モデル</div>
+      <div class="ttl"></div><div class="body"></div>
+      <div class="meter"><div class="lab"><span>都市への流入圧力</span><span class="val"></span></div><div class="bar"><div class="fill" style="background:var(--dvp)"></div></div></div>
+      <div class="meter"><div class="lab"><span>雇用の充足</span><span class="val"></span></div><div class="bar"><div class="fill" style="background:var(--ok)"></div></div></div>
+      <div class="meter"><div class="lab"><span>スラム人口</span><span class="val"></span></div><div class="bar"><div class="fill" style="background:var(--red)"></div></div></div>
+    </div>
+
+    <div class="card c-dev" id="info-dev">
+      <div class="tag">先進国モデル</div>
+      <div class="ttl"></div><div class="body"></div>
+      <div class="meter"><div class="lab"><span>都心の地価</span><span class="val"></span></div><div class="bar"><div class="fill" style="background:var(--gold)"></div></div></div>
+      <div class="meter"><div class="lab"><span>都心の居住人口</span><span class="val"></span></div><div class="bar"><div class="fill" style="background:var(--dev)"></div></div></div>
+      <div class="meter"><div class="lab"><span>郊外の人口</span><span class="val"></span></div><div class="bar"><div class="fill" style="background:var(--ok)"></div></div></div>
+    </div>
+
+    <div class="card" id="cmp" style="display:none">
+      <div class="tag dot">POINT ― 2つのモデルの比較</div>
+      <table style="margin-top:8px">
+        <thead><tr><th></th><th>途上国</th><th>先進国</th></tr></thead>
+        <tbody>
+          <tr><th>移動の型</th><td><b style="color:var(--dvp)">プッシュ型</b><br>農村が人を押し出す</td><td><b style="color:var(--dev)">プル型</b><br>都市が人を引き寄せる</td></tr>
+          <tr><th>主な原因</th><td>農村の人口増加と余剰労働力</td><td>都市の工業化による労働力需要</td></tr>
+          <tr><th>スラムの位置</th><td>都市の<b>周縁部</b>(河川・線路沿い)</td><td><b>都心周辺</b>(インナーシティ)</td></tr>
+          <tr><th>その後</th><td>インフラ整備・住環境の改善が課題</td><td>再開発 → 富裕層の回帰(ジェントリフィケーション)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" id="legendCard">
+      <div class="tag dot">MAP LEGEND ― 凡例</div>
+      <div style="margin-top:7px" id="legendItems"></div>
+    </div>
+
+    <div class="note">※メーター・マップの変化は概念理解のためのモデル表現です(実測値ではありません)。教科書「居住・都市問題」p.176〜179 対応。<br>操作:下のPHASEボタン / キー1〜4 / ←→</div>
+  </aside>
+</main>
+
+<footer>
+  <div style="display:flex;gap:8px" id="timeline"></div>
+  <button id="autoBtn">▶ AUTO</button>
+</footer>
+</div>
+
+<script>
+/* ============================================================
+   URBAN PROBLEMS 2D ― タイルマップ式デュアル都市モデル
+   ============================================================ */
+const $=s=>document.querySelector(s);
+const ERAS=[
+  {no:'PHASE 1',nm:'移動の始まり'},
+  {no:'PHASE 2',nm:'都市への集中'},
+  {no:'PHASE 3',nm:'都市問題の噴出'},
+  {no:'PHASE 4',nm:'その後の変化'}
+];
+const TXT={
+ dvp:[
+  {t:'農村の余剰労働力 ―〈プッシュ型〉の胎動',
+   d:'人口増加などにより、農村に仕事のない<b>余剰労働力</b>が生まれる。農村の貧しさが人を押し出す ― <b>プッシュ型</b>の人口移動が始まる。',m:[35,70,5]},
+  {t:'首位都市(プライメートシティ)への一極集中',
+   d:'人々は雇用機会と便利な生活を求めて最大都市へ殺到。人口と機能が突出する<b>首位都市(プライメートシティ)</b>が肥大化する。',m:[95,45,20]},
+  {t:'スラムの形成 ― 雇用が追いつかない',
+   d:'雇用の増加が流入に追いつかず、露天商などの<b>インフォーマルセクター</b>で生計を立てる人々が急増。<b>河川や線路沿い、郊外の空き地</b>を占拠してバラックが建ち、<b>スラム</b>が拡大する。',m:[90,30,60]},
+  {t:'インフラ不足と改善への取り組み',
+   d:'電気・上下水道・ごみ処理などの<b>インフラ</b>が追いつかず、交通渋滞や大気汚染も深刻に。住環境の改善やインフラ整備が課題となる(青いタイル=改善地区)。',m:[85,35,65]}
+ ],
+ dev:[
+  {t:'都市化 ―〈プル型〉の人口移動',
+   d:'工業化した都市が労働力を必要とし、農村から人を<b>引き寄せる(プル型)</b>。工場のまわり、都心部に労働者の住宅が密集していく。',m:[30,55,10]},
+  {t:'過密と地価の高騰',
+   d:'人口と中枢管理機能の集中で<b>都心の地価が高騰</b>。住宅難・混雑・住環境の悪化が進み、人々は都心に住みづらくなる。',m:[90,90,20]},
+  {t:'郊外化とインナーシティ問題',
+   d:'中・高所得層は<b>郊外の住宅地</b>へ転出(郊外化)。古い市街地=<b>インナーシティ</b>には低所得層が滞留し、老朽化・スラム化・治安悪化が進む(灰色=荒廃)。',m:[55,35,85]},
+  {t:'再開発と富裕層の回帰 ― ジェントリフィケーション',
+   d:'荒廃した都心を<b>ウォーターフロント開発</b>などで再開発。高所得層が都心に回帰する<b>ジェントリフィケーション</b>が進む一方、家賃上昇による従来住民の<b>立ち退き</b>が問題に。',m:[85,65,80]}
+ ]
+};
+
+/* ---------- パレット ---------- */
+const PAL={
+  dvp:{rural:['#7E7048','#8A7A52'],sub:'#6E6248',inner:'#5C554A',cbd:'#4A4E55',road:'#33383F'},
+  dev:{rural:['#4E6B45','#587951'],sub:'#4E6B45',inner:'#524C44',cbd:'#3C4653',road:'#33383F'}
+};
+const BC={ /* 建物色 */
+  cbd1:'#7E848E',cbd2:'#99A3B0',cbd3:'#AEB9C6',glass:'#9FC4D8',
+  worker:'#A05A48',dense:'#B06552',decay:'#6B5648',rubble:'#3C3833',
+  gentri:'#5FD3BE',park:'#6FAF6B',
+  house:'#EFE6D2',roofL:'#B5533C',
+  fact:'#7A4A3A',factOff:'#4A423C',
+  slum:['#8C6B4F','#7E7A6A','#9A5F45','#8A8262'],improve:'#5FA8D6',
+  hut:'#8F7B5A',
+  dvpMid:'#B98A5E'
+};
+
+/* ---------- タイルマップ生成 ---------- */
+const N=42, CTR=(N-1)/2, R={cbd:3.4,inner:8,sub:14,rur:18.6};
+
+function buildTiles(kind){
+  const tiles=[];
+  /* 途上国の川:中心から下へ緩くカーブ / 線路:左上へ直線 */
+  const railDir={x:-0.78,y:-0.63};
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const dx=x-CTR,dy=y-CTR,d=Math.hypot(dx,dy);
+    if(d>R.rur+1.2){
+      /* 先進国:北側は海(ウォーターフロント) */
+      if(kind==='dev'&&dy<-13&&d<R.rur+6)tiles.push({x,y,zone:'water'});
+      continue;
+    }
+    if(kind==='dev'&&dy<-13.5){tiles.push({x,y,zone:'water'});continue;}
+    let zone=d<R.cbd?'cbd':d<R.inner?'inner':d<R.sub?'sub':'rural';
+    const t={x,y,dx,dy,d,zone,rnd:Math.random(),rnd2:Math.random(),
+      river:false,rail:false,north:dy<-4};
+    if(kind==='dvp'){
+      /* 川:中心から下方向(南)へ、少し東に振れる帯 */
+      const rx=CTR+dy*0.28;
+      if(dy>2.5&&Math.abs(x-rx)<1.4&&d<R.rur+.5){t.zone='water';tiles.push(t);continue;}
+      if(dy>2.5&&Math.abs(x-rx)<4.2)t.river=true;
+      /* 線路:左上への直線 */
+      const proj=dx*railDir.x+dy*railDir.y;
+      const perp=Math.abs(dx*railDir.y-dy*railDir.x);
+      if(proj>3&&proj<R.rur&&perp<0.75){t.zone='railline';tiles.push(t);continue;}
+      if(proj>4&&proj<R.sub+2&&perp<3.2)t.rail=true;
+    }
+    tiles.push(t);
+  }
+  return tiles;
+}
+
+/* ---------- フェーズごとのタイル状態 ---------- */
+function tileState(kind,t,p){
+  const r=t.rnd,r2=t.rnd2;
+  const S=(c,g)=>({c,g:g||null});
+  if(t.zone==='water')return S('#2E6E96','water');
+  if(t.zone==='railline')return S('#2A2F36','rail');
+  if(kind==='dev'){
+    if(t.zone==='cbd'){
+      const c=[BC.cbd1,BC.cbd2,BC.cbd3,BC.glass][p-1];
+      return S(c,'tower'+Math.min(p,3));
+    }
+    if(t.zone==='inner'){
+      const isF=r<.1;
+      if(isF)return p<=2?S(BC.fact,'fact'):p===3?S(BC.factOff,'factOff'):S(BC.glass,'tower3');
+      if(p===1)return r<.72?S(BC.worker):S(null);
+      if(p===2)return S(BC.dense);
+      if(p===3)return r<.4?S(BC.rubble,'rubble'):S(BC.decay);
+      /* p4:北(水辺)ほど再開発 */
+      const gp=t.north?.8:.55;
+      return r<gp?S(BC.gentri,'tower2'):S(BC.park,'park');
+    }
+    if(t.zone==='sub'){
+      const vis=[.04,.12,.72,.78][p-1];
+      return r<vis?(p<=2?S(BC.hut):S(BC.house,'house')):S(null);
+    }
+    return r<(p>=3?.14:.24)?S(BC.hut):S(null); /* rural */
+  }
+  /* ---- 途上国 ---- */
+  if(t.zone==='cbd'){
+    const c=(p===4&&r<.3)?BC.glass:[BC.cbd1,BC.cbd1,BC.cbd2,BC.cbd2][p-1];
+    return S(c,'tower'+Math.min(p,3));
+  }
+  if(t.zone==='inner'){
+    const vis=[.5,.88,.96,.96][p-1];
+    return r<vis?S(BC.dvpMid):S(null);
+  }
+  if(t.zone==='sub'){
+    const early=t.river||t.rail;
+    const vis=early?[.05,.55,.94,.96][p-1]:[.02,.18,.78,.85][p-1];
+    if(r>=vis)return S(null);
+    if(p===4&&r2<.15)return S(BC.improve,'improve');
+    return S(BC.slum[(r*4)|0],'slum');
+  }
+  return r<.3?S(BC.hut):S(null); /* rural */
+}
+
+/* ---------- 人の流れ ---------- */
+function mkCurves(n,fromR,toR,seedA){
+  const cs=[];
+  for(let i=0;i<n;i++){
+    const a=seedA+(i/n)*Math.PI*2+Math.random()*.3;
+    const a2=a+(Math.random()-.5)*.9;
+    const f={x:CTR+Math.cos(a)*fromR,y:CTR+Math.sin(a)*fromR};
+    const t={x:CTR+Math.cos(a2)*toR,y:CTR+Math.sin(a2)*toR};
+    const m={x:(f.x+t.x)/2+(Math.random()-.5)*5,y:(f.y+t.y)/2+(Math.random()-.5)*5};
+    cs.push({f,m,t,ph:Math.random()});
+  }
+  return cs;
+}
+const FLOWS={
+ dvp:[
+  {col:'#FF7A45',I:[.25,1,.9,.8],curves:mkCurves(10,17.5,4,0.3),w:1}
+ ],
+ dev:[
+  {col:'#57A7E8',I:[1,.55,0,0],curves:mkCurves(8,17.5,5,1.2).filter(c=>c.f.y>CTR-12),w:1}, /* 海側を避ける */
+  {col:'#F2C14E',I:[0,0,1,.15],curves:mkCurves(7,5.5,11.5,0.8).filter(c=>c.t.y>CTR-11),w:1},
+  {col:'#5FD3BE',I:[0,0,0,1],curves:mkCurves(7,11.5,4.5,2.1).filter(c=>c.f.y>CTR-11),w:1},
+  {col:'#E0574B',I:[0,0,0,.6],curves:mkCurves(4,5.5,14.5,3.6).filter(c=>c.t.y>CTR-12),w:.8}
+ ]
+};
+
+/* ---------- 注釈ラベル(都市ごと最大4) ---------- */
+const NOTES={
+ dvp:p=>[
+  {tx:CTR,ty:CTR,text:p>=2?'首位都市':'CBD',anchor:'c'},
+  p>=3?{tx:CTR+4.5,ty:CTR+12,text:'川沿いのスラム',alert:true}:null,
+  p>=3?{tx:CTR-10,ty:CTR-8,text:'線路沿いのスラム',alert:true}:null,
+  {tx:CTR+13,ty:CTR+14.5,text:p<=2?'農村(プッシュ要因)':'農村(流出続く)',edge:true},
+  p===4?{tx:CTR-12,ty:CTR+9,text:'改善地区',good:true}:null
+ ].filter(Boolean),
+ dev:p=>[
+  {tx:CTR,ty:CTR,text:'CBD',anchor:'c'},
+  {tx:CTR-6,ty:CTR+4.5,
+   text:p===1?'労働者住宅・工場':p===2?'過密市街地':p===3?'インナーシティ(荒廃)':'再開発地区',
+   alert:p===3,good:p===4},
+  p>=3?{tx:CTR+11,ty:CTR+7,text:'郊外高級住宅地'}:null,
+  p>=4?{tx:CTR,ty:CTR-11,text:'ウォーターフロント再開発',good:true}:null,
+  p<=2?{tx:CTR-13,ty:CTR+13,text:'農村(プル型で流出)',edge:true}:null
+ ].filter(Boolean)
+};
+
+/* ---------- 都市オブジェクト ---------- */
+function makeCity(kind,canvas){
+  return{kind,canvas,ctx:canvas.getContext('2d'),
+    tiles:buildTiles(kind),phaseT0:-10};
+}
+const CITIES={dvp:makeCity('dvp',$('#c-dvp')),dev:makeCity('dev',$('#c-dev'))};
+
+let PHASE=1,now=0;
+function setPhase(p,instant=false){
+  PHASE=p;
+  Object.values(CITIES).forEach(c=>{
+    c.tiles.forEach(t=>{
+      t.prev=t.stateNow||tileState(c.kind,t,p);
+      t.next=tileState(c.kind,t,p);
+      t.flipAt=instant?-10:now+t.rnd2*.8+.05;
+    });
+    c.phaseT0=now;
+  });
+  updateHUD();
+}
+
+/* ---------- 描画 ---------- */
+function resize(cv){
+  const w=cv.clientWidth,h=cv.clientHeight,dpr=Math.min(devicePixelRatio,2);
+  if(cv.width!==w*dpr||cv.height!==h*dpr){cv.width=w*dpr;cv.height=h*dpr;}
+}
+function drawCity(city){
+  const cv=city.canvas;resize(cv);
+  const ctx=city.ctx,dpr=Math.min(devicePixelRatio,2);
+  const W=cv.width/dpr,H=cv.height/dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  const size=Math.min(W,H)-8;
+  const ox=(W-size)/2,oy=(H-size)/2,ts=size/N;
+  const px=(gx)=>ox+gx*ts, py=(gy)=>oy+gy*ts;
+  ctx.font=`${Math.max(9,ts*1.05)}px 'Noto Sans JP'`;
+
+  const pal=PAL[city.kind];
+  /* --- ゾーン地面(同心円) --- */
+  ctx.save();
+  ctx.beginPath();ctx.arc(px(CTR),py(CTR),R.rur*ts,0,7);ctx.fillStyle=pal.rural[0];ctx.fill();
+  ctx.beginPath();ctx.arc(px(CTR),py(CTR),R.sub*ts,0,7);ctx.fillStyle=pal.sub;ctx.fill();
+  ctx.beginPath();ctx.arc(px(CTR),py(CTR),R.inner*ts,0,7);ctx.fillStyle=pal.inner;ctx.fill();
+  ctx.beginPath();ctx.arc(px(CTR),py(CTR),R.cbd*ts,0,7);ctx.fillStyle=pal.cbd;ctx.fill();
+  ctx.restore();
+  /* 農地のパッチ */
+  city.tiles.forEach(t=>{
+    if(t.zone==='rural'&&t.rnd<.5){
+      ctx.fillStyle=PAL[city.kind].rural[1];
+      ctx.fillRect(px(t.x)+.5,py(t.y)+.5,ts-1,ts-1);
+    }
+  });
+  /* --- 道路(十字+環状) --- */
+  ctx.strokeStyle=pal.road;ctx.lineWidth=Math.max(2,ts*.5);
+  ctx.beginPath();
+  ctx.moveTo(px(CTR-R.rur),py(CTR));ctx.lineTo(px(CTR+R.rur),py(CTR));
+  if(city.kind==='dev'){ctx.moveTo(px(CTR),py(CTR-12.5));}else{ctx.moveTo(px(CTR),py(CTR-R.rur));}
+  ctx.lineTo(px(CTR),py(CTR+R.rur));ctx.stroke();
+  ctx.lineWidth=Math.max(1.5,ts*.32);
+  [R.cbd,R.inner,R.sub].forEach(r=>{
+    ctx.beginPath();ctx.arc(px(CTR),py(CTR),r*ts,0,7);ctx.stroke();
+  });
+
+  /* --- タイル(建物) --- */
+  city.tiles.forEach(t=>{
+    const st=now>=t.flipAt?t.next:t.prev;
+    t.stateNow=st;
+    if(!st)return;
+    /* 水・線路 */
+    if(st.g==='water'){
+      ctx.fillStyle='#2E6E96';ctx.fillRect(px(t.x),py(t.y),ts+ .5,ts+.5);
+      if((t.x+t.y)%5===0){ctx.fillStyle='rgba(255,255,255,.14)';ctx.fillRect(px(t.x)+ts*.15,py(t.y)+ts*.45,ts*.5,1);}
+      return;
+    }
+    if(st.g==='rail'){
+      ctx.fillStyle='#2A2F36';ctx.fillRect(px(t.x),py(t.y),ts,ts);
+      ctx.fillStyle='#555C66';ctx.fillRect(px(t.x)+ts*.2,py(t.y)+ts*.4,ts*.6,ts*.2);
+      return;
+    }
+    if(!st.c)return;
+    /* 出現ポップ */
+    let k=1;
+    if(t.flipAt>0&&now>=t.flipAt)k=Math.min(1,(now-t.flipAt)/.16);
+    const s=ts*(0.86*(0.35+0.65*k));
+    const cx0=px(t.x)+ts/2,cy0=py(t.y)+ts/2;
+    ctx.fillStyle=st.c;
+    ctx.fillRect(cx0-s/2,cy0-s/2,s,s);
+    if(k<1)return;
+    /* グリフ */
+    const g=st.g;
+    if(g&&g.startsWith('tower')){
+      const nWin=+g.slice(5);
+      ctx.fillStyle='rgba(255,255,240,.85)';
+      for(let i=0;i<nWin;i++)ctx.fillRect(cx0-s*.28+i*s*.3,cy0-s*.18,Math.max(1.2,s*.14),Math.max(1.2,s*.14));
+    }else if(g==='fact'){
+      ctx.fillStyle='#3A332E';ctx.fillRect(cx0+s*.12,cy0-s*.42,s*.24,s*.3);
+      ctx.fillStyle='rgba(210,214,220,.7)';
+      ctx.beginPath();ctx.arc(cx0+s*.24,cy0-s*.55+Math.sin(now*3+t.rnd*9)*1.2,s*.14,0,7);ctx.fill();
+    }else if(g==='factOff'){
+      ctx.fillStyle='#2E2A26';ctx.fillRect(cx0+s*.12,cy0-s*.42,s*.24,s*.3);
+    }else if(g==='house'){
+      ctx.fillStyle=BC.roofL;ctx.fillRect(cx0-s/2,cy0-s/2,s,s*.34);
+    }else if(g==='slum'){
+      ctx.fillStyle='rgba(0,0,0,.28)';
+      ctx.fillRect(cx0-s*.36+t.rnd*s*.3,cy0-s*.3,s*.3,s*.26);
+      ctx.fillRect(cx0+ s*.02,cy0+s*.04-t.rnd2*s*.2,s*.3,s*.26);
+    }else if(g==='rubble'){
+      ctx.fillStyle='rgba(0,0,0,.4)';
+      ctx.fillRect(cx0-s*.3,cy0-s*.05,s*.24,s*.2);ctx.fillRect(cx0+s*.05,cy0-s*.3,s*.2,s*.18);
+    }else if(g==='park'){
+      ctx.fillStyle='#8FCB86';ctx.beginPath();ctx.arc(cx0,cy0,s*.24,0,7);ctx.fill();
+    }else if(g==='improve'){
+      ctx.fillStyle='#fff';ctx.fillRect(cx0-s*.1,cy0-s*.1,s*.2,s*.2);
+    }
+  });
+
+  /* --- ゾーン境界名(左上の弧沿い・静的) --- */
+  const zl=city.kind==='dev'
+    ?[['CBD',R.cbd],['インナーシティ',R.inner],['郊外',R.sub],['農村',R.rur]]
+    :[['CBD',R.cbd],['市街地',R.inner],['周縁部',R.sub],['農村',R.rur]];
+  ctx.textAlign='left';ctx.textBaseline='bottom';
+  ctx.font=`700 ${Math.max(9.5,ts*.95)}px 'Noto Sans JP'`;
+  const la=city.kind==='dev'?Math.PI*0.78:Math.PI*1.28; /* devは左下側(海を避ける) */
+  zl.forEach(([nm,r])=>{
+    const lx=px(CTR+Math.cos(la)*(r-1.1)),ly=py(CTR+Math.sin(la)*(r-1.1));
+    ctx.fillStyle='rgba(10,14,19,.72)';
+    const w=ctx.measureText(nm).width;
+    ctx.fillRect(lx-3,ly-ts*1.15,w+6,ts*1.25);
+    ctx.fillStyle='rgba(232,238,244,.92)';ctx.fillText(nm,lx,ly);
+  });
+
+  /* --- 人の流れ --- */
+  FLOWS[city.kind].forEach(fl=>{
+    const inten=fl.I[PHASE-1];if(inten<=0)return;
+    const nC=Math.max(1,Math.round(fl.curves.length*inten));
+    ctx.lineWidth=1.4;
+    for(let i=0;i<nC;i++){
+      const c=fl.curves[i];
+      /* 経路(薄) */
+      ctx.strokeStyle=fl.col+'44';
+      ctx.beginPath();ctx.moveTo(px(c.f.x),py(c.f.y));
+      ctx.quadraticCurveTo(px(c.m.x),py(c.m.y),px(c.t.x),py(c.t.y));ctx.stroke();
+      /* 矢じり */
+      arrowHead(ctx,c,px,py,fl.col);
+      /* 動く点 */
+      for(let d=0;d<2;d++){
+        const tt=((now*.16)+c.ph+d*.5)%1;
+        const q=quad(c,tt);
+        ctx.fillStyle=fl.col;
+        ctx.beginPath();ctx.arc(px(q.x),py(q.y),Math.max(2,ts*.24),0,7);ctx.fill();
+      }
+    }
+  });
+
+  /* --- 注釈 --- */
+  ctx.font=`700 ${Math.max(10,ts*1.02)}px 'Noto Sans JP'`;
+  NOTES[city.kind](PHASE).forEach(n=>{
+    const x=px(n.tx),y=py(n.ty);
+    const col=n.alert?'#FFB4AC':n.good?'#B8F0E4':'#E8EEF4';
+    const bd=n.alert?'#E0574B':n.good?'#5FD3BE':'#5E7288';
+    const txt=n.text,w=ctx.measureText(txt).width;
+    const bx=x-w/2-5,by=y-ts*2.6;
+    /* 引き出し線 */
+    ctx.strokeStyle=bd;ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x,y-ts*.2);ctx.lineTo(x,by+ts*1.5);ctx.stroke();
+    ctx.fillStyle='rgba(10,14,19,.85)';
+    ctx.fillRect(bx,by,w+10,ts*1.5);
+    ctx.strokeStyle=bd;ctx.strokeRect(bx+.5,by+.5,w+9,ts*1.5-1);
+    ctx.fillStyle=col;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(txt,x,by+ts*.75);
+    ctx.textAlign='left';ctx.textBaseline='bottom';
+  });
+}
+function quad(c,t){
+  const a=1-t;
+  return{x:a*a*c.f.x+2*a*t*c.m.x+t*t*c.t.x, y:a*a*c.f.y+2*a*t*c.m.y+t*t*c.t.y};
+}
+function arrowHead(ctx,c,px,py,col){
+  const p1=quad(c,.92),p2=quad(c,1);
+  const ang=Math.atan2(py(p2.y)-py(p1.y),px(p2.x)-px(p1.x));
+  ctx.fillStyle=col;
+  ctx.beginPath();
+  ctx.moveTo(px(p2.x),py(p2.y));
+  ctx.lineTo(px(p2.x)-8*Math.cos(ang-.4),py(p2.y)-8*Math.sin(ang-.4));
+  ctx.lineTo(px(p2.x)-8*Math.cos(ang+.4),py(p2.y)-8*Math.sin(ang+.4));
+  ctx.closePath();ctx.fill();
+}
+
+/* ---------- 凡例 ---------- */
+const LEGENDS={
+ dvp:[
+  ['sw',BC.cbd2,'CBD(中心業務地区)'],['sw',BC.dvpMid,'市街地の住宅'],
+  ['sw',BC.slum[0],'スラム(バラック)'],['sw',BC.improve,'住環境の改善地区'],
+  ['sw','#2E6E96','川 / ▬ 線路'],['arw','#FF7A45','プッシュ型の人口移動']
+ ],
+ dev:[
+  ['sw',BC.cbd2,'CBD(中心業務地区)'],['sw',BC.worker,'労働者住宅・工場'],
+  ['sw',BC.rubble,'荒廃・空き地(インナーシティ問題)'],['sw',BC.house,'郊外の住宅地'],
+  ['sw',BC.gentri,'再開発(ジェントリフィケーション)'],
+  ['arw','#57A7E8','プル型の流入'],['arw','#F2C14E','郊外化'],
+  ['arw','#5FD3BE','都心回帰'],['arw','#E0574B','立ち退き']
+ ]
+};
+function renderLegend(mode){
+  const box=$('#legendItems');box.innerHTML='';
+  const items=mode==='cmp'
+    ?[LEGENDS.dvp[2],LEGENDS.dvp[3],LEGENDS.dvp[5],...LEGENDS.dev.slice(2)]
+    :LEGENDS[mode];
+  items.forEach(([ty,c,t])=>{
+    const d=document.createElement('div');d.className='li';
+    d.innerHTML=`<span class="${ty}" style="background:${c}"></span><span>${t}</span>`;
+    box.appendChild(d);
+  });
+}
+
+/* ---------- モード切替 ---------- */
+let MODE='cmp';
+function setMode(m){
+  MODE=m;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('#box-dvp').style.display=(m==='dev')?'none':'flex';
+  $('#box-dev').style.display=(m==='dvp')?'none':'flex';
+  $('#info-dvp').style.display=(m==='dev')?'none':'block';
+  $('#info-dev').style.display=(m==='dvp')?'none':'block';
+  $('#cmp').style.display=(m==='cmp')?'block':'none';
+  renderLegend(m);
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+
+/* ---------- HUD ---------- */
+const tl=$('#timeline');
+ERAS.forEach((e,i)=>{
+  const b=document.createElement('button');b.className='ph';
+  b.innerHTML=`<div class="no dot">${e.no}</div><div class="nm">${e.nm}</div>`;
+  b.onclick=()=>{stopAuto();setPhase(i+1);};
+  tl.appendChild(b);
+});
+function updateHUD(){
+  document.querySelectorAll('.ph').forEach((b,i)=>b.classList.toggle('on',i===PHASE-1));
+  ['dvp','dev'].forEach(k=>{
+    const P=$('#info-'+k),d=TXT[k][PHASE-1];
+    P.querySelector('.ttl').textContent='PHASE '+PHASE+'｜'+d.t;
+    P.querySelector('.body').innerHTML=d.d;
+    P.querySelectorAll('.meter').forEach((m,i)=>{
+      m.querySelector('.fill').style.width=d.m[i]+'%';
+      m.querySelector('.val').textContent=d.m[i];
+    });
+  });
+}
+let autoTimer=null;
+function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;
+  $('#autoBtn').textContent='▶ AUTO';$('#autoBtn').classList.remove('playing');}}
+$('#autoBtn').onclick=()=>{
+  if(autoTimer){stopAuto();return;}
+  setPhase(1);
+  $('#autoBtn').textContent='■ STOP';$('#autoBtn').classList.add('playing');
+  autoTimer=setInterval(()=>{if(PHASE>=4){stopAuto();return;}setPhase(PHASE+1);},9000);
+};
+addEventListener('keydown',e=>{
+  if(e.key>='1'&&e.key<='4'){stopAuto();setPhase(+e.key);}
+  if(e.key==='ArrowRight'&&PHASE<4){stopAuto();setPhase(PHASE+1);}
+  if(e.key==='ArrowLeft'&&PHASE>1){stopAuto();setPhase(PHASE-1);}
+});
+
+/* ---------- 起動 ---------- */
+setMode('cmp');
+setPhase(1,true);
+let last=performance.now();
+(function loop(ts){
+  requestAnimationFrame(loop);
+  now=ts/1000;
+  if($('#box-dvp').style.display!=='none')drawCity(CITIES.dvp);
+  if($('#box-dev').style.display!=='none')drawCity(CITIES.dev);
+})(last);
+</script>
+</body>
+</html>
