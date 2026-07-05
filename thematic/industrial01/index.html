@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工場は、なぜ“そこ”にあるのか ― 工業立地論 3D SPECIAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --ink:#05070C;          /* 放送の黒 */
+  --navy:#0E1A2B;         /* 深夜の紺 */
+  --gold:#E9C46A;         /* 特番ゴールド */
+  --paper:#F4F1E8;        /* テロップ白 */
+  --steel:#7FB3D5;        /* データ青 */
+  --dim:#9AA3AE;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);
+  font-family:'Noto Sans JP',sans-serif;color:var(--paper)}
+#stage{position:fixed;inset:0}
+canvas{display:block}
+
+/* ── レターボックス ── */
+.bar{position:fixed;left:0;right:0;height:8.5vh;background:linear-gradient(180deg,#000,#000);z-index:20}
+.bar.top{top:0;box-shadow:0 6px 24px rgba(0,0,0,.55)}
+.bar.bottom{bottom:0;box-shadow:0 -6px 24px rgba(0,0,0,.55)}
+
+/* ── 常設表示 ── */
+#watermark{position:fixed;top:2vh;right:2.4vw;z-index:30;text-align:right;
+  font-size:clamp(10px,1.2vw,13px);letter-spacing:.28em;color:var(--gold);opacity:.85;font-weight:700}
+#watermark small{display:block;letter-spacing:.18em;color:var(--dim);font-weight:400;font-size:.82em;margin-top:2px}
+#kicker{position:fixed;top:2vh;left:2.4vw;z-index:30;display:flex;align-items:center;gap:10px;
+  opacity:0;transition:opacity .6s}
+#kicker.show{opacity:1}
+#kicker .no{font-family:'Shippori Mincho B1',serif;font-size:clamp(13px,1.5vw,18px);
+  color:var(--gold);letter-spacing:.22em;border-right:1px solid rgba(233,196,106,.5);padding-right:12px}
+#kicker .nm{font-size:clamp(12px,1.35vw,16px);letter-spacing:.14em;font-weight:700}
+#kicker .ex{font-size:clamp(10px,1.1vw,13px);color:var(--dim);letter-spacing:.1em}
+
+/* ── 帯テロップ ── */
+#telop{position:fixed;left:50%;transform:translateX(-50%) translateY(14px);
+  bottom:calc(8.5vh + 2.6vh);z-index:25;width:min(88vw,980px);
+  opacity:0;transition:opacity .45s ease,transform .45s ease;pointer-events:none}
+#telop.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#telop .band{display:flex;gap:16px;align-items:stretch;
+  background:linear-gradient(90deg,rgba(4,6,10,.92),rgba(4,6,10,.78) 70%,rgba(4,6,10,.35));
+  border-left:4px solid var(--gold);padding:14px 26px 13px 18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#telop .main{font-family:'Shippori Mincho B1',serif;font-weight:800;
+  font-size:clamp(16px,2.5vw,27px);line-height:1.5;letter-spacing:.04em}
+#telop .main em{font-style:normal;color:var(--gold)}
+#telop .sub{margin-top:6px;font-size:clamp(11px,1.35vw,15px);color:#C9CFD6;letter-spacing:.08em;font-weight:500}
+#telop .sub b{color:var(--steel);font-weight:700}
+
+/* ── 章タイトルカード ── */
+#card{position:fixed;inset:0;z-index:22;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(5,7,12,.25),rgba(5,7,12,.82))}
+#card .inner{text-align:center}
+#card .kick{font-size:clamp(13px,1.6vw,19px);letter-spacing:.5em;color:var(--gold);font-weight:700;text-indent:.5em}
+#card .ttl{font-family:'Shippori Mincho B1',serif;font-weight:800;
+  font-size:clamp(34px,6.4vw,72px);letter-spacing:.08em;margin:14px 0 10px;
+  text-shadow:0 4px 30px rgba(0,0,0,.7)}
+#card .rule{width:120px;height:1px;background:var(--gold);margin:0 auto 12px;opacity:.8}
+#card .desc{font-size:clamp(13px,1.7vw,19px);color:#D8DCE2;letter-spacing:.14em}
+
+/* ── OP / ED ── */
+.fullcard{position:fixed;inset:0;z-index:23;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;text-align:center}
+#op .pre{font-size:clamp(12px,1.5vw,17px);letter-spacing:.6em;text-indent:.6em;color:var(--gold);font-weight:700}
+#op h1{font-family:'Shippori Mincho B1',serif;font-weight:800;line-height:1.35;
+  font-size:clamp(34px,6.8vw,78px);letter-spacing:.06em;margin:20px 0 16px;
+  text-shadow:0 6px 40px rgba(0,0,0,.8)}
+#op h1 span{color:var(--gold)}
+#op .sub{font-size:clamp(13px,1.7vw,19px);color:#CBD2DA;letter-spacing:.2em}
+#ed .wrap{max-width:min(90vw,860px)}
+#ed h2{font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:clamp(20px,3vw,32px);
+  letter-spacing:.16em;color:var(--gold);margin-bottom:3vh}
+#ed ul{list-style:none;text-align:left}
+#ed li{display:flex;gap:14px;align-items:baseline;padding:.9vh 0;opacity:0;transform:translateY(8px);
+  transition:opacity .6s,transform .6s;border-bottom:1px solid rgba(244,241,232,.08)}
+#ed li.on{opacity:1;transform:none}
+#ed li .tag{flex:0 0 auto;min-width:9.5em;font-weight:900;letter-spacing:.06em;
+  color:var(--paper);font-size:clamp(13px,1.7vw,19px)}
+#ed li .tag i{font-style:normal;color:var(--gold)}
+#ed li .bd{font-size:clamp(12px,1.5vw,16px);color:#C3CAD2;letter-spacing:.04em}
+#ed .quote{margin-top:3.4vh;opacity:0;transition:opacity .8s;
+  font-family:'Shippori Mincho B1',serif;font-size:clamp(15px,2.2vw,24px);letter-spacing:.1em;text-align:center}
+#ed .quote.on{opacity:1}
+#ed .quote small{display:block;margin-top:8px;font-family:'Noto Sans JP';font-size:.62em;color:var(--dim);letter-spacing:.24em}
+
+/* ── コントロール(下部黒帯内) ── */
+#ctrl{position:fixed;bottom:0;left:0;right:0;height:8.5vh;z-index:40;
+  display:flex;align-items:center;gap:14px;padding:0 2.4vw}
+#playBtn{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:1px solid rgba(233,196,106,.55);
+  background:rgba(233,196,106,.1);color:var(--gold);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .2s}
+#playBtn:hover{background:rgba(233,196,106,.25)}
+#playBtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#chips{display:flex;gap:6px;flex:0 1 auto;overflow-x:auto;scrollbar-width:none}
+#chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid rgba(244,241,232,.18);background:transparent;color:#B8BEC6;
+  border-radius:3px;padding:5px 11px;font-size:clamp(10px,1.05vw,12.5px);letter-spacing:.08em;
+  cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.chip:hover{border-color:var(--gold);color:var(--paper)}
+.chip.on{background:var(--gold);color:#141005;border-color:var(--gold);font-weight:700}
+.chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#prog{flex:1 1 auto;height:5px;background:rgba(244,241,232,.14);border-radius:3px;position:relative;cursor:pointer;min-width:80px}
+#progFill{position:absolute;left:0;top:0;bottom:0;background:var(--gold);border-radius:3px;width:0%}
+.tick{position:absolute;top:-2px;bottom:-2px;width:1px;background:rgba(244,241,232,.35)}
+#time{flex:0 0 auto;font-size:clamp(10px,1.05vw,12.5px);color:var(--dim);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+
+/* 再生前スプラッシュ */
+#splash{position:fixed;inset:0;z-index:60;background:rgba(5,7,12,.9);display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:18px}
+#splash.show{display:flex}
+#splash button{font-family:inherit;font-size:16px;letter-spacing:.2em;padding:14px 44px;
+  background:var(--gold);color:#141005;border:none;border-radius:2px;cursor:pointer;font-weight:900}
+@media (prefers-reduced-motion: reduce){ #telop,#telop.show{transition:none} }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+
+<div class="bar top"></div>
+<div class="bar bottom"></div>
+
+<div id="watermark">地理探究 SPECIAL<small>工業立地論 ― 6つの指向</small></div>
+<div id="kicker"><span class="no"></span><span class="nm"></span><span class="ex"></span></div>
+
+<div id="telop"><div class="band"><div>
+  <div class="main"></div><div class="sub"></div>
+</div></div></div>
+
+<div id="card"><div class="inner">
+  <div class="kick"></div><div class="ttl"></div><div class="rule"></div><div class="desc"></div>
+</div></div>
+
+<div id="op" class="fullcard"><div>
+  <div class="pre">地理探究 SPECIAL</div>
+  <h1>工場は、なぜ<br>“<span>そこ</span>”にあるのか</h1>
+  <div class="sub">ウェーバーの工業立地論（1909）を、3Dで旅する</div>
+</div></div>
+
+<div id="ed" class="fullcard"><div class="wrap">
+  <h2>― 6つの立地指向 ―</h2>
+  <ul id="edList">
+    <li><span class="tag"><i>①</i> 原料指向型</span><span class="bd">セメント ― 加工で軽くなるなら、原料産地のそばへ</span></li>
+    <li><span class="tag"><i>②</i> 労働力指向型</span><span class="bd">縫製 ― 人件費の安い場所へ、国境をこえて</span></li>
+    <li><span class="tag"><i>③</i> 市場指向型</span><span class="bd">飲料・印刷 ― 重くなる製品と鮮度・情報は、消費地のそばへ</span></li>
+    <li><span class="tag"><i>④</i> 臨海指向型</span><span class="bd">鉄鋼 ― 輸入原料は、大型船の着く港のそばへ</span></li>
+    <li><span class="tag"><i>⑤</i> 臨空港指向型</span><span class="bd">半導体 ― 軽くて高価なら、空港・ICのそばへ</span></li>
+    <li><span class="tag"><i>⑥</i> 集積指向型</span><span class="bd">自動車 ― 約3万点の部品、関連工場の集まる場所へ</span></li>
+  </ul>
+  <div class="quote">「工場は、費用が最小となる地点に立地する」<small>ALFRED WEBER ― 工業立地論・1909</small></div>
+</div></div>
+
+<div id="ctrl">
+  <button id="playBtn" aria-label="再生/一時停止">▶</button>
+  <div id="chips"></div>
+  <div id="prog"><div id="progFill"></div></div>
+  <div id="time">0:00 / 0:00</div>
+</div>
+
+<div id="splash"><button id="startBtn">▶ 番組をはじめる</button></div>
+
+<script>
+/* ============================================================
+   工業立地論 3D SPECIAL  ―  自動再生シネマティックエンジン
+   ============================================================ */
+const $=s=>document.querySelector(s);
+
+/* ---------- three.js 基盤 ---------- */
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+$('#stage').appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.1,400);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);});
+
+const hemi=new THREE.HemisphereLight(0xbcd0e6,0x1a1410,.75);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xffe2b0,.95);sun.position.set(30,50,20);scene.add(sun);
+
+/* ---------- 素材ヘルパ ---------- */
+const M=c=>new THREE.MeshLambertMaterial({color:c});
+const ME=(c,e,ei)=>new THREE.MeshLambertMaterial({color:c,emissive:e,emissiveIntensity:ei??.6});
+function box(w,h,d,c,x=0,y=0,z=0){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.position.set(x,y+h/2,z);return m;}
+function cyl(rt,rb,h,c,x=0,y=0,z=0,seg=14){const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),M(c));m.position.set(x,y+h/2,z);return m;}
+function cone(r,h,c,x=0,y=0,z=0,seg=6){const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,seg),M(c));m.position.set(x,y+h/2,z);return m;}
+function ground(c,r=110){const g=new THREE.Mesh(new THREE.CircleGeometry(r,48),M(c));g.rotation.x=-Math.PI/2;return g;}
+function disposeGroup(g){g.traverse(o=>{if(o.geometry)o.geometry.dispose();
+  if(o.material){(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());}});}
+
+/* 道路(平帯) */
+function road(pts,w,c=0x2A2E36){
+  const grp=new THREE.Group();
+  for(let i=0;i<pts.length-1;i++){
+    const a=new THREE.Vector3(...pts[i]),b=new THREE.Vector3(...pts[i+1]);
+    const len=a.distanceTo(b),mid=a.clone().add(b).multiplyScalar(.5);
+    const seg=new THREE.Mesh(new THREE.PlaneGeometry(w,len+w*.9),M(c));
+    seg.rotation.x=-Math.PI/2;seg.position.set(mid.x,.02,mid.z);
+    seg.rotation.z=-Math.atan2(b.x-a.x,b.z-a.z);grp.add(seg);
+  }return grp;
+}
+
+/* ポリライン追従(車両・船・人) */
+function follower(obj,ptsArr,speed,offset=0,loop=true,onLap=null){
+  const pts=ptsArr.map(p=>new THREE.Vector3(...p));
+  const segs=[];let total=0;
+  const n=loop?pts.length:pts.length-1;
+  for(let i=0;i<n;i++){const a=pts[i],b=pts[(i+1)%pts.length];const L=a.distanceTo(b);segs.push({a,b,L});total+=L;}
+  let s=offset*total;
+  function at(d){let r=d;for(const sg of segs){if(r<=sg.L)return{p:sg.a.clone().lerp(sg.b,r/sg.L),dir:sg.b.clone().sub(sg.a).normalize()};r-=sg.L;}
+    const last=segs[segs.length-1];return{p:last.b.clone(),dir:last.b.clone().sub(last.a).normalize()};}
+  return{update(dt){
+    s+=speed*dt;
+    if(loop&&s>=total){s%=total;if(onLap)onLap(obj);}
+    if(!loop&&s>total)s=total;
+    const{p,dir}=at(s);obj.position.copy(p);
+    if(dir.lengthSq()>1e-6)obj.rotation.y=Math.atan2(dir.x,dir.z);
+  }};
+}
+
+/* トラック */
+function truck(bodyC,cabC=0x30343C){
+  const g=new THREE.Group();
+  g.add(box(1.5,1.5,3.2,bodyC,0,.55,-.5));
+  g.add(box(1.3,1.1,1.1,cabC,0,.55,1.6));
+  [[-.7,1.1],[.7,1.1],[-.7,-1.4],[.7,-1.4]].forEach(([x,z])=>{
+    const w=cyl(.36,.36,.3,0x14161B,x,0,z);w.rotation.z=Math.PI/2;w.position.y=.4;g.add(w);});
+  return g;
+}
+/* 煙(パーティクル) */
+function smoke(x,y,z,tint=0xd9dde3){
+  const g=new THREE.Group();g.position.set(x,y,z);
+  const puffs=[];
+  for(let i=0;i<6;i++){
+    const p=new THREE.Mesh(new THREE.SphereGeometry(.5,8,8),
+      new THREE.MeshLambertMaterial({color:tint,transparent:true,opacity:.5}));
+    p.userData.t=i/6;g.add(p);puffs.push(p);
+  }
+  return{group:g,update(dt){puffs.forEach(p=>{
+    p.userData.t=(p.userData.t+dt*.22)%1;const t=p.userData.t;
+    p.position.set(Math.sin(t*9)*.4,t*5,Math.cos(t*7)*.3);
+    const s=.4+t*1.4;p.scale.set(s,s,s);p.material.opacity=.5*(1-t);
+  });}};
+}
+/* 都市ブロック群 */
+function city(cx,cz,cols,rows,pitch,hMin,hMax,base=0x3A4250,lit=false){
+  const g=new THREE.Group();
+  for(let i=0;i<cols;i++)for(let j=0;j<rows;j++){
+    const h=hMin+Math.random()*(hMax-hMin);
+    const shade=base+((Math.random()*0x10)|0)*0x010101;
+    const b=lit&&Math.random()<.5
+      ?new THREE.Mesh(new THREE.BoxGeometry(pitch*.6,h,pitch*.6),ME(shade,0xE9C46A,.12+Math.random()*.15))
+      :box(pitch*.6,h,pitch*.6,shade);
+    b.position.set(cx+(i-(cols-1)/2)*pitch,h/2,cz+(j-(rows-1)/2)*pitch);
+    g.add(b);
+  }return g;
+}
+/* 移動する人(点) */
+function crowd(pathsArr,count,color=0xE8A87C){
+  const g=new THREE.Group(),ups=[];
+  for(let k=0;k<count;k++){
+    const d=new THREE.Mesh(new THREE.SphereGeometry(.28,6,6),M(color));
+    d.position.y=.3;g.add(d);
+    const path=pathsArr[k%pathsArr.length];
+    ups.push(follower(d,path,2.2+Math.random()*1.4,Math.random()));
+  }
+  return{group:g,update(dt){ups.forEach(u=>u.update(dt));}};
+}
+
+/* ============================================================
+   台本(章 / カメラ / テロップキュー)
+   ============================================================ */
+function K(t,p,l){return{t,p:new THREE.Vector3(...p),l:new THREE.Vector3(...l)};}
+const smooth=t=>t*t*(3-2*t);
+
+const CHAPTERS=[
+
+/* ── 序章 ── */
+{ id:'op',no:'序章',nm:'',ex:'',dur:12,env:{bg:0x05070C,fog:.028},
+  cam:[K(0,[0,6,44],[0,5,0]),K(1,[0,9,22],[0,6,-8])],
+  cues:[
+    {a:1.2,b:6.2,main:'工場の場所には、<em>理由</em>がある。'},
+    {a:6.6,b:11.4,main:'鍵は<em>費用</em> ― 輸送費・労働費・集積の利益。',sub:'6つの「立地指向」を、3Dの現場から読み解く'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x0A0F16));
+    for(let i=0;i<40;i++){
+      const x=(Math.random()-.5)*90,z=-Math.random()*70+10;
+      const h=1.5+Math.random()*4;
+      g.add(box(2+Math.random()*2,h,2+Math.random()*2,0x141B26,x,0,z));
+      if(Math.random()<.45)g.add(cyl(.14,.14,h+2,0x1B2430,x+1.1,0,z));
+    }
+    const beacons=[];
+    for(let i=0;i<14;i++){
+      const b=new THREE.Mesh(new THREE.SphereGeometry(.22,8,8),ME(0xE9C46A,0xE9C46A,1));
+      b.position.set((Math.random()-.5)*70,3+Math.random()*4,-Math.random()*55+8);
+      b.userData.ph=Math.random()*6.28;g.add(b);beacons.push(b);
+    }
+    sc.add(g);
+    return{group:g,update(lt,dt){beacons.forEach(b=>{b.material.emissiveIntensity=.5+.5*Math.sin(lt*2+b.userData.ph);});}};
+  }
+},
+
+/* ── 第一章 原料指向型(セメント) ── */
+{ id:'raw',no:'第一章',nm:'原料指向型',ex:'セメント工業',dur:30,env:{bg:0x101820,fog:.018},
+  card:{kick:'第 一 章',ttl:'原料指向型',desc:'セメントは、なぜ山のそばか'},
+  cam:[K(0,[0,28,46],[-6,3,0]),K(.28,[-32,11,16],[-20,7,-6]),K(.55,[-15,7,14],[-7,4,-3]),
+       K(.8,[4,10,24],[8,3,2]),K(1,[12,22,42],[6,2,0])],
+  cues:[
+    {a:3.6,b:9.5,main:'セメントの主原料は<em>石灰石</em> ― 重く、かさばる岩石だ。',sub:'埼玉県秩父や山口県など、石灰石の山のふもとに工場は立つ'},
+    {a:10,b:15.5,main:'焼いて加工すると、製品は原料よりずっと<em>軽く</em>なる。',sub:'重量が減る原料 ＝「<b>重量減損原料</b>」'},
+    {a:16,b:22.5,main:'重い原料を運ぶより、<em>山のそば</em>で製品にすればいい。',sub:'輸送費が最小になる地点 ― それは原料産地'},
+    {a:23,b:29.5,main:'これが<em>原料指向型</em> ― セメントや紙・パルプの立地だ。',sub:'石灰石は、日本がほぼ100%自給できる数少ない鉱産資源'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x232E28));
+    /* 石灰石の段々採掘場 */
+    const qx=-24,qz=-8;
+    [[9,4],[7.2,3.4],[5.4,2.8],[3.8,2.2],[2.4,1.8]].forEach(([r,h],i)=>{
+      const level=cyl(r*.8,r,h,0xC9C4B4,qx,i===0?0:undefined,qz,10);
+      let y=0;for(let k=0;k<i;k++)y+=[[9,4],[7.2,3.4],[5.4,2.8],[3.8,2.2],[2.4,1.8]][k][1];
+      level.position.y=y+h/2;g.add(level);
+    });
+    /* セメント工場 */
+    const fx=-6,fz=-3;
+    g.add(box(7,4,5,0x8E8A80,fx,0,fz));
+    const kiln=cyl(1.1,1.1,9,0xA8A296,fx+1,0,fz+4.5);kiln.rotation.z=Math.PI/2;kiln.position.set(fx+1,2,fz+4.5);g.add(kiln);
+    [0,1,2].forEach(i=>g.add(cyl(1,1,7,0xB9B4A8,fx-4+i*2.2,0,fz-4)));
+    g.add(cyl(.5,.7,10,0x7E7A72,fx+4.5,0,fz-1));
+    const sm=smoke(fx+4.5,10,fz-1);g.add(sm.group);
+    /* 遠くの都市 */
+    g.add(city(30,4,4,3,3.2,3,9,0x39414E,true));
+    /* 道路 */
+    g.add(road([[qx+6,0,qz+4],[fx-5,0,fz+3]],2.4));
+    g.add(road([[fx+4,0,fz+4],[14,0,4],[26,0,4]],2.4));
+    /* トラック:原石(鉱山⇄工場)×3、製品(工場→都市)×1 */
+    const ups=[sm];
+    const orePath=[[qx+6,0,qz+4],[fx-6,0,fz+3],[fx-6,0,fz+6],[qx+6,0,qz+7]];
+    for(let i=0;i<3;i++){const t=truck(0x7A6F5E);g.add(t);ups.push(follower(t,orePath,5,i/3));}
+    const prodPath=[[fx+4,0,fz+4],[14,0,4],[26,0,4],[26,0,8],[14,0,8],[fx+4,0,fz+8]];
+    const pt=truck(0xC9C4B4);g.add(pt);ups.push(follower(pt,prodPath,6,.2));
+    sc.add(g);
+    return{group:g,update(lt,dt){ups.forEach(u=>u.update(dt));}};
+  }
+},
+
+/* ── 第二章 労働力指向型(縫製) ── */
+{ id:'labor',no:'第二章',nm:'労働力指向型',ex:'縫製(アパレル)',dur:30,env:{bg:0x1A1310,fog:.016},
+  card:{kick:'第 二 章',ttl:'労働力指向型',desc:'服の工場は、賃金を追いかける'},
+  cam:[K(0,[-36,13,26],[-20,4,0]),K(.4,[-8,9,26],[0,3,0]),K(.75,[18,9,24],[20,3,0]),K(1,[0,24,42],[0,2,0])],
+  cues:[
+    {a:3.6,b:9.5,main:'1着の服は、ミシンを踏む<em>無数の手</em>から生まれる。',sub:'人手が費用の中心 ＝「<b>労働集約型</b>」の工業'},
+    {a:10,b:15.5,main:'決め手は輸送費ではなく、<em>人件費</em>。',sub:'安くて豊富な労働力のある場所が、圧倒的に有利になる'},
+    {a:16,b:22.5,main:'賃金が上がれば、工場は<em>国境をこえて</em>移っていく。',sub:'生産の中心は、より人件費の安いアジアの国々へ'},
+    {a:23,b:29.5,main:'これが<em>労働力指向型</em> ― 服のタグが、その移動を物語る。',sub:'アジアの新興国は、繊維製品の輸入国から輸出国へ'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x2A211B));
+    /* 左:賃金の高い都市 */
+    g.add(city(-22,-4,4,3,3.4,5,13,0x3C4350,true));
+    /* 左の縫製工場(縮んでいく) */
+    const oldF=new THREE.Group();
+    oldF.add(box(6,3,4,0x6E5F55,0,0,0));oldF.add(cyl(.3,.4,5,0x55493F,2.4,0,-1));
+    oldF.position.set(-19,0,7);g.add(oldF);
+    /* 右:新興国の工業団地(成長する) */
+    const newF=new THREE.Group();
+    for(let i=0;i<3;i++){
+      const shed=box(6,2.6,4,0xB0846A,0,0,i*5-5);
+      const roof=cone(3.4,1.4,0x8F6852,0,2.6,i*5-5,4);roof.rotation.y=Math.PI/4;
+      newF.add(shed,roof);
+    }
+    newF.position.set(20,0,2);newF.scale.set(.01,.01,.01);g.add(newF);
+    /* 賃金バー */
+    const barL=box(1.6,9,1.6,0xE9C46A,-14,0,-2);g.add(barL);
+    const barR=box(1.6,2.6,1.6,0xE9C46A,14,0,-2);g.add(barR);
+    /* 通勤する人々(右工場へ) */
+    const cw=crowd([
+      [[28,0,-8],[22,0,-2],[20,0,2],[24,0,8],[30,0,4]],
+      [[12,0,10],[17,0,5],[20,0,2],[16,0,-4],[10,0,2]],
+      [[26,0,12],[22,0,7],[20,0,2],[26,0,-2],[30,0,6]]
+    ],26);
+    g.add(cw.group);
+    /* 移転の矢印(金の粒が弧を描く) */
+    const arc=[],AN=16;
+    for(let i=0;i<AN;i++){
+      const s=new THREE.Mesh(new THREE.SphereGeometry(.4,8,8),ME(0xE9C46A,0xE9C46A,1));
+      s.visible=false;g.add(s);arc.push(s);
+    }
+    sc.add(g);
+    return{group:g,update(lt,dt){
+      cw.update(dt);
+      /* 12〜20秒:移転演出 */
+      const ph=THREE.MathUtils.clamp((lt-12)/8,0,1);
+      const os=Math.max(.15,1-ph);oldF.scale.set(os,os,os);
+      const ns=Math.max(.01,ph);newF.scale.set(ns,ns,ns);
+      arc.forEach((s,i)=>{
+        const t=((lt*.35+i/AN)%1);
+        s.visible=lt>12&&lt<24;
+        const x=THREE.MathUtils.lerp(-19,20,t);
+        const y=1+Math.sin(t*Math.PI)*9;
+        const z=THREE.MathUtils.lerp(7,2,t);
+        s.position.set(x,y,z);
+        s.material.opacity=1;
+      });
+    }};
+  }
+},
+
+/* ── 第三章 市場指向型(飲料・印刷) ── */
+{ id:'market',no:'第三章',nm:'市場指向型',ex:'飲料・印刷',dur:30,env:{bg:0x0B1220,fog:.017},
+  card:{kick:'第 三 章',ttl:'市場指向型',desc:'ビール工場は、なぜ大都市のそばか'},
+  cam:[K(0,[0,32,48],[0,3,0]),K(.35,[20,8,22],[10,3,5]),K(.7,[-8,6,20],[-2,4,2]),K(1,[0,17,36],[0,4,0])],
+  cues:[
+    {a:3.6,b:9.5,main:'ビールや清涼飲料 ― 主原料の<em>水</em>は、ほぼどこでも手に入る。',sub:'どこでも得られる原料 ＝「<b>普遍原料</b>」'},
+    {a:10,b:15.5,main:'水を加えた製品は、原料より<em>重く、かさばる</em>。',sub:'運ぶべきは製品 → 消費地の近くで作るほど輸送費は安い'},
+    {a:16,b:22.5,main:'だから飲料工場は<em>大都市圏</em>に立地する ― 市場指向型だ。'},
+    {a:23,b:29.5,main:'流行と情報が命の<em>印刷・出版</em>も、市場に集まる。',sub:'学術・文化・情報発信の中心 ― 大都市への集中が典型'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x131A26));
+    /* 大都市 */
+    g.add(city(-4,-6,6,5,3.6,4,16,0x38404E,true));
+    /* 飲料工場(都市の縁) */
+    const fx=13,fz=6;
+    g.add(box(7,3.5,5,0x4E6E86,fx,0,fz));
+    const tank1=cyl(1.5,1.5,4.5,0xC9D4DC,fx-3.5,0,fz-4);g.add(tank1);
+    const tank2=cyl(1.5,1.5,4.5,0xC9D4DC,fx,0,fz-4.5);g.add(tank2);
+    g.add(cyl(1,1.4,6,0x7FB3D5,fx+4.5,0,fz-2)); // 給水塔
+    /* 印刷所(都市内) */
+    g.add(box(5,2.6,4,0x5A5145,-14,0,9));
+    g.add(box(1.2,3.6,1.2,0x6B6255,-16,0,7.6));
+    /* 配送路(短距離・都市内) */
+    g.add(road([[fx-4,0,fz+3],[4,0,10],[-6,0,10],[-14,0,12]],2.2));
+    g.add(road([[fx-4,0,fz+3],[2,0,2],[-4,0,-2]],2.2));
+    const ups=[];
+    const p1=[[fx-4,0,fz+3],[4,0,10],[-6,0,10],[-14,0,12],[-14,0,15],[0,0,14],[fx-2,0,fz+6]];
+    const p2=[[fx-4,0,fz+3],[2,0,2],[-4,0,-2],[-8,0,2],[0,0,6],[fx-4,0,fz+6]];
+    for(let i=0;i<2;i++){const t=truck(0x7FB3D5);g.add(t);ups.push(follower(t,p1,5.5,i/2));}
+    const t2=truck(0xD9C08A);g.add(t2);ups.push(follower(t2,p2,5,.4));
+    /* 新聞トラック */
+    const t3=truck(0x8A8577);g.add(t3);
+    ups.push(follower(t3,[[-14,0,12],[-6,0,10],[0,0,4],[-8,0,-2],[-16,0,4]],6,.1));
+    sc.add(g);
+    return{group:g,update(lt,dt){ups.forEach(u=>u.update(dt));}};
+  }
+},
+
+/* ── 第四章 臨海指向型(鉄鋼) ── */
+{ id:'port',no:'第四章',nm:'臨海指向型',ex:'鉄鋼業(日本)',dur:30,env:{bg:0x0D1622,fog:.016},
+  card:{kick:'第 四 章',ttl:'臨海指向型',desc:'製鉄所は、なぜ海に面するのか'},
+  cam:[K(0,[-12,20,36],[-8,2,-8]),K(.3,[-34,8,-2],[-14,3,-16]),K(.6,[8,7,12],[0,9,-2]),K(1,[0,26,40],[0,4,-8])],
+  cues:[
+    {a:3.6,b:9.5,main:'製鉄には<em>鉄鉱石と石炭</em> ― 原料は、製品よりはるかに重い。',sub:'本来なら「原料指向」で立地するはずの工業'},
+    {a:10,b:15.5,main:'かつて製鉄所は、<em>炭田のそば</em>にあった。',sub:'ドイツ・ルール地方、そして北九州 ― 原料産地立地の時代'},
+    {a:16,b:22.5,main:'いま日本は、鉄鉱石も原料炭も、ほぼ<em>全量を輸入</em>する。',sub:'安価な海外原料の時代 ― 「原料産地」は海の向こうへ'},
+    {a:23,b:29.5,main:'大型船が横づけできる<em>臨海部</em>へ ― 臨海指向型の立地だ。',sub:'埋立地に<b>銑鋼一貫工場</b>が海に面して並ぶ'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    /* 海と陸 */
+    const sea=new THREE.Mesh(new THREE.PlaneGeometry(220,90),ME(0x123049,0x1B4466,.25));
+    sea.rotation.x=-Math.PI/2;sea.position.set(0,-.05,-38);g.add(sea);
+    const land=new THREE.Mesh(new THREE.PlaneGeometry(220,60),M(0x232830));
+    land.rotation.x=-Math.PI/2;land.position.set(0,0,18);g.add(land);
+    g.add(box(70,1,4,0x3A404A,-4,-.4,-10)); // 岸壁
+    /* 原料ヤード */
+    g.add(cone(3.4,3,0xB06A3A,-16,0,-4,8)); // 鉄鉱石
+    g.add(cone(3,2.6,0xA8672F,-11,0,-3,8));
+    g.add(cone(3.2,2.8,0x1E2126,-4,0,-4,8)); // 石炭
+    g.add(cone(2.6,2.2,0x23262C,1,0,-3,8));
+    /* 高炉群 */
+    [8,14].forEach(x=>{
+      g.add(cyl(2,2.8,11,0x555C68,x,0,2));
+      g.add(cyl(.5,.5,14,0x666D7A,x+2.6,0,2));
+      const pipe=cyl(.4,.4,5,0x767D8A,x+1.3,0,2);pipe.rotation.z=Math.PI/3;pipe.position.set(x+1.3,9,2);g.add(pipe);
+    });
+    g.add(box(14,4,7,0x494F5B,22,0,4)); // 圧延工場
+    const sm1=smoke(10.6,14,2,0xc7ccd4),sm2=smoke(16.6,14,2,0xc7ccd4);
+    g.add(sm1.group,sm2.group);
+    /* ガントリークレーン */
+    [-14,-6].forEach(x=>{
+      const cr=new THREE.Group();
+      cr.add(box(.7,7,.7,0xC0392B*0+0xB5533C,-2.5,0,0));
+      cr.add(box(.7,7,.7,0xB5533C,2.5,0,0));
+      cr.add(box(7.5,.7,1,0xB5533C,0,7,0));
+      cr.position.set(x,0,-9);g.add(cr);
+    });
+    /* ばら積み船(入港) */
+    const ship=new THREE.Group();
+    const hull=box(6,2.4,22,0x8A2F23,0,0,0);ship.add(hull);
+    ship.add(box(5,1,20,0x2A2E36,0,2.4,0));
+    ship.add(box(4,3.4,3.4,0xD8D4CA,0,2.6,-7.5));
+    [[-.9,5],[.9,5],[-.9,1],[.9,1],[-.9,-3],[.9,-3]].forEach(([x,z])=>ship.add(cone(1.1,1,0xB06A3A,x,3.2,z,6)));
+    g.add(ship);
+    const shipF=follower(ship,[[-70,0,-34],[-40,0,-26],[-18,0,-17],[-8,0,-14.5]],3.2,0,false);
+    sc.add(g);
+    return{group:g,update(lt,dt){shipF.update(dt);sm1.update(dt);sm2.update(dt);
+      sea.material.emissiveIntensity=.2+.08*Math.sin(lt*1.4);}};
+  }
+},
+
+/* ── 第五章 臨空港指向型(半導体) ── */
+{ id:'air',no:'第五章',nm:'臨空港指向型',ex:'半導体(IC)',dur:30,env:{bg:0x0A1424,fog:.015},
+  card:{kick:'第 五 章',ttl:'臨空港指向型',desc:'ICの工場は、なぜ空港のそばか'},
+  cam:[K(0,[-38,10,20],[-8,2,-10]),K(.35,[-4,6,6],[10,3,-8]),K(.65,[22,8,22],[14,3,8]),K(1,[0,28,42],[0,2,-4])],
+  cues:[
+    {a:3.6,b:9.5,main:'半導体チップ ― <em>小さく、軽く、そして高価</em>。',sub:'典型的な「軽薄短小」・高付加価値の製品'},
+    {a:10,b:15.5,main:'価格に占める輸送費は<em>ごくわずか</em> ― 空輸でも採算が合う。'},
+    {a:16,b:22.5,main:'工場は<em>空港</em>や高速道路の<em>インターチェンジ</em>の近くへ。',sub:'地方の空港周辺・高速道路沿いに立地が広がった'},
+    {a:23,b:29.5,main:'九州が“<em>シリコンアイランド</em>”とよばれた理由がここにある。',sub:'これが臨空港指向型の立地'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x18202C));
+    /* 滑走路 */
+    const rw=new THREE.Mesh(new THREE.PlaneGeometry(70,7),M(0x262B33));
+    rw.rotation.x=-Math.PI/2;rw.position.set(-6,.03,-12);g.add(rw);
+    for(let i=0;i<12;i++){
+      const st=new THREE.Mesh(new THREE.PlaneGeometry(3,.5),ME(0xF4F1E8,0xF4F1E8,.5));
+      st.rotation.x=-Math.PI/2;st.position.set(-36+i*5.6,.05,-12);g.add(st);
+    }
+    /* ターミナル・管制塔 */
+    g.add(box(14,3,4,0x3E4652,-6,0,-3));
+    g.add(cyl(.7,.9,8,0x4A5260,3,0,-4));
+    g.add(cyl(1.8,1.4,1.6,0x7FB3D5,3,8,-4));
+    /* 半導体工場(クリーンルーム) */
+    const fx=16,fz=9;
+    g.add(box(9,4,6,0xD9DCE2,fx,0,fz));
+    g.add(box(9.4,.5,6.4,0x7FB3D5,fx,4,fz));
+    g.add(box(2,2,2,0xB9BFC8,fx-2.5,4.4,fz));
+    g.add(box(2,1.6,2,0xB9BFC8,fx+2.5,4.4,fz));
+    /* 高速道路+IC */
+    g.add(road([[-40,0,20],[40,0,20]],3.2,0x30353E));
+    g.add(road([[8,0,20],[12,0,15],[fx-2,0,fz+4]],2.2,0x30353E));
+    const ups=[];
+    for(let i=0;i<2;i++){const t=truck(0xD9DCE2);g.add(t);
+      ups.push(follower(t,[[-38,0,19],[38,0,19],[38,0,21.4],[-38,0,21.4]],8,i/2));}
+    const t2=truck(0x7FB3D5);g.add(t2);
+    ups.push(follower(t2,[[8,0,20],[12,0,15],[fx-2,0,fz+4],[fx-5,0,fz+4],[10,0,16],[6,0,21]],5,.3));
+    /* 飛行機(離陸ループ): 外=ヨー / 内=ピッチ */
+    const plane=new THREE.Group();      // 位置+進行方向
+    const body=new THREE.Group();       // 機首上げ用
+    const fus=cyl(.9,.9,9,0xE8EAEE);fus.rotation.x=Math.PI/2;body.add(fus);
+    body.add(box(10,.25,2.2,0xD2D6DC,0,-.2,0));
+    body.add(box(4,.25,1.4,0xD2D6DC,0,1.6,-4));
+    body.add(box(.25,2,1.6,0xB5533C,0,.6,-4.4));
+    plane.add(body);plane.rotation.y=Math.PI/2;
+    g.add(plane);
+    let pt=0;
+    sc.add(g);
+    return{group:g,update(lt,dt){
+      ups.forEach(u=>u.update(dt));
+      pt=(pt+dt/9)%1; /* 9秒周期の離陸 */
+      const x=-36+pt*110;
+      const y=pt<.4?.9:.9+((pt-.4)/.6)*22*((pt-.4)/.6+0.4);
+      plane.position.set(x,y,-12);
+      body.rotation.x=pt<.4?0:-.28;   // 機首上げ
+      plane.visible=pt<.92;
+    }};
+  }
+},
+
+/* ── 第六章 集積指向型(自動車) ── */
+{ id:'agg',no:'第六章',nm:'集積指向型',ex:'自動車工業',dur:30,env:{bg:0x12141A,fog:.015},
+  card:{kick:'第 六 章',ttl:'集積指向型',desc:'クルマの町は、なぜ生まれるのか'},
+  cam:[K(0,[0,36,46],[0,0,0]),K(.4,[26,8,26],[8,3,4]),K(.7,[-24,10,20],[-4,4,0]),K(1,[0,30,44],[0,2,0])],
+  cues:[
+    {a:3.6,b:9.5,main:'自動車1台の部品は、<em>約3万点</em>。',sub:'部品を作る関連・下請け工場なしには、1台も完成しない'},
+    {a:10,b:15.5,main:'関連工場が、組立工場の<em>まわりに集まって</em>くる。',sub:'必要な部品を必要なときに ― <b>ジャスト・イン・タイム</b>'},
+    {a:16,b:22.5,main:'集まれば、輸送も情報交換も施設の共用も有利 ― <em>集積の利益</em>。',sub:'労働力・技術・インフラを共同で利用し、費用を節約'},
+    {a:23,b:29.5,main:'これが<em>集積指向型</em> ― 愛知県豊田市の周辺が典型だ。',sub:'集積が進み、大規模な工業地域が形成される'}
+  ],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x1C1F26));
+    /* 中央:組立工場 */
+    g.add(box(14,5,10,0x46506A,0,0,0));
+    g.add(box(14.6,.8,10.6,0x5A6684,0,5,0));
+    [-4,0,4].forEach(x=>g.add(box(2.2,1.6,2.2,0x39415A,x,5.8,0)));
+    g.add(box(4,2.2,10.5,0x323A50,-9,0,0)); // 搬入棟
+    /* 周囲:部品工場リング */
+    const ups=[];
+    const R=22,N=8;
+    for(let i=0;i<N;i++){
+      const a=i/N*Math.PI*2;
+      const x=Math.cos(a)*R,z=Math.sin(a)*R;
+      const hue=[0xB5533C,0x7FB3D5,0xD9C08A,0x7BA37E][i%4];
+      const f=new THREE.Group();
+      f.add(box(5,2.6,4,0x3A4048));
+      f.add(box(1.6,1,1.6,hue,0,2.6,0));
+      f.add(cyl(.24,.3,4,0x555C68,2,0,-1.4));
+      f.position.set(x,0,z);f.rotation.y=-a;g.add(f);
+      /* 放射状の道とJITトラック */
+      g.add(road([[x*.9,0,z*.9],[x*.18,0,z*.18]],1.8));
+      const path=[[x*.9,0,z*.9],[x*.2,0,z*.2],[x*.2+ (z>0?1.5:-1.5),0,z*.2],[x*.9+(z>0?1.5:-1.5),0,z*.9]];
+      const t=truck(hue);g.add(t);
+      ups.push(follower(t,path,4.5+((i*7)%3),i*.13));
+    }
+    /* 完成車の搬出 */
+    g.add(road([[7,0,6],[30,0,14]],2.4));
+    const car=new THREE.Group();
+    car.add(box(1.6,.7,3,0xB5533C,0,.3,0));car.add(box(1.4,.6,1.6,0x8A3A28,0,1,-.2));
+    const car2=car.clone();
+    g.add(car,car2);
+    ups.push(follower(car,[[7,0,6],[30,0,14],[30,0,17],[7,0,9]],6,0));
+    ups.push(follower(car2,[[7,0,6],[30,0,14],[30,0,17],[7,0,9]],6,.5));
+    sc.add(g);
+    return{group:g,update(lt,dt){ups.forEach(u=>u.update(dt));}};
+  }
+},
+
+/* ── 終章 ── */
+{ id:'ed',no:'終章',nm:'費用最小の法則',ex:'',dur:22,env:{bg:0x05070C,fog:.03},
+  cam:[K(0,[28,11,28],[0,3,0]),K(1,[-28,13,28],[0,3,0])],
+  cues:[],
+  build(sc){
+    const g=new THREE.Group();
+    g.add(ground(0x0A0F16));
+    for(let i=0;i<34;i++){
+      const x=(Math.random()-.5)*90,z=(Math.random()-.5)*80;
+      if(Math.abs(x)<12&&Math.abs(z)<12)continue;
+      g.add(box(2+Math.random()*2,1.5+Math.random()*3.5,2+Math.random()*2,0x141B26,x,0,z));
+    }
+    const core=new THREE.Mesh(new THREE.OctahedronGeometry(3),ME(0xE9C46A,0xE9C46A,.7));
+    core.position.y=6;g.add(core);
+    sc.add(g);
+    return{group:g,update(lt,dt){core.rotation.y+=dt*.5;core.position.y=6+Math.sin(lt)*0.6;}};
+  }
+}
+];
+
+/* ============================================================
+   タイムライン制御
+   ============================================================ */
+const TOTAL=CHAPTERS.reduce((s,c)=>s+c.dur,0);
+const starts=[];{let a=0;CHAPTERS.forEach(c=>{starts.push(a);a+=c.dur;});}
+let T=0,playing=false,curIdx=-1,cur=null;
+
+/* UI 構築 */
+const chipsEl=$('#chips');
+CHAPTERS.forEach((c,i)=>{
+  const b=document.createElement('button');b.className='chip';
+  b.textContent=c.nm?c.no+'|'+c.nm:c.no;
+  b.onclick=()=>seek(starts[i]);
+  chipsEl.appendChild(b);
+});
+const progEl=$('#prog');
+CHAPTERS.forEach((c,i)=>{if(i===0)return;
+  const t=document.createElement('div');t.className='tick';
+  t.style.left=(starts[i]/TOTAL*100)+'%';progEl.appendChild(t);});
+progEl.addEventListener('click',e=>{
+  const r=progEl.getBoundingClientRect();
+  const f=(e.clientX-r.left)/r.width*TOTAL;
+  let i=0;for(let k=0;k<CHAPTERS.length;k++)if(f>=starts[k])i=k;
+  seek(starts[i]);
+});
+function fmt(s){s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+$('#time').textContent='0:00 / '+fmt(TOTAL);
+
+function setPlaying(p){playing=p;$('#playBtn').textContent=p?'❚❚':'▶';}
+$('#playBtn').onclick=()=>{if(T>=TOTAL){seek(0);}setPlaying(!playing);};
+addEventListener('keydown',e=>{
+  if(e.code==='Space'){e.preventDefault();$('#playBtn').click();}
+  if(e.key==='ArrowRight')seek(starts[Math.min(curIdx+1,CHAPTERS.length-1)]);
+  if(e.key==='ArrowLeft'){const lt=T-starts[curIdx];seek(lt>2?starts[curIdx]:starts[Math.max(curIdx-1,0)]);}
+});
+
+function seek(t){T=t;switchChapter(idxAt(t),true);}
+function idxAt(t){let i=0;for(let k=0;k<CHAPTERS.length;k++)if(t>=starts[k])i=k;return i;}
+
+function switchChapter(i,force){
+  if(i===curIdx&&!force)return;
+  if(cur){scene.remove(cur.group);disposeGroup(cur.group);}
+  curIdx=i;const c=CHAPTERS[i];
+  scene.background=new THREE.Color(c.env.bg);
+  scene.fog=new THREE.FogExp2(c.env.bg,c.env.fog);
+  cur=c.build(scene);
+  /* キッカー */
+  const k=$('#kicker');
+  if(c.nm){k.classList.add('show');
+    k.querySelector('.no').textContent=c.no;
+    k.querySelector('.nm').textContent=c.nm;
+    k.querySelector('.ex').textContent=c.ex?'― '+c.ex:'';
+  }else k.classList.remove('show');
+  /* 章カード */
+  if(c.card){
+    $('#card .kick').textContent=c.card.kick;
+    $('#card .ttl').textContent=c.card.ttl;
+    $('#card .desc').textContent=c.card.desc;
+  }
+  /* チップ */
+  document.querySelectorAll('.chip').forEach((b,bi)=>b.classList.toggle('on',bi===i));
+  hideTelop();
+}
+
+/* テロップ */
+let curCue=null;
+function hideTelop(){curCue=null;$('#telop').classList.remove('show');}
+function updateTelop(c,lt){
+  const cue=c.cues.find(q=>lt>=q.a&&lt<q.b)||null;
+  if(cue!==curCue){
+    curCue=cue;
+    const el=$('#telop');
+    if(cue){
+      el.querySelector('.main').innerHTML=cue.main;
+      const sub=el.querySelector('.sub');
+      sub.innerHTML=cue.sub||'';sub.style.display=cue.sub?'block':'none';
+      el.classList.add('show');
+    }else el.classList.remove('show');
+  }
+}
+
+/* カメラ補間 */
+const _p=new THREE.Vector3(),_l=new THREE.Vector3();
+function updateCamera(c,lt){
+  const t01=THREE.MathUtils.clamp(lt/c.dur,0,1);
+  const ks=c.cam;
+  let a=ks[0],b=ks[ks.length-1];
+  for(let i=0;i<ks.length-1;i++)if(t01>=ks[i].t&&t01<=ks[i+1].t){a=ks[i];b=ks[i+1];break;}
+  const span=Math.max(b.t-a.t,1e-6);
+  const f=smooth((t01-a.t)/span);
+  _p.copy(a.p).lerp(b.p,f);_l.copy(a.l).lerp(b.l,f);
+  camera.position.copy(_p);camera.lookAt(_l);
+}
+
+/* オーバーレイ不透明度 */
+function fadeWindow(lt,inA,inB,outA,outB){
+  if(lt<inA)return 0;if(lt<inB)return (lt-inA)/(inB-inA);
+  if(lt<outA)return 1;if(lt<outB)return 1-(lt-outA)/(outB-outA);return 0;
+}
+
+/* メインループ */
+const clock=new THREE.Clock();
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(clock.getDelta(),.05);
+  if(playing){T+=dt;if(T>=TOTAL){T=TOTAL;setPlaying(false);}}
+  const i=idxAt(T);switchChapter(i);
+  const c=CHAPTERS[i],lt=T-starts[i];
+  cur.update(lt,dt);
+  updateCamera(c,lt);
+  updateTelop(c,lt);
+  /* 章カード / OP / ED */
+  $('#card').style.opacity=c.card?fadeWindow(lt,0,.6,2.9,3.7):0;
+  $('#op').style.opacity=c.id==='op'?fadeWindow(lt,0,.8,c.dur-1.4,c.dur-.2):0;
+  if(c.id==='ed'){
+    $('#ed').style.opacity=fadeWindow(lt,0,.8,c.dur+9,c.dur+10);
+    document.querySelectorAll('#edList li').forEach((li,k)=>li.classList.toggle('on',lt>1.6+k*2));
+    $('#ed .quote').classList.toggle('on',lt>15);
+  }else{$('#ed').style.opacity=0;
+    document.querySelectorAll('#edList li').forEach(li=>li.classList.remove('on'));
+    $('#ed .quote').classList.remove('on');}
+  /* プログレス */
+  $('#progFill').style.width=(T/TOTAL*100)+'%';
+  $('#time').textContent=fmt(T)+' / '+fmt(TOTAL);
+  renderer.render(scene,camera);
+}
+
+/* 起動 */
+switchChapter(0,true);
+loop();
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduced){$('#splash').classList.add('show');
+  $('#startBtn').onclick=()=>{$('#splash').classList.remove('show');setPlaying(true);};
+}else setPlaying(true);
+</script>
+</body>
+</html>
