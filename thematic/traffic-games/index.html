@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>列島レーサー | 日本縦断・乗り継ぎレースゲーム</title>
+<style>
+:root{
+  --ink:#17324F; --ink2:#4A6076; --bg:#E9EEF2; --panel:#FFFFFF;
+  --line:#C6D2DC; --accent:#D9333F; --gold:#C8A24A;
+  --c-LOC:#4A9B6E; --c-EXP:#E67A2E; --c-SHK:#2E6FB7; --c-BUS:#8E5BA6;
+  --c-NBUS:#5F4B8B; --c-FER:#2AA9B8; --c-NFER:#1B7F8C;
+  --radius:10px;
+  font-size:16px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Noto Sans JP","Meiryo",sans-serif;
+  background:var(--bg); color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit; cursor:pointer;}
+button:focus-visible, a:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+
+/* ===== 方向幕ヘッダー ===== */
+#header{
+  background:#101820; color:#fff;
+  display:flex; align-items:center; gap:14px;
+  padding:8px 16px; flex-wrap:wrap;
+  border-bottom:4px solid var(--accent);
+}
+#header .rollsign{
+  font-weight:800; letter-spacing:.14em; font-size:1.05rem;
+  display:flex; align-items:baseline; gap:10px;
+}
+#header .rollsign small{font-weight:400; letter-spacing:.06em; color:#9FB3C8; font-size:.72rem;}
+#header .stats{display:flex; gap:8px; margin-left:auto; flex-wrap:wrap;}
+.stat{
+  background:#1C2B3A; border:1px solid #33465C; border-radius:6px;
+  padding:4px 10px; font-size:.8rem; display:flex; flex-direction:column; min-width:88px;
+}
+.stat b{font-size:1rem; font-variant-numeric:tabular-nums; letter-spacing:.03em;}
+.stat span{color:#9FB3C8; font-size:.65rem; letter-spacing:.1em;}
+.stat.money b{color:#FFD87A;}
+.stat.clock b{color:#8FD4FF;}
+.stat.elapsed b{color:#FF9DA4;}
+
+/* ===== レイアウト ===== */
+#game{display:none; height:calc(100% - 62px);}
+#game.active{display:flex;}
+#mapwrap{flex:1; min-width:0; position:relative; overflow:hidden;}
+#map{width:100%; height:100%; display:block;}
+#side{
+  width:390px; max-width:46%; background:var(--panel);
+  border-left:1px solid var(--line); display:flex; flex-direction:column;
+  overflow:hidden;
+}
+@media (max-width:820px){
+  #game.active{flex-direction:column;}
+  #mapwrap{flex:0 0 42%;}
+  #side{width:100%; max-width:100%; flex:1; border-left:none; border-top:1px solid var(--line);}
+  :root{font-size:15px;}
+}
+
+/* ===== 駅名標 ===== */
+#ekimei{
+  margin:12px; border:3px solid var(--ink); border-radius:8px; background:#fff;
+  overflow:hidden; box-shadow:0 2px 0 rgba(23,50,79,.15);
+}
+#ekimei .band{height:8px; background:var(--ink);}
+#ekimei .body{padding:8px 14px 10px; text-align:center; position:relative;}
+#ekimei .name{font-size:1.7rem; font-weight:800; letter-spacing:.2em;}
+#ekimei .romaji{font-size:.72rem; letter-spacing:.28em; color:var(--ink2); text-transform:uppercase;}
+#ekimei .pref{
+  position:absolute; top:8px; right:10px; font-size:.62rem; color:var(--ink2);
+  border:1px solid var(--line); border-radius:4px; padding:1px 6px;
+}
+#ekimei .goalarrow{font-size:.72rem; color:var(--accent); margin-top:2px; font-weight:700;}
+
+/* ===== 移動オプション ===== */
+#optshead{
+  padding:0 14px; font-size:.75rem; letter-spacing:.16em; color:var(--ink2);
+  display:flex; justify-content:space-between; align-items:center;
+}
+#optshead .resthint{color:var(--accent); font-weight:700;}
+#opts{flex:1; overflow-y:auto; padding:8px 12px 12px; display:flex; flex-direction:column; gap:8px;}
+.optcard{
+  width:100%; text-align:left; background:#fff; border:1.5px solid var(--line);
+  border-radius:var(--radius); padding:10px 12px; display:flex; align-items:center; gap:10px;
+  transition:transform .08s ease, border-color .08s ease;
+}
+.optcard:hover:not(:disabled){border-color:var(--ink); transform:translateY(-1px);}
+.optcard:disabled{opacity:.45; cursor:not-allowed;}
+.modechip{
+  flex:0 0 auto; color:#fff; font-weight:800; font-size:.68rem; letter-spacing:.08em;
+  border-radius:5px; padding:5px 7px; min-width:56px; text-align:center;
+}
+.optmain{flex:1; min-width:0;}
+.optmain .dest{font-weight:800; font-size:1rem;}
+.optmain .meta{font-size:.72rem; color:var(--ink2); margin-top:2px; font-variant-numeric:tabular-nums;}
+.optprice{font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.optprice small{font-weight:400; color:var(--ink2);}
+.optcard .warn{color:var(--accent); font-size:.68rem; font-weight:700;}
+
+#restbtn{
+  margin:0 12px 10px; padding:10px; border-radius:var(--radius);
+  border:1.5px dashed var(--ink2); background:#F4F7FA; color:var(--ink);
+  font-weight:700; font-size:.85rem; display:none;
+}
+#restbtn.show{display:block;}
+
+/* ===== ログ ===== */
+#log{
+  flex:0 0 auto; max-height:120px; overflow-y:auto; border-top:1px solid var(--line);
+  padding:8px 14px; font-size:.7rem; color:var(--ink2); background:#F7FAFC;
+  font-variant-numeric:tabular-nums;
+}
+#log div{padding:1px 0;}
+#log .em{color:var(--ink); font-weight:700;}
+
+/* ===== SVG地図 ===== */
+.island{fill:#D8E3EC; stroke:#B4C6D4; stroke-width:1.2;}
+.edge{stroke:#BECBD7; stroke-width:2; fill:none;}
+.edge.ferry{stroke-dasharray:5 5;}
+.edge.done{stroke-width:3.5;}
+.nodedot{fill:#fff; stroke:var(--ink); stroke-width:2;}
+.nodedot.visited{fill:var(--ink);}
+.nodelabel{font-size:11px; font-weight:700; fill:var(--ink); paint-order:stroke; stroke:#E9EEF2; stroke-width:3px; stroke-linejoin:round;}
+.goalring{fill:none; stroke:var(--accent); stroke-width:2.5;}
+.goaltxt{font-size:10px; font-weight:800; fill:var(--accent); paint-order:stroke; stroke:#fff; stroke-width:3px;}
+#curmarker{fill:var(--accent); stroke:#fff; stroke-width:2;}
+#curring{
+  fill:none; stroke:var(--accent); stroke-width:2; opacity:.8;
+  transform-box:fill-box; transform-origin:center;
+  animation:pulse 1.6s ease-out infinite;
+}
+@keyframes pulse{0%{transform:scale(.6);opacity:.9;}100%{transform:scale(2.4);opacity:0;}}
+@media (prefers-reduced-motion:reduce){
+  #curring{animation:none; opacity:.5;}
+  .optcard{transition:none;}
+}
+
+/* ===== タイトル画面 ===== */
+#title{
+  min-height:100%; display:flex; flex-direction:column; align-items:center;
+  padding:34px 18px 40px; gap:20px;
+}
+#title .logo{
+  text-align:center; background:#101820; color:#fff; border-radius:12px;
+  padding:20px 34px; border-bottom:6px solid var(--accent); box-shadow:0 6px 18px rgba(16,24,32,.25);
+}
+#title .logo h1{font-size:2.1rem; letter-spacing:.3em; font-weight:800; padding-left:.3em;}
+#title .logo p{color:#9FB3C8; font-size:.78rem; letter-spacing:.2em; margin-top:6px;}
+#title .rules{
+  max-width:640px; background:#fff; border:1.5px solid var(--line); border-radius:12px;
+  padding:16px 20px; font-size:.85rem; line-height:1.8;
+}
+#title .rules h2{font-size:.8rem; letter-spacing:.2em; color:var(--accent); margin-bottom:6px;}
+.courses{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; max-width:960px;}
+.coursecard{
+  flex:1 1 260px; max-width:300px; background:#fff; border:1.5px solid var(--line);
+  border-radius:12px; padding:0; overflow:hidden; text-align:left;
+  transition:transform .1s ease, box-shadow .1s ease;
+}
+.coursecard:hover{transform:translateY(-3px); box-shadow:0 8px 20px rgba(23,50,79,.15); border-color:var(--ink);}
+.coursecard .head{background:var(--ink); color:#fff; padding:8px 14px; font-size:.72rem; letter-spacing:.14em; display:flex; justify-content:space-between;}
+.coursecard .route{padding:14px 14px 4px; font-size:1.25rem; font-weight:800; letter-spacing:.05em;}
+.coursecard .route .arr{color:var(--accent); padding:0 6px;}
+.coursecard .info{padding:4px 14px 12px; font-size:.75rem; color:var(--ink2); line-height:1.7;}
+.coursecard .best{padding:8px 14px; border-top:1px dashed var(--line); font-size:.72rem; color:var(--gold); font-weight:700;}
+#title .foot{font-size:.68rem; color:var(--ink2); max-width:640px; text-align:center; line-height:1.7;}
+#title .teacherlink{background:none; border:none; color:var(--ink); text-decoration:underline; font-size:.72rem;}
+
+/* ===== モーダル・トースト ===== */
+.overlay{
+  position:fixed; inset:0; background:rgba(16,24,32,.55); display:none;
+  align-items:center; justify-content:center; z-index:50; padding:16px;
+}
+.overlay.show{display:flex;}
+.modal{
+  background:#fff; border-radius:14px; max-width:520px; width:100%;
+  padding:22px 24px; box-shadow:0 20px 50px rgba(0,0,0,.35);
+  max-height:88vh; overflow-y:auto;
+}
+.modal h2{font-size:1.05rem; letter-spacing:.1em; margin-bottom:10px;}
+.modal p{font-size:.85rem; line-height:1.8; color:var(--ink2);}
+.modal .btnrow{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+.btn{
+  flex:1; padding:12px; border-radius:10px; border:none; font-weight:800; font-size:.9rem;
+  background:var(--ink); color:#fff;
+}
+.btn.sub{background:#EDF1F4; color:var(--ink); border:1.5px solid var(--line);}
+.btn.red{background:var(--accent);}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+
+/* 結果 */
+#resultmodal .rank{
+  text-align:center; margin:8px 0 14px;
+}
+#resultmodal .rank b{
+  display:inline-block; font-size:3.4rem; color:var(--accent);
+  border:4px solid var(--accent); border-radius:50%; width:92px; height:92px; line-height:84px;
+  transform:rotate(-8deg); font-family:serif;
+}
+#resultmodal .numbers{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;}
+#resultmodal .numbers div{background:#F4F7FA; border-radius:8px; padding:8px 14px; text-align:center;}
+#resultmodal .numbers b{font-size:1.1rem; display:block; font-variant-numeric:tabular-nums;}
+#resultmodal .numbers span{font-size:.65rem; color:var(--ink2); letter-spacing:.1em;}
+#resultroute{font-size:.72rem; color:var(--ink2); line-height:1.9; border-top:1px dashed var(--line); padding-top:10px; max-height:170px; overflow-y:auto;}
+#newrecord{display:none; text-align:center; color:var(--gold); font-weight:800; letter-spacing:.15em; margin-bottom:8px;}
+#newrecord.show{display:block;}
+
+/* 豆知識トースト */
+#toast{
+  position:fixed; left:50%; bottom:24px; transform:translate(-50%, 30px);
+  background:#101820; color:#fff; border-radius:12px; padding:12px 18px 12px 14px;
+  max-width:min(560px, 92vw); display:flex; gap:12px; align-items:center;
+  opacity:0; pointer-events:none; transition:all .35s ease; z-index:60;
+  border-left:5px solid var(--accent);
+}
+#toast.show{opacity:1; transform:translate(-50%,0);}
+#toast .stamp{
+  flex:0 0 auto; width:44px; height:44px; border:2.5px solid var(--accent); border-radius:50%;
+  color:var(--accent); font-weight:800; display:flex; align-items:center; justify-content:center;
+  transform:rotate(-12deg); font-size:.95rem;
+}
+#toast .txt b{display:block; font-size:.85rem; margin-bottom:2px;}
+#toast .txt p{font-size:.75rem; color:#C7D5E2; line-height:1.6;}
+@media (prefers-reduced-motion:reduce){#toast{transition:opacity .2s;}}
+</style>
+</head>
+<body>
+
+<!-- ===================== タイトル ===================== -->
+<div id="title">
+  <div class="logo">
+    <h1>列島レーサー</h1>
+    <p>RETTOU RACER ─ 乗り継ぎで日本を駆け抜けろ</p>
+  </div>
+  <div class="rules">
+    <h2>▍ルール</h2>
+    ① 限られた <b>予算</b> だけで、スタートからゴールまで公共交通を乗り継いで移動する。<b>飛行機は使用禁止。</b><br>
+    ② <b>23時までに移動を終える</b>こと。夜行バス・夜行フェリーに乗っていれば夜間も移動できる。<br>
+    ③ 夜はホテル(¥4,000・翌6時発)か駅で仮眠(無料・翌7時発)。どちらを選ぶかも作戦のうち。<br>
+    ④ ゴール到着までの <b>経過時間</b> でランクが決まる。最速ルートを探し出そう!
+  </div>
+  <div class="courses" id="courses"></div>
+  <div class="foot">
+    ※路線名・列車名・航路名は実在のものを収録し、運賃は2026年時点の通常期・自由席等の水準(2026年3月のJR東日本運賃改定を含む)を参考にした概算値です。<br>
+    ※フェリー・夜行便の発時刻は各社公表ダイヤに基づきます(一部簡略化)。昼行の列車・バスはパターンダイヤによる近似で、実際の時刻表とは異なります。ご利用時は必ず最新の公式情報をご確認ください。<br>
+    <button class="teacherlink" id="teacherbtn">▸ 先生向け:授業での活用ヒント・データの出典</button>
+  </div>
+</div>
+
+<!-- ===================== ゲーム ===================== -->
+<div id="header" style="display:none;">
+  <div class="rollsign"><span id="hcourse">列島レーサー</span><small id="hsub"></small></div>
+  <div class="stats">
+    <div class="stat money"><b id="hmoney">¥0</b><span>所持金</span></div>
+    <div class="stat clock"><b id="hclock">1日目 06:00</b><span>現在時刻</span></div>
+    <div class="stat elapsed"><b id="helapsed">0:00</b><span>経過時間</span></div>
+  </div>
+</div>
+<div id="game">
+  <div id="mapwrap"><svg id="map" viewBox="0 0 760 840" role="img" aria-label="日本地図と移動ルート"></svg></div>
+  <div id="side">
+    <div id="ekimei">
+      <div class="band"></div>
+      <div class="body">
+        <div class="pref" id="ekpref"></div>
+        <div class="name" id="ekname"></div>
+        <div class="romaji" id="ekromaji"></div>
+        <div class="goalarrow" id="ekgoal"></div>
+      </div>
+      <div class="band"></div>
+    </div>
+    <div id="optshead"><span>▍ここから乗れる便</span><span class="resthint" id="resthint"></span></div>
+    <div id="opts"></div>
+    <button id="restbtn">🛏 今日はここで休む(ホテル or 駅仮眠)</button>
+    <div id="log"></div>
+  </div>
+</div>
+
+<!-- ===================== モーダル群 ===================== -->
+<div class="overlay" id="restmodal">
+  <div class="modal">
+    <h2 id="resttitle">🌙 夜になりました</h2>
+    <p id="restdesc">23時をまわると移動できません。今夜の過ごし方を選んでください。</p>
+    <div class="btnrow">
+      <button class="btn" id="hotelbtn">ホテルに泊まる<br><small>¥4,000 / 翌 6:00 出発</small></button>
+      <button class="btn sub" id="napbtn">駅で仮眠する<br><small>無料 / 翌 7:00 出発</small></button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="brokemodal">
+  <div class="modal">
+    <h2>💸 資金切れ…</h2>
+    <p>所持金が足りず、ここからどの便にも乗れません。ルートと予算配分を見直して再挑戦しよう。</p>
+    <div class="btnrow"><button class="btn red" id="brokeretry">リトライ</button><button class="btn sub" id="broketitle">コース選択へ</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="resultmodal">
+  <div class="modal">
+    <h2 style="text-align:center;">🏁 ゴール!</h2>
+    <div id="newrecord">★ セッションベスト更新! ★</div>
+    <div class="rank"><b id="ranktxt">S</b></div>
+    <div class="numbers">
+      <div><b id="restime">0:00</b><span>経過時間</span></div>
+      <div><b id="resspent">¥0</b><span>使った金額</span></div>
+      <div><b id="resleft">¥0</b><span>残金</span></div>
+    </div>
+    <div id="resultroute"></div>
+    <div class="btnrow"><button class="btn red" id="resretry">同じコースに再挑戦</button><button class="btn sub" id="restitle">コース選択へ</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="teachermodal">
+  <div class="modal">
+    <h2>🧑‍🏫 授業での活用ヒント</h2>
+    <p>
+      <b>ねらい:</b>交通網・地形・都市の分布を「移動の意思決定」を通して体感的に学ぶ。<br><br>
+      <b>発問例</b><br>
+      ・「最安ルート」と「最速ルート」はなぜ一致しないのか?<br>
+      ・太平洋側ルートと日本海側ルート、交通網の密度の違いはなぜ生まれた?<br>
+      ・夜行バスやフェリーにはどんな役割がある?(時間の有効活用・貨物との関係)<br>
+      ・海峡(津軽・関門・瀬戸内)は移動にどう影響している?<br><br>
+      <b>展開例:</b>①個人で1回プレー → ②班でルート作戦会議 → ③タイムアタック → ④「なぜそのルートが速い/安いのか」を地図帳で検証。<br><br>
+      <b>データについて</b><br>
+      ・路線名・列車名・航路名は実在のものです。運賃は2026年時点の通常期・自由席等を参考にした概算値(2026年3月のJR東日本運賃改定を反映)。<br>
+      ・フェリー・夜行便の発時刻は各社の公表ダイヤに基づきます(津軽海峡フェリー6便/日、名門大洋フェリー17:00・19:50発、さんふらわあ19:05発など。一部簡略化)。昼行便はパターンダイヤ近似です。<br>
+      ・青森〜盛岡の在来線が並行在来線(青い森鉄道+IGR)で新幹線と運賃差が小さいこと、松山〜小倉フェリーが2025年6月末で廃止され本ゲームに収録されていないことなど、<b>交通網の変化そのものも教材になります</b>。<br>
+      ・実際の時刻表(駅すぱあと・NAVITIME等)との比較検証活動も効果的です。
+    </p>
+    <div class="btnrow"><button class="btn" id="teacherclose">閉じる</button></div>
+  </div>
+</div>
+
+<div id="toast"><div class="stamp">着</div><div class="txt"><b id="toastcity"></b><p id="toasttrivia"></p></div></div>
+
+<script>
+"use strict";
+/* ============================================================
+   列島レーサー ─ オリジナル実装
+   運賃・所要時間・ダイヤはゲーム用の概算値(実在ダイヤとは異なる)
+============================================================ */
+
+/* ---------- 都市データ ---------- */
+const NODES = {
+  wak:{n:"稚内", r:"WAKKANAI", p:"北海道", lat:45.40, lon:141.70, t:"日本最北端の市。宗谷海峡をはさんでサハリン(樺太)と向かい合う。"},
+  asa:{n:"旭川", r:"ASAHIKAWA", p:"北海道", lat:43.77, lon:142.36, t:"上川盆地に位置する内陸都市。放射冷却により冬の冷え込みが非常に厳しい。"},
+  sap:{n:"札幌", r:"SAPPORO", p:"北海道", lat:43.06, lon:141.35, t:"明治期の開拓で碁盤目状の街路がつくられた、北海道の政治・経済の中心。"},
+  hak:{n:"函館", r:"HAKODATE", p:"北海道", lat:41.77, lon:140.73, t:"津軽海峡に面する港町。青函連絡船の時代から本州との結節点だった。"},
+  aom:{n:"青森", r:"AOMORI", p:"青森県", lat:40.82, lon:140.75, t:"陸奥湾に面した港町。りんごの生産量は青森県が全国一。"},
+  aki:{n:"秋田", r:"AKITA", p:"秋田県", lat:39.72, lon:140.10, t:"日本海側気候で冬の降雪が多い。近郊には八郎潟の大規模な干拓地が広がる。"},
+  mor:{n:"盛岡", r:"MORIOKA", p:"岩手県", lat:39.70, lon:141.15, t:"北上盆地に位置する城下町。南部鉄器などの伝統工芸で知られる。"},
+  sen:{n:"仙台", r:"SENDAI", p:"宮城県", lat:38.27, lon:140.87, t:"「杜の都」と呼ばれる東北地方最大の都市。"},
+  nig:{n:"新潟", r:"NIIGATA", p:"新潟県", lat:37.92, lon:139.04, t:"信濃川の河口に発達した港町。越後平野は日本有数の稲作地帯。"},
+  nag:{n:"長野", r:"NAGANO", p:"長野県", lat:36.65, lon:138.18, t:"内陸の盆地に位置し、昼夜の気温差を生かした果樹栽培が盛ん。"},
+  kan:{n:"金沢", r:"KANAZAWA", p:"石川県", lat:36.56, lon:136.66, t:"加賀百万石の城下町。日本海側気候で冬に降水(雪)が多い。"},
+  tok:{n:"東京", r:"TOKYO", p:"東京都", lat:35.68, lon:139.77, t:"日本の首都。世界有数の巨大都市圏の中心で、交通網が放射状に集まる。"},
+  shz:{n:"静岡", r:"SHIZUOKA", p:"静岡県", lat:34.97, lon:138.38, t:"温暖な気候と牧ノ原台地などを生かした茶の栽培で全国的に有名。"},
+  ngy:{n:"名古屋", r:"NAGOYA", p:"愛知県", lat:35.17, lon:136.88, t:"濃尾平野に位置する中京工業地帯の中心。自動車関連産業が集積する。"},
+  kyo:{n:"京都", r:"KYOTO", p:"京都府", lat:35.01, lon:135.76, t:"平安京以来の古都。盆地のため夏は蒸し暑く、冬は底冷えする。"},
+  osa:{n:"大阪", r:"OSAKA", p:"大阪府", lat:34.69, lon:135.50, t:"淀川の河口に発達した西日本の経済の中心。江戸時代は「天下の台所」。"},
+  oka:{n:"岡山", r:"OKAYAMA", p:"岡山県", lat:34.66, lon:133.92, t:"瀬戸内式気候で降水が少なく「晴れの国」と呼ばれる。本州と四国の結節点。"},
+  hir:{n:"広島", r:"HIROSHIMA", p:"広島県", lat:34.40, lon:132.46, t:"太田川の三角州の上に発達した中国地方最大の都市。"},
+  tak:{n:"高松", r:"TAKAMATSU", p:"香川県", lat:34.34, lon:134.05, t:"讃岐平野には、少雨の瀬戸内式気候に対応するためのため池が数多く残る。"},
+  mat:{n:"松山", r:"MATSUYAMA", p:"愛媛県", lat:33.84, lon:132.77, t:"四国最大の都市。愛媛県は温暖な斜面を生かしたみかん栽培が盛ん。"},
+  kit:{n:"北九州", r:"KITAKYUSHU", p:"福岡県", lat:33.89, lon:130.88, t:"官営八幡製鉄所を核に発展した工業都市。関門海峡で本州と向き合う。"},
+  fuk:{n:"福岡", r:"FUKUOKA", p:"福岡県", lat:33.59, lon:130.40, t:"九州最大の都市。古代から大陸との交流の窓口として栄えた。"},
+  oit:{n:"大分", r:"OITA", p:"大分県", lat:33.24, lon:131.61, t:"別府をはじめ日本有数の温泉地を抱え、地熱資源が豊富。"},
+  kum:{n:"熊本", r:"KUMAMOTO", p:"熊本県", lat:32.80, lon:130.71, t:"阿蘇山の巨大カルデラで知られる。市の水道は豊富な地下水でまかなわれる。"},
+  miy:{n:"宮崎", r:"MIYAZAKI", p:"宮崎県", lat:31.91, lon:131.42, t:"温暖な気候を生かした野菜の促成栽培(ピーマンなど)で知られる。"},
+  kag:{n:"鹿児島", r:"KAGOSHIMA", p:"鹿児島県", lat:31.60, lon:130.56, t:"桜島と向き合う南九州の中心都市。火山噴出物のシラス台地が広がり畜産が盛ん。"},
+};
+
+/* ---------- 交通手段 ---------- */
+const MODES = {
+  LOC:{n:"普通列車", c:"var(--c-LOC)", head:25},
+  EXP:{n:"特急",     c:"var(--c-EXP)", head:40},
+  SHK:{n:"新幹線",   c:"var(--c-SHK)", head:20},
+  BUS:{n:"高速バス", c:"var(--c-BUS)", head:50},
+  NBUS:{n:"夜行バス", c:"var(--c-NBUS)", dep:1290},           // 21:30発
+  FER:{n:"フェリー", c:"var(--c-FER)"},                        // depsは路線ごと
+  NFER:{n:"夜行フェリー", c:"var(--c-NFER)"},                  // depは路線ごと
+};
+
+/* ---------- 路線データ(双方向) p:円 d:分 ln:実在の路線・便名
+   運賃は2026年時点の通常期・自由席等を参考にした概算値。
+   フェリー・夜行便の発時刻は公表ダイヤ準拠(一部簡略)。
+   deps=a→b方向の発時刻 / depsR=b→a方向(分単位・日内) ---------- */
+const EDGES = [
+  {a:"wak",b:"asa",o:[
+    {m:"EXP",p:8900,d:220,ln:"特急 宗谷・サロベツ(宗谷本線)"},
+    {m:"LOC",p:5900,d:360,ln:"宗谷本線 普通(名寄乗継)"}]},
+  {a:"asa",b:"sap",o:[
+    {m:"EXP",p:5700,d:85,ln:"特急 ライラック・カムイ"},
+    {m:"LOC",p:3200,d:150,ln:"函館本線 普通(岩見沢乗継)"},
+    {m:"BUS",p:2500,d:125,ln:"高速あさひかわ号"}]},
+  {a:"sap",b:"hak",o:[
+    {m:"EXP",p:9500,d:230,ln:"特急 北斗"},
+    {m:"BUS",p:5200,d:330,ln:"高速はこだて号"}]},
+  {a:"hak",b:"aom",o:[
+    {m:"FER",p:3200,d:220,ln:"津軽海峡フェリー(1日6便)",
+     deps:[200,530,840,1090,1330], depsR:[150,615,860,1035,1345]},
+    {m:"SHK",p:9000,d:130,ln:"北海道新幹線 はやぶさ(新函館北斗乗継)"}]},
+  {a:"aom",b:"mor",o:[
+    {m:"SHK",p:6700,d:60,ln:"東北新幹線 はやぶさ(新青森乗継)"},
+    {m:"LOC",p:5900,d:180,ln:"青い森鉄道+IGRいわて銀河鉄道"}]},
+  {a:"aom",b:"aki",o:[
+    {m:"EXP",p:5300,d:165,ln:"特急 つがる(奥羽本線)"},
+    {m:"LOC",p:3500,d:210,ln:"奥羽本線 普通"}]},
+  {a:"aki",b:"nig",o:[
+    {m:"EXP",p:7300,d:230,ln:"特急 いなほ(酒田乗継)"},
+    {m:"LOC",p:5000,d:420,ln:"羽越本線 普通"}]},
+  {a:"mor",b:"sen",o:[
+    {m:"SHK",p:6700,d:45,ln:"東北新幹線 やまびこ・はやぶさ"},
+    {m:"LOC",p:3600,d:180,ln:"東北本線 普通"}]},
+  {a:"sen",b:"tok",o:[
+    {m:"SHK",p:11500,d:110,ln:"東北新幹線 やまびこ"},
+    {m:"LOC",p:6400,d:360,ln:"東北本線 普通(乗継)"},
+    {m:"BUS",p:4000,d:330,ln:"昼行高速バス(仙台〜新宿)"},
+    {m:"NBUS",p:5000,d:420,ln:"夜行高速バス(仙台〜東京)"}]},
+  {a:"sen",b:"nig",o:[
+    {m:"BUS",p:4200,d:240,ln:"高速バス WEライナー"},
+    {m:"LOC",p:4800,d:350,ln:"在来線乗継(仙山線・米坂線経由)"}]},
+  {a:"nig",b:"tok",o:[
+    {m:"SHK",p:11200,d:120,ln:"上越新幹線 とき"},
+    {m:"LOC",p:6000,d:420,ln:"上越線・高崎線 普通"},
+    {m:"BUS",p:3500,d:330,ln:"昼行高速バス(新潟〜池袋)"}]},
+  {a:"nig",b:"kan",o:[
+    {m:"EXP",p:9300,d:180,ln:"特急しらゆき+北陸新幹線(上越妙高乗継)"},
+    {m:"LOC",p:5500,d:420,ln:"えちごトキめき・あいの風とやま鉄道等 乗継"},
+    {m:"BUS",p:4800,d:285,ln:"高速バス(新潟〜金沢)"}]},
+  {a:"tok",b:"nag",o:[
+    {m:"SHK",p:8600,d:95,ln:"北陸新幹線 かがやき・あさま"},
+    {m:"LOC",p:4400,d:270,ln:"高崎線+信越本線+しなの鉄道"},
+    {m:"BUS",p:3200,d:250,ln:"高速バス(新宿〜長野)"}]},
+  {a:"tok",b:"shz",o:[
+    {m:"SHK",p:6500,d:62,ln:"東海道新幹線 ひかり・こだま"},
+    {m:"LOC",p:3400,d:190,ln:"東海道本線 普通"}]},
+  {a:"shz",b:"ngy",o:[
+    {m:"SHK",p:6700,d:65,ln:"東海道新幹線 こだま"},
+    {m:"LOC",p:3400,d:180,ln:"東海道本線 普通"}]},
+  {a:"tok",b:"ngy",o:[
+    {m:"SHK",p:10600,d:100,ln:"東海道新幹線 のぞみ(自由席)"},
+    {m:"BUS",p:3000,d:330,ln:"昼行高速バス(東京〜名古屋)"},
+    {m:"NBUS",p:4500,d:390,ln:"夜行高速バス(東京〜名古屋)"}]},
+  {a:"nag",b:"ngy",o:[
+    {m:"EXP",p:7200,d:180,ln:"特急 しなの(中央西線)"},
+    {m:"LOC",p:4500,d:330,ln:"篠ノ井線・中央西線 普通"}]},
+  {a:"nag",b:"kan",o:[
+    {m:"SHK",p:9100,d:70,ln:"北陸新幹線 はくたか"}]},
+  {a:"kan",b:"kyo",o:[
+    {m:"EXP",p:7700,d:135,ln:"北陸新幹線つるぎ+特急サンダーバード(敦賀乗継)"},
+    {m:"LOC",p:4400,d:270,ln:"IRいしかわ+ハピライン+北陸本線 乗継"},
+    {m:"BUS",p:4000,d:250,ln:"高速バス(金沢〜京都)"}]},
+  {a:"ngy",b:"kyo",o:[
+    {m:"SHK",p:5200,d:36,ln:"東海道新幹線 のぞみ・ひかり"},
+    {m:"LOC",p:2600,d:150,ln:"東海道本線 普通(大垣・米原乗継)"},
+    {m:"BUS",p:2500,d:150,ln:"高速バス(名古屋〜京都)"}]},
+  {a:"kyo",b:"osa",o:[
+    {m:"LOC",p:580,d:30,ln:"JR京都線 新快速"}]},
+  {a:"ngy",b:"osa",o:[
+    {m:"SHK",p:6500,d:50,ln:"東海道新幹線 のぞみ(自由席)"},
+    {m:"EXP",p:5000,d:135,ln:"近鉄特急 ひのとり・アーバンライナー"},
+    {m:"BUS",p:2800,d:180,ln:"高速バス(名古屋〜大阪)"}]},
+  {a:"osa",b:"oka",o:[
+    {m:"SHK",p:6500,d:45,ln:"山陽新幹線 のぞみ・さくら"},
+    {m:"LOC",p:3400,d:180,ln:"山陽本線 普通(姫路・相生乗継)"},
+    {m:"BUS",p:3100,d:200,ln:"高速バス(大阪〜岡山)"}]},
+  {a:"osa",b:"hir",o:[
+    {m:"SHK",p:10400,d:85,ln:"山陽新幹線 のぞみ(自由席)"},
+    {m:"BUS",p:4500,d:300,ln:"昼行高速バス(大阪〜広島)"}]},
+  {a:"oka",b:"tak",o:[
+    {m:"LOC",p:1660,d:55,ln:"快速マリンライナー(瀬戸大橋線)"}]},
+  {a:"tak",b:"mat",o:[
+    {m:"EXP",p:6000,d:150,ln:"特急 いしづち(予讃線)"},
+    {m:"LOC",p:3700,d:270,ln:"予讃線 普通"},
+    {m:"BUS",p:4500,d:160,ln:"高速バス 坊っちゃんエクスプレス"}]},
+  {a:"mat",b:"oit",o:[
+    {m:"FER",p:5500,d:300,ln:"JR予讃線+宇和島運輸フェリー(八幡浜〜別府)",
+     deps:[460,820,1120], depsR:[460,820,1120]}]},
+  {a:"oka",b:"hir",o:[
+    {m:"SHK",p:5600,d:40,ln:"山陽新幹線 のぞみ・さくら"},
+    {m:"LOC",p:3100,d:180,ln:"山陽本線 普通"}]},
+  {a:"hir",b:"kit",o:[
+    {m:"SHK",p:6800,d:50,ln:"山陽新幹線 のぞみ・さくら(小倉)"},
+    {m:"LOC",p:3700,d:260,ln:"山陽本線 普通(徳山・下関乗継)"}]},
+  {a:"kit",b:"fuk",o:[
+    {m:"LOC",p:1300,d:75,ln:"鹿児島本線 快速(小倉〜博多)"},
+    {m:"SHK",p:2300,d:17,ln:"山陽新幹線(小倉〜博多・自由席)"}]},
+  {a:"osa",b:"kit",o:[
+    {m:"NFER",p:10100,d:755,ln:"名門大洋フェリー(大阪南港〜新門司)",
+     deps:[1020,1190], depsR:[1020,1190]},
+    {m:"NBUS",p:8500,d:630,ln:"夜行高速バス(大阪〜北九州・福岡)"}]},
+  {a:"osa",b:"oit",o:[
+    {m:"NFER",p:10400,d:710,ln:"フェリーさんふらわあ(大阪南港〜別府)",
+     dep:1145, depR:1125}]},
+  {a:"fuk",b:"kum",o:[
+    {m:"SHK",p:4700,d:40,ln:"九州新幹線 さくら・つばめ"},
+    {m:"LOC",p:2200,d:150,ln:"鹿児島本線 普通"},
+    {m:"BUS",p:2500,d:120,ln:"高速バス ひのくに号"}]},
+  {a:"fuk",b:"oit",o:[
+    {m:"EXP",p:5500,d:135,ln:"特急 ソニック(日豊本線)"},
+    {m:"LOC",p:3300,d:220,ln:"日豊本線 普通"}]},
+  {a:"kum",b:"kag",o:[
+    {m:"SHK",p:6500,d:45,ln:"九州新幹線 さくら"},
+    {m:"LOC",p:4500,d:300,ln:"肥薩おれんじ鉄道経由 普通"},
+    {m:"BUS",p:4100,d:200,ln:"高速バス(熊本〜鹿児島)"}]},
+  {a:"oit",b:"miy",o:[
+    {m:"EXP",p:5700,d:195,ln:"特急 にちりん(日豊本線)"},
+    {m:"LOC",p:4000,d:330,ln:"日豊本線 普通"}]},
+  {a:"oit",b:"kum",o:[
+    {m:"EXP",p:5000,d:180,ln:"特急 あそ・九州横断特急(豊肥本線)"},
+    {m:"BUS",p:3500,d:180,ln:"高速バス やまびこ号"}]},
+  {a:"miy",b:"kag",o:[
+    {m:"EXP",p:4300,d:130,ln:"特急 きりしま(日豊本線)"},
+    {m:"LOC",p:2700,d:250,ln:"日豊本線 普通"},
+    {m:"BUS",p:3000,d:170,ln:"高速バス(宮崎〜鹿児島)"}]},
+];
+
+/* ---------- コース ---------- */
+const COURSES = [
+  {id:0, name:"東海道チャレンジ", start:"tok", goal:"osa", budget:8000,
+   diff:"★☆☆ 入門", desc:"新幹線代は足りない!バスと在来線をどう組み合わせる?",
+   ranks:[600,780,1440]},
+  {id:1, name:"北の大地から首都へ", start:"sap", goal:"tok", budget:28000,
+   diff:"★★☆ 中級", desc:"津軽海峡をどう越える?フェリーか、新幹線か。",
+   ranks:[1320,1680,2880]},
+  {id:2, name:"日本列島大縦断", start:"wak", goal:"kag", budget:70000,
+   diff:"★★★ 上級", desc:"最北端から南九州へ。予算配分と夜の使い方がカギ。",
+   ranks:[3600,4680,6600]},
+];
+const bestRecords = {}; // セッション内のみ保持
+
+/* ---------- 投影(経緯度→SVG座標) ---------- */
+function proj(lon,lat){ return [ (lon-129)/17*690+40, (46-lat)/15.5*760+30 ]; }
+for(const k in NODES){ const [x,y]=proj(NODES[k].lon,NODES[k].lat); NODES[k].x=x; NODES[k].y=y; }
+
+/* ---------- 簡略化した島のシルエット(lon,lat) ---------- */
+const ISLANDS = [
+  // 北海道
+  [[141.0,45.4],[141.65,45.5],[142.1,45.0],[142.7,44.4],[143.9,44.15],[145.3,44.35],[145.1,43.7],[145.8,43.4],[145.55,43.0],[144.4,42.95],[143.3,42.0],[142.0,42.6],[141.0,42.55],[140.7,42.6],[140.95,41.95],[140.72,41.75],[140.1,41.4],[139.85,42.1],[140.3,42.4],[139.95,43.2],[140.7,43.2],[141.0,43.25],[141.4,43.4],[141.65,44.0],[141.65,45.0]],
+  // 本州
+  [[140.65,41.2],[141.0,40.85],[141.45,41.35],[141.55,40.5],[141.75,39.6],[141.6,38.4],[140.95,38.25],[140.9,37.0],[140.85,35.72],[140.4,35.15],[139.9,34.9],[139.82,35.3],[139.9,35.6],[139.65,35.25],[139.15,35.15],[138.95,34.62],[138.75,35.0],[138.5,34.98],[138.22,34.6],[137.3,34.65],[137.05,34.78],[136.9,35.0],[136.85,34.55],[136.9,34.28],[136.3,34.15],[135.75,33.45],[135.1,33.9],[135.4,34.62],[135.0,34.68],[134.6,34.75],[134.0,34.55],[133.1,34.38],[132.45,34.32],[132.15,33.95],[131.8,34.02],[131.0,33.95],[130.9,34.1],[131.2,34.38],[131.6,34.66],[132.4,35.2],[132.75,35.45],[133.35,35.55],[134.4,35.62],[135.2,35.72],[135.35,35.5],[135.75,35.48],[136.1,35.65],[136.05,36.2],[136.7,36.75],[136.75,37.4],[137.35,37.5],[137.2,37.0],[137.55,36.95],[138.35,37.4],[138.9,37.95],[139.45,38.35],[139.85,38.95],[140.05,39.7],[139.92,40.5],[140.3,41.05]],
+  // 四国
+  [[134.62,34.22],[134.75,33.83],[134.35,33.5],[134.16,33.25],[133.55,33.5],[133.02,32.72],[132.55,32.95],[132.4,33.35],[132.0,33.35],[132.7,33.85],[133.6,34.05],[134.05,34.35]],
+  // 九州
+  [[130.92,33.95],[131.05,33.6],[131.75,33.28],[131.9,32.75],[131.5,31.85],[131.42,31.05],[130.68,30.98],[130.62,31.55],[130.55,31.6],[130.3,31.25],[130.15,31.9],[129.78,32.55],[129.87,32.72],[129.62,33.0],[129.85,33.35],[130.2,33.58],[130.42,33.62],[130.6,33.9]],
+];
+
+/* ---------- ユーティリティ ---------- */
+const $ = s=>document.querySelector(s);
+const yen = v=>"¥"+v.toLocaleString("ja-JP");
+function fmtClock(t){ const d=Math.floor(t/1440)+1, m=t%1440; return d+"日目 "+String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"); }
+function fmtHM(t){ const m=t%1440; return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"); }
+function fmtDur(mins){ const h=Math.floor(mins/60), m=mins%60; return (h? h+"時間":"")+(m? m+"分":"") || "0分"; }
+function fmtElapsed(mins){ const h=Math.floor(mins/60), m=mins%60; return h+":"+String(m).padStart(2,"0"); }
+
+/* ---------- 出発時刻計算 ---------- */
+const DAY_FIRST=360, DAY_LAST=1320, NIGHT_START=1380; // 6:00 / 22:00 / 23:00
+function nextDep(opt, now, rev){
+  const t = now + 10; // 乗車手続き10分
+  const day = Math.floor(t/1440), tod = t%1440;
+  const deps = rev ? (opt.depsR || opt.deps) : opt.deps;
+  if(deps){ // 時刻表運航(フェリー等)
+    for(const d of deps){ if(d>=tod) return day*1440+d; }
+    return (day+1)*1440 + deps[0];
+  }
+  let fixed = rev ? (opt.depR!=null?opt.depR:opt.dep) : opt.dep;
+  if(fixed==null && opt.m==="NBUS") fixed = MODES.NBUS.dep;
+  if(fixed!=null){ // 夜行(1日1便)
+    return tod<=fixed ? day*1440+fixed : (day+1)*1440+fixed;
+  }
+  // 昼行モード:等間隔ダイヤ(6:00〜22:00)
+  const h = MODES[opt.m].head;
+  let cand = Math.ceil(t/h)*h;
+  for(let i=0;i<3;i++){
+    const ctod = cand%1440;
+    if(ctod<DAY_FIRST){ cand = Math.floor(cand/1440)*1440 + DAY_FIRST; cand = Math.ceil(cand/h)*h; }
+    else if(ctod>DAY_LAST){ cand = (Math.floor(cand/1440)+1)*1440 + DAY_FIRST; cand = Math.ceil(cand/h)*h; }
+    else break;
+  }
+  return cand;
+}
+
+/* ---------- 状態 ---------- */
+let S = null; // {course, node, money, time, spent, route, visitedEdges:Set, hotelNights}
+let animating = false;
+
+/* ---------- タイトル描画 ---------- */
+function renderTitle(){
+  const wrap = $("#courses"); wrap.innerHTML="";
+  COURSES.forEach(c=>{
+    const btn = document.createElement("button");
+    btn.className="coursecard";
+    const best = bestRecords[c.id];
+    btn.innerHTML = `
+      <div class="head"><span>${c.diff}</span><span>予算 ${yen(c.budget)}</span></div>
+      <div class="route">${NODES[c.start].n}<span class="arr">➔</span>${NODES[c.goal].n}</div>
+      <div class="info">${c.name}<br>${c.desc}</div>
+      <div class="best">${best ? "🏆 セッションベスト "+fmtElapsed(best) : "─ 記録なし ─"}</div>`;
+    btn.addEventListener("click", ()=>startGame(c));
+    wrap.appendChild(btn);
+  });
+}
+
+/* ---------- ゲーム開始 ---------- */
+function startGame(course){
+  S = { course, node:course.start, money:course.budget, time:DAY_FIRST, spent:0,
+        route:[], visitedEdges:new Set(), visitedNodes:new Set([course.start]) };
+  $("#title").style.display="none";
+  $("#header").style.display="flex";
+  $("#game").classList.add("active");
+  $("#hcourse").textContent = NODES[course.start].n+" ⇒ "+NODES[course.goal].n;
+  $("#hsub").textContent = course.name;
+  $("#log").innerHTML="";
+  addLog(`<span class="em">レース開始!</span> ${NODES[course.start].n}を6:00に出発。予算 ${yen(course.budget)}`);
+  drawMap();
+  refresh();
+}
+
+/* ---------- 地図描画 ---------- */
+function drawMap(){
+  const svg = $("#map"); svg.innerHTML="";
+  const ns = "http://www.w3.org/2000/svg";
+  // 島
+  for(const poly of ISLANDS){
+    const p = document.createElementNS(ns,"path");
+    p.setAttribute("d", "M"+poly.map(pt=>proj(pt[0],pt[1]).map(v=>v.toFixed(1)).join(",")).join("L")+"Z");
+    p.setAttribute("class","island");
+    svg.appendChild(p);
+  }
+  // 路線
+  for(const e of EDGES){
+    const A=NODES[e.a], B=NODES[e.b];
+    const l = document.createElementNS(ns,"line");
+    l.setAttribute("x1",A.x); l.setAttribute("y1",A.y);
+    l.setAttribute("x2",B.x); l.setAttribute("y2",B.y);
+    const ferry = e.o.every(o=>o.m==="FER"||o.m==="NFER");
+    l.setAttribute("class","edge"+(ferry?" ferry":""));
+    l.dataset.key = e.a+"-"+e.b;
+    svg.appendChild(l);
+  }
+  // ゴールマーク
+  const g = NODES[S.course.goal];
+  const ring = document.createElementNS(ns,"circle");
+  ring.setAttribute("cx",g.x); ring.setAttribute("cy",g.y); ring.setAttribute("r",11);
+  ring.setAttribute("class","goalring"); svg.appendChild(ring);
+  const gt = document.createElementNS(ns,"text");
+  gt.setAttribute("x",g.x+14); gt.setAttribute("y",g.y-10);
+  gt.setAttribute("class","goaltxt"); gt.textContent="GOAL"; svg.appendChild(gt);
+  // 駅
+  for(const k in NODES){
+    const nd = NODES[k];
+    const c = document.createElementNS(ns,"circle");
+    c.setAttribute("cx",nd.x); c.setAttribute("cy",nd.y); c.setAttribute("r",5);
+    c.setAttribute("class","nodedot"); c.id="dot-"+k;
+    svg.appendChild(c);
+    const t = document.createElementNS(ns,"text");
+    const off = nd.lab || [8,-8];
+    t.setAttribute("x",nd.x+off[0]); t.setAttribute("y",nd.y+off[1]);
+    t.setAttribute("class","nodelabel"); t.textContent=nd.n;
+    svg.appendChild(t);
+  }
+  // 現在地マーカー
+  const cur = NODES[S.node];
+  const ringc = document.createElementNS(ns,"circle");
+  ringc.id="curring"; ringc.setAttribute("r",8);
+  ringc.setAttribute("cx",cur.x); ringc.setAttribute("cy",cur.y);
+  svg.appendChild(ringc);
+  const m = document.createElementNS(ns,"circle");
+  m.id="curmarker"; m.setAttribute("r",7);
+  m.setAttribute("cx",cur.x); m.setAttribute("cy",cur.y);
+  svg.appendChild(m);
+  updateMapState();
+}
+function updateMapState(){
+  for(const k in NODES){
+    const d = $("#dot-"+k);
+    if(d) d.classList.toggle("visited", S.visitedNodes.has(k));
+  }
+  document.querySelectorAll(".edge").forEach(el=>{
+    const key = el.dataset.key;
+    const rev = key.split("-").reverse().join("-");
+    if(S.visitedEdges.has(key)||S.visitedEdges.has(rev)){
+      el.classList.add("done");
+      el.style.stroke = S.edgeColors && (S.edgeColors[key]||S.edgeColors[rev]) || "var(--ink)";
+    }
+  });
+}
+
+/* ---------- 画面更新 ---------- */
+function refresh(){
+  $("#hmoney").textContent = yen(S.money);
+  $("#hclock").textContent = fmtClock(S.time);
+  $("#helapsed").textContent = fmtElapsed(S.time - DAY_FIRST);
+  const nd = NODES[S.node];
+  $("#ekname").textContent = nd.n;
+  $("#ekromaji").textContent = nd.r;
+  $("#ekpref").textContent = nd.p;
+  const g = NODES[S.course.goal];
+  const dist = Math.round(Math.hypot(g.lon-nd.lon,(g.lat-nd.lat)*1.11)*92); // ざっくり直線距離km
+  $("#ekgoal").textContent = S.node===S.course.goal ? "🏁 ゴール!" : `▶ ゴール ${g.n} まで 直線約${dist}km`;
+  renderOptions();
+  const tod = S.time%1440;
+  $("#restbtn").classList.toggle("show", tod>=1140 && tod<NIGHT_START);
+  $("#resthint").textContent = tod>=1260&&tod<NIGHT_START ? "⚠ まもなく23時" : "";
+}
+
+function optionsAt(node){
+  const list=[];
+  for(const e of EDGES){
+    let to=null, rev=false;
+    if(e.a===node) to=e.b; else if(e.b===node){ to=e.a; rev=true; }
+    if(!to) continue;
+    for(const o of e.o){
+      list.push({to, edge:e, opt:o, rev});
+    }
+  }
+  return list;
+}
+
+function renderOptions(){
+  const wrap = $("#opts"); wrap.innerHTML="";
+  const now = S.time;
+  const opts = optionsAt(S.node);
+  // 出発の早い順に並べる
+  opts.forEach(x=>{ x.dep = nextDep(x.opt, now, x.rev); });
+  opts.sort((a,b)=>a.dep-b.dep || a.opt.p-b.opt.p);
+  let anyClickable=false;
+  for(const x of opts){
+    const {to, opt, dep} = x;
+    const md = MODES[opt.m];
+    const sameDay = Math.floor(dep/1440)===Math.floor((now+10)/1440);
+    const affordable = S.money>=opt.p;
+    const clickable = sameDay && affordable && !animating;
+    if(sameDay && affordable) anyClickable=true;
+    const arr = dep + opt.d;
+    const btn = document.createElement("button");
+    btn.className="optcard";
+    btn.disabled = !clickable;
+    btn.innerHTML = `
+      <span class="modechip" style="background:${md.c}">${md.n}</span>
+      <span class="optmain">
+        <span class="dest">${NODES[to].n} 行き</span>
+        <span class="meta">${opt.ln}</span>
+        <span class="meta">${sameDay ? fmtHM(dep)+" 発 → "+fmtHM(arr)+" 着("+(Math.floor(arr/1440)>Math.floor(dep/1440)?"翌":"")+fmtDur(opt.d)+")" : "本日の運行は終了(翌 "+fmtHM(dep)+" 発)"}</span>
+        ${!affordable ? '<span class="warn">資金不足</span>':''}
+      </span>
+      <span class="optprice">${yen(opt.p)}</span>`;
+    if(clickable) btn.addEventListener("click", ()=>ride(x));
+    wrap.appendChild(btn);
+  }
+  // 資金切れチェック(どの便もお金が足りない)
+  const minPrice = Math.min(...opts.map(x=>x.opt.p));
+  if(S.money < minPrice && S.node!==S.course.goal){
+    $("#brokemodal").classList.add("show");
+    return;
+  }
+  // 動ける便が今日はもう無い → 休むしかない
+  if(!anyClickable && !animating){
+    const tod = S.time%1440;
+    if(tod>=DAY_FIRST) $("#restbtn").classList.add("show");
+  }
+}
+
+/* ---------- 乗車 ---------- */
+function ride(x){
+  if(animating) return;
+  const {to, opt, dep, edge} = x;
+  if(S.money < opt.p) return;
+  animating = true;
+  S.money -= opt.p; S.spent += opt.p;
+  const arr = dep + opt.d;
+  const md = MODES[opt.m];
+  addLog(`${fmtClock(dep)} <span class="em">${NODES[S.node].n} → ${NODES[to].n}</span> ${opt.ln}(${yen(opt.p)} / ${fmtDur(opt.d)})`);
+  S.route.push({from:S.node, to, mode:opt.m, ln:opt.ln, dep, arr, price:opt.p});
+  const key = edge.a+"-"+edge.b;
+  S.visitedEdges.add(key);
+  S.edgeColors = S.edgeColors||{}; S.edgeColors[key]=md.c;
+  // マーカー移動アニメ
+  const A=NODES[S.node], B=NODES[to];
+  const mk=$("#curmarker"), rg=$("#curring");
+  const dur = matchMedia("(prefers-reduced-motion:reduce)").matches ? 0 : 1100;
+  const t0 = performance.now();
+  function step(t){
+    const k = dur? Math.min(1,(t-t0)/dur) : 1;
+    const e = k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+    const cx=A.x+(B.x-A.x)*e, cy=A.y+(B.y-A.y)*e;
+    mk.setAttribute("cx",cx); mk.setAttribute("cy",cy);
+    rg.setAttribute("cx",cx); rg.setAttribute("cy",cy);
+    if(k<1) requestAnimationFrame(step); else arrive(to, arr);
+  }
+  requestAnimationFrame(step);
+  // 時計は先に進めておく
+  S.time = arr;
+  $("#hclock").textContent = fmtClock(S.time);
+  $("#hmoney").textContent = yen(S.money);
+}
+
+function arrive(to, arr){
+  S.node = to; S.time = arr;
+  S.visitedNodes.add(to);
+  animating = false;
+  updateMapState();
+  showToast(NODES[to]);
+  if(to === S.course.goal){ setTimeout(finish, 700); refresh(); return; }
+  refresh();
+  if($("#brokemodal").classList.contains("show")) return; // 資金切れが優先
+  const tod = S.time%1440;
+  if(tod>=NIGHT_START || tod<300){ openRest(true); }
+}
+
+/* ---------- 宿泊 ---------- */
+function openRest(forced){
+  $("#resttitle").textContent = forced ? "🌙 夜になりました" : "🛏 今日はここまで?";
+  $("#restdesc").textContent = forced
+    ? "23時をまわると移動できません。今夜の過ごし方を選んでください。"
+    : "早めに休んで明朝に備えることもできます。";
+  $("#hotelbtn").disabled = S.money < 4000;
+  $("#restmodal").classList.add("show");
+  $("#restmodal").dataset.forced = forced ? "1":"";
+}
+function doRest(hotel){
+  const tod = S.time%1440;
+  const base = tod<300 ? Math.floor(S.time/1440)*1440 : (Math.floor(S.time/1440)+1)*1440;
+  if(hotel){ S.money-=4000; S.spent+=4000; S.time = base + 360; addLog(`ホテルに宿泊(¥4,000)。${fmtClock(S.time)} 出発準備OK`); }
+  else { S.time = base + 420; addLog(`駅で仮眠…。${fmtClock(S.time)} 出発準備OK`); }
+  $("#restmodal").classList.remove("show");
+  refresh();
+}
+
+/* ---------- 豆知識トースト ---------- */
+let toastTimer=null;
+function showToast(nd){
+  $("#toastcity").textContent = nd.n+"に到着 〔"+nd.p+"〕";
+  $("#toasttrivia").textContent = nd.t;
+  $("#toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>$("#toast").classList.remove("show"), 5200);
+}
+
+/* ---------- ログ ---------- */
+function addLog(html){
+  const d=document.createElement("div"); d.innerHTML=html;
+  $("#log").prepend(d);
+}
+
+/* ---------- ゴール ---------- */
+function finish(){
+  const elapsed = S.time - DAY_FIRST;
+  const [s,a,b] = S.course.ranks;
+  const rank = elapsed<=s?"S":elapsed<=a?"A":elapsed<=b?"B":"C";
+  $("#ranktxt").textContent = rank;
+  $("#restime").textContent = fmtElapsed(elapsed)+" ("+fmtClock(S.time)+"着)";
+  $("#resspent").textContent = yen(S.spent);
+  $("#resleft").textContent = yen(S.money);
+  const prev = bestRecords[S.course.id];
+  const isBest = prev==null || elapsed<prev;
+  if(isBest) bestRecords[S.course.id]=elapsed;
+  $("#newrecord").classList.toggle("show", isBest);
+  $("#resultroute").innerHTML = "<b>たどったルート</b><br>" + S.route.map(r=>
+    `${fmtClock(r.dep)} ${NODES[r.from].n} → ${NODES[r.to].n}〔${r.ln}〕${fmtHM(r.arr)}着 ${yen(r.price)}`
+  ).join("<br>");
+  $("#resultmodal").classList.add("show");
+}
+
+/* ---------- 画面遷移 ---------- */
+function toTitle(){
+  $("#resultmodal").classList.remove("show");
+  $("#brokemodal").classList.remove("show");
+  $("#restmodal").classList.remove("show");
+  $("#game").classList.remove("active");
+  $("#header").style.display="none";
+  $("#title").style.display="flex";
+  renderTitle();
+}
+function retry(){
+  const c = S.course;
+  $("#resultmodal").classList.remove("show");
+  $("#brokemodal").classList.remove("show");
+  startGame(c);
+}
+
+/* ---------- イベント ---------- */
+$("#hotelbtn").addEventListener("click", ()=>doRest(true));
+$("#napbtn").addEventListener("click", ()=>doRest(false));
+$("#restbtn").addEventListener("click", ()=>openRest(false));
+$("#resretry").addEventListener("click", retry);
+$("#restitle").addEventListener("click", toTitle);
+$("#brokeretry").addEventListener("click", retry);
+$("#broketitle").addEventListener("click", toTitle);
+$("#teacherbtn").addEventListener("click", ()=>$("#teachermodal").classList.add("show"));
+$("#teacherclose").addEventListener("click", ()=>$("#teachermodal").classList.remove("show"));
+// 任意選択の宿泊モーダルは外側クリックで閉じられる(強制時は閉じない)
+$("#restmodal").addEventListener("click", e=>{
+  if(e.target.id==="restmodal" && !$("#restmodal").dataset.forced) $("#restmodal").classList.remove("show");
+});
+
+renderTitle();
+</script>
+</body>
+</html>
