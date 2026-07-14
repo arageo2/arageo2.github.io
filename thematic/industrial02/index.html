@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工業の知識集約化ラボ ― 3社の100年でたどる技術集約度の高まり</title>
+<style>
+:root{
+  --ink:#1b2a4a;          /* 濃紺インク */
+  --paper:#f5f7fa;        /* クールな紙 */
+  --card:#ffffff;
+  --line:#d5dbe5;
+  --muted:#5b6b85;
+  --toray:#2b5f9e;        /* 繊維の藍 */
+  --nintendo:#c43a3a;     /* 花札の朱 */
+  --fuji:#0f8a5f;         /* フィルム箱の緑 */
+  --labor:#e0a13c;        /* 労働集約 */
+  --capital:#7a6bbf;      /* 資本集約 */
+  --knowledge:#1f9e8e;    /* 知識集約 */
+  --correct:#e7f5ee;
+  --wrong:#fdeeee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;
+}
+.serif{font-family:"Hiragino Mincho ProN","Yu Mincho",serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ===== ヘッダー ===== */
+header{
+  background:var(--ink);color:#fff;padding:44px 0 36px;
+  border-bottom:6px solid var(--knowledge);
+}
+header .eyebrow{font-size:.8rem;letter-spacing:.35em;color:#9fb3d9;margin-bottom:10px}
+header h1{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;line-height:1.4}
+header h1 .accent{color:#6fd3c4}
+header p.lead{margin-top:14px;color:#c9d6ec;font-size:.95rem;max-width:760px}
+.q-banner{
+  margin-top:20px;display:inline-block;background:rgba(255,255,255,.08);
+  border-left:4px solid #6fd3c4;padding:10px 18px;border-radius:0 8px 8px 0;
+  font-size:1.02rem;font-weight:700;
+}
+
+/* ===== ナビ ===== */
+nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 8px rgba(27,42,74,.06)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:0 12px}
+nav button{
+  border:none;background:none;padding:14px 16px;font-size:.9rem;font-weight:600;
+  color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;
+  font-family:inherit;
+}
+nav button:hover{color:var(--ink)}
+nav button.active{color:var(--ink);border-bottom-color:var(--knowledge)}
+nav button[data-nav="toray"].active{border-bottom-color:var(--toray)}
+nav button[data-nav="nintendo"].active{border-bottom-color:var(--nintendo)}
+nav button[data-nav="fuji"].active{border-bottom-color:var(--fuji)}
+
+/* ===== セクション共通 ===== */
+section{display:none;padding:40px 0 60px}
+section.show{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2.sec-title{font-size:1.4rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+h2 .chip{font-size:.7rem;padding:3px 10px;border-radius:999px;color:#fff;letter-spacing:.1em}
+p.sec-lead{color:var(--muted);font-size:.92rem;margin-bottom:26px;max-width:820px}
+
+/* ===== 導入:3つの集約型 ===== */
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:20px 0}
+.type-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;border-top:5px solid var(--line)}
+.type-card.labor{border-top-color:var(--labor)}
+.type-card.capital{border-top-color:var(--capital)}
+.type-card.knowledge{border-top-color:var(--knowledge)}
+.type-card h3{font-size:1.05rem;margin-bottom:8px}
+.type-card p{font-size:.88rem;color:var(--muted)}
+.type-card .ex{margin-top:10px;font-size:.82rem;background:var(--paper);border-radius:8px;padding:8px 12px}
+.arrow-flow{
+  text-align:center;font-weight:700;font-size:1rem;margin:24px 0;
+  background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px;
+}
+.arrow-flow span{padding:4px 12px;border-radius:8px;color:#fff;margin:0 4px;display:inline-block}
+.note-box{
+  background:#fff;border-left:5px solid var(--ink);border-radius:0 10px 10px 0;
+  padding:16px 20px;font-size:.9rem;margin-top:22px;
+}
+.note-box b{display:block;margin-bottom:4px}
+
+/* ===== 企業ページレイアウト ===== */
+.co-layout{display:grid;grid-template-columns:190px 1fr;gap:22px;align-items:start}
+@media(max-width:760px){.co-layout{grid-template-columns:1fr}}
+.timeline{display:flex;flex-direction:column;gap:8px;position:sticky;top:64px}
+@media(max-width:760px){.timeline{flex-direction:row;overflow-x:auto;position:static;padding-bottom:6px}}
+.era-btn{
+  border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px 14px;
+  text-align:left;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;
+}
+.era-btn .yr{font-size:1.05rem;font-weight:800;font-variant-numeric:tabular-nums;display:block}
+.era-btn .lb{font-size:.76rem;color:var(--muted)}
+.era-btn:hover{border-color:var(--ink)}
+.era-btn.active{color:#fff;border-color:transparent}
+.era-btn.active .lb{color:rgba(255,255,255,.85)}
+.co-toray .era-btn.active{background:var(--toray)}
+.co-nintendo .era-btn.active{background:var(--nintendo)}
+.co-fuji .era-btn.active{background:var(--fuji)}
+
+/* ステージカード(1画面1焦点) */
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.stage-head{padding:20px 24px 14px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
+.stage-head h3{font-size:1.25rem}
+.stage-head .badge{
+  font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:999px;color:#fff;
+  letter-spacing:.05em;
+}
+.stage-body{display:grid;grid-template-columns:1.35fr 1fr;gap:0}
+@media(max-width:760px){.stage-body{grid-template-columns:1fr}}
+.stage-main{padding:20px 24px}
+.stage-main p{font-size:.92rem;margin-bottom:12px}
+.kw{display:inline-block;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:2px 10px;font-size:.78rem;font-weight:700;margin:2px 4px 2px 0}
+.stage-side{background:#f2f5f9;padding:20px 22px;border-left:1px solid var(--line)}
+@media(max-width:760px){.stage-side{border-left:none;border-top:1px solid var(--line)}}
+.stage-side h4{font-size:.82rem;letter-spacing:.15em;color:var(--muted);margin-bottom:10px}
+
+/* 技術集約度メーター(シグネチャー要素) */
+.meter{margin-top:4px}
+.meter .row{display:grid;grid-template-columns:82px 1fr 34px;align-items:center;gap:10px;margin-bottom:10px;font-size:.82rem;font-weight:700}
+.meter .bar{height:14px;background:#e6eaf1;border-radius:999px;overflow:hidden}
+.meter .fill{height:100%;border-radius:999px;width:0;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.fill.labor{background:var(--labor)}
+.fill.capital{background:var(--capital)}
+.fill.knowledge{background:var(--knowledge)}
+.meter-note{font-size:.72rem;color:var(--muted);margin-top:8px}
+.geo-view{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.84rem}
+.geo-view b{color:var(--ink)}
+
+/* ===== クイズ ===== */
+.quiz-box{margin-top:34px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.quiz-box h3{font-size:1.05rem;margin-bottom:4px}
+.quiz-box .progress{font-size:.8rem;color:var(--muted);margin-bottom:16px}
+.q-item{margin-bottom:22px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.q-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.q-item .qt{font-weight:700;font-size:.95rem;margin-bottom:10px}
+.choices{display:grid;gap:8px}
+.choices button{
+  text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;
+  padding:10px 14px;font-size:.9rem;cursor:pointer;font-family:inherit;transition:all .12s;
+}
+.choices button:hover:not(:disabled){border-color:var(--ink)}
+.choices button:disabled{cursor:default}
+.choices button.correct{background:var(--correct);border-color:#2e9e6b;font-weight:700}
+.choices button.wrong{background:var(--wrong);border-color:#d06060}
+.feedback{margin-top:10px;font-size:.85rem;background:var(--paper);border-radius:8px;padding:10px 14px;display:none}
+.feedback.show{display:block}
+.feedback b{display:block;margin-bottom:2px}
+
+/* ===== まとめ ===== */
+table.compare{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:.86rem;margin:18px 0}
+table.compare th,table.compare td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+table.compare th{background:var(--ink);color:#fff;font-size:.82rem}
+table.compare td:first-child{font-weight:700;white-space:nowrap}
+.essay{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:18px}
+.essay h3{font-size:1rem;margin-bottom:6px}
+.essay .tag{display:inline-block;font-size:.72rem;color:#fff;padding:2px 10px;border-radius:999px;margin-right:8px;vertical-align:2px}
+.tag.kousatsu{background:var(--capital)}
+.tag.kousou{background:var(--knowledge)}
+.essay textarea{
+  width:100%;margin-top:12px;border:1px solid var(--line);border-radius:8px;padding:12px;
+  font-family:inherit;font-size:.9rem;min-height:96px;resize:vertical;background:var(--paper);
+}
+.hint-btn{
+  margin-top:10px;border:1px solid var(--ink);background:none;color:var(--ink);
+  border-radius:999px;padding:6px 18px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.hint-btn:hover{background:var(--ink);color:#fff}
+.hint-body{display:none;margin-top:12px;font-size:.85rem;background:var(--paper);border-radius:8px;padding:12px 14px}
+.hint-body.show{display:block}
+
+/* 次へボタン */
+.next-btn{
+  display:block;margin:40px auto 0;border:none;background:var(--ink);color:#fff;
+  border-radius:999px;padding:12px 34px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.next-btn:hover{opacity:.88}
+
+footer{background:var(--ink);color:#9fb3d9;font-size:.75rem;padding:26px 0;margin-top:20px}
+footer p{max-width:820px}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">地理探究　現代世界の系統地理的考察 ― 工業</div>
+    <h1 class="serif">工業の知識集約化ラボ<br><span class="accent">― 3つの企業の100年でたどる「技術集約度」の高まり ―</span></h1>
+    <p class="lead">花札・レーヨン・写真フィルム。かつて日本の工業を支えたこれらの製品をつくっていた会社は、いまゲーム機・炭素繊維・医薬品の世界的企業になっています。年表を操作しながら、その変化を「労働集約 → 資本集約 → 知識集約」という地理の視点で読み解きましょう。</p>
+    <div class="q-banner">今日の問い：なぜ企業は、つくるものを変え続けてきたのだろうか？</div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <button data-nav="intro" class="active" onclick="go('intro')">① 導入：技術集約度とは</button>
+    <button data-nav="toray" onclick="go('toray')">② 東レ（繊維→先端素材）</button>
+    <button data-nav="nintendo" onclick="go('nintendo')">③ 任天堂（花札→娯楽IP）</button>
+    <button data-nav="fuji" onclick="go('fuji')">④ 富士フイルム（写真→医療）</button>
+    <button data-nav="matome" onclick="go('matome')">⑤ まとめ・考察→構想</button>
+  </div>
+</nav>
+
+<!-- ===================== 導入 ===================== -->
+<section id="intro" class="show">
+  <div class="wrap">
+    <h2 class="sec-title serif">① 「技術集約度」とは何だろうか</h2>
+    <p class="sec-lead">工業は、生産のために「何を最も多く投入するか」によって、大きく3つの型に分けて考えることができます。まず3つの型の違いをおさえましょう。</p>
+
+    <div class="grid3">
+      <div class="type-card labor">
+        <h3>労働集約型</h3>
+        <p>多くの<b>人手（労働力）</b>に頼って生産する型。賃金の安い地域に立地しやすい。</p>
+        <div class="ex">例：繊維（縫製）、雑貨、電子部品の組立など</div>
+      </div>
+      <div class="type-card capital">
+        <h3>資本集約型</h3>
+        <p>大規模な<b>設備・機械（資本）</b>への投資が中心となる型。原料輸入に便利な臨海部などに立地しやすい。</p>
+        <div class="ex">例：鉄鋼、石油化学、自動車など</div>
+      </div>
+      <div class="type-card knowledge">
+        <h3>知識集約型</h3>
+        <p><b>研究・開発（R&amp;D）</b>が生む技術・知識が付加価値の源泉となる型。高度人材や大学・研究機関の近くに立地しやすい。</p>
+        <div class="ex">例：先端素材、医薬品、半導体設計、ソフトウェアなど</div>
+      </div>
+    </div>
+
+    <div class="arrow-flow">
+      日本の工業のあゆみ（大きな流れ）：
+      <span style="background:var(--labor)">軽工業（繊維など）</span>→
+      <span style="background:var(--capital)">重化学工業</span>→
+      <span style="background:var(--capital)">加工組立型</span>→
+      <span style="background:var(--knowledge)">先端技術・知識集約型</span>
+    </div>
+
+    <div class="note-box">
+      <b>この教材の使い方</b>
+      ②〜④では、実在の3社の年表ボタンを押して各時代のようすを確認します。右側の「技術集約度メーター」が時代とともにどう変わるかに注目しましょう。各社のページの最後にはチェッククイズがあります。最後の⑤で3社を比較し、考察・構想に取り組みます。
+    </div>
+
+    <button class="next-btn" onclick="go('toray')">② 東レのページへ進む →</button>
+  </div>
+</section>
+
+<!-- ===================== 東レ ===================== -->
+<section id="toray" class="co-toray">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip" style="background:var(--toray)">CASE 1</span>東レ ― 「人造絹糸」から航空機の主翼へ</h2>
+    <p class="sec-lead">1926年、滋賀県で「東洋レーヨン」として生まれた繊維会社は、いまや航空機の機体を支える炭素繊維の世界的メーカーです。年表ボタンを押して変化をたどりましょう。</p>
+    <div class="co-layout">
+      <div class="timeline" id="tl-toray"></div>
+      <div>
+        <div class="stage" id="stage-toray"></div>
+      </div>
+    </div>
+    <div class="quiz-box" id="quiz-toray"></div>
+    <button class="next-btn" onclick="go('nintendo')">③ 任天堂のページへ進む →</button>
+  </div>
+</section>
+
+<!-- ===================== 任天堂 ===================== -->
+<section id="nintendo" class="co-nintendo">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip" style="background:var(--nintendo)">CASE 2</span>任天堂 ― 京都の花札屋から世界の娯楽企業へ</h2>
+    <p class="sec-lead">1889年、京都で手描きの花札をつくる小さな店として創業。手工業からエレクトロニクス、そして「知識・キャラクター（IP）」を売る企業へと変化しました。</p>
+    <div class="co-layout">
+      <div class="timeline" id="tl-nintendo"></div>
+      <div>
+        <div class="stage" id="stage-nintendo"></div>
+      </div>
+    </div>
+    <div class="quiz-box" id="quiz-nintendo"></div>
+    <button class="next-btn" onclick="go('fuji')">④ 富士フイルムのページへ進む →</button>
+  </div>
+</section>
+
+<!-- ===================== 富士フイルム ===================== -->
+<section id="fuji" class="co-fuji">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip" style="background:var(--fuji)">CASE 3</span>富士フイルム ― 主力製品の「消滅」を乗り越えた会社</h2>
+    <p class="sec-lead">1934年、写真フィルムの国産化を使命に設立。2000年代、デジタルカメラの普及で主力のフィルム市場が急激に縮小するという危機に直面します。会社はどう生き残ったのでしょうか。</p>
+    <div class="co-layout">
+      <div class="timeline" id="tl-fuji"></div>
+      <div>
+        <div class="stage" id="stage-fuji"></div>
+      </div>
+    </div>
+    <div class="quiz-box" id="quiz-fuji"></div>
+    <button class="next-btn" onclick="go('matome')">⑤ まとめ・考察へ進む →</button>
+  </div>
+</section>
+
+<!-- ===================== まとめ ===================== -->
+<section id="matome">
+  <div class="wrap">
+    <h2 class="sec-title serif">⑤ まとめ ― 3社を比較して考える</h2>
+    <p class="sec-lead">3社の変化を1枚の表に整理しました。共通点と相違点を見つけてから、考察・構想に取り組みましょう。</p>
+
+    <table class="compare">
+      <thead>
+        <tr><th style="width:110px"></th><th>東レ</th><th>任天堂</th><th>富士フイルム</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>出発点</td>
+          <td>レーヨン（人造絹糸）＝軽工業（繊維）</td>
+          <td>花札＝手工業（軽工業）</td>
+          <td>写真フィルム＝精密な化学工業</td></tr>
+        <tr><td>転機</td>
+          <td>海外からの技術導入（ナイロン）と、赤字でも続けた炭素繊維の研究開発</td>
+          <td>玩具のアイデア開発から電子ゲームへの参入</td>
+          <td>デジタル化による主力市場の急激な縮小（2000年代）</td></tr>
+        <tr><td>現在の強み</td>
+          <td>炭素繊維など先端素材（航空機の一次構造材にも採用）</td>
+          <td>ゲームソフト・ゲーム機とキャラクターなどの知的財産（IP）</td>
+          <td>フィルムで培った化学技術を応用した医療・医薬品・化粧品・高機能材料</td></tr>
+        <tr><td>集約型の変化</td>
+          <td>労働集約 → 資本集約 → 知識集約</td>
+          <td>労働集約 → 加工組立 → 知識集約</td>
+          <td>資本集約 → 知識集約（技術の横展開）</td></tr>
+      </tbody>
+    </table>
+
+    <div class="quiz-box" id="quiz-matome"></div>
+
+    <div class="essay">
+      <h3><span class="tag kousatsu">考察</span>WORK 1（80字程度）</h3>
+      <p style="font-size:.9rem">3社に共通する変化を、「技術集約度」「付加価値」の2つの語を用いて説明しなさい。</p>
+      <textarea placeholder="ここに書いてみよう（メモ用。保存はされません）"></textarea>
+      <button class="hint-btn" onclick="toggleHint(this)">ヒントを見る</button>
+      <div class="hint-body">3社とも、人手や設備に頼る生産から、<b>研究・開発が生み出す技術や知識</b>を中心とする生産へ移り、より<b>付加価値の高い</b>製品・サービスに転換した、という方向でまとめてみよう。</div>
+    </div>
+
+    <div class="essay">
+      <h3><span class="tag kousatsu">考察</span>WORK 2（100字程度）</h3>
+      <p style="font-size:.9rem">富士フイルムと同じく写真フィルムの世界的企業だった米国のコダック社は、2012年に経営破綻しました（その後再建）。両社の明暗を分けた要因は何だったと考えられるか、説明しなさい。</p>
+      <textarea placeholder="ここに書いてみよう"></textarea>
+      <button class="hint-btn" onclick="toggleHint(this)">ヒントを見る</button>
+      <div class="hint-body">富士フイルムは、フィルム事業で培った<b>化学の基礎技術</b>を医療・化粧品・高機能材料などの新分野に応用（多角化）した。主力製品そのものではなく、<b>その裏にある技術・知識</b>を会社の強みととらえ直したことがポイント。</div>
+    </div>
+
+    <div class="essay">
+      <h3><span class="tag kousou">構想</span>WORK 3（自由記述）</h3>
+      <p style="font-size:.9rem">あなたの住む地域（または知っている地域）の産業・企業を1つ取り上げ、その技術や強みを生かして今後どのような分野に展開できそうか、構想してみよう。手持ちの教科書・地図帳や自治体の資料も参考にしてよい。</p>
+      <textarea placeholder="地域の産業：／生かせる技術・強み：／展開できそうな分野：" style="min-height:130px"></textarea>
+      <button class="hint-btn" onclick="toggleHint(this)">考えるための視点</button>
+      <div class="hint-body">①その産業が持つ「本当の強み」は製品そのものか、それとも技術・ノウハウか　②社会の変化（高齢化・環境・デジタル化など）でこれから需要が増える分野は何か　③3社の事例のどのパターンに近いか、の3点から考えてみよう。</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>本教材は個人が学習用に作成したものであり、特定の教科書・出版社・掲載企業とは一切関係ありません。各社の沿革は各社公表資料等の公開情報に基づいて作成していますが、細部の年代・数値は諸説ある場合があります。授業では最新の公式資料もあわせて確認してください。</p>
+  </div>
+</footer>
+
+<script>
+/* =====================================================
+   データ定義
+   meter: 労働・資本・知識の各集約度（5段階の定性的イメージ）
+===================================================== */
+const DATA = {
+  toray: {
+    color: "var(--toray)",
+    eras: [
+      {
+        yr:"1926", lb:"創業：レーヨン",
+        title:"「人造絹糸」の時代 ― 軽工業（繊維）",
+        badge:"軽工業（繊維）", badgeColor:"var(--labor)",
+        body:`<p>1926年、三井物産の出資により滋賀県で<b>東洋レーヨン</b>が設立され、翌1927年にレーヨン糸の製造を開始しました。レーヨンは木材パルプを原料とする化学繊維で、絹に似た光沢から「人造絹糸（人絹）」と呼ばれ、当時の日本の代表的な輸出品である繊維産業の一角を担いました。</p>
+        <p><span class="kw">軽工業</span><span class="kw">繊維工業</span><span class="kw">輸出産業</span></p>`,
+        meter:{labor:5, capital:3, knowledge:1},
+        geo:"戦前の日本は<b>繊維（生糸・綿・人絹）</b>が輸出の中心。安く豊富な労働力を生かした<b>労働集約的</b>な工業が経済を支えていた。"
+      },
+      {
+        yr:"1951", lb:"合成繊維へ",
+        title:"技術導入と合成繊維 ― 重化学工業化",
+        badge:"化学工業（資本集約）", badgeColor:"var(--capital)",
+        body:`<p>戦後、米国デュポン社から<b>ナイロン</b>の技術（特許の実施権）を導入し、1951年から本格生産を開始。製造ノウハウ自体は自社の試行錯誤で確立したとされ、これが後の「自前の技術力」につながります。1958年にはポリエステル繊維「テトロン」の生産も始め、合成繊維メーカーへと転身しました。</p>
+        <p><span class="kw">技術導入</span><span class="kw">重化学工業化</span><span class="kw">高度経済成長</span></p>`,
+        meter:{labor:3, capital:4, knowledge:3},
+        geo:"高度経済成長期、日本の工業の中心は繊維などの軽工業から、大規模な設備投資を必要とする<b>重化学工業（資本集約型）</b>へ移っていった。先進国からの<b>技術導入</b>はその重要な足がかりだった。"
+      },
+      {
+        yr:"1971", lb:"炭素繊維に挑戦",
+        title:"炭素繊維「トレカ」 ― 赤字でも続けた研究開発",
+        badge:"新素材への投資", badgeColor:"var(--capital)",
+        body:`<p>1970年、レーヨン生産の縮小を受けて社名を<b>東レ</b>に変更。1971年には炭素繊維「トレカ」の生産・販売を開始します。炭素繊維は軽くて強い新素材でしたが、当初の用途は釣り竿やゴルフシャフトなどに限られ、事業は<b>長期にわたり赤字</b>だったとされます。それでも同社は撤退せず、品質向上への投資を続けました。</p>
+        <p><span class="kw">研究・開発（R&amp;D）</span><span class="kw">新素材</span><span class="kw">先行投資</span></p>`,
+        meter:{labor:2, capital:4, knowledge:4},
+        geo:"すぐには利益にならない<b>研究・開発への長期投資</b>が、のちに他社がまねできない技術（＝知的財産）となる。知識集約化の「仕込み」の時期といえる。"
+      },
+      {
+        yr:"2011", lb:"航空機の主翼へ",
+        title:"先端素材の時代 ― 知識集約型工業へ",
+        badge:"先端技術産業（知識集約）", badgeColor:"var(--knowledge)",
+        body:`<p>炭素繊維は1990年にボーイング777型機の尾翼の一次構造材（機体の強度を支える部材）として認定され、2011年就航の<b>ボーイング787型機</b>では主翼や胴体など一次構造材に採用され、東レが供給しています。鉄より軽くて強い素材は航空機の燃費向上に貢献し、高い付加価値を生んでいます。同社は水処理膜などの高機能材料にも事業を広げています。</p>
+        <p><span class="kw">知識集約型工業</span><span class="kw">高付加価値化</span><span class="kw">先端素材</span></p>`,
+        meter:{labor:1, capital:4, knowledge:5},
+        geo:"約40年かけて育てた技術が世界の航空機産業を支える。<b>特許や技術という「知識」</b>が最大の競争力となる、知識集約型工業の典型例。"
+      }
+    ],
+    quiz: [
+      {
+        q:"東レの前身「東洋レーヨン」が創業時につくっていたレーヨンは、どの工業に分類されるか。",
+        choices:["軽工業（繊維工業）","鉄鋼業","先端技術産業","食品工業"],
+        ans:0,
+        exp:"レーヨンは化学的につくる繊維で、繊維工業＝軽工業に分類される。戦前の日本の輸出を支えた産業だった。"
+      },
+      {
+        q:"戦後、東レがナイロンの本格生産を始めるきっかけとなったのは何か。",
+        choices:["米国企業からの技術導入","政府による工場の払い下げ","石油危機","円高"],
+        ans:0,
+        exp:"1951年、米国デュポン社から特許の実施権を得て本格生産を開始した。先進国からの技術導入は、当時の日本の工業化に共通するパターン。"
+      },
+      {
+        q:"炭素繊維がボーイング787の主翼などに採用されたことは、東レのどんな変化を象徴しているか。",
+        choices:["研究開発が生む技術を強みとする知識集約化","安い労働力を生かした労働集約化","原料産地への工場移転","生産の完全な海外移転"],
+        ans:0,
+        exp:"長年の研究・開発で得た技術（知識）こそが付加価値の源泉になっている。これが工業の知識集約化である。"
+      }
+    ]
+  },
+
+  nintendo: {
+    color: "var(--nintendo)",
+    eras: [
+      {
+        yr:"1889", lb:"創業：花札",
+        title:"京都の花札屋 ― 職人の手工業",
+        badge:"手工業（労働集約）", badgeColor:"var(--labor)",
+        body:`<p>1889年、山内房治郎が京都で創業し、職人が手作業で仕上げる<b>花札</b>の製造・販売を始めました。1902年には国産初のトランプを製造したとされ、かるた・トランプの製造会社として歩み始めます。</p>
+        <p><span class="kw">手工業</span><span class="kw">地場産業</span><span class="kw">伝統工芸的な技術</span></p>`,
+        meter:{labor:5, capital:1, knowledge:1},
+        geo:"京都のような歴史ある都市には、職人の技術に支えられた<b>地場産業</b>が集積してきた。人の手が生産の中心＝<b>労働集約型</b>。"
+      },
+      {
+        yr:"1960年代", lb:"玩具メーカーへ",
+        title:"アイデアで勝負する玩具の時代",
+        badge:"玩具（アイデア商品）", badgeColor:"var(--labor)",
+        body:`<p>1959年にはディズニーのキャラクターを使ったトランプがヒット。1960年代には「ウルトラハンド」（1966年）などのアイデア玩具を次々に開発し、カード会社から<b>玩具メーカー</b>へと事業を広げました。製品の価値の中心が「素材や手間」から「<b>アイデア・企画</b>」へ移り始めた時期です。</p>
+        <p><span class="kw">企画・開発</span><span class="kw">多角化</span>`,
+        meter:{labor:4, capital:2, knowledge:2},
+        geo:"同じ「モノづくり」でも、<b>何をつくるかを考える力（企画力）</b>が価値を生むようになると、知識集約化への一歩が始まる。"
+      },
+      {
+        yr:"1983", lb:"ファミコン",
+        title:"エレクトロニクスへの参入 ― 加工組立型",
+        badge:"エレクトロニクス（加工組立）", badgeColor:"var(--capital)",
+        body:`<p>1980年に携帯型ゲーム機「ゲーム&amp;ウオッチ」が大ヒット。その利益をもとに開発された家庭用ゲーム機<b>「ファミリーコンピュータ」（1983年）</b>は、1985年発売のソフト「スーパーマリオブラザーズ」とともに世界的にヒットし、任天堂はビデオゲーム企業として広く知られるようになりました。</p>
+        <p><span class="kw">エレクトロニクス産業</span><span class="kw">加工組立型工業</span>`,
+        meter:{labor:2, capital:3, knowledge:4},
+        geo:"石油危機後の日本経済をけん引したのは、自動車やエレクトロニクスなど<b>付加価値の高い加工組立型工業</b>。任天堂の転身はその流れと重なる。"
+      },
+      {
+        yr:"現在", lb:"知識・IPの企業",
+        title:"ソフトとキャラクター（IP）が価値の中心に",
+        badge:"知識集約型", badgeColor:"var(--knowledge)",
+        body:`<p>現在の任天堂の価値の中心は、ゲーム機そのものよりも、<b>ゲームソフトの開発力と、マリオなどのキャラクター（知的財産＝IP）</b>にあります。ハードの生産の多くは外部の協力企業に委託しており、<b>ファブレスに近い生産形態</b>とされます。映画やテーマパークなど、IPをゲームの外でも活用する動きが進んでいます。</p>
+        <p><span class="kw">知的財産（IP）</span><span class="kw">ファブレス企業</span><span class="kw">企業間分業</span>`,
+        meter:{labor:1, capital:2, knowledge:5},
+        geo:"企画・開発に特化し、生産は他社に任せる<b>ファブレス</b>型の分業は、エレクトロニクス産業の世界的な特徴。付加価値の多くは<b>「知識」を持つ側</b>に集まる。"
+      }
+    ],
+    quiz: [
+      {
+        q:"任天堂が1889年の創業時につくっていた製品はどれか。",
+        choices:["花札","ゲーム機","玩具","時計"],
+        ans:0,
+        exp:"京都で職人が手作業でつくる花札の製造から始まった。約100年かけて娯楽の「中身」を変え続けてきた会社といえる。"
+      },
+      {
+        q:"1983年に任天堂が発売し、世界的ヒットにつながった家庭用ゲーム機は何か。",
+        choices:["ファミリーコンピュータ","ゲーム&ウオッチ","ゲームボーイ","Nintendo Switch"],
+        ans:0,
+        exp:"1980年のゲーム&ウオッチの利益をもとに開発され、1983年に発売された。エレクトロニクス企業への転身を決定づけた。"
+      },
+      {
+        q:"現在の任天堂のように、生産部門を切り離して企画・開発に特化する企業を何と呼ぶか。",
+        choices:["ファブレス企業","多国籍企業","ベンチャーキャピタル","コンビナート"],
+        ans:0,
+        exp:"自社工場を持たず（fab-less）、生産は受託企業に委託する形態。付加価値の高い企画・開発・知的財産を自社に残すのが特徴。"
+      }
+    ]
+  },
+
+  fuji: {
+    color: "var(--fuji)",
+    eras: [
+      {
+        yr:"1934", lb:"創業：国産化",
+        title:"写真フィルムの国産化 ― 精密化学の挑戦",
+        badge:"化学工業（資本集約）", badgeColor:"var(--capital)",
+        body:`<p>当時の日本は写真フィルムを米国やドイツからの輸入に頼っていました。1934年、その<b>国産化</b>を使命として、大日本セルロイドから分離するかたちで<b>富士写真フイルム</b>が設立されます。フィルム製造には繊細な化学技術と精密な塗布技術が必要で、量産化には失敗と試行錯誤の連続でした。</p>
+        <p><span class="kw">輸入代替</span><span class="kw">国産化</span><span class="kw">精密化学</span>`,
+        meter:{labor:3, capital:4, knowledge:3},
+        geo:"輸入品を国内生産に置き換える<b>輸入代替</b>型の工業化。この時期に蓄えられた化学技術が、約70年後に会社を救うことになる。"
+      },
+      {
+        yr:"戦後〜1990年代", lb:"世界企業へ",
+        title:"カラーフィルムで世界へ ― コダックとの競争",
+        badge:"グローバル企業（資本集約）", badgeColor:"var(--capital)",
+        body:`<p>戦後のカメラブームとともに成長し、カラーフィルムで世界市場に進出。「世界最強」と呼ばれた米国コダック社を追い、日本・米国・欧州・中国での生産体制を築きました。フィルムは会社の売上の中核であり続けました。</p>
+        <p><span class="kw">多国籍企業</span><span class="kw">グローバル化</span>`,
+        meter:{labor:2, capital:5, knowledge:4},
+        geo:"市場の近くで生産・販売する<b>多国籍企業</b>の典型的な展開。ただしこの時点では、会社の柱は「フィルム」という1つの製品に集中していた。"
+      },
+      {
+        yr:"2000年代", lb:"デジタル化の危機",
+        title:"主力市場の「消滅」 ― デジタルカメラの衝撃",
+        badge:"転換期（危機）", badgeColor:"var(--labor)",
+        body:`<p>2000年度ごろをピークに、デジタルカメラの普及でカラーフィルムの世界需要は<b>年20〜30%という急激なペースで縮小</b>したとされます。同社の売上に占める写真フィルムの比率は、2000年度の約19%から2010年度には約1%まで低下しました（同社公開資料による）。同じフィルム大手の米国コダック社は、2012年に経営破綻に至ります（その後再建）。</p>
+        <p><span class="kw">技術革新（イノベーション）</span><span class="kw">産業構造の変化</span>`,
+        meter:{labor:2, capital:4, knowledge:4},
+        geo:"技術革新は、既存の巨大市場を短期間で縮小させることがある。<b>どんな大企業でも、変化に対応できなければ生き残れない</b>ことを示す事例。"
+      },
+      {
+        yr:"現在", lb:"第二の創業",
+        title:"技術の横展開 ― 医療・化粧品・高機能材料へ",
+        badge:"知識集約型", badgeColor:"var(--knowledge)",
+        body:`<p>富士フイルムは「<b>第二の創業</b>」を掲げ、フィルム事業で培った化学・材料技術を新しい分野へ応用しました。フィルムの主原料コラーゲンや成分を細かく安定させる技術は<b>化粧品</b>へ、画像技術は<b>医療機器</b>へ。医薬品や再生医療、液晶ディスプレイ用フィルムなどの<b>高機能材料</b>にも展開し、多角化に成功しました。</p>
+        <p><span class="kw">研究・開発（R&amp;D）</span><span class="kw">多角化</span><span class="kw">高付加価値化</span>`,
+        meter:{labor:1, capital:3, knowledge:5},
+        geo:"製品（フィルム）は失われても、<b>その裏にある技術・知識は他分野に応用できる</b>。工業の知識集約化とは、この「応用できる知識」を強みにすることでもある。"
+      }
+    ],
+    quiz: [
+      {
+        q:"富士写真フイルムが1934年に設立された目的は何か。",
+        choices:["写真フィルムの国産化","デジタルカメラの開発","化粧品の製造","医薬品の輸出"],
+        ans:0,
+        exp:"当時輸入に頼っていた写真フィルムを国内で生産する「輸入代替」が使命だった。この過程で高度な化学技術が蓄積された。"
+      },
+      {
+        q:"2000年代に富士フイルムが直面した危機の原因は何か。",
+        choices:["デジタルカメラの普及によるフィルム需要の急減","石油危機による原料高騰","貿易摩擦による輸出規制","大地震による工場被災"],
+        ans:0,
+        exp:"デジタル化という技術革新により、カラーフィルムの世界需要は年20〜30%のペースで縮小したとされる。"
+      },
+      {
+        q:"富士フイルムが危機を乗り越えられた最大の要因として適切なものはどれか。",
+        choices:["フィルムで培った技術を医療・化粧品などに応用した","フィルムの値下げで需要を回復させた","工場をすべて海外に移転した","フィルム事業を他社に売却して解散した"],
+        ans:0,
+        exp:"製品ではなく「技術・知識」を会社の強みととらえ直し、研究開発によって多角化した。知識集約化の代表的な成功例とされる。"
+      }
+    ]
+  }
+};
+
+const MATOME_QUIZ = [
+  {
+    q:"3社の歴史に共通する変化として、最も適切なものはどれか。",
+    choices:[
+      "労働や設備に頼る生産から、研究開発が生む知識を強みとする生産へ移った",
+      "国内生産をやめてすべて輸入に切り替えた",
+      "創業時の製品を一切変えずに規模だけを拡大した",
+      "農業から工業へ転換した"
+    ],
+    ans:0,
+    exp:"3社とも、労働集約・資本集約的な段階を経て、技術・知識・IPが付加価値の中心となる知識集約型へと変化した。"
+  },
+  {
+    q:"知識集約型の工業（研究・開発部門など）が立地しやすい場所はどこか。",
+    choices:[
+      "高度人材が集まり、大学・研究機関に近い大都市圏など",
+      "原料の産地に近い山間部",
+      "賃金の最も安い地域",
+      "港のそばの埋立地のみ"
+    ],
+    ans:0,
+    exp:"知識集約型工業では高度人材の確保と、大学・研究機関との近接性、情報の集まりやすさが重視される。"
+  },
+  {
+    q:"賃金の高い先進国の企業が知識集約化を進める理由として、最も適切なものはどれか。",
+    choices:[
+      "新興国とのコスト競争を避け、付加価値の高い分野で優位を保つため",
+      "労働者の数を増やすため",
+      "設備投資を完全になくすため",
+      "製品の価格を下げるため"
+    ],
+    ans:0,
+    exp:"人件費の高い先進国では、安い労働力に頼る生産では新興国に対抗できない。特許などの知的財産で守られた高付加価値分野に活路を求める。"
+  }
+];
+
+/* =====================================================
+   描画・操作
+===================================================== */
+function go(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.nav===id));
+  window.scrollTo({top:0});
+}
+
+function renderCompany(key){
+  const co = DATA[key];
+  const tl = document.getElementById('tl-'+key);
+  tl.innerHTML = '';
+  co.eras.forEach((e,i)=>{
+    const b = document.createElement('button');
+    b.className = 'era-btn';
+    b.innerHTML = `<span class="yr">${e.yr}</span><span class="lb">${e.lb}</span>`;
+    b.onclick = ()=>showEra(key,i);
+    tl.appendChild(b);
+  });
+  showEra(key,0);
+  renderQuiz('quiz-'+key, co.quiz, 'チェッククイズ（'+ {toray:'東レ',nintendo:'任天堂',fuji:'富士フイルム'}[key] +'）');
+}
+
+function showEra(key,idx){
+  const co = DATA[key];
+  const e = co.eras[idx];
+  document.querySelectorAll('#tl-'+key+' .era-btn').forEach((b,i)=>b.classList.toggle('active', i===idx));
+  const stage = document.getElementById('stage-'+key);
+  stage.innerHTML = `
+    <div class="stage-head">
+      <h3 class="serif">${e.title}</h3>
+      <span class="badge" style="background:${e.badgeColor}">${e.badge}</span>
+    </div>
+    <div class="stage-body">
+      <div class="stage-main">${e.body}</div>
+      <div class="stage-side">
+        <h4>技術集約度メーター</h4>
+        <div class="meter">
+          ${meterRow('労働集約','labor',e.meter.labor)}
+          ${meterRow('資本集約','capital',e.meter.capital)}
+          ${meterRow('知識集約','knowledge',e.meter.knowledge)}
+        </div>
+        <p class="meter-note">※5段階の定性的なイメージです（統計値ではありません）</p>
+        <div class="geo-view"><b>地理の視点：</b>${e.geo}</div>
+      </div>
+    </div>`;
+  // バーのアニメーション
+  setTimeout(()=>{
+    stage.querySelectorAll('.fill').forEach(f=>{
+      f.style.width = (f.dataset.v*20)+'%';
+    });
+  }, 30);
+}
+
+function meterRow(label, cls, v){
+  return `<div class="row"><span>${label}</span><div class="bar"><div class="fill ${cls}" data-v="${v}"></div></div><span>${v}/5</span></div>`;
+}
+
+function renderQuiz(containerId, items, title){
+  const box = document.getElementById(containerId);
+  let html = `<h3>✔ ${title}</h3><p class="progress" id="${containerId}-p">正解 0 / ${items.length}</p>`;
+  items.forEach((it,qi)=>{
+    html += `<div class="q-item"><div class="qt">問${qi+1}．${it.q}</div><div class="choices">`;
+    // 選択肢をシャッフル
+    const order = it.choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    order.forEach(ci=>{
+      html += `<button onclick="answer('${containerId}',${qi},${ci},this)">${it.choices[ci]}</button>`;
+    });
+    html += `</div><div class="feedback" id="${containerId}-f${qi}"></div></div>`;
+  });
+  box.innerHTML = html;
+  box.dataset.correct = 0;
+  box.dataset.total = items.length;
+  box._items = items;
+}
+
+function answer(containerId, qi, ci, btn){
+  const box = document.getElementById(containerId);
+  const it = box._items[qi];
+  const buttons = btn.parentElement.querySelectorAll('button');
+  buttons.forEach(b=>b.disabled=true);
+  const fb = document.getElementById(containerId+'-f'+qi);
+  if(ci===it.ans){
+    btn.classList.add('correct');
+    box.dataset.correct = Number(box.dataset.correct)+1;
+    fb.innerHTML = `<b>◯ 正解！</b>${it.exp}`;
+  }else{
+    btn.classList.add('wrong');
+    buttons.forEach(b=>{ if(b.textContent===it.choices[it.ans]) b.classList.add('correct'); });
+    fb.innerHTML = `<b>✕ おしい！</b>${it.exp}`;
+  }
+  fb.classList.add('show');
+  document.getElementById(containerId+'-p').textContent = `正解 ${box.dataset.correct} / ${box.dataset.total}`;
+}
+
+function toggleHint(btn){
+  const body = btn.nextElementSibling;
+  body.classList.toggle('show');
+  btn.textContent = body.classList.contains('show') ? 'ヒントを閉じる' : 'ヒントを見る';
+}
+
+/* 初期化 */
+['toray','nintendo','fuji'].forEach(renderCompany);
+renderQuiz('quiz-matome', MATOME_QUIZ, '総合チェッククイズ');
+</script>
+</body>
+</html>
