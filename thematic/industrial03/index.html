@@ -1,1 +1,752 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グローバル工業ラボ ― R&D・特許・国際分業で読み解く現代の工業</title>
+<style>
+:root{
+  --ink:#1b2a4a;
+  --paper:#f5f7fa;
+  --card:#ffffff;
+  --line:#d5dbe5;
+  --muted:#5b6b85;
+  --sp:#7a4fc9;     /* スマホ分業:紫 */
+  --car:#2b5f9e;    /* 自動車:藍 */
+  --ip:#b0821e;     /* 特許・IP:金茶 */
+  --chip:#0f8a5f;   /* 半導体:緑 */
+  --hi:#1f9e8e;
+  --correct:#e7f5ee;
+  --wrong:#fdeeee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;background:var(--paper);color:var(--ink);line-height:1.75}
+.serif{font-family:"Hiragino Mincho ProN","Yu Mincho",serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 
+header{background:var(--ink);color:#fff;padding:44px 0 36px;border-bottom:6px solid var(--ip)}
+header .eyebrow{font-size:.8rem;letter-spacing:.35em;color:#9fb3d9;margin-bottom:10px}
+header h1{font-size:clamp(1.5rem,4vw,2.15rem);font-weight:700;line-height:1.4}
+header h1 .accent{color:#f0c96a}
+header p.lead{margin-top:14px;color:#c9d6ec;font-size:.95rem;max-width:780px}
+.q-banner{margin-top:20px;display:inline-block;background:rgba(255,255,255,.08);border-left:4px solid #f0c96a;padding:10px 18px;border-radius:0 8px 8px 0;font-size:1.02rem;font-weight:700}
+
+nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 8px rgba(27,42,74,.06)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:0 12px}
+nav button{border:none;background:none;padding:14px 14px;font-size:.88rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-family:inherit}
+nav button:hover{color:var(--ink)}
+nav button.active{color:var(--ink);border-bottom-color:var(--hi)}
+nav button[data-nav="sp"].active{border-bottom-color:var(--sp)}
+nav button[data-nav="car"].active{border-bottom-color:var(--car)}
+nav button[data-nav="ip"].active{border-bottom-color:var(--ip)}
+nav button[data-nav="chip"].active{border-bottom-color:var(--chip)}
+
+section{display:none;padding:40px 0 60px}
+section.show{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2.sec-title{font-size:1.35rem;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h2 .chip-lb{font-size:.7rem;padding:3px 10px;border-radius:999px;color:#fff;letter-spacing:.1em}
+p.sec-lead{color:var(--muted);font-size:.92rem;margin-bottom:26px;max-width:840px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:22px}
+.card h3{font-size:1.05rem;margin-bottom:10px}
+.kw{display:inline-block;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:2px 10px;font-size:.78rem;font-weight:700;margin:2px 4px 2px 0}
+.note-box{background:#fff;border-left:5px solid var(--ink);border-radius:0 10px 10px 0;padding:16px 20px;font-size:.9rem;margin:18px 0}
+.note-box b{display:block;margin-bottom:4px}
+.src{font-size:.72rem;color:var(--muted);margin-top:10px}
+
+/* スマイルカーブ */
+.smile-wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:start}
+@media(max-width:760px){.smile-wrap{grid-template-columns:1fr}}
+.smile-svg{width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:12px}
+.smile-node{cursor:pointer}
+.smile-node circle{transition:r .15s}
+.smile-node:hover circle{r:15}
+.smile-node.on circle{stroke:var(--ink);stroke-width:3}
+.smile-panel{background:#f2f5f9;border:1px solid var(--line);border-radius:12px;padding:18px 20px;min-height:220px}
+.smile-panel h4{font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.smile-panel .va{font-size:.8rem;font-weight:800;padding:2px 10px;border-radius:999px;color:#fff}
+.smile-panel p{font-size:.88rem}
+.smile-panel .who{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:.83rem}
+
+/* ステップフロー(スマホ分業) */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0}
+@media(max-width:760px){.flow{grid-template-columns:repeat(2,1fr)}}
+.flow button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px 8px;cursor:pointer;font-family:inherit;text-align:center;transition:all .15s}
+.flow button .st{display:block;font-size:.7rem;color:var(--muted);letter-spacing:.1em}
+.flow button .nm{display:block;font-weight:800;font-size:.9rem;margin-top:2px}
+.flow button:hover{border-color:var(--sp)}
+.flow button.on{background:var(--sp);color:#fff;border-color:var(--sp)}
+.flow button.on .st{color:rgba(255,255,255,.8)}
+.flow-panel{background:#f2f5f9;border:1px solid var(--line);border-radius:12px;padding:18px 20px;min-height:150px}
+.flow-panel h4{font-size:1rem;margin-bottom:6px}
+.flow-panel p{font-size:.88rem}
+.flow-panel .term{margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:.83rem}
+
+/* スマホ分業:世界地図 */
+.map-box{background:#e8f0f7;border:1px solid var(--line);border-radius:12px;padding:8px;margin:14px 0}
+.map-box svg{width:100%;height:auto;display:block}
+.map-src{font-size:.72rem;color:var(--muted);margin:6px 8px 2px}
+.land{fill:#d5e0eb;stroke:#b3c3d4;stroke-width:1}
+.sea-lb{font-size:12px;fill:#8aa2ba;letter-spacing:.3em}
+.geo-lb{font-size:11px;fill:#5b6b85}
+.fl-arrow{fill:none;stroke:#7a4fc9;stroke-width:2.5;stroke-dasharray:8 6;animation:dashmove 1.1s linear infinite;marker-end:url(#spArrow)}
+@keyframes dashmove{to{stroke-dashoffset:-28}}
+.mk-core{fill:#7a4fc9;stroke:#fff;stroke-width:2}
+.mk-pulse{fill:none;stroke:#7a4fc9;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:mkp 1.6s ease-out infinite}
+@keyframes mkp{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.mk-lb{font-size:12px;font-weight:800;fill:#1b2a4a;paint-order:stroke;stroke:#ffffff;stroke-width:3.5;stroke-linejoin:round}
+.ar-lb{font-size:11px;font-weight:700;fill:#7a4fc9;paint-order:stroke;stroke:#ffffff;stroke-width:3;stroke-linejoin:round}
+
+/* 自動車:年代バー */
+.era-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.era-row button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 18px;font-weight:800;cursor:pointer;font-family:inherit;font-variant-numeric:tabular-nums}
+.era-row button:hover{border-color:var(--car)}
+.era-row button.on{background:var(--car);color:#fff;border-color:var(--car)}
+.pbar-area{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.pbar-row{display:grid;grid-template-columns:96px 1fr 110px;align-items:center;gap:12px;margin-bottom:12px;font-size:.86rem;font-weight:700}
+.pbar{height:26px;background:#e6eaf1;border-radius:8px;overflow:hidden}
+.pfill{height:100%;width:0;transition:width .6s cubic-bezier(.2,.8,.2,1);border-radius:8px}
+.pfill.dom{background:var(--car)}
+.pfill.ovs{background:#e0a13c}
+.pnote{font-size:.85rem;background:var(--paper);border-radius:8px;padding:10px 14px;margin-top:6px}
+
+/* IP収支 */
+.ip-flow{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin:16px 0}
+@media(max-width:640px){.ip-flow{grid-template-columns:1fr}}
+.ip-box{background:#fff;border:2px solid var(--ip);border-radius:12px;padding:14px 16px;text-align:center}
+.ip-box b{display:block;font-size:.95rem}
+.ip-box span{font-size:.78rem;color:var(--muted)}
+.ip-arrow{text-align:center;font-weight:800;color:var(--ip);font-size:.85rem}
+.ip-bars{margin-top:14px}
+.ip-bar-row{display:grid;grid-template-columns:110px 1fr 120px;align-items:center;gap:12px;margin-bottom:10px;font-size:.86rem;font-weight:700}
+.ip-bar{height:24px;background:#e6eaf1;border-radius:8px;overflow:hidden}
+.ip-fill{height:100%;width:0;transition:width .7s ease;border-radius:8px}
+
+/* クイズ */
+.quiz-box{margin-top:30px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.quiz-box h3{font-size:1.05rem;margin-bottom:4px}
+.quiz-box .progress{font-size:.8rem;color:var(--muted);margin-bottom:16px}
+.q-item{margin-bottom:22px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.q-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.q-item .qt{font-weight:700;font-size:.95rem;margin-bottom:10px}
+.choices{display:grid;gap:8px}
+.choices button{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:.9rem;cursor:pointer;font-family:inherit;transition:all .12s}
+.choices button:hover:not(:disabled){border-color:var(--ink)}
+.choices button:disabled{cursor:default}
+.choices button.correct{background:var(--correct);border-color:#2e9e6b;font-weight:700}
+.choices button.wrong{background:var(--wrong);border-color:#d06060}
+.feedback{margin-top:10px;font-size:.85rem;background:var(--paper);border-radius:8px;padding:10px 14px;display:none}
+.feedback.show{display:block}
+.feedback b{display:block;margin-bottom:2px}
+
+/* まとめ */
+table.compare{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:.85rem;margin:18px 0}
+table.compare th,table.compare td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+table.compare th{background:var(--ink);color:#fff;font-size:.8rem}
+table.compare td:first-child{font-weight:700;white-space:nowrap}
+.essay{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:18px}
+.essay h3{font-size:1rem;margin-bottom:6px}
+.essay .tag{display:inline-block;font-size:.72rem;color:#fff;padding:2px 10px;border-radius:999px;margin-right:8px;vertical-align:2px}
+.tag.kousatsu{background:#7a6bbf}
+.tag.kousou{background:var(--hi)}
+.essay textarea{width:100%;margin-top:12px;border:1px solid var(--line);border-radius:8px;padding:12px;font-family:inherit;font-size:.9rem;min-height:96px;resize:vertical;background:var(--paper)}
+.hint-btn{margin-top:10px;border:1px solid var(--ink);background:none;color:var(--ink);border-radius:999px;padding:6px 18px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}
+.hint-btn:hover{background:var(--ink);color:#fff}
+.hint-body{display:none;margin-top:12px;font-size:.85rem;background:var(--paper);border-radius:8px;padding:12px 14px}
+.hint-body.show{display:block}
+
+.next-btn{display:block;margin:40px auto 0;border:none;background:var(--ink);color:#fff;border-radius:999px;padding:12px 34px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit}
+.next-btn:hover{opacity:.88}
+footer{background:var(--ink);color:#9fb3d9;font-size:.75rem;padding:26px 0;margin-top:20px}
+footer p{max-width:860px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">地理探究　現代世界の系統地理的考察 ― 工業・貿易</div>
+    <h1 class="serif">グローバル工業ラボ<br><span class="accent">― R&amp;D・特許・国際分業で読み解く現代の工業 ―</span></h1>
+    <p class="lead">1台のスマートフォンには、設計した国・部品をつくった国・組み立てた国が別々に存在します。日本の自動車の多くは、もう日本ではつくられていません。それでも日本は「特許」で年間3兆円以上を稼いでいます。複雑にからみ合う現代の工業を、日本企業の事例で解剖しましょう。</p>
+    <div class="q-banner">今日の問い：モノをつくらない国・企業は、どうやって稼いでいるのだろうか？</div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <button data-nav="intro" class="active" onclick="go('intro')">① スマイルカーブ</button>
+    <button data-nav="sp" onclick="go('sp')">② スマホの国際分業</button>
+    <button data-nav="car" onclick="go('car')">③ 自動車と生産移転</button>
+    <button data-nav="ip" onclick="go('ip')">④ 特許で稼ぐ日本</button>
+    <button data-nav="chip" onclick="go('chip')">⑤ 生産が「来る」時代</button>
+    <button data-nav="matome" onclick="go('matome')">⑥ まとめ・考察→構想</button>
+  </div>
+</nav>
+
+<!-- ========== ① スマイルカーブ ========== -->
+<section id="intro" class="show">
+  <div class="wrap">
+    <h2 class="sec-title serif">① どの工程が「もうかる」のか ― スマイルカーブ</h2>
+    <p class="sec-lead">製品づくりの工程を「企画・研究開発 → 部品 → 組立 → 販売・サービス」と並べ、縦軸に付加価値をとると、両端が高く真ん中が低い「笑った口」のような曲線になります。台湾のパソコンメーカー・エイサーの創業者が提唱したとされる<b>スマイルカーブ</b>です。曲線上の●をクリックして、各工程を確認しましょう。</p>
+
+    <div class="smile-wrap">
+      <svg class="smile-svg" viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg" aria-label="スマイルカーブの図">
+        <!-- 軸 -->
+        <line x1="50" y1="270" x2="490" y2="270" stroke="#8a97ad" stroke-width="2"/>
+        <line x1="50" y1="270" x2="50" y2="30" stroke="#8a97ad" stroke-width="2"/>
+        <text x="46" y="24" font-size="12" fill="#5b6b85" text-anchor="end">付加価値</text>
+        <text x="490" y="290" font-size="12" fill="#5b6b85" text-anchor="end">工程の流れ →</text>
+        <text x="42" y="70" font-size="11" fill="#5b6b85" text-anchor="end">高</text>
+        <text x="42" y="250" font-size="11" fill="#5b6b85" text-anchor="end">低</text>
+        <!-- カーブ -->
+        <path d="M 100 70 Q 170 200 260 210 Q 350 200 440 75" fill="none" stroke="#1b2a4a" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- ノード -->
+        <g class="smile-node" id="sn0" onclick="smile(0)">
+          <circle cx="100" cy="70" r="12" fill="#1f9e8e"/>
+          <text x="100" y="48" font-size="13" font-weight="700" fill="#1b2a4a" text-anchor="middle">企画・R&amp;D</text>
+        </g>
+        <g class="smile-node" id="sn1" onclick="smile(1)">
+          <circle cx="180" cy="182" r="12" fill="#7a6bbf"/>
+          <text x="180" y="160" font-size="13" font-weight="700" fill="#1b2a4a" text-anchor="middle">主要部品</text>
+        </g>
+        <g class="smile-node" id="sn2" onclick="smile(2)">
+          <circle cx="260" cy="210" r="12" fill="#e0a13c"/>
+          <text x="260" y="244" font-size="13" font-weight="700" fill="#1b2a4a" text-anchor="middle">組立</text>
+        </g>
+        <g class="smile-node" id="sn3" onclick="smile(3)">
+          <circle cx="352" cy="180" r="12" fill="#7a6bbf"/>
+          <text x="352" y="158" font-size="13" font-weight="700" fill="#1b2a4a" text-anchor="middle">流通・販売</text>
+        </g>
+        <g class="smile-node" id="sn4" onclick="smile(4)">
+          <circle cx="440" cy="75" r="12" fill="#1f9e8e"/>
+          <text x="440" y="53" font-size="13" font-weight="700" fill="#1b2a4a" text-anchor="middle">サービス・IP</text>
+        </g>
+      </svg>
+      <div class="smile-panel" id="smilePanel"></div>
+    </div>
+
+    <div class="note-box">
+      <b>地理の視点</b>
+      多国籍企業は、付加価値の高い<b>企画・研究開発や専門的な営業部門を先進国</b>に置き、付加価値の低い<b>組立工程を賃金の安い新興国・発展途上国</b>に配置する傾向があります。「どの国がどの工程を担うか」は、その国が得られる豊かさに直結します。<span class="kw">企業内分業</span><span class="kw">国際分業</span><span class="kw">付加価値</span>
+    </div>
+
+    <button class="next-btn" onclick="go('sp')">② スマホの国際分業へ →</button>
+  </div>
+</section>
+
+<!-- ========== ② スマホ ========== -->
+<section id="sp">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip-lb" style="background:var(--sp)">CASE 1</span>1台のスマートフォンを「解剖」する</h2>
+    <p class="sec-lead">あなたのポケットのスマートフォンは、実は世界中の企業の分業でできています。工程ボタンを順に押して、「誰が・どこで・何を」担っているかを確認しましょう（米国アップル社のスマートフォンの例。一般に知られている分業構造にもとづくモデルです）。</p>
+
+    <div class="card">
+      <div class="flow" id="spFlow"></div>
+
+      <div class="map-box">
+        <svg id="spMap" viewBox="0 0 900 470" xmlns="http://www.w3.org/2000/svg" aria-label="スマートフォンの国際分業を示す模式世界地図（太平洋中心）">
+          <defs>
+            <marker id="spArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#7a4fc9"/>
+            </marker>
+          </defs>
+          <!-- ユーラシア(ロシア・中国・東南アジア・インド) -->
+          <path class="land" d="M0,25 L150,28 C200,35 225,55 232,80 C238,100 228,112 240,125
+            C232,140 220,148 228,160 C220,172 208,178 212,192 C204,210 190,215 196,232
+            C192,250 200,262 196,276 C190,290 176,292 170,282 C162,270 158,258 150,262
+            C138,268 128,282 116,290 C104,298 94,290 86,296 C80,314 72,330 60,318
+            C50,300 46,292 40,287 L0,286 Z"/>
+          <!-- 東南アジア島しょ部 -->
+          <ellipse class="land" cx="216" cy="304" rx="16" ry="6"/>
+          <ellipse class="land" cx="248" cy="308" rx="18" ry="6"/>
+          <ellipse class="land" cx="282" cy="300" rx="12" ry="7"/>
+          <ellipse class="land" cx="242" cy="252" rx="5" ry="10"/>
+          <!-- 日本列島(弧状) -->
+          <path d="M263,194 C272,181 281,170 290,158 C297,149 302,140 308,131"
+                fill="none" stroke="#d5e0eb" stroke-width="9" stroke-linecap="round"/>
+          <path d="M263,194 C272,181 281,170 290,158 C297,149 302,140 308,131"
+                fill="none" stroke="#b3c3d4" stroke-width="1" opacity="0"/>
+          <!-- 朝鮮半島 -->
+          <path d="M243,149 L239,168" fill="none" stroke="#d5e0eb" stroke-width="8" stroke-linecap="round"/>
+          <!-- 台湾 -->
+          <ellipse class="land" cx="227" cy="214" rx="4.5" ry="9" transform="rotate(18 227 214)"/>
+          <!-- オーストラリア・NZ -->
+          <path class="land" d="M303,348 C318,331 352,325 377,335 C397,345 402,366 392,383
+            C377,399 341,401 320,393 C305,386 297,366 303,348 Z"/>
+          <circle class="land" cx="432" cy="396" r="4"/>
+          <circle class="land" cx="439" cy="408" r="4"/>
+          <!-- 北アメリカ -->
+          <path class="land" d="M545,55 L760,45 C792,55 802,80 792,100 L800,130
+            C795,152 780,157 770,172 C760,192 746,202 736,216 C722,236 706,246 696,256
+            L686,268 C678,276 671,270 667,260 C660,249 651,240 641,226
+            C621,206 606,196 598,178 C588,160 580,140 570,120 C558,95 548,75 545,55 Z"/>
+          <!-- 南アメリカ -->
+          <path class="land" d="M676,272 C690,262 711,265 726,276 C746,289 756,311 751,336
+            C746,366 736,396 721,421 C711,439 700,446 694,431 C686,406 680,376 676,346
+            C672,321 670,293 676,272 Z"/>
+          <!-- ヨーロッパ・アフリカ(大西洋側・右端) -->
+          <path class="land" d="M900,68 C878,80 866,96 872,116 C860,132 853,147 862,162
+            C851,182 847,207 855,237 C860,267 871,292 881,312 C889,330 896,342 900,347 Z"/>
+          <!-- ラベル -->
+          <text class="sea-lb" x="440" y="248" text-anchor="middle">太　平　洋</text>
+          <text class="geo-lb" x="140" y="150">中国</text>
+          <text class="geo-lb" x="300" y="180">日本</text>
+          <text class="geo-lb" x="212" y="141">韓国</text>
+          <text class="geo-lb" x="238" y="226">台湾</text>
+          <text class="geo-lb" x="640" y="110">アメリカ合衆国</text>
+          <text class="geo-lb" x="318" y="374">オーストラリア</text>
+          <text class="geo-lb" x="700" y="360">南アメリカ</text>
+          <text class="geo-lb" x="838" y="98">ヨーロッパ</text>
+          <text class="geo-lb" x="848" y="270">アフリカ</text>
+          <!-- 動的レイヤー(矢印・マーカー) -->
+          <g id="mapDyn"></g>
+        </svg>
+        <p class="map-src">※模式図（大陸の位置・形状は大きく簡略化しています）。STEPボタンを押すと、その工程の場所とモノ・情報の流れが表示されます。</p>
+      </div>
+
+      <div class="flow-panel" id="spPanel"></div>
+    </div>
+
+    <div class="note-box">
+      <b>3つのキープレーヤー</b>
+      <span class="kw">ファブレス企業</span>…自社工場を持たず企画・開発に特化（例：米アップル。日本ではセンサー機器のキーエンスや、生産の多くを委託する任天堂もファブレスに近い形態として知られる）　
+      <span class="kw">ファウンドリ</span>…半導体の生産だけを受託（例：台湾TSMC）　
+      <span class="kw">EMS</span>…電子機器の組立を受託（例：台湾の大手EMS企業が中国などの工場で組立）
+    </div>
+
+    <div class="quiz-box" id="quiz-sp"></div>
+    <button class="next-btn" onclick="go('car')">③ 自動車と生産移転へ →</button>
+  </div>
+</section>
+
+<!-- ========== ③ 自動車 ========== -->
+<section id="car">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip-lb" style="background:var(--car)">CASE 2</span>日本車の多くは日本でつくられていない ― 生産現場の移転</h2>
+    <p class="sec-lead">日本の基幹産業・自動車。しかし日本メーカーの車の多くは、いまや海外の工場で生産されています。年代ボタンを押して、国内生産と海外生産の逆転をたどりましょう。</p>
+
+    <div class="card">
+      <div class="era-row" id="carEras"></div>
+      <div class="pbar-area">
+        <div class="pbar-row"><span>国内生産</span><div class="pbar"><div class="pfill dom" id="barDom"></div></div><span id="valDom"></span></div>
+        <div class="pbar-row"><span>海外生産</span><div class="pbar"><div class="pfill ovs" id="barOvs"></div></div><span id="valOvs"></span></div>
+        <div class="pnote" id="carNote"></div>
+        <p class="src">※四輪車・概数。日本自動車工業会（JAMA）の統計等をもとに作成（グラフは概略値。最新値はJAMA統計で確認しよう）</p>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <b>移転の理由は時代で変わった</b>
+      1970年代後半〜80年代は<b>貿易摩擦の回避</b>（輸出自主規制→現地生産）と<b>プラザ合意（1985年）後の円高</b>への対応で欧米へ。1990年代以降は<b>安い労働力と成長する市場</b>を求めてASEAN・中国へ。生産の海外移転は国内の雇用を減らす<b>産業の空洞化</b>を招く一方、海外拠点が親会社に支払う特許使用料や配当という新しい「稼ぎ方」も生みました（→④へ）。<span class="kw">貿易摩擦</span><span class="kw">現地生産</span><span class="kw">産業の空洞化</span>
+    </div>
+
+    <div class="quiz-box" id="quiz-car"></div>
+    <button class="next-btn" onclick="go('ip')">④ 特許で稼ぐ日本へ →</button>
+  </div>
+</section>
+
+<!-- ========== ④ 特許・IP ========== -->
+<section id="ip">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip-lb" style="background:var(--ip)">CASE 3</span>「特許」は輸出品 ― 知的財産の国際取引</h2>
+    <p class="sec-lead">工場が海外に移っても、日本が「からっぽ」になったわけではありません。技術・特許・ブランドの使用料という形で、日本にはお金が流れこんでいます。モノの貿易ならぬ「<b>技術貿易</b>」の姿を見てみましょう。</p>
+
+    <div class="card">
+      <h3>日本の知的財産権等使用料収支（2023年・円換算の概数）</h3>
+      <div class="ip-bars">
+        <div class="ip-bar-row"><span>受取（輸出側）</span><div class="ip-bar"><div class="ip-fill" id="ipIn" style="background:var(--ip)"></div></div><span>約7.3兆円</span></div>
+        <div class="ip-bar-row"><span>支払（輸入側）</span><div class="ip-bar"><div class="ip-fill" id="ipOut" style="background:#8a97ad"></div></div><span>約4.2兆円</span></div>
+        <div class="ip-bar-row"><span>収支（黒字）</span><div class="ip-bar"><div class="ip-fill" id="ipNet" style="background:var(--hi)"></div></div><span>約＋3.2兆円</span></div>
+      </div>
+      <p class="src">出典：国際収支統計等にもとづく報道・調査資料（221億米ドルの黒字、米国・ドイツに次ぐ規模とされる）。円換算は当時のレートによる概数。</p>
+    </div>
+
+    <div class="card">
+      <h3>お金はどう流れているのか（クリックで確認）</h3>
+      <div class="ip-flow">
+        <div class="ip-box"><b>日本の親会社</b><span>特許・技術・ブランドを保有<br>（研究・開発の拠点）</span></div>
+        <div class="ip-arrow">─ 技術・特許の使用を許可 →<br>← 使用料（ロイヤルティ） ─</div>
+        <div class="ip-box"><b>海外の生産子会社など</b><span>現地で生産・販売<br>（親会社の技術を使用）</span></div>
+      </div>
+      <p style="font-size:.88rem">日本の知財収支の黒字は、<b>日本の製造業が海外拠点での生産・販売を増やした結果、海外子会社から親会社への特許などの使用料の受取が増えた</b>ことがおもな要因とされます（日本銀行の分析による）。つまり③で見た「生産の海外移転」と、この黒字は表裏一体なのです。</p>
+      <p style="font-size:.88rem;margin-top:8px">ただし内訳を見ると、特許など<b>産業財産権では大幅な黒字</b>である一方、映画・音楽・ソフトウェアなどの<b>著作権等では赤字傾向</b>が続くとされます。「技術では稼げるが、コンテンツ配信などでは海外への支払いが多い」という日本の強みと弱みが見えてきます。</p>
+      <p style="margin-top:8px"><span class="kw">知的財産権</span><span class="kw">技術貿易</span><span class="kw">サービス貿易</span><span class="kw">研究・開発（R&amp;D）</span></p>
+    </div>
+
+    <div class="quiz-box" id="quiz-ip"></div>
+    <button class="next-btn" onclick="go('chip')">⑤ 生産が「来る」時代へ →</button>
+  </div>
+</section>
+
+<!-- ========== ⑤ TSMC熊本 ========== -->
+<section id="chip">
+  <div class="wrap">
+    <h2 class="sec-title serif"><span class="chip-lb" style="background:var(--chip)">CASE 4</span>今度は生産が日本に「来る」 ― TSMC熊本工場</h2>
+    <p class="sec-lead">生産は賃金の安い国へ出ていくだけ ― そんな常識をくつがえす動きが、九州で起きています。世界最大の半導体ファウンドリ、台湾のTSMCが熊本県に工場を建てたのです。</p>
+
+    <div class="card">
+      <h3>JASM（TSMC熊本工場）のあらまし</h3>
+      <p style="font-size:.9rem">台湾のTSMCが過半を出資し、ソニーグループの半導体子会社やデンソーなど<b>日本企業も出資</b>する合弁会社JASMが、熊本県菊陽町に半導体工場を建設。2021年に進出を表明、2022年に着工、<b>2024年に第1工場が開所</b>し、同年末に量産を開始しました。日本政府は第1工場に<b>最大4,760億円</b>の補助を決定。第2工場（トヨタも出資）も2027年末までの稼働をめざして計画が進んでいます。周辺には関連企業の進出があいつぎ、数兆円規模の経済波及効果が試算されています。</p>
+      <p class="src">出典：経済産業省資料、各社発表等（2024年時点の公表情報にもとづく）</p>
+    </div>
+
+    <div class="card">
+      <h3>なぜ「賃金の高い日本」に工場が来たのか ― 3つの視点（クリックで開く）</h3>
+      <div class="flow" id="chipFlow" style="grid-template-columns:repeat(3,1fr)"></div>
+      <div class="flow-panel" id="chipPanel"></div>
+    </div>
+
+    <div class="note-box">
+      <b>地理の視点：立地の理由が変わった</b>
+      20世紀の工場立地は「輸送費」「賃金」が主役でした。しかし現代の先端産業では、<b>安定して部品を調達できるか（サプライチェーン）</b>、<b>政治的なリスクは小さいか（経済安全保障）</b>、<b>顧客や関連企業・人材が近くにいるか（集積）</b>が立地を左右します。米国やドイツでも半導体工場の誘致が進んでおり、先進国への<b>生産の回帰</b>は世界的な動きになりつつあります。<span class="kw">サプライチェーン</span><span class="kw">経済安全保障</span><span class="kw">産業の集積</span><span class="kw">国内回帰</span>
+    </div>
+
+    <div class="quiz-box" id="quiz-chip"></div>
+    <button class="next-btn" onclick="go('matome')">⑥ まとめ・考察へ →</button>
+  </div>
+</section>
+
+<!-- ========== ⑥ まとめ ========== -->
+<section id="matome">
+  <div class="wrap">
+    <h2 class="sec-title serif">⑥ まとめ ― 4つの事例をつなげて考える</h2>
+    <p class="sec-lead">4つの事例は、バラバラの話ではなく1つの構造でつながっています。表で整理してから、考察・構想に挑戦しましょう。</p>
+
+    <table class="compare">
+      <thead><tr><th style="width:150px">事例</th><th>何が国境をこえたか</th><th>日本（先進国）に残った・生まれたもの</th></tr></thead>
+      <tbody>
+        <tr><td>① スマイルカーブ</td><td>―（考え方の枠組み）</td><td>付加価値の高い両端（R&amp;D・サービス）を先進国が担う傾向</td></tr>
+        <tr><td>② スマートフォン</td><td>設計図・部品・組立が別々の国へ（企業内・企業間分業）</td><td>高付加価値部品（画像センサーなど）の供給という役割</td></tr>
+        <tr><td>③ 自動車</td><td>生産現場（工場）が海外へ ― 2024年は海外約1,650万台 vs 国内約820万台</td><td>研究・開発機能と、空洞化という課題</td></tr>
+        <tr><td>④ 知的財産</td><td>特許・技術の「使用権」が海外へ、使用料が日本へ</td><td>約3兆円規模の知財収支の黒字（技術貿易）</td></tr>
+        <tr><td>⑤ TSMC熊本</td><td>台湾企業の生産拠点が日本へ（逆方向の直接投資）</td><td>先端半導体の生産拠点と地域への集積</td></tr>
+      </tbody>
+    </table>
+
+    <div class="quiz-box" id="quiz-matome"></div>
+
+    <div class="essay">
+      <h3><span class="tag kousatsu">考察</span>WORK 1（100字程度）</h3>
+      <p style="font-size:.9rem">日本の自動車メーカーの海外生産の拡大（③）と、日本の知的財産権等使用料収支の黒字（④）は、どのような関係にあるか。「生産」「特許使用料」の2語を用いて説明しなさい。</p>
+      <textarea placeholder="ここに書いてみよう（メモ用。保存はされません）"></textarea>
+      <button class="hint-btn" onclick="toggleHint(this)">ヒントを見る</button>
+      <div class="hint-body">海外拠点で<b>生産</b>が増えるほど、その拠点は日本の親会社が持つ技術・特許を使う。その対価として<b>特許使用料</b>が日本へ支払われるため、生産の海外移転が知財収支の黒字を押し上げている、という関係を書こう。</div>
+    </div>
+
+    <div class="essay">
+      <h3><span class="tag kousatsu">考察</span>WORK 2（120字程度）</h3>
+      <p style="font-size:.9rem">スマイルカーブ（①）の考え方を使って、「組立工程を主に担う国」が経済的に不利になりやすい理由と、その国が豊かになるためにとりうる方策を説明しなさい。</p>
+      <textarea placeholder="ここに書いてみよう"></textarea>
+      <button class="hint-btn" onclick="toggleHint(this)">ヒントを見る</button>
+      <div class="hint-body">組立は付加価値が低く、賃金が上がると別の国に移されてしまう。豊かになるには、研究開発・設計・ブランドなど<b>カーブの両端</b>へ移る必要がある。台湾（受託生産から世界最大のファウンドリへ）や韓国の例を思い出そう。</div>
+    </div>
+
+    <div class="essay">
+      <h3><span class="tag kousou">構想</span>WORK 3（自由記述）</h3>
+      <p style="font-size:.9rem">TSMC熊本のような大型工場の進出は、地域に恩恵と課題の両方をもたらす。あなたが進出先の自治体の担当者なら、恩恵を最大化し課題を減らすためにどんな政策を構想するか。手持ちの教科書・地図帳や自治体の資料も参考にしてよい。</p>
+      <textarea placeholder="想定される恩恵：／想定される課題：／私の政策構想：" style="min-height:130px"></textarea>
+      <button class="hint-btn" onclick="toggleHint(this)">考えるための視点</button>
+      <div class="hint-body">恩恵：雇用・関連企業の集積・税収など。課題：交通渋滞、住宅・地価の上昇、水資源の利用、人材の奪い合いなどが各地で議論されている。<b>産学官連携</b>（地元の高校・高専・大学での人材育成）や、インフラ整備の優先順位づけといった視点で構想してみよう。</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>本教材は個人が学習用に作成したものであり、特定の教科書・出版社・掲載企業とは一切関係ありません。統計値・企業事例は公的統計（国際収支統計、日本自動車工業会統計等）や各社・政府の公表資料等の公開情報にもとづく概数・要約であり、作成時点以降に変化している可能性があります。授業では最新の公式資料もあわせて確認してください。</p>
+  </div>
+</footer>
+
+<script>
+/* ============ ① スマイルカーブ ============ */
+const SMILE = [
+  {name:"企画・研究開発（R&D）", va:"付加価値：高", vaColor:"#1f9e8e",
+   body:"製品のコンセプトを考え、新しい技術を開発する工程。特許などの知的財産が生まれる源泉であり、まねされにくいため付加価値が最も高い。",
+   who:"<b>担い手の例：</b>先進国の本社・研究所。高度人材や大学・研究機関の近く（大都市圏）に集積する。日本企業の研究所も大都市圏周辺に多い。"},
+  {name:"主要部品の生産", va:"付加価値：中", vaColor:"#7a6bbf",
+   body:"半導体や画像センサー、電池など、高度な技術を要する部品の生産。技術の蓄積が必要なため、簡単には他国に移せない。",
+   who:"<b>担い手の例：</b>日本・韓国・台湾など。日本企業はスマートフォン向けの画像センサーや電子部品、素材などで高いシェアを持つ分野がある。"},
+  {name:"組立", va:"付加価値：低", vaColor:"#e0a13c",
+   body:"部品を集めて製品に組み上げる工程。多くの人手が必要な一方、技術的な参入障壁が比較的低く、価格競争になりやすい。",
+   who:"<b>担い手の例：</b>賃金の安い新興国・発展途上国の工場（中国・ベトナムなど）。賃金が上がると、さらに安い国へ工場が移転しやすい。"},
+  {name:"流通・販売", va:"付加価値：中", vaColor:"#7a6bbf",
+   body:"製品を市場に届け、販売する工程。ブランドや販売網の力が価値を左右する。",
+   who:"<b>担い手の例：</b>ブランドを持つ企業（多くは先進国）と、各国の販売網。ネット通販の拡大で流通のあり方も変化している。"},
+  {name:"サービス・アフターケア・IP活用", va:"付加価値：高", vaColor:"#1f9e8e",
+   body:"アプリ配信・修理・保守や、キャラクター・ブランドなど知的財産（IP）の活用。製品を売った後も継続的に収益を生む。",
+   who:"<b>担い手の例：</b>ブランド・IPを持つ企業。ゲーム機本体より、ソフトやキャラクターIPが収益の柱になる任天堂のような例もある。"}
+];
+function smile(i){
+  SMILE.forEach((_,k)=>document.getElementById('sn'+k).classList.toggle('on',k===i));
+  const s = SMILE[i];
+  document.getElementById('smilePanel').innerHTML =
+    `<h4>${s.name}<span class="va" style="background:${s.vaColor}">${s.va}</span></h4><p>${s.body}</p><div class="who">${s.who}</div>`;
+}
+
+/* ============ ② スマホ分業 ============ */
+const SP = [
+  {st:"STEP 1", nm:"企画・設計", body:"米国アップル社が製品を企画・設計する。同社は<b>自社工場を持たないファブレス企業</b>で、付加価値の高い企画・開発・ブランドに経営資源を集中しているとされる。",
+   term:"<b>ファブレス企業：</b>生産部門を切り離し、企画・開発に特化した企業。自社工場（fab）を持たない（less）。"},
+  {st:"STEP 2", nm:"半導体の製造", body:"スマートフォンの頭脳であるチップは、アップル社が設計し、<b>台湾のTSMC</b>などのファウンドリが受託して製造しているとされる。設計と製造の分業が半導体産業の基本形になっている。",
+   term:"<b>ファウンドリ：</b>半導体の生産だけを専門に受託する企業。台湾のTSMCが世界最大。"},
+  {st:"STEP 3", nm:"部品の供給", body:"カメラの画像センサーは日本のソニーグループ、ディスプレイや記憶装置は韓国企業など、<b>日本・韓国・台湾などの企業が高付加価値部品を供給</b>しているとされる。日本は「完成品」より「部品・素材」で存在感を保っている。",
+   term:"<b>高付加価値部品：</b>高度な技術の蓄積が必要で、まねされにくい部品。技術が集積する先進国に生産が残りやすい。"},
+  {st:"STEP 4", nm:"組立", body:"世界中から集まった部品は、<b>台湾の大手EMS企業が中国などに持つ巨大工場</b>で組み立てられているとされる。数十万人規模の労働者が働く工場もあり、組立は労働集約的な工程である。",
+   term:"<b>EMS：</b>電子機器の受託製造サービス。ファブレス企業が切り離した生産部門を専門に担う。"},
+  {st:"STEP 5", nm:"販売・サービス", body:"完成品は世界中で販売され、その後もアプリ配信や音楽・動画などのサービスが継続的な収益を生む。<b>利益の多くは、企画とブランドとサービスを握るファブレス企業側に集まる</b>とされる。",
+   term:"<b>スマイルカーブとの対応：</b>STEP1と5（両端）を先進国企業が握り、STEP4（中央）を新興国の工場が担う構造。"}
+];
+/* 地図上の地点座標(模式図上の位置) */
+const PTS = {
+  us:[598,178],  // 米国西海岸(設計)
+  tw:[227,214],  // 台湾(ファウンドリ)
+  jp:[284,167],  // 日本(部品)
+  kr:[241,158],  // 韓国(部品)
+  cn:[203,192],  // 中国沿岸部(組立)
+  na:[665,140],  // 販売:北米
+  eu:[868,118],  // 販売:ヨーロッパ
+  au:[348,362],  // 販売:オーストラリア
+  sa:[712,318],  // 販売:南アメリカ
+  sea:[228,278]  // 販売:東南アジア
+};
+/* 各STEPで表示するマーカーと矢印 */
+const SPMAP = [
+  {marks:[{p:'us',t:'企画・設計'}], arrows:[]},
+  {marks:[{p:'tw',t:'半導体製造'},{p:'us',t:'設計'}], arrows:[{f:'us',to:'tw',lb:'設計データ'}]},
+  {marks:[{p:'jp',t:'部品'},{p:'kr',t:'部品'},{p:'tw',t:'部品'}], arrows:[]},
+  {marks:[{p:'cn',t:'組立'}], arrows:[{f:'jp',to:'cn'},{f:'kr',to:'cn'},{f:'tw',to:'cn'},{f:'us',to:'cn',lb:'設計・発注'}]},
+  {marks:[{p:'cn',t:'出荷'}], arrows:[{f:'cn',to:'na'},{f:'cn',to:'eu'},{f:'cn',to:'jp'},{f:'cn',to:'au'},{f:'cn',to:'sa'},{f:'cn',to:'sea'}]}
+];
+const SVGNS = 'http://www.w3.org/2000/svg';
+function arcPath(a,b,bend){
+  const mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2;
+  const dx=b[0]-a[0], dy=b[1]-a[1];
+  const len=Math.sqrt(dx*dx+dy*dy)||1;
+  const cx=mx-dy/len*bend, cy=my+dx/len*bend;
+  return {d:`M${a[0]},${a[1]} Q${cx},${cy} ${b[0]},${b[1]}`, lx:(mx+cx)/2, ly:(my+cy)/2};
+}
+function drawSpMap(i){
+  const g = document.getElementById('mapDyn');
+  g.innerHTML = '';
+  const cfg = SPMAP[i];
+  cfg.arrows.forEach(a=>{
+    const from=PTS[a.f], to=PTS[a.to];
+    const bend = Math.min(70, Math.max(24, Math.abs(to[0]-from[0])*0.22)) * -1;
+    const arc = arcPath(from,to,bend);
+    const path = document.createElementNS(SVGNS,'path');
+    path.setAttribute('d',arc.d);
+    path.setAttribute('class','fl-arrow');
+    g.appendChild(path);
+    if(a.lb){
+      const t = document.createElementNS(SVGNS,'text');
+      t.setAttribute('x',arc.lx); t.setAttribute('y',arc.ly-6);
+      t.setAttribute('class','ar-lb'); t.setAttribute('text-anchor','middle');
+      t.textContent = a.lb;
+      g.appendChild(t);
+    }
+  });
+  cfg.marks.forEach(m=>{
+    const p = PTS[m.p];
+    const pulse = document.createElementNS(SVGNS,'circle');
+    pulse.setAttribute('cx',p[0]); pulse.setAttribute('cy',p[1]); pulse.setAttribute('r',9);
+    pulse.setAttribute('class','mk-pulse');
+    g.appendChild(pulse);
+    const core = document.createElementNS(SVGNS,'circle');
+    core.setAttribute('cx',p[0]); core.setAttribute('cy',p[1]); core.setAttribute('r',6);
+    core.setAttribute('class','mk-core');
+    g.appendChild(core);
+    const lb = document.createElementNS(SVGNS,'text');
+    lb.setAttribute('x',p[0]); lb.setAttribute('y',p[1]-13);
+    lb.setAttribute('class','mk-lb'); lb.setAttribute('text-anchor','middle');
+    lb.textContent = m.t;
+    g.appendChild(lb);
+  });
+}
+function spStep(i){
+  document.querySelectorAll('#spFlow button').forEach((b,k)=>b.classList.toggle('on',k===i));
+  const s = SP[i];
+  document.getElementById('spPanel').innerHTML = `<h4>${s.st}：${s.nm}</h4><p>${s.body}</p><div class="term">${s.term}</div>`;
+  drawSpMap(i);
+}
+
+/* ============ ③ 自動車 ============ */
+/* 台数は概数(万台)。JAMA統計等にもとづく概略値 */
+const CAR = [
+  {yr:"1990年ごろ", dom:1350, ovs:330,
+   note:"国内生産はこの時期がピーク（約1,350万台）。1980年代の貿易摩擦とプラザ合意（1985年）後の円高を受けて、欧米での現地生産が始まっていた。"},
+  {yr:"2000年ごろ", dom:1010, ovs:630,
+   note:"バブル崩壊後、国内生産は減少へ。一方、ASEAN・中国など成長するアジア市場に向けた現地生産が拡大していく。国内では産業の空洞化が課題に。"},
+  {yr:"2010年ごろ", dom:960, ovs:1320,
+   note:"2000年代後半、海外生産が国内生産を上回るように。リーマンショックと円高、アジア市場の急成長が海外シフトを加速させた。"},
+  {yr:"2024年", dom:823, ovs:1648,
+   note:"海外生産（1,648万台）は国内生産（約820万台）の約2倍に（日本自動車工業会統計）。「日本車」の多くは海外の工場で、現地の労働者によってつくられている。"}
+];
+function carEra(i){
+  document.querySelectorAll('#carEras button').forEach((b,k)=>b.classList.toggle('on',k===i));
+  const c = CAR[i];
+  const max = 1700;
+  document.getElementById('barDom').style.width = (c.dom/max*100)+'%';
+  document.getElementById('barOvs').style.width = (c.ovs/max*100)+'%';
+  document.getElementById('valDom').textContent = '約'+c.dom.toLocaleString()+'万台';
+  document.getElementById('valOvs').textContent = '約'+c.ovs.toLocaleString()+'万台';
+  document.getElementById('carNote').innerHTML = '<b>'+c.yr+'：</b>'+c.note;
+}
+
+/* ============ ⑤ TSMC:3つの視点 ============ */
+const CHIP = [
+  {st:"視点 1", nm:"経済安全保障", body:"半導体は自動車から兵器まであらゆる製品に不可欠な「産業のコメ」。生産が特定の国・地域に集中していると、国際情勢の変化や災害で供給が止まるリスクがある。各国政府は巨額の補助金を出してでも、<b>自国内に生産拠点を確保</b>しようとしている。日本政府もJASM第1工場に最大4,760億円の補助を決定した。",
+   term:"<b>キーワード：</b>経済安全保障／サプライチェーンの強靱化"},
+  {st:"視点 2", nm:"顧客と集積", body:"熊本を含む九州はもともと「シリコンアイランド」と呼ばれる半導体関連の集積地。出資者でもあるソニーグループの画像センサー工場が近くにあり、<b>つくった半導体をすぐ使う顧客が近い</b>。進出後は装置・材料メーカーの立地もあいつぎ、集積がさらに集積を呼んでいる。",
+   term:"<b>キーワード：</b>集積の利益／産業クラスター"},
+  {st:"視点 3", nm:"人材と技術", body:"半導体の製造には高度な技術者・技能者が欠かせない。九州には理工系の大学・高専や、長年の半導体産業で育った人材の蓄積がある。一方で人材の奪い合いも起きており、<b>地元の教育機関と連携した人材育成</b>が急務になっている。",
+   term:"<b>キーワード：</b>高度人材／産学官連携"}
+];
+function chipStep(i){
+  document.querySelectorAll('#chipFlow button').forEach((b,k)=>b.classList.toggle('on',k===i));
+  const s = CHIP[i];
+  document.getElementById('chipPanel').innerHTML = `<h4>${s.st}：${s.nm}</h4><p>${s.body}</p><div class="term">${s.term}</div>`;
+}
+
+/* ============ クイズ ============ */
+const QUIZ = {
+  sp: {title:"チェッククイズ（スマホの国際分業）", items:[
+    {q:"自社工場を持たず、企画・開発に特化する企業を何と呼ぶか。",
+     choices:["ファブレス企業","ファウンドリ","EMS","コンビナート"], ans:0,
+     exp:"fab（工場）がless（ない）企業。米アップルが代表例で、日本ではキーエンスなどが知られる。"},
+    {q:"スマートフォンの組立工程が中国などの新興国で行われるおもな理由はどれか。",
+     choices:["組立は労働集約的で、賃金の安さが立地を左右するから","組立には最先端の研究施設が必要だから","新興国のほうが特許を多く持っているから","先進国では組立が法律で禁止されているから"], ans:0,
+     exp:"組立は多くの人手を要する労働集約的な工程。付加価値が低く価格競争になりやすいため、賃金の安い地域に立地する。"}
+  ]},
+  car: {title:"チェッククイズ（自動車と生産移転）", items:[
+    {q:"1980年代に日本の自動車メーカーが欧米での現地生産を進めたきっかけとして適切なものはどれか。",
+     choices:["貿易摩擦の回避とプラザ合意後の円高","欧米の賃金が日本より安かったから","日本国内で自動車が売れなくなったから","石炭の産地が欧米にあったから"], ans:0,
+     exp:"対米輸出の急増が貿易摩擦を生み、1985年のプラザ合意後の円高が輸出の採算を悪化させたため、現地生産に切り替えた。"},
+    {q:"2024年時点の日本メーカーの四輪車生産について正しいものはどれか。",
+     choices:["海外生産が国内生産の約2倍に達している","国内生産が海外生産の約2倍である","海外生産はほぼゼロになった","国内生産は過去最高を更新し続けている"], ans:0,
+     exp:"海外生産は1,648万台、国内生産は約820万台（日本自動車工業会統計）。国内生産のピークは1990年ごろの約1,350万台だった。"}
+  ]},
+  ip: {title:"チェッククイズ（特許で稼ぐ日本）", items:[
+    {q:"日本の知的財産権等使用料収支について正しいものはどれか。",
+     choices:["黒字であり、その主因は海外拠点の生産増による特許使用料の受取増とされる","大幅な赤字が続いている","収支はつねにゼロである","黒字の主因は映画・音楽など著作権の受取とされる"], ans:0,
+     exp:"日本は米独に次ぐ規模の黒字国。海外生産の拡大が、子会社から親会社への産業財産権使用料の受取を増やしている。著作権等はむしろ赤字傾向。"},
+    {q:"外国との間で特許やノウハウ、技術指導などをやり取りすることを何と呼ぶか。",
+     choices:["技術貿易","加工貿易","中継貿易","保護貿易"], ans:0,
+     exp:"モノではなく技術そのものの輸出入。技術貿易収支はその国の技術力を示す指標の一つとされる。"}
+  ]},
+  chip: {title:"チェッククイズ（生産が「来る」時代）", items:[
+    {q:"TSMC熊本工場（JASM）の説明として正しいものはどれか。",
+     choices:["台湾企業が過半を出資し、日本企業も出資、日本政府が巨額の補助を行った","日本企業だけで設立された工場である","政府の補助はいっさい受けていない","製品はすべて台湾に輸出される契約である"], ans:0,
+     exp:"TSMC過半出資に、ソニーグループの半導体子会社やデンソー（第2工場ではトヨタも）が参加。政府は第1工場に最大4,760億円の補助を決定した。"},
+    {q:"賃金の高い先進国に先端半導体工場が立地する近年の動きの背景として、適切でないものはどれか。",
+     choices:["先進国の賃金が新興国より安くなったから","供給が止まるリスクに備える経済安全保障の考え方","顧客や関連産業が近くに集積していること","政府による大規模な補助金・誘致政策"], ans:0,
+     exp:"先進国の賃金は依然高い。それでも立地するのは、賃金以外の要因（安全保障・集積・補助金・人材）が重要になったから。"}
+  ]},
+  matome: {title:"総合チェッククイズ", items:[
+    {q:"スマイルカーブが示す内容として正しいものはどれか。",
+     choices:["企画・R&Dとサービスの付加価値が高く、組立の付加価値が低い","組立の付加価値が最も高い","すべての工程の付加価値は等しい","付加価値は工程の順番と無関係である"], ans:0,
+     exp:"曲線の両端（企画・R&D／販売後のサービス・IP）が高く、中央の組立が低い。先進国は両端を、新興国は中央を担う傾向がある。"},
+    {q:"「生産の海外移転」と「知財収支の黒字」の関係として最も適切なものはどれか。",
+     choices:["海外での生産が増えるほど、日本の親会社が受け取る特許使用料も増える","生産が海外に移ると特許は消滅する","両者にはまったく関係がない","知財収支の黒字は生産の国内回帰によってのみ生まれる"], ans:0,
+     exp:"海外子会社は日本の親会社の技術・特許を使って生産するため、その使用料が日本へ支払われる。空洞化の一方で生まれた新しい稼ぎ方。"},
+    {q:"現代の先端産業の工場立地で、20世紀と比べて重要性を増した要因はどれか。",
+     choices:["経済安全保障やサプライチェーンの安定","石炭産地への近さ","河川の水運","気温の低さ"], ans:0,
+     exp:"輸送費・賃金中心の立地論に加え、供給網の安定・政治リスク・集積・政府の補助が先端産業の立地を左右するようになった。"}
+  ]}
+};
+
+function renderQuiz(containerId, data){
+  const box = document.getElementById(containerId);
+  let html = `<h3>✔ ${data.title}</h3><p class="progress" id="${containerId}-p">正解 0 / ${data.items.length}</p>`;
+  data.items.forEach((it,qi)=>{
+    html += `<div class="q-item"><div class="qt">問${qi+1}．${it.q}</div><div class="choices">`;
+    const order = it.choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    order.forEach(ci=>{
+      html += `<button onclick="answer('${containerId}',${qi},${ci},this)">${it.choices[ci]}</button>`;
+    });
+    html += `</div><div class="feedback" id="${containerId}-f${qi}"></div></div>`;
+  });
+  box.innerHTML = html;
+  box.dataset.correct = 0;
+  box.dataset.total = data.items.length;
+  box._items = data.items;
+}
+function answer(containerId, qi, ci, btn){
+  const box = document.getElementById(containerId);
+  const it = box._items[qi];
+  const buttons = btn.parentElement.querySelectorAll('button');
+  buttons.forEach(b=>b.disabled=true);
+  const fb = document.getElementById(containerId+'-f'+qi);
+  if(ci===it.ans){
+    btn.classList.add('correct');
+    box.dataset.correct = Number(box.dataset.correct)+1;
+    fb.innerHTML = `<b>◯ 正解！</b>${it.exp}`;
+  }else{
+    btn.classList.add('wrong');
+    buttons.forEach(b=>{ if(b.textContent===it.choices[it.ans]) b.classList.add('correct'); });
+    fb.innerHTML = `<b>✕ おしい！</b>${it.exp}`;
+  }
+  fb.classList.add('show');
+  document.getElementById(containerId+'-p').textContent = `正解 ${box.dataset.correct} / ${box.dataset.total}`;
+}
+function toggleHint(btn){
+  const body = btn.nextElementSibling;
+  body.classList.toggle('show');
+  btn.textContent = body.classList.contains('show') ? '閉じる' : 'ヒントを見る';
+}
+function go(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.nav===id));
+  window.scrollTo({top:0});
+}
+
+/* ============ 初期化 ============ */
+smile(0);
+(function(){
+  const f = document.getElementById('spFlow');
+  SP.forEach((s,i)=>{
+    const b = document.createElement('button');
+    b.innerHTML = `<span class="st">${s.st}</span><span class="nm">${s.nm}</span>`;
+    b.onclick = ()=>spStep(i);
+    f.appendChild(b);
+  });
+  spStep(0);
+})();
+(function(){
+  const r = document.getElementById('carEras');
+  CAR.forEach((c,i)=>{
+    const b = document.createElement('button');
+    b.textContent = c.yr;
+    b.onclick = ()=>carEra(i);
+    r.appendChild(b);
+  });
+  carEra(0);
+})();
+(function(){
+  const f = document.getElementById('chipFlow');
+  CHIP.forEach((s,i)=>{
+    const b = document.createElement('button');
+    b.innerHTML = `<span class="st">${s.st}</span><span class="nm">${s.nm}</span>`;
+    b.onclick = ()=>chipStep(i);
+    f.appendChild(b);
+  });
+  chipStep(0);
+})();
+/* IP収支バー(受取7.3/支払4.2/黒字3.2、最大7.3=100%) */
+setTimeout(()=>{
+  document.getElementById('ipIn').style.width = '100%';
+  document.getElementById('ipOut').style.width = (4.2/7.3*100)+'%';
+  document.getElementById('ipNet').style.width = (3.2/7.3*100)+'%';
+}, 200);
+renderQuiz('quiz-sp', QUIZ.sp);
+renderQuiz('quiz-car', QUIZ.car);
+renderQuiz('quiz-ip', QUIZ.ip);
+renderQuiz('quiz-chip', QUIZ.chip);
+renderQuiz('quiz-matome', QUIZ.matome);
+</script>
+</body>
+</html>
