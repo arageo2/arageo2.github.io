@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12．世界の気候と人々のくらし２｜授業用インタラクティブ教材</title>
+<style>
+  :root{
+    --ink:#1d1d1f;
+    --paper:#fcfcfa;
+    --shu:#c22f2f;      /* 朱：プリントの赤と対応 */
+    --rain:#1e6fb8;     /* 雨・上昇気流 */
+    --rain-bg:#e3eef9;
+    --dry:#d98a25;      /* 乾燥・下降気流 */
+    --dry-bg:#faf0dd;
+    --leaf:#3f7d3f;     /* 植生 */
+    --gray:#efede8;
+    --line:#c9c6bf;
+    --serif:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+    --sans:"Yu Gothic Medium","Yu Gothic","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.75}
+
+  /* ===== ヘッダー ===== */
+  header{border-bottom:3px solid var(--ink);background:#fff}
+  .head-in{max-width:1120px;margin:0 auto;padding:22px 24px 14px}
+  .kicker{font-size:13px;letter-spacing:.18em;color:#666}
+  h1{font-family:var(--serif);font-size:clamp(24px,3.4vw,34px);font-weight:700;letter-spacing:.02em}
+  h1 .num{color:var(--shu);margin-right:.35em}
+  .theme{margin-top:6px;font-size:15px}
+  .theme b{color:var(--shu)}
+
+  /* ===== タブ ===== */
+  nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .tabs{max-width:1120px;margin:0 auto;display:flex;gap:4px;padding:8px 16px;overflow-x:auto}
+  .tab{flex:1;min-width:150px;border:1.5px solid var(--line);background:#fff;border-radius:8px;
+       padding:9px 8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;
+       color:#555;text-align:center;line-height:1.35;transition:.15s}
+  .tab small{display:block;font-size:11px;font-weight:400;color:#999}
+  .tab:hover{border-color:var(--ink);color:var(--ink)}
+  .tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tab.on small{color:#ccc}
+
+  main{max-width:1120px;margin:0 auto;padding:28px 24px 80px}
+  section{display:none}
+  section.on{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ===== 見出し・共通部品 ===== */
+  .q{display:flex;gap:12px;align-items:flex-start;background:var(--gray);border-left:6px solid var(--shu);
+     border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:22px}
+  .q .qmark{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--shu);line-height:1.2}
+  .q p{font-size:17px;font-weight:700}
+  h2{font-family:var(--serif);font-size:24px;margin:34px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+  h2:first-of-type{margin-top:0}
+  h2 .step{color:var(--shu);font-size:18px;margin-right:.5em;letter-spacing:.1em}
+  h3{font-size:18px;margin:22px 0 8px}
+  h3::before{content:"■";color:var(--shu);margin-right:.4em;font-size:14px;vertical-align:.1em}
+  p.lead{margin-bottom:12px}
+
+  .fig{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:18px;margin:14px 0}
+  .fig .cap{font-size:13px;color:#777;margin-top:10px;line-height:1.6}
+  .figrow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:860px){.figrow{grid-template-columns:1fr}}
+
+  /* 先生用ポイント */
+  .memo{background:#fff;border:1.5px dashed var(--line);border-radius:12px;margin:16px 0;overflow:hidden}
+  .memo summary{cursor:pointer;padding:11px 16px;font-weight:700;font-size:15px;color:#555;list-style:none}
+  .memo summary::before{content:"▸ ";color:var(--shu)}
+  .memo[open] summary::before{content:"▾ "}
+  .memo .body{padding:2px 20px 16px;font-size:15.5px;color:#333}
+  .memo .body li{margin:6px 0 6px 1.2em}
+
+  /* クリックで答え */
+  .ans{display:inline-block;min-width:2.5em;text-align:center;background:var(--gray);border-radius:5px;
+       color:transparent;cursor:pointer;padding:0 .35em;border-bottom:2px solid var(--line);
+       transition:.15s;user-select:none;font-weight:700}
+  .ans:hover{background:#e2dfd8}
+  .ans.show{color:var(--shu);background:transparent;border-bottom-color:var(--shu);cursor:default}
+  .ansbar{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px}
+  .ansbar button{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:5px 16px;
+       font-size:13px;cursor:pointer;font-family:var(--sans)}
+  .ansbar button:hover{border-color:var(--ink)}
+
+  /* 比較表 */
+  table.cmp{width:100%;border-collapse:collapse;margin:10px 0;background:#fff}
+  table.cmp th,table.cmp td{border:1.5px solid var(--ink);padding:9px 12px;font-size:15.5px;vertical-align:top}
+  table.cmp thead th{background:var(--ink);color:#fff;font-size:16px}
+  table.cmp td.h{background:var(--gray);font-weight:700;text-align:center;width:110px}
+  table.cmp .tag{font-size:12px;color:#fff;background:var(--shu);border-radius:4px;padding:1px 7px;margin-left:6px;vertical-align:middle;font-weight:400}
+
+  /* コントロール */
+  .ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:14px;background:var(--gray);
+        border-radius:10px;padding:10px 16px;margin:10px 0}
+  .ctrl label{font-weight:700;font-size:15px}
+  .ctrl input[type=range]{flex:1;min-width:180px;accent-color:var(--shu)}
+  .ctrl .val{font-family:var(--serif);font-size:20px;font-weight:700;min-width:4.2em;text-align:center;
+        background:#fff;border-radius:8px;padding:2px 10px;border:1.5px solid var(--line)}
+  .btn{border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:8px;
+       padding:7px 18px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:.15s}
+  .btn:hover{background:var(--ink);color:#fff}
+  .btn.on{background:var(--ink);color:#fff}
+  .btn.shu{border-color:var(--shu);color:var(--shu)}
+  .btn.shu:hover,.btn.shu.on{background:var(--shu);color:#fff}
+
+  /* ルールバナー */
+  .rule{background:#fff;border:3px solid var(--shu);border-radius:14px;text-align:center;
+        padding:18px 16px;margin:18px 0;font-family:var(--serif)}
+  .rule .big{font-size:clamp(19px,2.6vw,26px);font-weight:700}
+  .rule .big .up{color:var(--rain)}
+  .rule .big .dn{color:var(--dry)}
+  .rule .sub{font-size:14px;color:#666;margin-top:6px;font-family:var(--sans)}
+
+  /* 4要素カード */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:12px 0}
+  .card{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px}
+  .card .no{font-family:var(--serif);color:var(--shu);font-weight:700;font-size:15px}
+  .card h4{font-size:17px;margin:2px 0 6px}
+  .card p{font-size:14.5px;color:#444;line-height:1.65}
+
+  /* フローチャート（ケッペン） */
+  .flow{display:flex;flex-direction:column;gap:0;align-items:center}
+  .fstep{width:100%;max-width:760px;text-align:center}
+  .fq{background:var(--gray);border:2px solid var(--ink);border-radius:12px;padding:12px 16px;
+      font-weight:700;font-size:17px}
+  .fbtns{display:flex;gap:14px;justify-content:center;margin:12px 0}
+  .farrow{font-size:22px;color:#999;text-align:center;line-height:1;margin:2px 0 8px}
+  .fresult{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 0 4px}
+  .chip{background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px;text-align:center;
+        opacity:.25;transition:.3s;transform:scale(.97)}
+  .chip.lit{opacity:1;transform:scale(1);border-color:var(--shu);box-shadow:0 3px 10px rgba(194,47,47,.15)}
+  .chip b{font-family:var(--serif);font-size:20px;display:block}
+  .chip span{font-size:13px;color:#555}
+  .hidden{display:none}
+
+  /* 区分表 */
+  table.kp{width:100%;border-collapse:collapse;background:#fff;font-size:15px}
+  table.kp th,table.kp td{border:1.5px solid var(--ink);padding:7px 10px}
+  table.kp .grp{writing-mode:vertical-rl;text-align:center;font-weight:700;background:var(--gray);width:44px;letter-spacing:.2em}
+  table.kp .band b{color:var(--shu)}
+  table.kp td.ku{cursor:pointer;transition:.12s}
+  table.kp td.ku:hover{background:var(--rain-bg)}
+  table.kp td.ku b{color:var(--shu);font-family:var(--serif);margin-right:.5em}
+  .kpnote{background:var(--gray);border-radius:10px;padding:12px 16px;font-size:15px;margin-top:10px;min-height:52px}
+  .kpnote b{color:var(--shu)}
+
+  /* 雨温図グリッド */
+  .climo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:860px){.climo-wrap{grid-template-columns:1fr}}
+  .climo{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px}
+  .climo h4{font-size:16px;text-align:center;margin-bottom:4px}
+  .climo h4 b{color:var(--shu);font-family:var(--serif)}
+  .climo .meta{text-align:center;font-size:12.5px;color:#777;margin-bottom:4px}
+
+  footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 24px;font-size:12.5px;color:#888;
+         max-width:1120px;margin-left:auto;margin-right:auto;line-height:1.7}
+
+  svg text{font-family:var(--sans)}
+  .pulse{animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+  @media (prefers-reduced-motion: reduce){
+    .pulse{animation:none}
+    *{animation-duration:.001s !important;transition-duration:.001s !important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <div class="kicker">地理総合｜授業用インタラクティブ教材</div>
+    <h1><span class="num">12．</span>世界の気候と人々のくらし２</h1>
+    <p class="theme">【今日のテーマ】<b>ケッペンの気候区分と各気候帯の特徴</b>　― 気候は「暗記」ではなく、たった数個のルールから導ける ―</p>
+  </div>
+</header>
+
+<nav>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-t="s1">① 気候をつくる要素<small>気温と降水のしくみ</small></button>
+    <button class="tab" data-t="s2">② ケッペンの気候区分<small>判定フローチャート</small></button>
+    <button class="tab" data-t="s3">③ Af と BW<small>両極端の世界</small></button>
+    <button class="tab" data-t="s4">④ Aw と BS<small>雨季と乾季のしくみ</small></button>
+    <button class="tab" data-t="s5">⑤ Cfa と Cfb<small>日本 vs ヨーロッパ</small></button>
+  </div>
+</nav>
+
+<main>
+<div class="ansbar">
+  <button id="allShow">赤字（答え）をすべて表示</button>
+  <button id="allHide">すべて隠す</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- ① 気候をつくる要素 -->
+<!-- ============================================================ -->
+<section id="s1" class="on">
+  <div class="q"><div class="qmark">Q</div><p>同じ地球なのに、なぜ場所によって「暑い・寒い」「雨が多い・少ない」が生まれるのだろうか？</p></div>
+
+  <h2>気温のしくみ ―「どこが暑く、どこが寒いか」を決める4つの要素</h2>
+
+  <div class="fig">
+    <h3>①緯度 ― 太陽光の「当たり方」がすべての出発点</h3>
+    <p class="lead">下の図で、<b>同じ幅の太陽光の帯</b>が地面に当たる範囲を比べてみよう。ボタンで光の帯を点灯できます。</p>
+    <div class="ctrl">
+      <button class="btn shu" id="beamBtn">光の帯を当てる</button>
+      <span style="font-size:14px;color:#555">→ 低緯度は<b>狭い面積に集中</b>、高緯度は<b>広い面積に分散</b></span>
+    </div>
+    <svg id="sunFig" viewBox="0 0 900 420" style="width:100%;height:auto">
+      <!-- 太陽 -->
+      <circle cx="60" cy="210" r="34" fill="#f6b93b"/>
+      <g stroke="#f6b93b" stroke-width="3">
+        <line x1="60" y1="160" x2="60" y2="140"/><line x1="60" y1="260" x2="60" y2="280"/>
+        <line x1="15" y1="210" x2="-5" y2="210"/><line x1="25" y1="175" x2="11" y2="161"/>
+        <line x1="25" y1="245" x2="11" y2="259"/>
+      </g>
+      <text x="60" y="310" text-anchor="middle" font-size="14" fill="#a06a00">太陽</text>
+      <!-- 地球 -->
+      <circle cx="660" cy="210" r="170" fill="#eef4fb" stroke="#1d1d1f" stroke-width="2.5"/>
+      <line x1="490" y1="210" x2="830" y2="210" stroke="#999" stroke-dasharray="6 5"/>
+      <text x="838" y="215" font-size="14" fill="#555">赤道</text>
+      <text x="700" y="66" font-size="14" fill="#555">高緯度</text>
+      <text x="700" y="364" font-size="14" fill="#555">高緯度</text>
+      <!-- 光の帯（赤道向き） -->
+      <g id="beamEq" opacity="0">
+        <polygon points="120,192 490,192 490,228 120,228" fill="#f6b93b" opacity="0.45"/>
+        <path d="M 490 192 A 170 170 0 0 1 490 228" fill="none" stroke="#c22f2f" stroke-width="10"/>
+        <text x="452" y="258" font-size="15" font-weight="bold" fill="#c22f2f">当たる範囲：せまい</text>
+        <text x="452" y="278" font-size="14" fill="#c22f2f">→ 受熱量が大きい＝暑い</text>
+      </g>
+      <!-- 光の帯（高緯度向き） -->
+      <g id="beamHi" opacity="0">
+        <polygon points="120,60 560,60 566,96 120,96" fill="#f6b93b" opacity="0.45"/>
+        <path d="M 560 62 A 170 170 0 0 1 646 41.5" fill="none" stroke="#1e6fb8" stroke-width="10"/>
+        <text x="560" y="30" font-size="15" font-weight="bold" fill="#1e6fb8">当たる範囲：ひろい（斜めに当たるため）</text>
+        <text x="560" y="50" font-size="14" fill="#1e6fb8" opacity="0">.</text>
+        <text x="700" y="120" font-size="14" fill="#1e6fb8">→ 熱が分散＝寒い</text>
+      </g>
+    </svg>
+    <p class="cap">同じエネルギー量の光でも、球面に当たる角度によって「1㎡あたりの受け取る熱」が変わる。これが<b>低緯度＝暑い／高緯度＝寒い</b>の根本原因。</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="no">要素②</div><h4>海流</h4>
+      <p>暖流は<b>低緯度→高緯度</b>へ熱を運ぶ「お湯のベルトコンベア」。寒流はその逆。<br>※⑤で「ヨーロッパの冬が温和な理由」として回収します。</p></div>
+    <div class="card"><div class="no">要素③</div><h4>標高</h4>
+      <p>100m 上がるごとに気温は<b>約0.6℃低下</b>。下のスライダーで体感→</p></div>
+    <div class="card"><div class="no">要素④</div><h4>海からの距離（隔海度）</h4>
+      <p>海は温まりにくく冷めにくい→<b>沿岸部は気温差が小さい</b>（海洋性）。陸は温まりやすく冷めやすい→<b>内陸部は気温差が大きい</b>（大陸性）。</p></div>
+    <div class="card"><div class="no">用語</div><h4>年較差と日較差</h4>
+      <p><b>年較差</b>＝最暖月と最寒月の平均気温の差。<br><b>日較差</b>＝1日のうちの昼と夜の気温差。③のAf・BWの比較で使います。</p></div>
+  </div>
+
+  <div class="fig">
+    <h3>③標高を体感 ― 真夏の平地が30℃のとき、山の上は？</h3>
+    <div class="ctrl">
+      <label>標高</label>
+      <input type="range" id="altSlider" min="0" max="3800" step="50" value="0">
+      <span class="val" id="altVal">0 m</span>
+      <span class="val" id="tempVal" style="color:var(--shu)">30.0 ℃</span>
+    </div>
+    <svg viewBox="0 0 900 240" style="width:100%;height:auto">
+      <polygon points="0,240 320,240 560,40 800,240 900,240 900,240 0,240" fill="#e7e2d6" stroke="#b7b0a0" stroke-width="2"/>
+      <polygon points="500,90 560,40 620,90" fill="#fff" stroke="#b7b0a0"/>
+      <line x1="0" y1="238" x2="900" y2="238" stroke="#1d1d1f" stroke-width="2"/>
+      <circle id="climber" cx="330" cy="232" r="9" fill="#c22f2f"/>
+      <text x="560" y="28" text-anchor="middle" font-size="14" fill="#555">富士山 3,776 m（山頂は真夏でも1桁℃）</text>
+      <text x="60" y="228" font-size="14" fill="#555">平地 30℃</text>
+    </svg>
+    <p class="cap">計算式：気温 ＝ 30℃ −（標高 ÷ 100）× 0.6℃。「熱帯の高地に涼しい都市が発達する」（例：アンデスの高山都市）の伏線にもなる。</p>
+  </div>
+
+  <h2>降水のしくみ ― たった1つのルールで決まる</h2>
+
+  <div class="rule">
+    <div class="big"><span class="up">上昇気流</span>のある場所に雨が降り、<span class="dn">下降気流</span>のある場所は乾燥する</div>
+    <div class="sub">上昇＝空気が膨張して冷える → 水蒸気が雲になる → 雨　／　下降＝圧縮されて温まる → 雲ができない → 乾燥</div>
+  </div>
+
+  <div class="fig">
+    <h3>地球規模で見ると…（大気の大循環：赤道〜緯度30度の断面）</h3>
+    <div class="ctrl">
+      <button class="btn shu" id="circBtn">循環を動かす</button>
+      <span style="font-size:14px;color:#555">赤道で上がった空気は、緯度20〜30度付近で下りてくる</span>
+    </div>
+    <svg id="circFig" viewBox="0 0 900 400" style="width:100%;height:auto">
+      <!-- 地面 -->
+      <rect x="0" y="330" width="900" height="70" fill="#e7e2d6"/>
+      <line x1="0" y1="330" x2="900" y2="330" stroke="#1d1d1f" stroke-width="2.5"/>
+      <text x="120" y="376" text-anchor="middle" font-size="16" font-weight="bold">赤道（0度）</text>
+      <text x="740" y="376" text-anchor="middle" font-size="16" font-weight="bold">緯度20〜30度付近</text>
+      <!-- 循環矢印 -->
+      <g fill="none" stroke-width="6" stroke-linecap="round">
+        <path id="c1" d="M 120 320 L 120 110" stroke="#1e6fb8" marker-end="url(#arrB)"/>
+        <path id="c2" d="M 150 85 L 710 85" stroke="#888" marker-end="url(#arrG)"/>
+        <path id="c3" d="M 740 110 L 740 310" stroke="#d98a25" marker-end="url(#arrO)"/>
+        <path id="c4" d="M 700 320 Q 430 345 165 322" stroke="#888" marker-end="url(#arrG)"/>
+      </g>
+      <defs>
+        <marker id="arrB" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1e6fb8"/></marker>
+        <marker id="arrO" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d98a25"/></marker>
+        <marker id="arrG" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#888"/></marker>
+      </defs>
+      <!-- 雲と雨 -->
+      <g id="cloudRain">
+        <g fill="#b9cfe4" stroke="#7fa4c6">
+          <ellipse cx="95" cy="140" rx="42" ry="22"/><ellipse cx="140" cy="132" rx="48" ry="26"/><ellipse cx="180" cy="145" rx="38" ry="20"/>
+        </g>
+        <g id="rainDrops" stroke="#1e6fb8" stroke-width="3.5" stroke-linecap="round" opacity="0.9">
+          <line x1="95" y1="180" x2="88" y2="205"/><line x1="130" y1="185" x2="123" y2="210"/>
+          <line x1="165" y1="180" x2="158" y2="205"/><line x1="200" y1="185" x2="193" y2="210"/>
+        </g>
+        <text x="140" y="250" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e6fb8">上昇 → 冷える → 雲 → 雨</text>
+        <text x="140" y="272" text-anchor="middle" font-size="14" fill="#1e6fb8">年中多雨【→ Af の世界】</text>
+      </g>
+      <!-- 晴れマーク -->
+      <g id="dryMark">
+        <circle cx="740" cy="160" r="26" fill="#f6b93b"/>
+        <g stroke="#f6b93b" stroke-width="3">
+          <line x1="740" y1="120" x2="740" y2="106"/><line x1="740" y1="200" x2="740" y2="214"/>
+          <line x1="700" y1="160" x2="686" y2="160"/><line x1="780" y1="160" x2="794" y2="160"/>
+        </g>
+        <text x="740" y="250" text-anchor="middle" font-size="15" font-weight="bold" fill="#d98a25">下降 → 温まる → 雲ができない</text>
+        <text x="740" y="272" text-anchor="middle" font-size="14" fill="#d98a25">年中乾燥【→ BW の世界】</text>
+      </g>
+      <text x="430" y="60" text-anchor="middle" font-size="13" fill="#888">上空で赤道から離れる向きに流れる</text>
+      <text x="430" y="318" text-anchor="middle" font-size="13" fill="#888">地表付近では赤道へ戻る（貿易風）</text>
+    </svg>
+    <p class="cap">この循環の<b>上がる場所（赤道付近）と下りる場所（緯度20〜30度）</b>が、世界の「多雨地帯」と「砂漠地帯」の位置をそのまま決めている。※模式図（実際の循環を単純化）</p>
+  </div>
+
+  <details class="memo"><summary>先生用メモ：この節の展開ポイント</summary><div class="body"><ul>
+    <li><b>発問例</b>：「エアコンの暖房はなぜ上向きに吹く？」→ 暖かい空気は上昇する、の日常感覚から導入。</li>
+    <li>降水のルールは<b>この1文だけを板書</b>し、以降のすべての気候（Af・BW・Aw・BS、さらに梅雨や地中海性気候まで）をこのルールに帰着させると、単元全体が1本の線でつながる。</li>
+    <li>「上昇すると冷える」は、ペットボトルを急に開けると白くくもる（断熱膨張）で演示可能。</li>
+    <li>4要素のうち②海流は⑤で、①緯度と大循環は③④で回収する「伏線」であることを予告しておくと生徒の見通しがよい。</li>
+  </ul></div></details>
+
+  <p style="margin-top:14px">▶ まとめ：気温は「<span class="ans">緯度</span>・<span class="ans">海流</span>・<span class="ans">標高</span>・<span class="ans">海からの距離</span>」で、降水は「<span class="ans">上昇気流</span>か<span class="ans">下降気流</span>か」で決まる。</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- ② ケッペンの気候区分 -->
+<!-- ============================================================ -->
+<section id="s2">
+  <div class="q"><div class="qmark">Q</div><p>世界中の気候を、どうやって「たった13種類」に整理したのだろうか？</p></div>
+
+  <p class="lead">ドイツの気候学者<b>ケッペン</b>は、世界の<b style="color:var(--leaf)">植生</b>（植物の分布）に着目し、それを<b>気温と降水量</b>の数値で区分した。まずは判定の「考え方」を、フローチャートで順にたどってみよう。</p>
+
+  <h2>これで攻略！ 判定フローチャート（クリックで進む）</h2>
+
+  <div class="fig">
+    <div class="flow">
+      <div class="fstep">
+        <div class="fq">Q1．その土地に「樹林（森林）」はあるか？</div>
+        <div class="fbtns">
+          <button class="btn" data-f="yes">ある（樹林気候）</button>
+          <button class="btn" data-f="no">ない（無樹林気候）</button>
+        </div>
+      </div>
+
+      <div id="fNo" class="fstep hidden">
+        <div class="farrow">↓</div>
+        <div class="fq">Q2．樹林が育たない理由は？</div>
+        <div class="fresult" style="max-width:560px;margin-left:auto;margin-right:auto">
+          <div class="chip lit"><b>Ｂ気候</b><span>乾燥のため<br>＝乾燥帯</span></div>
+          <div class="chip lit"><b>Ｅ気候</b><span>低温のため<br>＝寒帯</span></div>
+        </div>
+        <p style="font-size:14px;color:#555;margin-top:6px">無樹林気候は、自然環境の特徴を<b>大文字2字</b>で表す（BW・BS・ET・EF）</p>
+      </div>
+
+      <div id="fYes" class="fstep hidden">
+        <div class="farrow">↓</div>
+        <div class="fq">Q2．最寒月（いちばん寒い月）の平均気温は？</div>
+        <div class="fresult">
+          <div class="chip lit"><b>Ａ気候</b><span>18℃以上<br>＝熱帯（暑い）</span></div>
+          <div class="chip lit"><b>Ｃ気候</b><span>−3℃以上18℃未満<br>＝温帯（普通）</span></div>
+          <div class="chip lit"><b>Ｄ気候</b><span>−3℃未満<br>＝亜寒帯（寒い）</span></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fq">Q3．乾季はあるか？（小文字で細分化）</div>
+        <div class="fresult" style="max-width:640px;margin-left:auto;margin-right:auto">
+          <div class="chip lit"><b>ｓ</b><span>夏に乾燥<br>（summer dry）</span></div>
+          <div class="chip lit"><b>ｗ</b><span>冬に乾燥<br>（winter dry）</span></div>
+          <div class="chip lit"><b>ｆ</b><span>年中湿潤<br>（feucht＝湿った）</span></div>
+        </div>
+        <p style="font-size:14px;color:#555;margin-top:6px">Ｃｆはさらに：真夏がある＝<b style="color:var(--shu)">ａ</b>／真夏がない＝<b style="color:var(--shu)">ｂ</b>（最暖月22℃が境目）</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>気候区分の全体表（クリックで解説を表示）</h2>
+  <div class="fig">
+    <table class="kp">
+      <tr>
+        <td class="grp" rowspan="3">樹林気候</td>
+        <td class="band">熱帯 <b>Ａ気候</b><br><span style="font-size:13px;color:#555">最寒月 18℃以上</span></td>
+        <td class="ku" data-k="Af"><b>Ａf</b>熱帯雨林気候</td>
+        <td class="ku" data-k="Am"><b>Ａm</b>弱い乾季のある熱帯雨林気候</td>
+        <td class="ku" data-k="Aw"><b>Ａw</b>サバナ気候</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="band">温帯 <b>Ｃ気候</b><br><span style="font-size:13px;color:#555">最寒月 −3℃以上18℃未満</span></td>
+        <td class="ku" data-k="Cfa"><b>Ｃfa</b>温暖湿潤気候</td>
+        <td class="ku" data-k="Cfb"><b>Ｃfb</b>西岸海洋性気候</td>
+        <td class="ku" data-k="Cs"><b>Ｃs</b>地中海性気候</td>
+        <td class="ku" data-k="Cw"><b>Ｃw</b>温暖冬季少雨気候</td>
+      </tr>
+      <tr>
+        <td class="band">亜寒帯 <b>Ｄ気候</b><br><span style="font-size:13px;color:#555">最寒月 −3℃未満</span></td>
+        <td class="ku" data-k="Df"><b>Ｄf</b>亜寒帯湿潤気候</td>
+        <td class="ku" data-k="Dw"><b>Ｄw</b>亜寒帯冬季少雨気候</td>
+        <td></td><td></td>
+      </tr>
+      <tr>
+        <td class="grp" rowspan="2">無樹林気候</td>
+        <td class="band">乾燥帯 <b>Ｂ気候</b><br><span style="font-size:13px;color:#555">年降水量おおむね250mm未満→ほぼ乾燥帯（例外あり）</span></td>
+        <td class="ku" data-k="BS"><b>ＢＳ</b>ステップ気候</td>
+        <td class="ku" data-k="BW"><b>ＢＷ</b>砂漠気候</td>
+        <td></td><td></td>
+      </tr>
+      <tr>
+        <td class="band">寒帯 <b>Ｅ気候</b><br><span style="font-size:13px;color:#555">最暖月 10℃未満</span></td>
+        <td class="ku" data-k="ET"><b>ＥＴ</b>ツンドラ気候</td>
+        <td class="ku" data-k="EF"><b>ＥＦ</b>氷雪気候</td>
+        <td></td><td></td>
+      </tr>
+    </table>
+    <div class="kpnote" id="kpNote">↑ 表の気候区をクリックすると、ここに一言解説が表示されます。</div>
+  </div>
+
+  <details class="memo"><summary>先生用メモ：この節の展開ポイント</summary><div class="body"><ul>
+    <li><b>順序が命</b>：いきなり全体表を見せず、フローチャートで「樹林の有無→温度帯→乾季」の順に生徒とやり取りしながら降りていく。</li>
+    <li>記号の意味（s＝summer dry、w＝winter dry、f＝feucht）を教えると暗記が「理解」に変わる。</li>
+    <li>アルファベットは<b>赤道から極に向かってA→E</b>の順（Bだけは温度でなく乾燥の区分、と補足）。</li>
+    <li>本時は代表6気候区（Af・BW・Aw・BS・Cfa・Cfb）に絞り、残りは次時以降で扱うと伝えると全体表への不安が減る。</li>
+  </ul></div></details>
+
+  <p style="margin-top:14px">▶ まとめ：まず<span class="ans">樹林の有無</span>で2分し、無樹林は乾燥の<span class="ans">Ｂ</span>と低温の<span class="ans">Ｅ</span>、樹林ありは温度で<span class="ans">Ａ・Ｃ・Ｄ</span>、さらに<span class="ans">乾季</span>の有無（小文字）で細分化する。</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- ③ Af と BW -->
+<!-- ============================================================ -->
+<section id="s3">
+  <div class="q"><div class="qmark">Q</div><p>「最も雨が降る場所」と「最も降らない場所」――両極端の2つの世界は、なぜ生まれるのだろうか？</p></div>
+
+  <h2><span class="step">STEP 1</span>成因の確認 ―「①気候をつくる要素」のルールを使う</h2>
+  <div class="fig">
+    <svg viewBox="0 0 900 190" style="width:100%;height:auto">
+      <rect x="0" y="140" width="900" height="50" fill="#e7e2d6"/>
+      <line x1="0" y1="140" x2="900" y2="140" stroke="#1d1d1f" stroke-width="2.5"/>
+      <g fill="none" stroke-width="7" stroke-linecap="round">
+        <line x1="180" y1="130" x2="180" y2="40" stroke="#1e6fb8" marker-end="url(#a3B)"/>
+        <line x1="700" y1="40" x2="700" y2="128" stroke="#d98a25" marker-end="url(#a3O)"/>
+      </g>
+      <defs>
+        <marker id="a3B" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1e6fb8"/></marker>
+        <marker id="a3O" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d98a25"/></marker>
+      </defs>
+      <text x="180" y="170" text-anchor="middle" font-size="15" font-weight="bold">赤道直下＝年中、上昇気流</text>
+      <text x="180" y="30" text-anchor="middle" font-size="15" fill="#1e6fb8" font-weight="bold">→ 年中降水【Af】</text>
+      <text x="700" y="170" text-anchor="middle" font-size="15" font-weight="bold">緯度20〜30度＝年中、下降気流</text>
+      <text x="700" y="30" text-anchor="middle" font-size="15" fill="#d98a25" font-weight="bold">→ 年中乾燥【BW】</text>
+    </svg>
+  </div>
+
+  <h2><span class="step">STEP 2</span>雨温図で確かめる ― シンガポール vs カイロ</h2>
+  <div class="climo-wrap">
+    <div class="climo"><h4><b>Af</b>｜シンガポール（北緯 約1度）</h4><div class="meta">ほぼ赤道直下</div><div id="climoAf"></div></div>
+    <div class="climo"><h4><b>BW</b>｜カイロ（北緯 約30度）</h4><div class="meta">亜熱帯高圧帯の直下</div><div id="climoBW"></div></div>
+  </div>
+  <p class="cap" style="font-size:13px;color:#777;margin:6px 4px">棒グラフ＝月降水量（右軸）、折れ線＝月平均気温（左軸）。値は平年値をもとにした概数。<b>着眼点：①気温の線の「平らさ」　②棒グラフの「有無」</b></p>
+
+  <h2><span class="step">STEP 3</span>比較表 ― クリックで1行ずつ表示</h2>
+  <div class="ctrl">
+    <button class="btn shu" id="revealBtn3">次の行を表示 ▼</button>
+    <button class="btn" id="resetBtn3">リセット</button>
+    <span style="font-size:14px;color:#555">「まず生徒に予想させてから表示」の展開に使えます</span>
+  </div>
+  <table class="cmp" id="cmpTable3">
+    <thead><tr><th style="width:110px"></th><th>熱帯雨林気候（Af）</th><th>砂漠気候（BW）</th></tr></thead>
+    <tbody>
+      <tr class="rrow"><td class="h">成因</td><td>赤道直下＝年中<b style="color:var(--rain)">上昇気流</b></td><td>緯度20〜30度＝年中<b style="color:var(--dry)">下降気流</b></td></tr>
+      <tr class="rrow"><td class="h">植生・土壌</td><td>熱帯雨林（ジャングル）／やせた赤色土（<b style="color:var(--shu)">フェラルソル</b>）</td><td>植生なし／砂漠土</td></tr>
+      <tr class="rrow"><td class="h">気温</td><td><b style="color:var(--shu)">年較差が小さい</b>（太陽が年中ほぼ真上→季節がない）</td><td><b style="color:var(--shu)">日較差が大きい</b>（雲がない→昼は強い日射・夜は熱が逃げる）</td></tr>
+      <tr class="rrow"><td class="h">降水</td><td>ほぼ毎日午後に<b style="color:var(--shu)">スコール</b></td><td>年に数回のみ</td></tr>
+      <tr class="rrow"><td class="h">くらし</td><td>高床式の住居（湿気と熱を逃がす）</td><td>水が得られる<b style="color:var(--shu)">オアシス</b>に集住・日干しれんがの家</td></tr>
+      <tr class="rrow"><td class="h">例</td><td>インドネシアなど</td><td>サハラ砂漠など</td></tr>
+    </tbody>
+  </table>
+
+  <details class="memo"><summary>先生用メモ：この節の展開ポイント</summary><div class="body"><ul>
+    <li><b>発問例</b>：「砂漠の夜はなぜ凍えるほど寒い？」→ 雲＝地球の毛布。雲がないBWは昼の熱が夜に逃げ放題（日較差大）。Afは雲と水蒸気の毛布で夜も暑い（年較差・日較差とも小）。</li>
+    <li>雨温図は「グラフの形→理由」の順ではなく、<b>「成因→グラフはどんな形になるはず？」と予想させてから見せる</b>と効果的。</li>
+    <li>Afの土壌がやせている理由：毎日の強い雨が養分を流してしまう（→焼畑・プランテーションの話につながる）。</li>
+  </ul></div></details>
+</section>
+
+<!-- ============================================================ -->
+<!-- ④ Aw と BS -->
+<!-- ============================================================ -->
+<section id="s4">
+  <div class="q"><div class="qmark">Q</div><p>AfとBWの「あいだ」の土地には、なぜ雨季と乾季があるのだろうか？</p></div>
+
+  <h2>季節シミュレーター ― 雨の帯は、太陽を追いかけて南北に動く</h2>
+  <p class="lead">③で見た「上昇気流の帯（＝雨の帯）」と「下降気流の帯（＝乾燥の帯）」は、じつは<b>太陽の動きにあわせて季節で南北に移動する</b>。月スライダーを動かして、4地点の空模様がどう変わるか観察しよう。</p>
+
+  <div class="fig">
+    <div class="ctrl">
+      <label>月</label>
+      <input type="range" id="monthSlider" min="1" max="12" step="1" value="1">
+      <span class="val" id="monthVal">1月</span>
+      <button class="btn shu" id="playBtn">▶ 1年を再生</button>
+    </div>
+    <svg id="beltFig" viewBox="0 0 900 360" style="width:100%;height:auto">
+      <!-- 帯の背景（緯度軸） -->
+      <rect x="60" y="60" width="780" height="150" fill="#faf8f3" stroke="#c9c6bf"/>
+      <!-- 乾燥帯（高圧帯）×2 -->
+      <rect id="hiN" x="0" y="60" width="0" height="150" fill="#f3ddb7" opacity="0.9"/>
+      <rect id="hiS" x="0" y="60" width="0" height="150" fill="#f3ddb7" opacity="0.9"/>
+      <!-- 雨の帯 -->
+      <rect id="rainBelt" x="0" y="60" width="0" height="150" fill="#bcd6ee" opacity="0.95"/>
+      <text id="rainLbl" x="0" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e6fb8">雨の帯（上昇気流）</text>
+      <text id="hiNLbl" x="0" y="205" text-anchor="middle" font-size="12" fill="#b06f10">乾燥の帯（下降気流）</text>
+      <text id="hiSLbl" x="0" y="205" text-anchor="middle" font-size="12" fill="#b06f10">乾燥の帯（下降気流）</text>
+      <!-- 緯度目盛 -->
+      <g font-size="13" fill="#555" text-anchor="middle">
+        <text x="450" y="235">0°（赤道）</text>
+        <text x="255" y="235">15°S</text><text x="645" y="235">15°N</text>
+        <text x="60" y="235">30°S</text><text x="840" y="235">30°N</text>
+      </g>
+      <line x1="450" y1="60" x2="450" y2="215" stroke="#999" stroke-dasharray="5 5"/>
+      <!-- 観測ピン4本 -->
+      <g id="pins" font-size="13" text-anchor="middle"></g>
+    </svg>
+    <p class="cap">帯の位置は実際の大気循環を単純化した模式値（±約8度の移動）。<b>雨の帯に入っている月＝雨季</b>、外れている月＝乾季として表示している。</p>
+  </div>
+
+  <div class="fig">
+    <h3>観察結果 ― 4地点の「雨季の長さ」を比べると</h3>
+    <table class="cmp">
+      <thead><tr><th style="width:150px">地点（緯度）</th><th style="width:130px">雨の帯に入る期間</th><th>気候区</th></tr></thead>
+      <tbody>
+        <tr><td class="h" style="width:150px">赤道直下（0°）</td><td><b style="color:var(--rain)">ほぼ1年中</b></td><td>年中多雨 → <b style="color:var(--shu)">Af 熱帯雨林気候</b></td></tr>
+        <tr><td class="h">10°N 付近</td><td><b style="color:var(--rain)">夏の約半年</b></td><td>明瞭な雨季と乾季 → <b style="color:var(--shu)">Aw サバナ気候</b></td></tr>
+        <tr><td class="h">16°N 付近</td><td><b style="color:var(--rain)">真夏の2〜3か月だけ</b></td><td>短い雨季のみ → <b style="color:var(--shu)">BS ステップ気候</b></td></tr>
+        <tr><td class="h">25°N 付近</td><td><b style="color:var(--dry)">一度も入らない</b></td><td>年中乾燥 → <b style="color:var(--shu)">BW 砂漠気候</b></td></tr>
+      </tbody>
+    </table>
+    <p class="cap">つまり Af → Aw → BS → BW は別々の気候ではなく、<b>「雨の帯にどれだけ入れるか」のグラデーション</b>として一続きに理解できる。</p>
+  </div>
+
+  <h2>雨温図で確かめる ― コルカタ vs ニアメ</h2>
+  <div class="climo-wrap">
+    <div class="climo"><h4><b>Aw</b>｜コルカタ（インド・北緯 約23度）</h4><div class="meta">夏＝雨季／冬＝乾季がくっきり</div><div id="climoAw"></div></div>
+    <div class="climo"><h4><b>BS</b>｜ニアメ（ニジェール・北緯 約13度）</h4><div class="meta">真夏に短い雨季だけ</div><div id="climoBS"></div></div>
+  </div>
+  <p class="cap" style="font-size:13px;color:#777;margin:6px 4px">値は平年値をもとにした概数。<b>着眼点：棒グラフ（降水）が「何月に・何か月分」立っているか。</b>※コルカタは季節風（モンスーン）の影響も強く受ける地点。</p>
+
+  <h2>景観とくらし</h2>
+  <table class="cmp">
+    <thead><tr><th style="width:110px"></th><th>サバナ気候（Aw）</th><th>ステップ気候（BS）</th></tr></thead>
+    <tbody>
+      <tr><td class="h">位置</td><td>Afの高緯度側</td><td>BWの周辺（外側）</td></tr>
+      <tr><td class="h">植生</td><td>長草草原＋まばらな樹木（<b style="color:var(--shu)">サバナ</b>）<br><span style="font-size:13.5px;color:#555">乾季に草は枯れ、樹木は落葉する</span></td><td>樹林はなく短草草原（<b style="color:var(--shu)">ステップ</b>）</td></tr>
+      <tr><td class="h">くらし</td><td>焼畑のほか、サトウキビ・綿花・コーヒーなどの栽培</td><td>草を求めて家畜と移動する<b style="color:var(--shu)">遊牧</b></td></tr>
+      <tr><td class="h">例</td><td>カンボジアのトンレサップ湖<br><span style="font-size:13.5px;color:#555">雨季に湖の面積が数倍に拡大する</span></td><td>モンゴルの草原など</td></tr>
+    </tbody>
+  </table>
+
+  <details class="memo"><summary>先生用メモ：この節の展開ポイント</summary><div class="body"><ul>
+    <li>この単元<b>最大の山場</b>。シミュレーターは①1月で止めて4地点の空模様を確認→②「7月にしたらどうなる？」と予想させる→③再生、の順が効果的。</li>
+    <li><b>発問例</b>：「なぜ雨の帯は動くのか？」→ 太陽の回帰（夏は太陽が北寄りから照らす→いちばん熱される場所が北にずれる→上昇気流の帯も北へ）。</li>
+    <li>トンレサップ湖は「雨季」を面積変化という<b>目に見える形</b>で示せる好例。衛星画像の比較を投影すると効果大。</li>
+    <li>発展：地中海性気候（Cs）の「夏だけ乾燥」も、乾燥の帯が夏に高緯度側へ張り出すことで説明できる＝同じ模型の応用と予告できる。</li>
+  </ul></div></details>
+
+  <p style="margin-top:14px">▶ まとめ：雨の帯と乾燥の帯は<span class="ans">季節で南北に移動</span>する。AfとBWのあいだでは、夏に<span class="ans">雨季</span>・冬に<span class="ans">乾季</span>が生まれ、<span class="ans">Aw</span>と<span class="ans">BS</span>が分布する。</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- ⑤ Cfa と Cfb -->
+<!-- ============================================================ -->
+<section id="s5">
+  <div class="q"><div class="qmark">Q</div><p>同じ「温帯・年中湿潤（Cf）」なのに、日本と西ヨーロッパの気候はなぜこんなに違うのだろうか？</p></div>
+
+  <h2>大陸の東岸と西岸 ― 風と海流のモデル図</h2>
+  <div class="fig">
+    <div class="ctrl">
+      <label>季節</label>
+      <button class="btn on" id="seasonSummer">夏</button>
+      <button class="btn" id="seasonWinter">冬</button>
+      <span style="font-size:14px;color:#555" id="seasonNote">夏：海から大陸へ、湿った季節風が吹き込む</span>
+    </div>
+    <svg id="coastFig" viewBox="0 0 900 380" style="width:100%;height:auto">
+      <!-- 海 -->
+      <rect x="0" y="0" width="900" height="380" fill="#dcebf7"/>
+      <!-- 大陸 -->
+      <rect x="230" y="40" width="440" height="300" rx="26" fill="#efe9da" stroke="#1d1d1f" stroke-width="2.5"/>
+      <text x="450" y="200" text-anchor="middle" font-size="20" font-weight="bold" fill="#555">ユーラシア大陸（模式図）</text>
+      <text x="120" y="34" text-anchor="middle" font-size="14" fill="#33648e">大西洋</text>
+      <text x="790" y="34" text-anchor="middle" font-size="14" fill="#33648e">太平洋</text>
+      <!-- 西岸：偏西風（常時） -->
+      <g id="westWind">
+        <g stroke="#1e6fb8" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="60" y1="110" x2="200" y2="110" marker-end="url(#a5B)"/>
+          <line x1="60" y1="170" x2="200" y2="170" marker-end="url(#a5B)"/>
+        </g>
+        <text x="130" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e6fb8">偏西風（一年中）</text>
+      </g>
+      <!-- 暖流 -->
+      <path d="M 40 340 Q 120 300 150 240 Q 175 190 165 130" fill="none" stroke="#c22f2f" stroke-width="8" stroke-dasharray="16 10" stroke-linecap="round" marker-end="url(#a5R)"/>
+      <text x="60" y="250" font-size="14" font-weight="bold" fill="#c22f2f">暖流</text>
+      <text x="40" y="270" font-size="12.5" fill="#c22f2f">（北大西洋海流）</text>
+      <!-- 東岸：季節風（切替） -->
+      <g id="monsoonSummer">
+        <g stroke="#1e6fb8" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="850" y1="150" x2="700" y2="120" marker-end="url(#a5B)"/>
+          <line x1="850" y1="230" x2="700" y2="200" marker-end="url(#a5B)"/>
+        </g>
+        <text x="790" y="270" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e6fb8">夏の季節風</text>
+        <text x="790" y="290" text-anchor="middle" font-size="13" fill="#1e6fb8">海から湿った空気 → 多雨</text>
+      </g>
+      <g id="monsoonWinter" class="hidden">
+        <g stroke="#7d8aa3" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="640" y1="100" x2="800" y2="140" marker-end="url(#a5G)"/>
+          <line x1="640" y1="180" x2="800" y2="220" marker-end="url(#a5G)"/>
+        </g>
+        <text x="790" y="270" text-anchor="middle" font-size="15" font-weight="bold" fill="#5b6b87">冬の季節風</text>
+        <text x="790" y="290" text-anchor="middle" font-size="13" fill="#5b6b87">大陸から冷たく乾いた空気</text>
+      </g>
+      <defs>
+        <marker id="a5B" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1e6fb8"/></marker>
+        <marker id="a5G" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7d8aa3"/></marker>
+        <marker id="a5R" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#c22f2f"/></marker>
+      </defs>
+      <!-- ラベル -->
+      <text x="255" y="365" font-size="15" font-weight="bold">西岸 → Cfb（西ヨーロッパ）</text>
+      <text x="645" y="365" font-size="15" font-weight="bold" text-anchor="end">東岸 → Cfa（日本）</text>
+    </svg>
+    <p class="cap"><b>西岸</b>：偏西風＋暖流が一年中、海の熱と湿気を安定して運ぶ→気温も降水も「平ら」。<b>東岸</b>：季節風の向きが夏と冬で反転→気温も降水も「メリハリ」。季節ボタンで東岸の風の反転を確認できます。</p>
+  </div>
+
+  <h2>雨温図で確かめる ― 東京 vs ロンドン</h2>
+  <div class="climo-wrap">
+    <div class="climo"><h4><b>Cfa</b>｜東京（北緯 約36度）</h4><div class="meta">年較差 大・夏に降水が集中</div><div id="climoCfa"></div></div>
+    <div class="climo"><h4><b>Cfb</b>｜ロンドン（北緯 約52度）</h4><div class="meta">年較差 小・降水は少なめで年中平均</div><div id="climoCfb"></div></div>
+  </div>
+  <p class="cap" style="font-size:13px;color:#777;margin:6px 4px">値は平年値をもとにした概数。<b>着眼点：①気温カーブの振れ幅　②棒グラフの高さと並び方。2つの軸目盛は同じにそろえてある。</b></p>
+
+  <div class="fig">
+    <h3>緯度をくらべると、もっと不思議 ― ロンドンは樺太と同じ緯度</h3>
+    <svg viewBox="0 0 900 200" style="width:100%;height:auto">
+      <line x1="80" y1="60" x2="860" y2="60" stroke="#1d1d1f" stroke-width="2"/>
+      <line x1="80" y1="140" x2="860" y2="140" stroke="#1d1d1f" stroke-width="2"/>
+      <text x="60" y="65" text-anchor="end" font-size="15" font-weight="bold">51°N</text>
+      <text x="60" y="145" text-anchor="end" font-size="15" font-weight="bold">36°N</text>
+      <circle cx="300" cy="60" r="9" fill="#c22f2f"/><text x="300" y="40" text-anchor="middle" font-size="15" font-weight="bold">ロンドン</text>
+      <circle cx="700" cy="60" r="9" fill="#555"/><text x="700" y="40" text-anchor="middle" font-size="15">樺太（サハリン）</text>
+      <circle cx="640" cy="140" r="9" fill="#c22f2f"/><text x="640" y="172" text-anchor="middle" font-size="15" font-weight="bold">東京</text>
+      <text x="300" y="120" text-anchor="middle" font-size="14" fill="#c22f2f">それなのに冬は東京と同じくらい温暖</text>
+      <text x="450" y="196" text-anchor="middle" font-size="13.5" fill="#555">→ 理由は「①気候をつくる要素」の 要素②：暖流（＋偏西風）が熱を運んでくるから</text>
+    </svg>
+  </div>
+
+  <h2>比較表 ― クリックで1行ずつ表示</h2>
+  <div class="ctrl">
+    <button class="btn shu" id="revealBtn5">次の行を表示 ▼</button>
+    <button class="btn" id="resetBtn5">リセット</button>
+  </div>
+  <table class="cmp" id="cmpTable5">
+    <thead><tr><th style="width:110px"></th><th>温暖湿潤気候（Cfa）＝日本</th><th>西岸海洋性気候（Cfb）＝西ヨーロッパ</th></tr></thead>
+    <tbody>
+      <tr class="rrow"><td class="h">成因</td><td><b style="color:var(--shu)">季節風</b>（夏：海から湿った風／冬：大陸から冷たい風）</td><td><b style="color:var(--shu)">偏西風＋暖流</b>（北大西洋海流）が年中、熱と湿気を運ぶ</td></tr>
+      <tr class="rrow"><td class="h">気温</td><td>年較差が<b style="color:var(--shu)">大きい</b>・メリハリのある四季</td><td>年較差が<b style="color:var(--shu)">小さい</b>・穏やかな四季</td></tr>
+      <tr class="rrow"><td class="h">降水</td><td>多い（夏に集中）</td><td>少なめ（年中平均して降る）</td></tr>
+      <tr class="rrow"><td class="h">農業と食</td><td>高温多雨 → <b style="color:var(--shu)">稲作</b>の適地 → <b style="color:var(--shu)">米食文化</b></td><td>冷涼少雨 → <b style="color:var(--shu)">小麦・牧畜</b>の適地 → <b style="color:var(--shu)">麦食文化</b></td></tr>
+      <tr class="rrow"><td class="h">植生・土壌</td><td>広葉樹と針葉樹の混合林／褐色森林土</td><td>（左と同じ）</td></tr>
+    </tbody>
+  </table>
+
+  <details class="memo"><summary>先生用メモ：この節の展開ポイント</summary><div class="body"><ul>
+    <li><b>発問例</b>：「ロンドンは樺太と同じ緯度。冬は極寒のはず？」→ 雨温図を見せて予想を裏切る→理由を①要素②（海流）に戻って回収。</li>
+    <li>「気候→農業→食文化」の因果連鎖（Cfa→稲作→米食／Cfb→小麦・牧畜→パンと乳製品）は、次章の食文化単元への橋渡しになる。</li>
+    <li>降水の違いを日常語に翻訳：「日本の雨はザーッと、ロンドンの雨はしとしと」。傘をささない人が多いロンドンの話も生徒に刺さる。</li>
+    <li>雨温図2枚は軸をそろえてあるので、<b>グラフの面積・振れ幅を視覚的に直接比較</b>させられる。</li>
+  </ul></div></details>
+
+  <p style="margin-top:14px">▶ まとめ：大陸東岸のCfaは<span class="ans">季節風</span>の影響で年較差<span class="ans">大</span>・夏多雨、西岸のCfbは<span class="ans">偏西風</span>と<span class="ans">暖流</span>の影響で年較差<span class="ans">小</span>・年中平均の降水。気候の違いが<span class="ans">米</span>と<span class="ans">麦</span>の食文化の違いを生んだ。</p>
+</section>
+
+<footer>
+  本教材は学習指導要領（地理総合）の内容をもとに独自に作成したものです。気温・降水量の数値は気象庁および理科年表等の平年値をもとにした概数で、模式図は理解のために実際の現象を単純化しています。<br>
+  対応プリント：「12．世界の気候と人々のくらし２」／ライセンス：CC BY-NC 4.0
+</footer>
+
+<script>
+"use strict";
+/* ================= タブ ================= */
+document.querySelectorAll(".tab").forEach(function(t){
+  t.addEventListener("click", function(){
+    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("on");});
+    document.querySelectorAll("main section").forEach(function(x){x.classList.remove("on");});
+    t.classList.add("on");
+    document.getElementById(t.dataset.t).classList.add("on");
+    window.scrollTo({top:0});
+  });
+});
+
+/* ================= 答え表示 ================= */
+document.querySelectorAll(".ans").forEach(function(a){
+  a.addEventListener("click", function(){ a.classList.add("show"); });
+});
+document.getElementById("allShow").addEventListener("click", function(){
+  document.querySelectorAll(".ans").forEach(function(a){a.classList.add("show");});
+});
+document.getElementById("allHide").addEventListener("click", function(){
+  document.querySelectorAll(".ans").forEach(function(a){a.classList.remove("show");});
+});
+
+/* ================= ① 光の帯 ================= */
+(function(){
+  var on = false;
+  document.getElementById("beamBtn").addEventListener("click", function(){
+    on = !on;
+    document.getElementById("beamEq").setAttribute("opacity", on ? "1" : "0");
+    document.getElementById("beamHi").setAttribute("opacity", on ? "1" : "0");
+    this.textContent = on ? "光の帯を消す" : "光の帯を当てる";
+  });
+})();
+
+/* ================= ① 標高スライダー ================= */
+(function(){
+  var s = document.getElementById("altSlider");
+  function update(){
+    var h = Number(s.value);
+    var t = 30 - h/100*0.6;
+    document.getElementById("altVal").textContent = h.toLocaleString() + " m";
+    document.getElementById("tempVal").textContent = t.toFixed(1) + " ℃";
+    /* 山の斜面に沿って登山者を移動（模式）: x 330→560, y 232→48 */
+    var r = h/3800;
+    var cl = document.getElementById("climber");
+    cl.setAttribute("cx", 330 + r*225);
+    cl.setAttribute("cy", 232 - r*186);
+  }
+  s.addEventListener("input", update);
+  update();
+})();
+
+/* ================= ① 循環アニメ ================= */
+(function(){
+  var on = false;
+  var paths = ["c1","c2","c3","c4"].map(function(id){return document.getElementById(id);});
+  paths.forEach(function(p){
+    var len = p.getTotalLength();
+    p.style.strokeDasharray = "14 12";
+  });
+  document.getElementById("circBtn").addEventListener("click", function(){
+    on = !on;
+    this.textContent = on ? "止める" : "循環を動かす";
+    paths.forEach(function(p){
+      p.style.animation = on ? "flowdash 1.2s linear infinite" : "none";
+    });
+    document.getElementById("rainDrops").classList.toggle("pulse", on);
+  });
+  var st = document.createElement("style");
+  st.textContent = "@keyframes flowdash{to{stroke-dashoffset:-52}}";
+  document.head.appendChild(st);
+})();
+
+/* ================= ② フローチャート ================= */
+document.querySelectorAll("[data-f]").forEach(function(b){
+  b.addEventListener("click", function(){
+    document.getElementById("fYes").classList.toggle("hidden", b.dataset.f !== "yes");
+    document.getElementById("fNo").classList.toggle("hidden", b.dataset.f !== "no");
+    document.querySelectorAll("[data-f]").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+  });
+});
+
+/* ================= ② 区分表クリック解説 ================= */
+(function(){
+  var notes = {
+    Af:"<b>熱帯雨林気候</b>：赤道直下。年中上昇気流で毎日スコール。→ 本時③で詳しく",
+    Am:"<b>弱い乾季のある熱帯雨林気候</b>：AfとAwの中間型。モンスーンの影響を受ける地域に多い（熱帯モンスーン気候とも）。",
+    Aw:"<b>サバナ気候</b>：雨の帯が夏だけやってくる。明瞭な雨季と乾季。→ 本時④で詳しく",
+    Cfa:"<b>温暖湿潤気候</b>：大陸東岸。季節風の影響で年較差大・夏多雨。日本の大部分。→ 本時⑤で詳しく",
+    Cfb:"<b>西岸海洋性気候</b>：大陸西岸。偏西風＋暖流で年中温和。西ヨーロッパ。→ 本時⑤で詳しく",
+    Cs:"<b>地中海性気候</b>：夏に乾燥の帯（高圧帯）が張り出してくる→夏乾燥・冬湿潤。オリーブやブドウの栽培。",
+    Cw:"<b>温暖冬季少雨気候</b>：大陸東岸のAwの高緯度側。夏のモンスーンで多雨、冬乾燥。",
+    Df:"<b>亜寒帯湿潤気候</b>：年間を通じて湿潤。タイガ（針葉樹林）が広がる。",
+    Dw:"<b>亜寒帯冬季少雨気候</b>：ユーラシア大陸北東部。年較差がきわめて大きい大陸性。",
+    BS:"<b>ステップ気候</b>：砂漠の周辺。短い雨季と短草草原。遊牧のくらし。→ 本時④で詳しく",
+    BW:"<b>砂漠気候</b>：下降気流の帯の直下。オアシスに集住。→ 本時③で詳しく",
+    ET:"<b>ツンドラ気候</b>：最暖月0〜10℃。短い夏にコケ類などが育つ。",
+    EF:"<b>氷雪気候</b>：最暖月も0℃未満。一年中氷と雪の世界（南極大陸など）。"
+  };
+  document.querySelectorAll("td.ku").forEach(function(td){
+    td.addEventListener("click", function(){
+      document.getElementById("kpNote").innerHTML = notes[td.dataset.k] || "";
+      document.querySelectorAll("td.ku").forEach(function(x){x.style.background="";});
+      td.style.background = "var(--rain-bg)";
+    });
+  });
+})();
+
+/* ================= 雨温図描画 ================= */
+function drawClimo(elId, temps, precs){
+  var W=380, H=300, L=46, R=46, T=18, B=34;
+  var pw = W-L-R, ph = H-T-B;
+  var tMin=-10, tMax=40, pMax=400;
+  function ty(v){ return T + ph*(1-(v-tMin)/(tMax-tMin)); }
+  function py(v){ return T + ph*(1-Math.min(v,pMax)/pMax); }
+  var bw = pw/12;
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto">';
+  /* グリッド・軸 */
+  s += '<rect x="'+L+'" y="'+T+'" width="'+pw+'" height="'+ph+'" fill="#fff" stroke="#ccc"/>';
+  [0,10,20,30].forEach(function(v){
+    s += '<line x1="'+L+'" y1="'+ty(v)+'" x2="'+(W-R)+'" y2="'+ty(v)+'" stroke="#eee"/>';
+    s += '<text x="'+(L-6)+'" y="'+(ty(v)+4)+'" text-anchor="end" font-size="11" fill="#c22f2f">'+v+'</text>';
+  });
+  [100,200,300].forEach(function(v){
+    s += '<text x="'+(W-R+6)+'" y="'+(py(v)+4)+'" font-size="11" fill="#1e6fb8">'+v+'</text>';
+  });
+  s += '<text x="'+(L-6)+'" y="'+(T-4)+'" text-anchor="end" font-size="10.5" fill="#c22f2f">気温℃</text>';
+  s += '<text x="'+(W-R+6)+'" y="'+(T-4)+'" font-size="10.5" fill="#1e6fb8">降水mm</text>';
+  /* 降水の棒 */
+  precs.forEach(function(v,i){
+    var x = L + i*bw + bw*0.18;
+    var y = py(v);
+    s += '<rect x="'+x+'" y="'+y+'" width="'+(bw*0.64)+'" height="'+(T+ph-y)+'" fill="#8fb8dd"/>';
+  });
+  /* 気温の線 */
+  var pts = temps.map(function(v,i){ return (L+i*bw+bw/2)+','+ty(v); }).join(' ');
+  s += '<polyline points="'+pts+'" fill="none" stroke="#c22f2f" stroke-width="3"/>';
+  temps.forEach(function(v,i){
+    s += '<circle cx="'+(L+i*bw+bw/2)+'" cy="'+ty(v)+'" r="3" fill="#c22f2f"/>';
+  });
+  /* 月ラベル */
+  for(var m=1;m<=12;m++){
+    if(m===1||m===4||m===7||m===10||m===12)
+      s += '<text x="'+(L+(m-1)*bw+bw/2)+'" y="'+(H-14)+'" text-anchor="middle" font-size="11" fill="#666">'+m+'月</text>';
+  }
+  /* 集計 */
+  var tAvg = (temps.reduce(function(a,b){return a+b;},0)/12).toFixed(1);
+  var pSum = Math.round(precs.reduce(function(a,b){return a+b;},0));
+  s += '<text x="'+(L+6)+'" y="'+(H-2)+'" font-size="11.5" fill="#555">年平均気温 約'+tAvg+'℃／年降水量 約'+pSum+'mm</text>';
+  s += '</svg>';
+  document.getElementById(elId).innerHTML = s;
+}
+/* 平年値をもとにした概数（理科年表・気象庁等） */
+drawClimo("climoAf",
+  [26.5,27.1,27.5,28.0,28.3,28.3,27.9,27.8,27.7,27.6,27.0,26.4],
+  [240,115,170,155,170,130,155,150,155,155,260,320]);
+drawClimo("climoBW",
+  [14,15,18,22,25,27,28,28,26,24,19,15],
+  [5,4,4,1,0,0,0,0,0,1,3,4]);
+drawClimo("climoAw",
+  [20,23,28,30,31,30,29,29,29,28,24,20],
+  [15,25,35,55,130,290,375,345,270,140,25,5]);
+drawClimo("climoBS",
+  [24,27,31,34,34,32,29,28,29,31,28,25],
+  [0,0,4,6,35,70,155,170,90,10,0,0]);
+drawClimo("climoCfa",
+  [5.4,6.1,9.4,14.3,18.8,21.9,25.7,26.9,23.3,18.0,12.5,7.7],
+  [60,57,116,134,140,168,156,155,225,235,96,58]);
+drawClimo("climoCfb",
+  [5.2,5.3,7.6,9.9,13.3,16.5,18.7,18.5,15.7,12.0,8.0,5.5],
+  [55,41,42,44,49,45,45,50,49,69,59,55]);
+
+/* ================= 比較表：1行ずつ表示 ================= */
+function setupReveal(tableId, btnId, resetId){
+  var rows = document.querySelectorAll("#"+tableId+" .rrow");
+  var i = 0;
+  rows.forEach(function(r){ r.style.visibility = "hidden"; });
+  document.getElementById(btnId).addEventListener("click", function(){
+    if(i < rows.length){ rows[i].style.visibility = "visible"; i++; }
+    if(i >= rows.length){ this.textContent = "すべて表示ずみ"; }
+  });
+  document.getElementById(resetId).addEventListener("click", function(){
+    i = 0;
+    rows.forEach(function(r){ r.style.visibility = "hidden"; });
+    document.getElementById(btnId).textContent = "次の行を表示 ▼";
+  });
+}
+setupReveal("cmpTable3","revealBtn3","resetBtn3");
+setupReveal("cmpTable5","revealBtn5","resetBtn5");
+
+/* ================= ④ 季節シミュレーター ================= */
+(function(){
+  var X0=60, X1=840;                       /* SVG: 30S..30N を x にマップ */
+  function latX(lat){ return X0 + (lat+30)/60*(X1-X0); }
+  var RAIN_HALF = 10, SHIFT = 8;           /* 雨の帯 半幅10度 / 移動±8度 */
+  var HI_OFF = 27, HI_HALF = 8;            /* 乾燥の帯 中心±27度 半幅8度 */
+  var pins = [
+    {lat:0,  name:"赤道直下", ku:"Af"},
+    {lat:10, name:"10°N",    ku:"Aw"},
+    {lat:16, name:"16°N",    ku:"BS"},
+    {lat:25, name:"25°N",    ku:"BW"}
+  ];
+  /* ピンDOM生成 */
+  var g = document.getElementById("pins");
+  pins.forEach(function(p,idx){
+    var x = latX(p.lat);
+    var el = document.createElementNS("http://www.w3.org/2000/svg","g");
+    el.innerHTML =
+      '<line x1="'+x+'" y1="60" x2="'+x+'" y2="252" stroke="#1d1d1f" stroke-width="2"/>' +
+      '<circle cx="'+x+'" cy="252" r="6" fill="#1d1d1f"/>' +
+      '<text x="'+x+'" y="272" font-size="13" font-weight="bold">'+p.name+'</text>' +
+      '<text x="'+x+'" y="290" font-size="12" fill="#888">（'+p.ku+'）</text>' +
+      '<text id="pinState'+idx+'" x="'+x+'" y="316" font-size="17" font-weight="bold"></text>';
+    g.appendChild(el);
+  });
+  var slider = document.getElementById("monthSlider");
+  function center(m){ return -SHIFT * Math.cos((m-1)/12*2*Math.PI); }
+  function setBand(id, lo, hi){
+    lo = Math.max(lo,-30); hi = Math.min(hi,30);
+    var el = document.getElementById(id);
+    if(hi <= -30 || lo >= 30 || hi <= lo){ el.setAttribute("width",0); return {mid:null}; }
+    el.setAttribute("x", latX(lo));
+    el.setAttribute("width", latX(hi)-latX(lo));
+    return {mid: latX((lo+hi)/2)};
+  }
+  function update(){
+    var m = Number(slider.value);
+    document.getElementById("monthVal").textContent = m + "月";
+    var c = center(m);
+    var r = setBand("rainBelt", c-RAIN_HALF, c+RAIN_HALF);
+    if(r.mid!==null) document.getElementById("rainLbl").setAttribute("x", r.mid);
+    var hn = setBand("hiN", c+HI_OFF-HI_HALF, c+HI_OFF+HI_HALF);
+    var hs = setBand("hiS", c-HI_OFF-HI_HALF, c-HI_OFF+HI_HALF);
+    var lblN = document.getElementById("hiNLbl"), lblS = document.getElementById("hiSLbl");
+    if(hn.mid!==null){ lblN.setAttribute("x",hn.mid); lblN.setAttribute("opacity",1);} else lblN.setAttribute("opacity",0);
+    if(hs.mid!==null){ lblS.setAttribute("x",hs.mid); lblS.setAttribute("opacity",1);} else lblS.setAttribute("opacity",0);
+    pins.forEach(function(p,idx){
+      var inRain = Math.abs(p.lat - c) <= RAIN_HALF;
+      var t = document.getElementById("pinState"+idx);
+      t.textContent = inRain ? "☔ 雨季" : "☀ 乾季";
+      t.setAttribute("fill", inRain ? "#1e6fb8" : "#d98a25");
+      t.setAttribute("text-anchor","middle");
+    });
+  }
+  slider.addEventListener("input", update);
+  update();
+  /* 再生 */
+  var timer = null;
+  document.getElementById("playBtn").addEventListener("click", function(){
+    var btn = this;
+    if(timer){ clearInterval(timer); timer=null; btn.textContent="▶ 1年を再生"; return; }
+    btn.textContent = "■ 停止";
+    timer = setInterval(function(){
+      var m = Number(slider.value) % 12 + 1;
+      slider.value = m; update();
+      if(m===12){ clearInterval(timer); timer=null; btn.textContent="▶ 1年を再生"; }
+    }, 700);
+  });
+})();
+
+/* ================= ⑤ 季節トグル ================= */
+(function(){
+  var bs = document.getElementById("seasonSummer");
+  var bw = document.getElementById("seasonWinter");
+  var note = document.getElementById("seasonNote");
+  function set(summer){
+    bs.classList.toggle("on", summer);
+    bw.classList.toggle("on", !summer);
+    document.getElementById("monsoonSummer").classList.toggle("hidden", !summer);
+    document.getElementById("monsoonWinter").classList.toggle("hidden", summer);
+    note.textContent = summer
+      ? "夏：海から大陸へ、湿った季節風が吹き込む → 東岸は多雨"
+      : "冬：大陸から海へ、冷たく乾いた季節風が吹き出す → 東岸は寒くて乾燥";
+  }
+  bs.addEventListener("click", function(){set(true);});
+  bw.addEventListener("click", function(){set(false);});
+})();
+</script>
+</body>
+</html>
