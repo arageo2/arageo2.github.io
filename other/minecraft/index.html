@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>はじめての マイクラ ノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#F2F7FA; --grid:#D7E6EF; --ink:#22303A; --ink-soft:#4F6270;
+  --card:#FFFFFF; --line:#B9CCD8;
+  --grass:#3F8F33; --soil:#8A5A33; --sky:#2F74C9; --sun:#F0B429; --lava:#D9482B; --berry:#8A3FA0;
+  --accent:var(--grass); --accent-soft:#E3F1DD; --stamp:#E8A317;
+  --pixel:"DotGothic16","Hiragino Kaku Gothic ProN","Noto Sans JP",monospace;
+  --round:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Noto Sans JP","Meiryo",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+body[data-mode="start"]{ --accent:#B86A00; --accent-soft:#FBEBD2; }
+body[data-mode="creative"]{ --accent:var(--sky); --accent-soft:#DDEBFA; }
+body[data-mode="book"]{ --accent:var(--berry); --accent-soft:#F1E3F5; }
+body[data-mode="parent"]{ --accent:var(--soil); --accent-soft:#F3E6DA; }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#16212A; --grid:#22313C; --ink:#E8F0F5; --ink-soft:#A9BCC8;
+    --card:#1E2B35; --line:#3A4D5B; --accent-soft:#24402A;
+  }
+  :root:not([data-theme="light"]) body[data-mode="start"]{ --accent-soft:#45321A; }
+  :root:not([data-theme="light"]) body[data-mode="creative"]{ --accent-soft:#1F3550; }
+  :root:not([data-theme="light"]) body[data-mode="book"]{ --accent-soft:#3A2442; }
+  :root:not([data-theme="light"]) body[data-mode="parent"]{ --accent-soft:#3F2F22; }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#16212A; --grid:#22313C; --ink:#E8F0F5; --ink-soft:#A9BCC8;
+  --card:#1E2B35; --line:#3A4D5B; --accent-soft:#24402A;
+}
+*,*::before,*::after{ box-sizing:inherit; }
+[hidden]{ display:none !important; }
+html{ scroll-padding-top:calc(env(safe-area-inset-top,0px) + 150px); }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ transition:none !important; animation:none !important; } }
+body{
+  margin:0; background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--round); font-weight:500; font-size:20px; line-height:1.9; letter-spacing:.04em;
+}
+img,svg{ max-width:100%; }
+.wrap{ max-width:840px; margin:0 auto; padding:0 16px 64px; }
+.g{ font-weight:700; }
+.g::after{ content:"（" attr(data-y) "）"; font-weight:500; font-size:.85em; color:var(--ink-soft); }
+
+.hero{ padding:20px 0 4px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; }
+.hero > div{ flex:1 1 260px; }
+.hero svg{ display:block; flex:1 1 300px; max-width:440px; height:auto; border:4px solid var(--ink); }
+.hero h1{ font-family:var(--pixel); font-weight:400; font-size:clamp(28px,5vw,42px); line-height:1.25; margin:0 0 4px; letter-spacing:.06em; }
+.hero p{ margin:0; color:var(--ink-soft); }
+
+.topbar{ position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--paper); padding:10px 0 0; border-bottom:3px solid var(--ink); margin-bottom:6px; }
+.tabs{ display:flex; gap:6px; padding:0 0 10px; }
+.subtabs{ display:flex; gap:6px; overflow-x:auto; padding:2px 2px 10px; scrollbar-width:thin; }
+.subtabs:empty{ display:none; }
+.subtab{ flex:none; font:inherit; font-weight:800; font-size:16px; line-height:1.35; cursor:pointer; padding:5px 12px; border:2px solid var(--ink); background:var(--card); color:var(--ink); border-radius:0; text-align:center; }
+.subtab small{ display:block; font-size:12px; font-weight:700; color:var(--ink-soft); }
+.subtab[aria-selected="true"]{ background:var(--accent); color:#fff; box-shadow:inset 0 -4px 0 rgba(0,0,0,.25); }
+.subtab[aria-selected="true"] small{ color:#fff; }
+.cgroup[hidden]{ display:none; }
+.cgroup > .chapter:first-child{ margin-top:8px; }
+.chapnav{ display:flex; justify-content:space-between; gap:10px; margin:8px 0 0; }
+.chapnav .btn{ max-width:48%; }
+body::before{ content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:30; background:var(--paper); }
+.tab{ flex:1; font:inherit; font-weight:800; font-size:18px; line-height:1.4; cursor:pointer; padding:8px 4px; border:3px solid var(--ink); background:var(--card); color:var(--ink); box-shadow:0 5px 0 var(--ink); border-radius:0; }
+.tab .stars{ display:block; font-size:14px; font-weight:700; color:var(--ink-soft); }
+.tab[aria-selected="true"]{ background:var(--accent); color:#fff; transform:translateY(4px); box-shadow:0 1px 0 var(--ink); }
+.tab[aria-selected="true"] .stars{ color:#fff; }
+.tab.small{ flex:.75; font-size:15px; }
+.tab:focus-visible, button:focus-visible, a:focus-visible{ outline:4px solid var(--sun); outline-offset:3px; }
+
+.panel[hidden]{ display:none; }
+.lead{ background:var(--accent-soft); border-left:8px solid var(--accent); padding:10px 18px; margin:10px 0 14px; }
+.lead h2{ font-family:var(--pixel); font-weight:400; font-size:30px; margin:0 0 4px; }
+.lead p{ margin:0; }
+
+.toc{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 26px; }
+.toc a{ display:inline-block; padding:4px 12px; border:2px solid var(--ink); background:var(--card); color:var(--ink); text-decoration:none; font-weight:800; font-size:17px; }
+.toc a:hover{ background:var(--accent-soft); }
+
+.chapter{ display:flex; align-items:center; gap:12px; margin:40px 0 18px; padding:8px 14px; background:var(--accent); color:#fff; font-family:var(--pixel); font-weight:400; font-size:26px; line-height:1.4; }
+.chapter small{ font-family:var(--round); font-size:16px; font-weight:700; opacity:.9; }
+
+.mission{ background:var(--card); border:3px solid var(--ink); margin:0 0 28px; position:relative; }
+.mission-head{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-bottom:3px solid var(--ink); background:var(--accent-soft); }
+.num{ flex:none; min-width:44px; height:44px; padding:0 4px; display:grid; place-items:center; background:var(--accent); color:#fff; font-family:var(--pixel); font-size:24px; }
+.mission-head h3{ margin:0; font-size:23px; line-height:1.4; flex:1; }
+.mission-body{ padding:14px 18px 18px; }
+.mission-body p{ margin:.4em 0; }
+.mission-body h4{ margin:16px 0 4px; font-size:20px; border-bottom:2px dotted var(--line); }
+.steps{ margin:.4em 0; padding-left:1.4em; }
+.steps li{ margin:.25em 0; }
+.tools{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+.btn{ font:inherit; font-weight:800; font-size:18px; cursor:pointer; padding:6px 14px; border:3px solid var(--ink); background:var(--card); color:var(--ink); box-shadow:0 4px 0 var(--ink); border-radius:0; }
+.btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--ink); }
+.btn.done{ background:var(--stamp); color:#2a1a00; }
+.btn.speaking{ background:var(--sky); color:#fff; }
+.stamp{ position:absolute; right:-10px; top:-14px; width:64px; height:64px; display:none; place-items:center; transform:rotate(12deg); background:var(--stamp); border:3px solid var(--ink); font-size:34px; }
+.mission.is-done .stamp{ display:grid; }
+.note{ border:2px dashed var(--line); padding:8px 14px; margin:12px 0; }
+.note.warn{ border-color:var(--lava); }
+.tag{ font-weight:800; }
+.learn{ margin:14px 0 0; padding:10px 14px; background:var(--accent-soft); }
+.learn .tag{ color:var(--accent); }
+
+.recipes, .smelts{ display:flex; flex-wrap:wrap; gap:14px; margin:12px 0; }
+.recipe{ display:flex; flex-direction:column; gap:6px; width:270px; max-width:100%; background:var(--card); border:3px solid var(--ink); padding:10px 12px; }
+.recipe-name{ font-size:19px; font-weight:800; line-height:1.4; }
+.recipe-desc{ font-size:16px; font-weight:700; line-height:1.55; padding:4px 8px; background:var(--accent-soft); }
+.recipe-row{ display:flex; align-items:center; gap:10px; margin-top:4px; }
+.cgrid{ display:grid; gap:3px; background:var(--ink); padding:3px; }
+.cell{ width:34px; height:34px; display:grid; place-items:center; font-size:13px; font-weight:800; color:#1b1b1b; background:#C6C6C6; }
+.cell.empty{ background:#9AA3A9; }
+.arrow{ font-size:22px; font-weight:800; }
+.out{ min-width:48px; height:48px; padding:0 6px; display:grid; place-items:center; border:3px solid var(--ink); background:var(--card); font-weight:800; font-size:15px; }
+.legend{ display:flex; flex-direction:column; gap:2px; font-size:15px; line-height:1.5; }
+.legend span.li{ white-space:nowrap; }
+.recipe-where{ margin-top:auto; padding-top:4px; border-top:1px dashed var(--line); font-size:14px; color:var(--ink-soft); }
+.sw{ display:inline-block; width:12px; height:12px; border:1px solid #333; margin-right:4px; vertical-align:middle; }
+.smelt-row{ display:flex; flex-direction:column; align-items:flex-start; gap:2px; margin-top:4px; font-size:15px; }
+.smelt-arrow{ padding-left:10px; font-weight:800; }
+.fuel-note{ font-size:15px; line-height:1.6; }
+.chip{ display:inline-flex; align-items:center; gap:6px; padding:2px 8px; border:2px solid var(--ink); background:var(--card); }
+.chip .sw{ width:16px; height:16px; margin:0; }
+.fuels{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin:12px 0; }
+.fuels .recipe{ width:auto; }
+.fuel-num{ display:flex; align-items:baseline; gap:6px; font-weight:800; }
+.fuel-num b{ font-family:var(--pixel); font-weight:400; font-size:34px; line-height:1; color:var(--accent); }
+.fuel-bar{ height:10px; background:var(--accent); border:1px solid var(--ink); min-width:3px; }
+.filters .btn{ font-size:15px; padding:3px 10px; }
+.ecard-head{ display:flex; align-items:center; gap:10px; }
+.ecard-icon{ flex:none; width:44px; height:44px; display:grid; place-items:center; font-size:28px; border:2px solid var(--ink); background:var(--paper); }
+.ecard-icon.block{ font-size:0; }
+.erows{ display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font-size:15px; line-height:1.55; margin:0; }
+.erows dt{ font-weight:800; color:var(--ink-soft); white-space:nowrap; }
+.erows dd{ margin:0; }
+.ereal{ margin-top:auto; padding-top:6px; border-top:1px dashed var(--line); font-size:14px; color:var(--ink-soft); }
+.book-sub{ font-size:22px; margin:6px 0 2px; padding-left:10px; border-left:6px solid var(--accent); }
+.book-note{ margin:0 0 4px; font-size:17px; color:var(--ink-soft); }
+.table-wrap{ overflow-x:auto; margin:10px 0; }
+table{ border-collapse:collapse; min-width:520px; width:100%; font-size:17px; }
+th,td{ border:2px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; }
+th{ background:var(--accent-soft); }
+
+.pad{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px; margin:8px 0; }
+.key{ display:flex; gap:10px; align-items:center; border:2px solid var(--line); padding:6px 10px; background:var(--card); }
+.k{ flex:none; min-width:46px; height:40px; padding:0 6px; display:grid; place-items:center; background:var(--ink); color:var(--card); font-weight:800; font-size:16px; border-radius:10px; }
+
+.builder{ margin:12px 0; }
+.bgrid{ display:inline-grid; gap:3px; background:var(--ink); padding:3px; touch-action:manipulation; }
+.bcell{ width:40px; height:40px; border:0; padding:0; cursor:pointer; background:#7DB8E8; }
+.bcell.on{ background:#C8A165; box-shadow:inset 0 -6px 0 rgba(0,0,0,.18); }
+.bstatus{ font-weight:800; margin:6px 0; min-height:1.9em; }
+.palette{ display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.swatch{ width:44px; height:44px; border:3px solid var(--ink); cursor:pointer; padding:0; font-size:12px; font-weight:800; color:#1b1b1b; }
+.swatch[aria-pressed="true"]{ outline:4px solid var(--sun); outline-offset:2px; }
+.counts{ font-size:17px; }
+
+.coord{ display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; margin:12px 0; }
+.cmap{ display:grid; grid-template-columns:repeat(11,26px); gap:1px; background:#5b8a3c; padding:2px; border:3px solid var(--ink); }
+.cmap span{ width:26px; height:26px; display:grid; place-items:center; font-size:16px; background:#8BC56A; }
+.cmap span.axis{ background:#A7D88A; }
+.cpad{ display:grid; grid-template-columns:repeat(3,92px); gap:6px; }
+.cpad .btn{ font-size:15px; padding:6px 2px; }
+.cread{ font-weight:800; font-size:19px; margin:6px 0; }
+
+.filters{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px; }
+.filters .btn[aria-pressed="true"]{ background:var(--accent); color:#fff; }
+.book{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:16px; }
+.recipe[hidden]{ display:none; }
+.book .recipe{ width:auto; }
+
+details.box{ background:var(--card); border:3px solid var(--ink); margin:0 0 20px; }
+details.box > summary{ cursor:pointer; padding:10px 16px; font-weight:800; font-size:21px; background:var(--accent-soft); list-style:none; }
+details.box > summary::-webkit-details-marker{ display:none; }
+details.box > summary::before{ content:"▶ "; }
+details.box[open] > summary::before{ content:"▼ "; }
+details.box .inner{ padding:10px 16px 16px; }
+
+.parent-text{ font-size:17px; line-height:1.85; letter-spacing:.02em; }
+.parent-text h3{ font-size:21px; margin:22px 0 6px; border-bottom:3px solid var(--accent); }
+.parent-text ul{ padding-left:1.3em; }
+footer{ margin-top:40px; font-size:14px; color:var(--ink-soft); line-height:1.7; }
+
+@media (min-width:561px){ .book .recipe-desc, #book-yaku .smelts .recipe-desc{ min-height:5.4em; } #fuels .recipe-name{ min-height:2.9em; } }
+@media (max-width:560px){
+  body{ font-size:18px; }
+  .tab{ font-size:14px; padding:6px 2px; }
+  .tab.small{ font-size:12px; }
+  .subtab{ font-size:14px; padding:4px 8px; }
+  .tab .stars{ display:none; }
+  .tab{ font-size:13px; }
+  .cell{ width:30px; height:30px; font-size:11px; }
+  .recipe{ width:100%; }
+  .bcell{ width:32px; height:32px; }
+  .cmap{ grid-template-columns:repeat(11,22px); }
+  .cmap span{ width:22px; height:22px; font-size:13px; }
+}
+</style>
+</head>
+<body data-mode="start">
+<div class="wrap">
+
+<header class="hero">
+  <svg viewBox="0 0 48 14" role="img" aria-label="ブロックで できた 山と 木と たいよう" shape-rendering="crispEdges">
+    <rect width="48" height="14" fill="#8CC6F0"/>
+    <rect x="39" y="1" width="4" height="4" fill="#F7D54A"/>
+    <rect x="4" y="2" width="6" height="1" fill="#fff"/><rect x="3" y="3" width="9" height="1" fill="#fff"/>
+    <rect x="22" y="3" width="5" height="1" fill="#fff"/><rect x="21" y="4" width="8" height="1" fill="#fff"/>
+    <rect x="26" y="5" width="4" height="2" fill="#5DA63F"/><rect x="24" y="6" width="9" height="2" fill="#5DA63F"/>
+    <rect x="27" y="4" width="2" height="1" fill="#fff"/>
+    <rect x="8" y="5" width="5" height="3" fill="#2F7A2A"/><rect x="9" y="4" width="3" height="1" fill="#2F7A2A"/>
+    <rect x="10" y="8" width="1" height="2" fill="#6B4423"/>
+    <rect x="0" y="8" width="48" height="1" fill="#4F9D38"/>
+    <rect x="0" y="9" width="48" height="2" fill="#8A5A33"/>
+    <rect x="0" y="11" width="48" height="3" fill="#8E8E8E"/>
+    <rect x="16" y="8" width="5" height="2" fill="#3A7BD5"/>
+    <rect x="15" y="8" width="7" height="1" fill="#C8A165"/>
+    <rect x="5" y="12" width="1" height="1" fill="#2B2B2B"/><rect x="13" y="11" width="1" height="1" fill="#2B2B2B"/>
+    <rect x="22" y="12" width="1" height="1" fill="#D9A06A"/><rect x="33" y="12" width="1" height="1" fill="#D9A06A"/>
+    <rect x="42" y="13" width="1" height="1" fill="#5FE0E0"/>
+    <rect x="36" y="5" width="6" height="3" fill="#C8A165"/><rect x="35" y="4" width="8" height="1" fill="#7A4E2B"/>
+    <rect x="38" y="6" width="1" height="2" fill="#6B4423"/><rect x="40" y="6" width="1" height="1" fill="#BFE6F5"/>
+    <rect x="44" y="7" width="1" height="1" fill="#D9B44A"/><rect x="45" y="7" width="1" height="1" fill="#D9B44A"/><rect x="46" y="7" width="1" height="1" fill="#D9B44A"/>
+  </svg>
+  <div><h1>はじめての<br>マイクラ ノート</h1>
+  <p>Nintendo Switch で あそぶ 1年生の ための ガイドだよ。</p></div>
+</header>
+
+
+
+<div id="topbar-anchor"></div>
+<div class="topbar" id="topbar">
+<nav class="tabs" role="tablist" aria-label="ページを えらぶ">
+  <button class="tab small" role="tab" id="tab-start" aria-controls="p-start" aria-selected="true" data-mode="start">🎮 はじめに</button>
+  <button class="tab" role="tab" id="tab-survival" aria-controls="p-survival" aria-selected="false" data-mode="survival">🌳 サバイバル<span class="stars" data-count="survival">★ 0</span></button>
+  <button class="tab" role="tab" id="tab-creative" aria-controls="p-creative" aria-selected="false" data-mode="creative">🎨 クリエイティブ<span class="stars" data-count="creative">★ 0</span></button>
+  <button class="tab small" role="tab" id="tab-book" aria-controls="p-book" aria-selected="false" data-mode="book">📖 ずかん</button>
+  <button class="tab small" role="tab" id="tab-parent" aria-controls="p-parent" aria-selected="false" data-mode="parent">おうちの<br>人へ</button>
+</nav>
+<div class="subtabs" id="subtabs" role="tablist" aria-label="こうもくを えらぶ"></div>
+</div>
+
+<!-- ================= はじめに ================= -->
+<section class="panel" id="p-start" role="tabpanel" aria-labelledby="tab-start">
+  <div class="lead">
+    <h2>はじめに</h2>
+    <p>まずは ボタンの つかいかた と おやくそく を おぼえよう。上の タブで ページを えらべるよ。</p>
+  </div>
+  <h2 class="chapter" data-short="ボタン">ボタンの つかいかた</h2>
+  <div class="mission"><div class="mission-body speak-only" data-read>
+    <div class="pad">
+      <div class="key"><span class="k">左</span><span>左の スティックで あるく</span></div>
+      <div class="key"><span class="k">左おし</span><span>左の スティックを おしこむと はしる</span></div>
+      <div class="key"><span class="k">右</span><span>右の スティックで 見る むきを かえる</span></div>
+      <div class="key"><span class="k">A</span><span>ジャンプ（水の 中では 上へ）</span></div>
+      <div class="key"><span class="k">B</span><span>しゃがむ（はしっこで おちない）</span></div>
+      <div class="key"><span class="k">ZR</span><span>こわす・ほる（ながく おす）</span></div>
+      <div class="key"><span class="k">ZL</span><span>おく・つかう・たべる・ひらく</span></div>
+      <div class="key"><span class="k">X</span><span>もちもの を ひらく</span></div>
+      <div class="key"><span class="k">L・R</span><span>手に もつ ものを えらぶ</span></div>
+    </div>
+    <p class="note">ボタンは せっていで かえられるよ。うまく いかない ときは、がめんに 出る ボタンの あんないを 見てね。</p>
+  </div></div>
+  <h2 class="chapter" data-short="おやくそく">あそぶ まえの おやくそく</h2>
+  <div class="mission"><div class="mission-body speak-only" data-read>
+    <ul class="steps">
+      <li>あそぶ じかんは おうちの 人と きめよう。</li>
+      <li>ときどき とおくを 見て、目を 休めよう。</li>
+      <li>がめんが ぐるぐるして きもちが わるく なったら、すぐ 休もう。</li>
+      <li>こまったら おうちの 人に きこう。</li>
+      <li>ほかの 人の つくった ものは こわさない。</li>
+      <li>しらない 人と ゲームで おはなし しない。</li>
+    </ul>
+  </div></div>
+  <h2 class="chapter" data-short="つかいかた">このページの つかいかた</h2>
+  <div class="mission"><div class="mission-body speak-only" data-read>
+    <ol class="steps">
+      <li>上の 大きな タブで「サバイバル」や「クリエイティブ」を えらぶ。</li>
+      <li>その下の 小さな タブで、見たい ところを えらぶ。</li>
+      <li>「🔊 よむ」を おすと、よみあげて くれるよ。</li>
+      <li>できたら「⭐ できた！」を おそう。ほしが たまって いくよ。</li>
+      <li>いちばん 下の「つぎ ▶」で、つぎの ところへ すすめるよ。</li>
+    </ol>
+  </div></div>
+</section>
+
+<!-- ================= サバイバル ================= -->
+<section class="panel" id="p-survival" role="tabpanel" aria-labelledby="tab-survival" hidden>
+  <div class="lead">
+    <h2>サバイバル</h2>
+    <p>じぶんで 木や 石を あつめて、どうぐや いえを つくる あそびかただよ。ピースフル なら モンスターは 出ないよ。上から じゅんばんに ためしてね。</p>
+  </div>
+
+  <h2 class="chapter" id="ch-s1" data-short="1 はじめの 1日">1 はじめの 1日 <small>まずは ここから</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">1</span><h3>ピースフルって なに？</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li>モンスターが 出てこない。</li>
+        <li>ハートが しぜんに もとに もどる。</li>
+        <li>おなかが へらない。</li>
+        <li>ゲームの 1日は、ほんとうの じかんで だいたい 20ぷん。よるに なると くらく なるよ。</li>
+      </ul>
+      <p class="note warn"><span class="tag">き を つけて！</span> ピースフル でも、たかい ところから おちたり、オレンジいろの <span class="g" data-y="ようがん">溶岩</span> に 入ったり、水の 中に ずっと いたり すると ハートが へるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">2</span><h3>木を あつめよう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>木の みきの そばまで あるこう。</li>
+        <li>木を 見ながら ZR を ながく おす。</li>
+        <li>ポロッと おちた <span class="g" data-y="げんぼく">原木</span> の そばに いくと ひろえるよ。</li>
+        <li>まずは 10こ くらい あつめよう。</li>
+      </ol>
+      <h4>はっぱからも いろいろ とれる</h4>
+      <p>はっぱを こわすと <span class="g" data-y="なえぎ">苗木</span> や <span class="g" data-y="ぼう">棒</span>、オークの 木からは リンゴ が おちる ことが あるよ。</p>
+      <p><span class="g" data-y="なえぎ">苗木</span> を 土に うえると、また 木が 生えてくるよ。木を とったら <span class="g" data-y="なえぎ">苗木</span> を うえて、森を まもろう。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>木の 名まえ</th><th>ある ところ</th></tr></thead>
+          <tbody>
+            <tr><td>オーク</td><td>草の ひろい ところ、森</td></tr>
+            <tr><td>シラカバ</td><td>白い 木。森</td></tr>
+            <tr><td>トウヒ</td><td>さむい ところ、ゆきの ちかく</td></tr>
+            <tr><td>ジャングル</td><td>あつくて 雨の おおい ジャングル</td></tr>
+            <tr><td>アカシア</td><td>かわいた サバンナ</td></tr>
+            <tr><td>サクラ</td><td>山の ちかくの ピンクの 林</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> あつい ところ、さむい ところで 生えている 木が ちがうよ。ほんとうの せかいでも おなじだよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">3</span><h3><span class="g" data-y="さぎょうだい">作業台</span> を つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>X で もちもの を ひらく。</li>
+        <li><span class="g" data-y="げんぼく">原木</span> 1こ から <span class="g" data-y="いたざい">板材</span> が 4こ できるよ。</li>
+        <li><span class="g" data-y="いたざい">板材</span> 4こ で <span class="g" data-y="さぎょうだい">作業台</span> が できるよ。</li>
+        <li>手に もって ZL で じめんに おこう。</li>
+        <li><span class="g" data-y="さぎょうだい">作業台</span> に むかって ZL で、大きな 9この ますが つかえるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="plank,table"></div>
+      <p class="note">左に ならんでいる えを えらぶ だけでも つくれるよ。あたらしい ものを ひろうと、つくれる ものが ふえて いくよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">4</span><h3>どうぐを そろえよう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="いたざい">板材</span> 2こ で <span class="g" data-y="ぼう">棒</span> が 4ほん できる。</li>
+        <li><span class="g" data-y="さぎょうだい">作業台</span> で ツルハシ・シャベル・オノ を つくろう。</li>
+        <li>石を ほると <span class="g" data-y="まるいし">丸石</span> が とれる。こんどは <span class="g" data-y="まるいし">丸石</span> で おなじ どうぐを つくると、つよく なるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="stick,wpick,shovel,axe,spick"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>どうぐ</th><th>とくい な もの</th></tr></thead>
+          <tbody>
+            <tr><td>ツルハシ</td><td>石、<span class="g" data-y="こうせき">鉱石</span>、レンガ</td></tr>
+            <tr><td>シャベル</td><td>土、<span class="g" data-y="すな">砂</span>、<span class="g" data-y="じゃり">砂利</span>、ゆき、<span class="g" data-y="ねんど">粘土</span></td></tr>
+            <tr><td>オノ</td><td>木、<span class="g" data-y="いたざい">板材</span>、<span class="g" data-y="さぎょうだい">作業台</span></td></tr>
+            <tr><td>クワ</td><td>はたけ を つくる（3 の しょうで くわしく）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note"><span class="tag">どうぐの つよさ</span> 木 → 石 → <span class="g" data-y="てつ">鉄</span> → ダイヤモンド の じゅんに つよく、ながもち するよ。どうぐは つかうと すこしずつ へって、さいごは こわれるよ。</p>
+      <p class="learn"><span class="tag">まなび</span> ならべかたが かわると、できる ものも かわるよ。上の ずと おなじ かたちに ならべて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">5</span><h3>かまど と <span class="g" data-y="たいまつ">松明</span></h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="まるいし">丸石</span> 8こ で かまど が できる。</li>
+        <li>くろい つぶつぶの ある 石を ほると <span class="g" data-y="せきたん">石炭</span> が とれる。</li>
+        <li><span class="g" data-y="せきたん">石炭</span> 1こ と <span class="g" data-y="ぼう">棒</span> 1ぽん で <span class="g" data-y="たいまつ">松明</span> が 4ほん。</li>
+      </ol>
+      <div class="recipes noread" data-list="furnace,torch"></div>
+      <h4>かまどの つかいかた</h4>
+      <p>上に やきたい もの、下に もやす もの（<span class="g" data-y="せきたん">石炭</span> や <span class="g" data-y="いたざい">板材</span>）を 入れるよ。やけたら 右から とりだそう。</p>
+      <div class="smelts noread" data-list="log>charcoal,sand>glass,cobble>stone,stone>smooth,rawiron>iron,clay>brick,potato>baked"></div>
+      <p class="note"><span class="g" data-y="せきたん">石炭</span> が 見つからない ときは、<span class="g" data-y="げんぼく">原木</span> を やいて <span class="g" data-y="もくたん">木炭</span> を つくろう。<span class="g" data-y="せきたん">石炭</span> と おなじように つかえるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">6</span><h3>よるに なったら</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>よるは くらいので、<span class="g" data-y="たいまつ">松明</span> を おいて あかるく しよう。</li>
+        <li>まだ ベッドが ない うちは、いえの 中で もちもの の せいりや、あしたの じゅんびを しよう。</li>
+        <li>ベッドは <span class="g" data-y="てつ">鉄</span> が とれて ハサミが つくれたら できるよ（20ばん）。よるに ねると すぐ あさに なるよ。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> マイクラの たいようも、ひがしから 出て にしに しずむよ。夕がたの 空の いろも 見て みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">7</span><h3>たおれて しまったら</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>あわてなくて だいじょうぶ。さいしょの ばしょ（ベッドで ねた ことが あれば その ベッド）から また はじまるよ。</li>
+        <li>もちものは たおれた ばしょに おちて いるよ。</li>
+        <li>おちた ものは しばらく すると きえて しまう。早めに とりに いこう。</li>
+        <li>だいじな ものは いえの チェストに しまって おこう。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> しっぱい したら、どうして そう なったか かんがえて みよう。つぎは うまく いくよ。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s2" data-short="2 いえ">2 いえを たてよう <small>まど・ドア・しまう ばしょ</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">8</span><h3>いえの きほん</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>ひらたい ところを えらぶ。川や 森の ちかくが べんりだよ。</li>
+        <li>ゆかを たて 5こ、よこ 5こ ならべる。</li>
+        <li>まわりに かべを 3こ の たかさ まで つむ。</li>
+        <li>入り口に ドア を つける。</li>
+        <li>上に やねを のせて、中に <span class="g" data-y="たいまつ">松明</span> を おく。</li>
+      </ol>
+      <div class="builder noread">
+        <p>下の ますを おして、ゆかを おいて みよう。ぜんぶで なんこ かな？</p>
+        <div class="bgrid" id="floor" aria-label="ゆかの ます"></div>
+        <p class="bstatus" id="floor-status" aria-live="polite">おいた かず：0こ</p>
+        <button class="btn" type="button" id="floor-reset">はじめから</button>
+      </div>
+      <h4>かっこよく する コツ</h4>
+      <ul class="steps">
+        <li>4つの かどに <span class="g" data-y="げんぼく">原木</span> の はしらを 立てる。</li>
+        <li>かべと はしらを ちがう ブロックに すると、すっきり 見えるよ。</li>
+        <li>やねは <span class="g" data-y="かいだん">階段</span> ブロックで ななめに すると いえらしく なるよ。</li>
+        <li>ゆかを 1だん たかく すると、雨の 日も あんしん な かんじに なるよ。</li>
+      </ul>
+      <p class="learn"><span class="tag">まなび</span> ほんとうの いえを 見て みよう。やね や まど や 入り口は どんな かたち かな？</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">9</span><h3>まどを つけよう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>川や うみの そばの <span class="g" data-y="すな">砂</span> を シャベルで あつめる。</li>
+        <li><span class="g" data-y="すな">砂</span> を かまどで やくと ガラス に なる。</li>
+        <li>ガラス 6こ を <span class="g" data-y="さぎょうだい">作業台</span> に ならべると、ガラス<span class="g" data-y="いた">板</span> が 16まい できる。</li>
+        <li>かべの 一つを こわして、ガラス か ガラス<span class="g" data-y="いた">板</span> を はめよう。</li>
+      </ol>
+      <div class="smelts noread" data-list="sand>glass"></div>
+      <div class="recipes noread" data-list="pane"></div>
+      <p class="note">ガラス<span class="g" data-y="いた">板</span> は うすいので、ほんとうの まどの ように 見えるよ。ガラスは こわすと なくなるので、おく ばしょを よく きめてね。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">10</span><h3>入り口 と やね の ブロック</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li><b>ドア</b>：<span class="g" data-y="いたざい">板材</span> 6こ で 3まい。2まい ならべると 大きな 入り口に なるよ。</li>
+        <li><b>トラップドア</b>：ゆかや まどに つける 小さな とびら。</li>
+        <li><b><span class="g" data-y="かいだん">階段</span></b>：やね や 2かいへの かいだんに。</li>
+        <li><b>ハーフブロック</b>：はんぶんの あつさ。だんさを なだらかに できる。</li>
+        <li><b>フェンス と フェンスゲート</b>：にわ や はたけの かこいに。</li>
+      </ul>
+      <div class="recipes noread" data-list="door,trapdoor,stairs,slab,fence,gate"></div>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">11</span><h3>しまう ばしょ を つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="いたざい">板材</span> 8こ で チェスト。もちものが いっぱいに なったら しまおう。</li>
+        <li>チェストの となりに もう 1つ おくと、2ばいの 大きな チェストに なるよ。</li>
+        <li>チェストの 上に ブロックが あると ひらけない。<span class="g" data-y="たる">樽</span> は 上が ふさがって いても ひらけるよ。</li>
+        <li><span class="g" data-y="かんばん">看板</span> を チェストに つけて、「つち」「いし」「たべもの」と 名まえを かこう。</li>
+      </ol>
+      <div class="recipes noread" data-list="chest,barrel,sign"></div>
+      <p class="learn"><span class="tag">まなび</span> おなじ なかまを あつめて しまうと、さがしやすく なるね。<span class="g" data-y="かんばん">看板</span> に ひらがなで 名まえを かいて、文字の れんしゅう も しよう。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s3" data-short="3 はたけ">3 はたけを はじめよう <small>木の どうぐ で できる</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">12</span><h3>はたけの きほん</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="いたざい">板材</span> 2こ と <span class="g" data-y="ぼう">棒</span> 2ほん で 木の クワ。</li>
+        <li>土や 草の ブロックに クワで ZL。たがやすと はたけ に なるよ。</li>
+        <li>はたけの 4ます いないに 水が あると、土が しめって こい いろに なるよ。</li>
+        <li><span class="g" data-y="たね">種</span> を もって ZL で うえる。</li>
+        <li>あかるい ところで そだつよ。よるは <span class="g" data-y="たいまつ">松明</span> を おこう。</li>
+      </ol>
+      <div class="recipes noread" data-list="hoe"></div>
+      <h4>いちばん むだの ない はたけ</h4>
+      <p>たて 9こ、よこ 9こ の まんなか 1ますに 水を 入れると、まわりの 80ます ぜんぶが はたけ に なるよ。</p>
+      <p class="note warn"><span class="tag">き を つけて！</span> はたけの 上で ジャンプ すると、ふつうの 土に もどって しまうよ。あるいて わたろう。</p>
+      <p class="learn"><span class="tag">まなび</span> 9こ が 9れつ で 81ます。水の 1ますを ひくと 80ます だね。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">13</span><h3><span class="g" data-y="こむぎ">小麦</span> を そだてよう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>草を こわすと <span class="g" data-y="こむぎのたね">小麦の種</span> が 出る ことが あるよ。</li>
+        <li>はたけに うえて まとう。</li>
+        <li>きいろく なったら ZR で とる。<span class="g" data-y="たね">種</span> も いっしょに とれるので、また うえよう。</li>
+        <li><span class="g" data-y="こむぎ">小麦</span> 3こ で パン！ <span class="g" data-y="こむぎ">小麦</span> は うし や ひつじの えさにも なるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="bread"></div>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">14</span><h3>サトウキビ</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>川や うみの へりに 生えている みどりの ぼうが サトウキビ。</li>
+        <li>水の すぐ となりの 土・草・<span class="g" data-y="すな">砂</span> に うえる。</li>
+        <li>上へ 3だん まで のびるよ。</li>
+        <li>とる ときは いちばん 下の 1つを のこそう。また 上へ のびるよ。</li>
+        <li><span class="g" data-y="かみ">紙</span> と <span class="g" data-y="さとう">砂糖</span> の ざいりょうに なるよ。<span class="g" data-y="かみ">紙</span> は あとで <span class="g" data-y="ちず">地図</span>（29ばん）に つかうので、ふやして おこう。</li>
+      </ol>
+      <div class="recipes noread" data-list="paper,sugar"></div>
+      <p class="learn"><span class="tag">まなび</span> ほんとうの <span class="g" data-y="さとう">砂糖</span> も、サトウキビ から つくられて いるよ。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s4" data-short="4 ほる">4 ほる <small>あんぜんに 石や <span class="g" data-y="こうせき">鉱石</span> を あつめよう</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">15</span><h3>ほりかたの コツ</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>足の 下を まっすぐ ほらない。おちて しまうよ。</li>
+        <li>かいだんの ように 1こ ずつ 下へ ほって いこう。</li>
+        <li>トンネルは 2こ の たかさで ほると あるきやすいよ。</li>
+        <li><span class="g" data-y="たいまつ">松明</span> を おきながら すすむ。</li>
+        <li>いく ときは 右の かべに だけ <span class="g" data-y="たいまつ">松明</span> を おく。かえる ときは <span class="g" data-y="たいまつ">松明</span> が 左に 見えるよ。</li>
+        <li>上を ほる ときは、<span class="g" data-y="すな">砂</span> や <span class="g" data-y="じゃり">砂利</span> が おちて くるので、すこし はなれて ほろう。</li>
+        <li>まっすぐ ほった トンネルから、よこに えだの ように トンネルを のばすと、<span class="g" data-y="こうせき">鉱石</span> が 見つけやすいよ。</li>
+      </ol>
+      <p class="note warn"><span class="tag">あぶない！</span> オレンジいろに ひかる どろどろは <span class="g" data-y="ようがん">溶岩</span>。見つけたら ちかづかず、ブロックで ふさごう。</p>
+      <p class="learn"><span class="tag">まなび</span> 土の 下には 石が あって、ふかく なるほど ちがう 石が 出てくるよ。じっさいの 山や 川の 石も しらべて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">16</span><h3><span class="g" data-y="こうせき">鉱石</span> ずかん</h3></div>
+    <div class="mission-body" data-read>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>見つけた 石</th><th>ほれる ツルハシ</th><th>とれる もの</th></tr></thead>
+          <tbody>
+            <tr><td><span class="g" data-y="せきたん">石炭</span> の <span class="g" data-y="こうせき">鉱石</span>（くろい つぶ）</td><td>木 から</td><td><span class="g" data-y="せきたん">石炭</span>。山の 中に おおい。</td></tr>
+            <tr><td><span class="g" data-y="どうこうせき">銅鉱石</span>（オレンジと みどり）</td><td>石 から</td><td><span class="g" data-y="どうのげんせき">銅の原石</span> → やくと <span class="g" data-y="どう">銅</span> インゴット</td></tr>
+            <tr><td><span class="g" data-y="てっこうせき">鉄鉱石</span>（ベージュの つぶ）</td><td>石 から</td><td><span class="g" data-y="てつのげんせき">鉄の原石</span> → やくと <span class="g" data-y="てつ">鉄</span> インゴット</td></tr>
+            <tr><td>ラピスラズリの <span class="g" data-y="こうせき">鉱石</span>（青い つぶ）</td><td>石 から</td><td>ラピスラズリ（青い <span class="g" data-y="せんりょう">染料</span> にも なる）</td></tr>
+            <tr><td><span class="g" data-y="きんこうせき">金鉱石</span>（きいろい つぶ）</td><td><span class="g" data-y="てつ">鉄</span> から</td><td><span class="g" data-y="きんのげんせき">金の原石</span> → やくと <span class="g" data-y="きん">金</span> インゴット</td></tr>
+            <tr><td>レッドストーンの <span class="g" data-y="こうせき">鉱石</span>（赤い つぶ）</td><td><span class="g" data-y="てつ">鉄</span> から</td><td>レッドストーン。ふかい ところに おおい。</td></tr>
+            <tr><td>ダイヤモンドの <span class="g" data-y="こうせき">鉱石</span>（水いろの つぶ）</td><td><span class="g" data-y="てつ">鉄</span> から</td><td>ダイヤモンド。ずっと 下の ほうに あるよ。</td></tr>
+            <tr><td>エメラルドの <span class="g" data-y="こうせき">鉱石</span>（みどりの つぶ）</td><td><span class="g" data-y="てつ">鉄</span> から</td><td>エメラルド。たかい 山の 中で 見つかる めずらしい 石。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">ずっと 下へ ほると、こい はいいろの かたい 石 <span class="g" data-y="しんそうがん">深層岩</span> に かわるよ。<span class="g" data-y="しんそうがん">深層岩</span> の 中の <span class="g" data-y="こうせき">鉱石</span> も おなじ ものが とれるよ。</p>
+      <p class="note">ほれない ツルハシで ほると、こわれても なにも 出てこないよ。いろの ついた 見本は「ずかん」の「こうせき」で 見られるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">17</span><h3>どうくつ たんけんの もちもの</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li><span class="g" data-y="たいまつ">松明</span> を たくさん（20ほん いじょう）</li>
+        <li>ツルハシ を 2ほん（1ぽん こわれても あんしん）</li>
+        <li><span class="g" data-y="まるいし">丸石</span> や 土 を すこし（あなを ふさぐ ため）</li>
+        <li>水の 入った バケツ</li>
+        <li>目じるし に なる ブロック（入り口に たかく つんで おくと、かえりに 見つけやすい）</li>
+      </ul>
+      <p class="note">バケツは <span class="g" data-y="てつ">鉄</span> が 3こ あれば つくれる。まずは 18ばん で <span class="g" data-y="てつ">鉄</span> を あつめよう。</p>
+      <h4>水バケツの つかいかた</h4>
+      <ol class="steps">
+        <li><span class="g" data-y="てつ">鉄</span> インゴット 3こ で バケツ。</li>
+        <li>水に むかって ZL で 水を くむ。</li>
+        <li><span class="g" data-y="ようがん">溶岩</span> に 水を かけると、かたい ブロックに かわるよ。</li>
+        <li>水を ZL で もう いちど くんで おこう。</li>
+      </ol>
+      <div class="recipes noread" data-list="bucket"></div>
+      <p class="learn"><span class="tag">まなび</span> 火山の ようがんも、ひえると かたい 石に なるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">18</span><h3><span class="g" data-y="てつ">鉄</span> で レベルアップ</h3></div>
+    <div class="mission-body" data-read>
+      <p><span class="g" data-y="てつ">鉄</span> インゴットが あつまったら、つくれる ものが ぐんと ふえるよ。</p>
+      <ul class="steps">
+        <li><span class="g" data-y="てつ">鉄</span> の ツルハシ：<span class="g" data-y="きん">金</span> や ダイヤモンド が ほれる。</li>
+        <li>ハサミ：ひつじの けを かる。はっぱも あつめられる。</li>
+        <li>バケツ：水や ミルクを はこぶ。</li>
+        <li><span class="g" data-y="てつ">鉄</span> ブロック：インゴット 9こ を 1こ に まとめる。</li>
+        <li><span class="g" data-y="てっかい">鉄塊</span>：インゴット 1こ から 9こ。ランタンの ざいりょう。</li>
+      </ul>
+      <div class="recipes noread" data-list="ipick,shears,bucket,ironblock,nugget"></div>
+      <p class="learn"><span class="tag">まなび</span> 9こ を 1こ に まとめると、もちものが すっきり するね。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s5" data-short="5 くらし">5 くらしを ゆたかに <small><span class="g" data-y="てつ">鉄</span> が とれたら</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">19</span><h3>レンガの いえに ちょうせん</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>川や みずうみの そこに ある 白っぽい はいいろの ブロックが <span class="g" data-y="ねんど">粘土</span>。</li>
+        <li>こわすと <span class="g" data-y="ねんどだま">粘土玉</span> が 4こ とれる。</li>
+        <li>かまどで やくと レンガ に なる。</li>
+        <li>レンガ 4こ で レンガブロック。レンガ 3こ で <span class="g" data-y="うえきばち">植木鉢</span>。</li>
+      </ol>
+      <div class="smelts noread" data-list="clay>brick"></div>
+      <div class="recipes noread" data-list="bricks,pot"></div>
+      <p class="learn"><span class="tag">まなび</span> ほんとうの レンガも、土を かためて やいて つくるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">20</span><h3>ベッド と かぐ</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li><b>ベッド</b>：<span class="g" data-y="てつ">鉄</span> で ハサミを つくり、ひつじの けを かって <span class="g" data-y="ようもう">羊毛</span> を あつめよう。</li>
+        <li><b>ランタン</b>：つるしたり おいたり できる あかり。<span class="g" data-y="てっかい">鉄塊</span> から つくるよ。</li>
+        <li><b>カーペット</b>：<span class="g" data-y="ようもう">羊毛</span> 2こ で 3まい。ゆかを かわいく。</li>
+        <li><b><span class="g" data-y="かいが">絵画</span></b>：かべに かざる え。どんな えが 出るかは おたのしみ。</li>
+        <li><b><span class="g" data-y="うえきばち">植木鉢</span></b>：花や <span class="g" data-y="なえぎ">苗木</span> を かざれる。レンガ（19ばん）から つくるよ。</li>
+      </ul>
+      <div class="recipes noread" data-list="shears,bed,lantern,carpet,painting,pot"></div>
+      <p class="learn"><span class="tag">まなび</span> へやの どこに なにを おくと くらしやすい かな？ じぶんの へやと くらべて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">21</span><h3>べんりな だい を つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <p><span class="g" data-y="さぎょうだい">作業台</span> の ほかにも、とくべつな しごとを する だい が あるよ。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>だい</th><th>できる こと</th></tr></thead>
+          <tbody>
+            <tr><td><span class="g" data-y="かなとこ">金床</span></td><td>どうぐに 名まえを つける。どうぐを なおす。</td></tr>
+            <tr><td><span class="g" data-y="せいずだい">製図台</span></td><td><span class="g" data-y="ちず">地図</span> を ひろげる、ふやす、とめる（30ばん）。</td></tr>
+            <tr><td><span class="g" data-y="いしきりだい">石切台</span></td><td>石を <span class="g" data-y="かいだん">階段</span> や かべ など いろいろな かたちに する。</td></tr>
+            <tr><td><span class="g" data-y="くんせいき">燻製器</span></td><td>たべものを かまど より はやく やく。</td></tr>
+            <tr><td><span class="g" data-y="かじだい">鍛冶台</span></td><td>つよい どうぐに する ときに つかう。</td></tr>
+            <tr><td>コンポスター</td><td>草や <span class="g" data-y="たね">種</span> から <span class="g" data-y="こっぷん">骨粉</span> を つくる。</td></tr>
+            <tr><td><span class="g" data-y="たる">樽</span></td><td>ものを しまう（11ばん）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="recipes noread" data-list="ironblock,anvil,carto,cutter,smoker,smithing,slab,composter"></div>
+      <p class="note"><span class="g" data-y="かなとこ">金床</span> は <span class="g" data-y="てつ">鉄</span> インゴットが 31こ も いる 大しごと。<span class="g" data-y="てつ">鉄</span> ブロック 1こ は インゴット 9こ ぶん だよ。</p>
+      <p class="learn"><span class="tag">まなび</span> 村人は この だい を つかって しごとを しているよ（27ばん）。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">22</span><h3>どうぶつを ふやそう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>どうぶつが すきな たべもの を 手に もつと、ついて くるよ。</li>
+        <li>フェンスで かこった ぼくじょうに つれて こよう。</li>
+        <li>おなじ どうぶつ 2ひき に たべものを あげると、ハートが 出て 子どもが 生まれるよ。</li>
+        <li>子どもは しばらく すると 大人に なるよ。</li>
+        <li>ミルクに つかう バケツ、けを かる ハサミ は 18ばん で つくれるよ。</li>
+      </ol>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>どうぶつ</th><th>すきな たべもの</th><th>もらえる もの</th></tr></thead>
+          <tbody>
+            <tr><td>うし</td><td><span class="g" data-y="こむぎ">小麦</span></td><td>バケツを つかうと ミルク</td></tr>
+            <tr><td>ひつじ</td><td><span class="g" data-y="こむぎ">小麦</span></td><td>ハサミで <span class="g" data-y="ようもう">羊毛</span>（けは また 生えるよ）</td></tr>
+            <tr><td>ぶた</td><td>ニンジン・ジャガイモ・ビートルート</td><td>―</td></tr>
+            <tr><td>にわとり</td><td>いろいろな <span class="g" data-y="たね">種</span></td><td>たまご</td></tr>
+            <tr><td>うさぎ</td><td>ニンジン・タンポポ</td><td>―</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">ひつじに <span class="g" data-y="せんりょう">染料</span> を つかうと けの いろが かわるよ。タンポポ からは きいろ、ポピー からは 赤の <span class="g" data-y="せんりょう">染料</span> が つくれるよ。</p>
+      <p class="learn"><span class="tag">まなび</span> いきもの には すきな たべものが あるね。いえや 学校で かっている いきものも しらべて みよう。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s6" data-short="6 たんけん">6 たんけん と のりもの <small>川を わたって とおくへ</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">23</span><h3>しゃがんで まっすぐ はし</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>川の はしっこに 立つ。</li>
+        <li>B を おして しゃがむ。しゃがんで いると おちないよ。</li>
+        <li>しゃがんだ まま、うしろに さがって 足もとの ブロックの はしっこへ。</li>
+        <li>下を 見て、ZL で 足もとの さきに ブロックを おく。</li>
+        <li>1こ おいたら 1こ すすむ。これを くりかえそう。</li>
+        <li>りょうがわに フェンス を つけると、おちない はしに なるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="fence"></div>
+      <p class="learn"><span class="tag">まなび</span> 川は ブロック なんこ ぶん かな？ かぞえてから つくると、ちょうど よい かずが わかるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">24</span><h3>りっぱな はしを つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>川の 中に <span class="g" data-y="げんぼく">原木</span> の はしらを 立てる。おなじ あいだを あけて ならべよう。</li>
+        <li>はしらの 上に <span class="g" data-y="いたざい">板材</span> を ならべて みちを つくる。</li>
+        <li>りょうはしは <span class="g" data-y="かいだん">階段</span> や ハーフブロック で、だんだん たかく する。まんなかが いちばん たかい アーチの はしに なるよ。</li>
+        <li>手すりは フェンス。ところどころ に ランタン を おくと、よるも きれい。</li>
+      </ol>
+      <div class="recipes noread" data-list="stairs,slab,lantern"></div>
+      <p class="learn"><span class="tag">まなび</span> 右と 左を おなじ かたちに すると きれいだよ。ちかくの 川の はしは どんな かたち かな？</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">25</span><h3>ボートで 川や うみを わたる</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="いたざい">板材</span> 5こ で ボート。</li>
+        <li>水に むかって ZL で ボートを おく。</li>
+        <li>ボートに むかって ZL で のる。</li>
+        <li>左の スティックで すすむ。</li>
+        <li>B で おりる。ボートは ZR で たたくと ひろえるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="boat"></div>
+      <p class="note">ボートには 2人 まで のれるよ。どうぶつを のせる ことも できるよ。ほかの のりもの（トロッコ・<span class="g" data-y="くら">鞍</span> など）は、ずかんの「つくりかた」→「のりもの」に のって いるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">26</span><h3>はしごで 上り下り</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="ぼう">棒</span> 7ほん で はしご が 3つ。</li>
+        <li>かべに むかって ZL で つける。</li>
+        <li>はしごに むかって すすむと 上れる。B で しゃがむと とちゅうで とまれるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="ladder"></div>
+      <p class="learn"><span class="tag">まなび</span> がけや 2かい だての いえに べんり。どこに つけると いいかな？</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">27</span><h3>村を たずねよう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>村には 村人が くらして いるよ。いえ、はたけ、かね の ある ひろば が あるよ。</li>
+        <li>村人は しごとの だい の まえで しごとを する。だい で しごとが きまるよ。</li>
+        <li>村人に むかって ZL で、エメラルド と ものを こうかん できるよ。</li>
+        <li>村の はたけには ジャガイモ・ニンジン・ビートルート が あるよ。すこし だけ わけて もらおう（34・35ばん）。</li>
+        <li>村の ものを こわしたり、とりすぎたり しないでね。</li>
+      </ol>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>しごとの だい</th><th>村人の しごと</th></tr></thead>
+          <tbody>
+            <tr><td>コンポスター</td><td>はたけの しごと</td></tr>
+            <tr><td><span class="g" data-y="せいずだい">製図台</span></td><td><span class="g" data-y="ちず">地図</span> を つくる しごと</td></tr>
+            <tr><td><span class="g" data-y="かじだい">鍛冶台</span></td><td>どうぐを つくる しごと</td></tr>
+            <tr><td><span class="g" data-y="いしきりだい">石切台</span></td><td>石を きる しごと</td></tr>
+            <tr><td><span class="g" data-y="くんせいき">燻製器</span></td><td>にくや</td></tr>
+            <tr><td><span class="g" data-y="たる">樽</span></td><td>さかなを とる しごと</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> 町にも いろいろな しごとの 人が いるね。どんな しごとが あるかな？</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">28</span><h3>いろいろな ばしょ（バイオーム）</h3></div>
+    <div class="mission-body" data-read>
+      <p>マイクラの せかいには、あつい ところ や さむい ところ が あるよ。この ばしょの しゅるいを バイオーム と いうよ。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ばしょ</th><th>とくちょう</th></tr></thead>
+          <tbody>
+            <tr><td>さばく</td><td><span class="g" data-y="すな">砂</span> ばかり。サボテンが 生える。雨が ふらない。</td></tr>
+            <tr><td>サバンナ</td><td>かわいた 草はら。アカシアの 木。</td></tr>
+            <tr><td>ジャングル</td><td>大きな 木と つる。スイカ や ココアまめ。パンダ や オウム も いる。</td></tr>
+            <tr><td>森・草はら</td><td>オークや シラカバ。花が たくさん。</td></tr>
+            <tr><td>ゆきの ばしょ</td><td>雨の かわりに ゆきが ふる。水が こおる。</td></tr>
+            <tr><td>山</td><td>てっぺんは ゆき。エメラルド が ある。</td></tr>
+            <tr><td>うみ</td><td>あたたかい うみには サンゴ。さかなや イルカ。</td></tr>
+            <tr><td>マングローブの ぬま</td><td>ねっこが 水の 上に 出ている 木。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> ちきゅうぎ や せかいの <span class="g" data-y="ちず">地図</span> で、にている ばしょを さがして みよう。たかい 山の 上が さむいのは、ほんとうの せかいも おなじ だよ。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s7" data-short="7 ちず・ほうがく">7 ちず と ほうがく <small>どこに いるか わかるように</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">29</span><h3><span class="g" data-y="ちず">地図</span> を つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>サトウキビ 3ぼん で <span class="g" data-y="かみ">紙</span> が 3まい。</li>
+        <li><span class="g" data-y="てつ">鉄</span> インゴット 4こ と レッドストーン 1こ で コンパス。</li>
+        <li><span class="g" data-y="かみ">紙</span> 8まい の 中に コンパスを おくと、まっさらな <span class="g" data-y="ちず">地図</span> が できる。</li>
+        <li>手に もって ZL。まわりの ようすが かかれて いくよ。</li>
+        <li>白い しるしが いまの じぶん。とがった ほうが 見ている むきだよ。</li>
+        <li>まだ いって いない ところは かかれない。あるくと どんどん うまって いくよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="paper,compass,map"></div>
+      <p class="note">コンパスを 入れずに <span class="g" data-y="かみ">紙</span> 9まい で つくると、じぶんの しるしが 出ない <span class="g" data-y="はくしのちず">白紙の地図</span> に なるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">30</span><h3><span class="g" data-y="ちず">地図</span> を ひろげる・ふやす</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="かみ">紙</span> 2まい と <span class="g" data-y="いたざい">板材</span> 4こ で <span class="g" data-y="せいずだい">製図台</span> を つくる。</li>
+        <li><b>ひろげる</b>：<span class="g" data-y="ちず">地図</span> と <span class="g" data-y="かみ">紙</span> 1まい を 入れると、もっと ひろい ばしょが うつる <span class="g" data-y="ちず">地図</span> に なる。4かい まで ひろげられるよ。</li>
+        <li><b>ふやす</b>：<span class="g" data-y="ちず">地図</span> と なにも かいていない <span class="g" data-y="ちず">地図</span> を 入れると、おなじ <span class="g" data-y="ちず">地図</span> が 2まい に なる。ともだちや かぞくに あげられるよ。</li>
+        <li><b>とめる</b>：<span class="g" data-y="ちず">地図</span> と ガラス<span class="g" data-y="いた">板</span> を 入れると、それ いじょう かわらない <span class="g" data-y="ちず">地図</span> に なる。</li>
+      </ol>
+      <div class="recipes noread" data-list="carto"></div>
+      <p class="learn"><span class="tag">まなび</span> ひろい ばしょが うつる <span class="g" data-y="ちず">地図</span> ほど、こまかい ところは 小さく なるね。ほんとうの <span class="g" data-y="ちず">地図</span> も おなじ だよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">31</span><h3>ほうがくを しろう</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li>たいようは ひがしから 出て、にしに しずむ。</li>
+        <li><span class="g" data-y="ちず">地図</span> の 上は いつも きた。</li>
+        <li>コンパスの はりは、さいしょに はじまった ばしょ の ほうを さすよ。</li>
+      </ul>
+      <div class="noread" style="margin:12px 0">
+        <svg viewBox="0 0 220 220" width="220" height="220" role="img" aria-label="ほうがくの ず。上が きた、右が ひがし、たいようは ひがしから 出る">
+          <rect x="10" y="10" width="200" height="200" fill="#CFE7C3" stroke="currentColor" stroke-width="4"/>
+          <rect x="60" y="60" width="100" height="100" fill="#E9D9B5" stroke="currentColor" stroke-width="2"/>
+          <polygon points="110,40 100,70 120,70" fill="#D9482B"/>
+          <text x="110" y="34" text-anchor="middle" font-size="18" font-weight="800" fill="currentColor">きた</text>
+          <text x="110" y="200" text-anchor="middle" font-size="18" font-weight="800" fill="currentColor">みなみ</text>
+          <text x="22" y="116" font-size="18" font-weight="800" fill="currentColor">にし</text>
+          <text x="152" y="116" font-size="18" font-weight="800" fill="currentColor">ひがし</text>
+          <circle cx="190" cy="76" r="12" fill="#F0B429"/>
+          <rect x="104" y="104" width="12" height="12" fill="#fff" stroke="#22303A" stroke-width="2"/>
+        </svg>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> あさ、たいようが 見える ほうが ひがし。いえや 学校の まどから、どっちが ひがしか たしかめて みよう。<span class="g" data-y="かみ">紙</span> に いえの まわりの <span class="g" data-y="ちず">地図</span> を かいて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">32</span><h3>ざひょう あそび</h3></div>
+    <div class="mission-body" data-read>
+      <p>ざひょう は、ばしょを いう ための かずの ことば だよ。せっていで がめんに 出せるよ（おうちの 人に たのもう）。</p>
+      <ul class="steps">
+        <li><b>X</b>：ひがしへ すすむと ふえる。にしへ すすむと へる。</li>
+        <li><b>Z</b>：みなみへ すすむと ふえる。きたへ すすむと へる。</li>
+        <li><b>Y</b>：たかさ。上へ いくと ふえる。</li>
+      </ul>
+      <div class="coord noread">
+        <div class="cmap" id="cmap" aria-hidden="true"></div>
+        <div>
+          <div class="cpad">
+            <span></span><button class="btn" type="button" data-d="0,-1">⬆ きた</button><span></span>
+            <button class="btn" type="button" data-d="-1,0">⬅ にし</button><span></span><button class="btn" type="button" data-d="1,0">ひがし ➡</button>
+            <span></span><button class="btn" type="button" data-d="0,1">⬇ みなみ</button><span></span>
+          </div>
+          <p class="cread" id="cread" aria-live="polite">X：0　Z：0</p>
+          <p id="cmsg" aria-live="polite">🙂 から 🏠 まで いって みよう。</p>
+        </div>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> いえの ざひょうを <span class="g" data-y="かみ">紙</span> に かいて おくと、まいごに なっても かえれるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">33</span><h3>まいごに なったら</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li><span class="g" data-y="ちず">地図</span> を ひらいて、いえの ある ほうを たしかめる。</li>
+        <li>コンパスの はりの ほうへ すすむと、さいしょの ばしょに もどれる。</li>
+        <li>いえの 上に たかい とう や 目じるしを たてて おくと、とおくから 見えるよ。</li>
+        <li><span class="g" data-y="たいまつ">松明</span> を みちに おいて いけば、かえりみち が わかる。</li>
+        <li>ざひょうを 見て、いえの かずに むかって すすむ。</li>
+      </ul>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-s8" data-short="8 はたけを ひろげる">8 はたけを ひろげよう <small>村や たんけんで 見つけた やさい</small></h2>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">34</span><h3>ジャガイモ と ニンジン</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>ジャガイモ と ニンジン は、村（27ばん）の はたけ で 見つかるよ。</li>
+        <li><span class="g" data-y="たね">種</span> は いらない。ジャガイモ や ニンジン を そのまま はたけに うえる。</li>
+        <li>そだつと 1つ から いくつも とれて、どんどん ふえるよ。</li>
+        <li>ジャガイモ を かまどで やくと ベイクドポテト に なるよ。</li>
+      </ol>
+      <div class="smelts noread" data-list="potato>baked"></div>
+      <p class="note">村の はたけを ぜんぶ とって しまうと、村人が こまるよ。すこし だけ もらって、じぶんの はたけで ふやそう。</p>
+      <p class="learn"><span class="tag">まなび</span> ほんとうの ジャガイモも、いもを 土に うえて ふやすよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">35</span><h3>ビートルート</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>村の はたけ や 村の チェストで <span class="g" data-y="たね">種</span> が 見つかるよ。</li>
+        <li><span class="g" data-y="こむぎ">小麦</span> と おなじように うえて、赤く なったら とる。</li>
+        <li>ビートルート 6こ と ボウル で ビートルートスープ。</li>
+        <li>ひつじに 赤い <span class="g" data-y="せんりょう">染料</span> を つかうと 赤い ひつじに なるよ。ビートルートからも 赤い <span class="g" data-y="せんりょう">染料</span> が つくれるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="bowl,beetsoup"></div>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">36</span><h3>カボチャ と スイカ</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>カボチャは 草の ひろい ところに、スイカは ジャングルで 見つかるよ。</li>
+        <li>カボチャ 1こ から <span class="g" data-y="たね">種</span> が 4こ。スイカは 1きれ から <span class="g" data-y="たね">種</span> 1こ。</li>
+        <li><span class="g" data-y="たね">種</span> を うえると くき が のびる。</li>
+        <li>くきの となりに、あいている 土か 草の ブロックを のこしておこう。そこに みが できるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="pseed,mseed"></div>
+      <p class="learn"><span class="tag">まなび</span> カボチャや スイカは つるを のばして そだつ やさい だよ。学校の 花だんと くらべて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">37</span><h3><span class="g" data-y="こっぷん">骨粉</span> で はやく そだてる</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>木の ハーフブロック 7こ で コンポスター を つくる。</li>
+        <li>コンポスター に むかって、<span class="g" data-y="たね">種</span> や 草や はっぱ を ZL で 入れる。</li>
+        <li>いっぱいに なると <span class="g" data-y="こっぷん">骨粉</span> が 1こ できるよ。</li>
+        <li><span class="g" data-y="こっぷん">骨粉</span> を やさいに つかうと、ぐんと そだつ。</li>
+        <li>草の 上で つかうと、花や 草が 生えるよ。</li>
+      </ol>
+      <div class="recipes noread" data-list="slab,composter"></div>
+      <p class="learn"><span class="tag">まなび</span> いらない 草や たべのこしを くさらせて ひりょう に する のは、ほんとうの はたけでも している くふう だよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="survival">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">38</span><h3>りょうりに ちょうせん</h3></div>
+    <div class="mission-body" data-read>
+      <p>ピースフル では おなかが へらないけど、りょうりを つくるのは たのしいよ。これまでに あつめた ざいりょうを つかって ちょうせん しよう。</p>
+      <ul class="steps">
+        <li><b>ケーキ</b>：ミルク 3ばい、<span class="g" data-y="さとう">砂糖</span> 2こ、たまご 1こ、<span class="g" data-y="こむぎ">小麦</span> 3こ。おいて みんなで たべられるよ。</li>
+        <li><b>パンプキンパイ</b>：カボチャ、<span class="g" data-y="さとう">砂糖</span>、たまご。</li>
+        <li><b>クッキー</b>：<span class="g" data-y="こむぎ">小麦</span> 2こ と ココアまめ（ジャングルの 木に なる）。</li>
+        <li><b>キノコシチュー</b>：赤い キノコ と ちゃいろの キノコ と ボウル。</li>
+      </ul>
+      <div class="recipes noread" data-list="cake,pie,cookie,stew"></div>
+      <p class="learn"><span class="tag">まなび</span> ケーキの ざいりょうは どの どうぶつ や やさい から きたかな？ たどって みよう。</p>
+    </div>
+  </article>
+
+</section>
+<!-- ================= クリエイティブ ================= -->
+<section class="panel" id="p-creative" role="tabpanel" aria-labelledby="tab-creative" hidden>
+  <div class="lead">
+    <h2>クリエイティブ</h2>
+    <p>ブロックが いくらでも つかえて、空も とべる あそびかただよ。つくりたい ものを じゆうに つくろう。</p>
+  </div>
+
+  <h2 class="chapter" id="ch-c1" data-short="1 きほん">1 きほん</h2>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">1</span><h3>ブロックを さがそう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>X で もちもの を ひらくと、ぜんぶの ブロックや どうぐが 見られるよ。</li>
+        <li>上の タブで 「けんちく」「そうび」「アイテム」「しぜん」に わかれて いるよ。</li>
+        <li>けんさくの らんに 名まえを 入れると、すぐ 見つかるよ。</li>
+        <li>ほしい ものを 下の ならびに うつすと、手に もてるよ。</li>
+        <li>ZL で おく。ZR で こわす。クリエイティブ では ブロックが すぐ こわれるよ。</li>
+      </ol>
+      <p class="note">クリエイティブ では <span class="g" data-y="さぎょうだい">作業台</span> で つくらなくても、なんでも とりだせるよ。サバイバルの まえの れんしゅうにも ぴったり。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">2</span><h3>空を とんで みよう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>A を はやく 2かい おすと、空に うかぶよ。</li>
+        <li>A を おしつづけると 上へ、B で 下へ。</li>
+        <li>もういちど A を はやく 2かい おすと、下へ おりるよ。</li>
+        <li>たおれる ことは ないけれど、せかいの いちばん 下より 下に おちると たおれて しまうよ。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> 空から 見ると、川や 山や 森が どう ならんでいるか よく わかるよ。上から 見た ようすが <span class="g" data-y="ちず">地図</span> の 見えかた だよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">3</span><h3>サバイバルの れんしゅう</h3></div>
+    <div class="mission-body" data-read>
+      <ul class="steps">
+        <li>しゃがんで はしを つくる れんしゅう（サバイバル 23）。</li>
+        <li>9×9 の はたけ を つくって みる（サバイバル 12）。</li>
+        <li>いえの まどや ドアの つけかた を ためす（サバイバル 8〜10）。</li>
+        <li>ボートに のって みる（サバイバル 25）。トロッコと レールは「ずかん」の「のりもの」で つくりかたが わかるよ。</li>
+      </ul>
+      <p class="learn"><span class="tag">まなび</span> さきに れんしゅう すると、ほんばんで あわてないね。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-c2" data-short="2 かたち・いろ">2 かたち と いろ</h2>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">4</span><h3>せっけいずを かいて、名まえを つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <p>つくる まえに、下の ノートで かたちを きめよう。いろを えらんで ますを おしてね。</p>
+      <div class="builder noread">
+        <div class="palette" id="palette" role="group" aria-label="いろを えらぶ"></div>
+        <div class="bgrid" id="pixel" aria-label="せっけいずの ます"></div>
+        <p class="counts" id="pixel-counts" aria-live="polite">まだ なにも ぬって いないよ。</p>
+        <button class="btn" type="button" id="pixel-reset">ぜんぶ けす</button>
+      </div>
+      <ol class="steps">
+        <li>じぶんの 名まえの はじめの 1文字を かいて みよう。</li>
+        <li>いろごとの かずを 見て、<span class="g" data-y="ようもう">羊毛</span> や コンクリートを よういしよう。</li>
+        <li>ゲームの 中で、おなじ かたちに ならべよう。</li>
+        <li>空から 見下ろすと、ちゃんと よめるか たしかめられるよ。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> さきに かいてから つくると、まちがいが へるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">5</span><h3>かたちを つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>しかくい はこを つくろう。</li>
+        <li><span class="g" data-y="かいだん">階段</span> ブロックを ならべて、さんかくの やねを つくろう。</li>
+        <li>ピラミッドに ちょうせん！ 下は たて 5こ よこ 5こ、つぎは たて 3こ よこ 3こ、いちばん 上は 1こ。</li>
+        <li>まるに ちょうせん！ ブロックで まるい かたちを つくるのは むずかしいよ。せっけいずで ためして みよう。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> ピラミッドは ぜんぶで なんこ かな？ 1だんずつ かぞえて たしてみよう。（こたえ：25こ と 9こ と 1こ で 35こ）</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">6</span><h3>にじの はし</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>川や たにを 見つけよう。</li>
+        <li><span class="g" data-y="ようもう">羊毛</span> を、あか・だいだい・きいろ・みどり・みずいろ・あお・むらさき の じゅんに よこに ならべる。</li>
+        <li>むこうがわ まで のばしたら できあがり！</li>
+        <li>さらに アーチの かたちに すると、ほんものの にじ みたいに なるよ。</li>
+      </ol>
+      <div class="noread" style="display:flex;gap:3px;margin:10px 0" aria-hidden="true">
+        <span style="width:36px;height:36px;background:#B02E26"></span><span style="width:36px;height:36px;background:#F9801D"></span><span style="width:36px;height:36px;background:#FED83D"></span><span style="width:36px;height:36px;background:#5E7C16"></span><span style="width:36px;height:36px;background:#3AB3DA"></span><span style="width:36px;height:36px;background:#3C44AA"></span><span style="width:36px;height:36px;background:#8932B8"></span>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> 雨の あとに 見える にじも、いろの じゅんばんは きまって いるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">7</span><h3>お花ばたけ と にわ</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>草の ブロックを しきつめる。</li>
+        <li>いろいろな 花を うえる。ポピー、タンポポ、ヤグルマギク、チューリップ など。</li>
+        <li>水を ひいて 小さな いけ や 川を つくる。</li>
+        <li>フェンス と ランタン で こみちを かざる。</li>
+      </ol>
+      <p class="note">草の 上で <span class="g" data-y="こっぷん">骨粉</span> を つかうと、花が しぜんに 生えて くるよ。</p>
+      <p class="learn"><span class="tag">まなび</span> 学校で 見た 花と おなじ 花は あるかな？</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-c3" data-short="3 町・いきもの">3 町 と いきもの</h2>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">8</span><h3>じぶんの 町を つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>まず <span class="g" data-y="かみ">紙</span> に、いえ・学校・こうえん・みち・川を かいて みよう。</li>
+        <li>みちを さきに つくると、町が きれいに なるよ。</li>
+        <li>いえ や 学校を たてよう。</li>
+        <li>木や 花を うえて、こうえんを つくろう。</li>
+        <li>川には はしを かけよう。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> じっさいの 町では、学校や おみせは どこに あるかな？ おうちの 人と さんぽして くらべて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">9</span><h3><span class="g" data-y="ちず">地図</span> の しるしを つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <p><span class="g" data-y="ちず">地図</span> には、たてものを あらわす しるし（<span class="g" data-y="ちずきごう">地図記号</span>）が あるよ。大きく つくって、空から 見て みよう。</p>
+      <div class="noread" style="display:flex;flex-wrap:wrap;gap:24px;margin:12px 0">
+        <figure style="margin:0;text-align:center">
+          <svg viewBox="0 0 7 7" width="112" height="112" shape-rendering="crispEdges" role="img" aria-label="学校の しるし の せっけいず">
+            <rect width="7" height="7" fill="#8BC56A"/>
+            <g fill="#F2F2F2"><rect x="3" y="0" width="1" height="1"/><rect x="1" y="1" width="5" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="0" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/></g>
+          </svg>
+          <figcaption>学校</figcaption>
+        </figure>
+        <figure style="margin:0;text-align:center">
+          <svg viewBox="0 0 7 7" width="112" height="112" shape-rendering="crispEdges" role="img" aria-label="田んぼの しるし の せっけいず">
+            <rect width="7" height="7" fill="#8BC56A"/>
+            <g fill="#F2F2F2"><rect x="1" y="1" width="1" height="2"/><rect x="5" y="1" width="1" height="2"/><rect x="1" y="4" width="1" height="2"/><rect x="5" y="4" width="1" height="2"/></g>
+          </svg>
+          <figcaption>田んぼ</figcaption>
+        </figure>
+        <figure style="margin:0;text-align:center">
+          <svg viewBox="0 0 7 7" width="112" height="112" shape-rendering="crispEdges" role="img" aria-label="ゆうびんきょくの しるし の せっけいず">
+            <rect width="7" height="7" fill="#8BC56A"/>
+            <g fill="#F2F2F2"><rect x="0" y="0" width="7" height="1"/><rect x="0" y="6" width="7" height="1"/><rect x="0" y="0" width="1" height="7"/><rect x="6" y="0" width="1" height="7"/><rect x="2" y="2" width="3" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="4" width="1" height="2"/></g>
+          </svg>
+          <figcaption>ゆうびんきょく</figcaption>
+        </figure>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> 3年生に なると <span class="g" data-y="ちずきごう">地図記号</span> を べんきょう するよ。ほかにも どんな しるしが あるか、<span class="g" data-y="ちず">地図</span> で さがして みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">10</span><h3>どうぶつの ぼくじょう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>フェンスで ひろい しかくを かこむ。入り口は フェンスゲート。</li>
+        <li>もちもの の 中の スポーンエッグ を ZL で つかうと、どうぶつが 出てくるよ。</li>
+        <li>ひつじ や うし には <span class="g" data-y="こむぎ">小麦</span>、ぶた には ニンジン、にわとり には <span class="g" data-y="たね">種</span> を あげよう。</li>
+        <li>水のみば や やねの ある こや も つくって あげよう。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> どうぶつに よって すきな たべものが ちがうね。学校や いえで かっている いきものは なにを たべるかな？</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">11</span><h3>すいぞくかん</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>ガラスで 大きな はこを つくる。上は あけて おく。</li>
+        <li>水バケツで 中に 水を 入れる。</li>
+        <li>スポーンエッグ で 中に さかな を 入れよう。</li>
+        <li>そこに <span class="g" data-y="すな">砂</span> や サンゴ、コンブ を おくと きれいだよ。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> うみの いきもの と 川の いきもの、ちがいは あるかな？ ほんとうの すいぞくかん でも くらべて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">12</span><h3>ゆきだるま を つくろう</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>ゆきブロックを 2こ たてに つむ。</li>
+        <li>いちばん 上に くりぬいた カボチャ を のせる。</li>
+        <li>ゆきだるまが うごきだすよ！ あるいた あとに ゆきが のこるよ。</li>
+      </ol>
+      <p class="note">さばく など あつい ばしょ では、とけて しまうよ。</p>
+      <p class="learn"><span class="tag">まなび</span> どうして あつい ところ では とけるのかな？ ほんとうの ゆきや こおりで たしかめて みよう。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">13</span><h3>空から せかい たんけん</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>空を とんで、まっすぐ とおくへ すすもう。</li>
+        <li>下の けしきが かわったら、おりて しらべよう。</li>
+        <li>見つけた ばしょに しるしを つけよう。</li>
+        <li>「ずかん」の「ばしょ」で、なんと いう ばしょか たしかめよう。</li>
+      </ol>
+      <div class="noread" role="group" aria-label="見つけた ばしょ" style="display:flex;flex-wrap:wrap;gap:8px 16px;margin:10px 0">
+        <label><input type="checkbox"> 🏜 さばく</label><label><input type="checkbox"> ❄ ゆきの ばしょ</label><label><input type="checkbox"> 🌴 ジャングル</label><label><input type="checkbox"> ⛰ 山</label><label><input type="checkbox"> 🌊 うみ</label><label><input type="checkbox"> 🌸 さくらの 林</label><label><input type="checkbox"> 🦒 サバンナ</label><label><input type="checkbox"> 🏘 村</label>
+      </div>
+      <p class="learn"><span class="tag">まなび</span> あつい ところと さむい ところ では、木や じめんの いろが どう ちがう かな？ ちきゅうぎ で にている ばしょも さがして みよう。</p>
+    </div>
+  </article>
+
+  <h2 class="chapter" id="ch-c4" data-short="4 うごく しかけ">4 うごく しかけ <small>レッドストーン はじめの いっぽ</small></h2>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">14</span><h3>ボタンで ひらく ドア</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li><span class="g" data-y="てつ">鉄</span> の ドア を おく。<span class="g" data-y="てつ">鉄</span> の ドアは 手では ひらかないよ。</li>
+        <li>ドアの よこの かべに ボタン を つける。</li>
+        <li>ボタンに むかって ZL。ドアが すこしの あいだ ひらくよ。</li>
+        <li>ボタンの かわりに、ドアの まえの ゆかに <span class="g" data-y="かんあつばん">感圧板</span> を おくと、上に のるだけで ひらくよ。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> スーパーの じどうドアも、人が きた ことを しらべて ひらいて いるよ。</p>
+    </div>
+  </article>
+
+  <article class="mission" data-tab="creative">
+    <div class="stamp" aria-hidden="true">⭐</div>
+    <div class="mission-head"><span class="num">15</span><h3>スイッチで つく あかり</h3></div>
+    <div class="mission-body" data-read>
+      <ol class="steps">
+        <li>レッドストーンランプ を おく。</li>
+        <li>すこし はなれた ところに レバー を つける。</li>
+        <li>レバーから ランプ まで、じめんに レッドストーン を ならべて つなぐ。</li>
+        <li>レバーに むかって ZL。ランプが つくよ！ もう いちど で きえるよ。</li>
+      </ol>
+      <p class="learn"><span class="tag">まなび</span> レッドストーン は でんきの せん みたいな もの。いえの でんきも、スイッチと せんで つながって いるよ。</p>
+    </div>
+  </article>
+
+</section>
+<!-- ================= ずかん ================= -->
+<section class="panel" id="p-book" role="tabpanel" aria-labelledby="tab-book" hidden>
+  <div class="lead">
+    <h2>ずかん</h2>
+    <p>マイクラの せかいの ものを あつめた ずかん だよ。上の 小さな タブで、見たい ものを えらんでね。</p>
+  </div>
+  <div id="book-recipe" class="bsec">
+    <h3 class="book-sub">つくりかた</h3>
+    <p class="book-note">しゅるいを えらぶと しぼりこめるよ。</p>
+    <div class="filters" id="rfilters" role="group" aria-label="しゅるいを えらぶ"></div>
+    <div class="book" id="book"></div>
+  </div>
+  <div id="book-yaku" class="bsec" hidden>
+    <h3 class="book-sub">やくと かわる もの</h3>
+    <p class="book-note">かまどの 上に 入れると、右の ものに かわるよ。</p>
+    <div class="smelts" data-list="log>charcoal,sand>glass,cobble>stone,stone>smooth,rawiron>iron,rawcopper>copper,rawgold>gold,clay>brick,potato>baked,kelp>driedkelp"></div>
+    <h3 class="book-sub">もやす もの（ねんりょう）</h3>
+    <p class="book-note">かまどの 下に 入れる もの。1こで いくつ やけるか くらべて みよう。</p>
+    <div class="fuels" id="fuels"></div>
+  </div>
+  <div id="book-ore" class="bsec" hidden>
+    <h3 class="book-sub">こうせき と めずらしい 石</h3>
+    <p class="book-note">ツルハシの つよさが たりないと、ほっても なにも 出ないよ。</p>
+    <div class="book" id="ores"></div>
+  </div>
+  <div id="book-animal" class="bsec" hidden>
+    <h3 class="book-sub">どうぶつ</h3>
+    <p class="book-note">ピースフル でも 出てくる どうぶつ だよ。やさしく しようね。</p>
+    <div class="book" id="animals"></div>
+  </div>
+  <div id="book-plant" class="bsec" hidden>
+    <h3 class="book-sub">しょくぶつ</h3>
+    <p class="book-note">生えている ばしょ を おぼえると、さがしやすく なるよ。</p>
+    <div class="book" id="plants"></div>
+  </div>
+  <div id="book-biome" class="bsec" hidden>
+    <h3 class="book-sub">ばしょ（バイオーム）</h3>
+    <p class="book-note">マイクラにも、あつい ところ・さむい ところ が あるよ。ほんとうの せかいの にている ところ も 見て みよう。</p>
+    <div class="book" id="biomes"></div>
+  </div>
+</section>
+
+<!-- ================= 保護者向け ================= -->
+<section class="panel" id="p-parent" role="tabpanel" aria-labelledby="tab-parent" hidden>
+  <div class="lead">
+    <h2>おうちの人へ</h2>
+    <p>このタブは保護者の方向けに、通常の漢字で書いています。</p>
+  </div>
+  <h2 class="chapter" data-short="設定">はじめの設定</h2>
+  <div class="mission"><div class="mission-body parent-text">
+    <ul>
+      <li>ワールド作成画面で、ゲームモードと難易度（ピースフル）を選びます。作成後もワールドの設定から難易度を変更できます。</li>
+      <li>「サバイバル用」と「クリエイティブ用」でワールドを分けておくと、お子さんがモードの違いを理解しやすくなります。</li>
+      <li>ピースフルでは敵が出ず、体力は自然回復し、空腹度も減りません。ただし落下・溶岩・溺れによるダメージは残ります。</li>
+      <li>ワールド設定の「座標を表示」をオンにすると、画面に座標が出ます。サバイバル ミッション32「ざひょう あそび」と組み合わせると、方位と位置の学習になります。</li>
+      <li>ワールド設定のチート項目には「日光サイクル（オフで常に昼）」や「インベントリを保持（倒れても持ち物が残る）」があります。チート項目を変更したワールドでは実績が解除できなくなる旨の表示が出ますので、納得のうえでお使いください。</li>
+    </ul>
+  </div></div>
+  <h2 class="chapter" data-short="時間・課金">時間・課金・オンライン</h2>
+  <div class="mission"><div class="mission-body parent-text">
+    <ul>
+      <li>プレイ時間の上限や購入の制限は、任天堂の「みまもり Switch」アプリで設定できます。</li>
+      <li>ゲーム内のマーケットプレイスでは有料コンテンツも販売されています。購入制限の設定をおすすめします。</li>
+      <li>最初はオンラインのマルチプレイを使わず、一人または家族で遊ぶのがおすすめです。</li>
+      <li>テレビモードでは画面分割で一緒に遊べます。最初の数回は保護者が隣で一緒にプレイすると、操作の定着が早くなります。</li>
+    </ul>
+  </div></div>
+  <h2 class="chapter" data-short="進め方">このページの構成と進め方</h2>
+  <div class="mission"><div class="mission-body parent-text">
+    <ul>
+      <li>サバイバルは8章38ミッション、クリエイティブは4章15ミッションです。サバイバルは、必要な材料が手に入る順に並べています（例：鉄が取れてからベッド・バケツ・地図）。1回のプレイで1〜2ミッションを目安にすると無理がありません。</li>
+      <li>最初の数日はクリエイティブで操作に慣れ、慣れてきたらサバイバルに進む順番もおすすめです（クリエイティブ ミッション3）。</li>
+      <li>「ずかん」タブには、レシピ・焼く物と燃料・鉱石・動物・植物・バイオームをまとめています。</li>
+      <li>各ミッションの「🔊 よむ」で、文章を音声で読み上げます（Chromebookの日本語音声を使用）。</li>
+      <li>「⭐ できた！」のスタンプは、ページを閉じるとリセットされます。</li>
+    </ul>
+  </div></div>
+  <h2 class="chapter" data-short="学び">学びとのつながり</h2>
+  <div class="mission"><div class="mission-body parent-text">
+    <div class="table-wrap"><table>
+      <thead><tr><th>ミッション</th><th>つながる学び</th></tr></thead>
+      <tbody>
+        <tr><td>いえ・はたけ（9×9）・ピラミッド・しまう ばしょ</td><td>算数（数を数える、たし算、かたちあそび）、仲間分け</td></tr>
+        <tr><td>地図・方角・座標</td><td>社会科・地理の素地（方位、太陽の動き、上から見た図、位置の表し方）</td></tr>
+        <tr><td>地図の しるし</td><td>3年生社会科の地図記号への橋渡し</td></tr>
+        <tr><td>バイオーム・木の種類</td><td>気候と植生の関係（暑い・寒い・乾いた地域の違い、高い山ほど寒い）</td></tr>
+        <tr><td>はたけ・どうぶつ・コンポスター</td><td>生活科（栽培、生き物の世話）、食べ物の材料をたどる学習</td></tr>
+        <tr><td>村人の しごと</td><td>生活科（まちの人々の仕事）</td></tr>
+        <tr><td>せっけいず・にじの はし・お花ばたけ</td><td>図画工作（ドット絵の設計、色の並び）</td></tr>
+        <tr><td>レッドストーン</td><td>プログラミング的思考の素地（入力と出力、つながり）</td></tr>
+        <tr><td>看板</td><td>国語（ひらがなの書字練習）</td></tr>
+      </tbody>
+    </table></div>
+  </div></div>
+  <h2 class="chapter" data-short="声かけ">声かけの例</h2>
+  <div class="mission"><div class="mission-body parent-text">
+    <ul>
+      <li>「どうしてそこに家を建てたの？」（場所を選んだ理由を言葉にする）</li>
+      <li>「地図で見ると、家はどっちの方角？」（方位の意識づけ）</li>
+      <li>「床は全部で何個使った？」（数の確認）</li>
+      <li>「ケーキの材料は、どの動物や野菜から来たのかな？」（食べ物の由来）</li>
+      <li>「失敗したのはどうしてだと思う？」（振り返り）</li>
+      <li>完成したら「⭐できた！」を押して、達成を一緒に喜びましょう。</li>
+    </ul>
+  </div></div>
+  <h2 class="chapter" data-short="表記・情報">表記と情報について</h2>
+  <div class="mission"><div class="mission-body parent-text">
+    <ul>
+      <li>ゲーム画面では「オークの原木」「オークの板材」のように、木の種類が付いた名前で表示されます。攻略サイトによっては「丸太」「木材」と書かれることもあります。</li>
+      <li>ボタン配置は本体の設定で変更できます。このページはSwitch版の初期配置（Aでジャンプ、Bでしゃがむ）で書いています。</li>
+      <li>内容は2026年10月時点の統合版（Switch版）をもとに作成しています。アップデートで名称やレシピが変わることがあります。</li>
+    </ul>
+  
+  </div></div>
+</section>
+
+<footer>
+  このページは非公式のガイドです。Minecraft は Mojang Synergies AB の商標です。Nintendo Switch は任天堂の商標です。
+</footer>
+</div>
+<script>
+(function(){
+  const G = (k,y) => `<span class="g" data-y="${y}">${k}</span>`;
+  const items = {
+    L:{n:G('原木','げんぼく'), c:'#8B5A2B', a:'げ', fg:'#fff'},
+    P:{n:G('板材','いたざい'), c:'#D2AA6B', a:'い'},
+    S:{n:G('棒','ぼう'), c:'#A27A4C', a:'ぼ', fg:'#fff'},
+    C:{n:G('丸石','まるいし'), c:'#9A9A9A', a:'ま'},
+    K:{n:G('石炭','せきたん'), c:'#3A3A3A', a:'せ', fg:'#fff'},
+    I:{n:G('鉄','てつ')+'インゴット', c:'#E3E3E3', a:'て'},
+    R:{n:'レッドストーン', c:'#C0262B', a:'れ', fg:'#fff'},
+    U:{n:'サトウキビ', c:'#86C95E', a:'さ'},
+    A:{n:G('紙','かみ'), c:'#FAFAF2', a:'か'},
+    Q:{n:'コンパス', c:'#AEB8C2', a:'こ'},
+    W:{n:G('羊毛','ようもう'), c:'#F2F2F2', a:'よ'},
+    H:{n:G('小麦','こむぎ'), c:'#DDB84D', a:'む'},
+    G:{n:'ガラス', c:'#CFEFF5', a:'が'},
+    B:{n:G('鉄','てつ')+'ブロック', c:'#C8C8C8', a:'ブ'},
+    T:{n:'石', c:'#7F7F7F', a:'石', fg:'#fff'},
+    N:{n:G('鉄塊','てっかい'), c:'#ECECEC', a:'か'},
+    D:{n:'木の ハーフブロック', c:'#C9A060', a:'は'},
+    F:{n:'かまど', c:'#6E6E6E', a:'か', fg:'#fff'},
+    Z:{n:G('砂糖','さとう'), c:'#FFFFFF', a:'さ'},
+    E:{n:'たまご', c:'#F3E5C0', a:'た'},
+    M:{n:'ミルク', c:'#F8F8F8', a:'み'},
+    J:{n:'レンガ', c:'#A4513A', a:'れ', fg:'#fff'},
+    V:{n:'ビートルート', c:'#A4273B', a:'び', fg:'#fff'},
+    O:{n:'ボウル', c:'#8C6239', a:'ボ', fg:'#fff'},
+    k:{n:'カボチャ', c:'#E38A1D', a:'か'},
+    m:{n:'スイカ（1きれ）', c:'#D8433A', a:'す', fg:'#fff'},
+    c:{n:'ココアまめ', c:'#6B3E1F', a:'こ', fg:'#fff'},
+    r:{n:'赤い キノコ', c:'#CC3333', a:'あ', fg:'#fff'},
+    b:{n:'ちゃいろの キノコ', c:'#9A6B4A', a:'ち', fg:'#fff'},
+    X:{n:G('松明','たいまつ'), c:'#F7C744', a:'た'},
+    v:{n:G('革','かわ'), c:'#9B5A2E', a:'か', fg:'#fff'},
+    y:{n:G('金','きん')+'インゴット', c:'#F5D64A', a:'き'},
+    i:{n:'糸', c:'#F4F4F4', a:'い'},
+    f:{n:'つりざお', c:'#B08950', a:'つ'},
+    n:{n:'ニンジン', c:'#F08A24', a:'に'},
+    q:{n:'ボート', c:'#B08950', a:'ボ'},
+    x:{n:'チェスト', c:'#C08A3E', a:'チ'},
+    // かまど用
+    log:{n:G('原木','げんぼく'), c:'#8B5A2B'}, charcoal:{n:G('木炭','もくたん'), c:'#2E2E2E'},
+    sand:{n:G('砂','すな'), c:'#E3D59A'}, glass:{n:'ガラス', c:'#CFEFF5'},
+    cobble:{n:G('丸石','まるいし'), c:'#9A9A9A'}, stone:{n:'石', c:'#7F7F7F'},
+    smooth:{n:'なめらかな 石', c:'#B3B3B3'},
+    rawiron:{n:G('鉄の原石','てつのげんせき'), c:'#C9A27E'}, iron:{n:G('鉄','てつ')+'インゴット', c:'#E3E3E3'},
+    rawcopper:{n:G('銅の原石','どうのげんせき'), c:'#C8734A'}, copper:{n:G('銅','どう')+'インゴット', c:'#D97B4F'},
+    rawgold:{n:G('金の原石','きんのげんせき'), c:'#E1B53B'}, gold:{n:G('金','きん')+'インゴット', c:'#F5D64A'},
+    clay:{n:G('粘土玉','ねんどだま'), c:'#A9B2BE'}, brick:{n:'レンガ', c:'#A4513A'},
+    potato:{n:'ジャガイモ', c:'#C9A46A'}, baked:{n:'ベイクドポテト', c:'#B98A3E'},
+    kelp:{n:'コンブ', c:'#4F8A3A'}, driedkelp:{n:G('乾燥した昆布','かんそうした こんぶ'), c:'#3D4A2E'}
+  };
+  const R = (g,out,n,w,cat,free) => ({g,out,n,w,cat,free});
+  const recipes = {
+    plank:   R(['L'], G('板材','いたざい'),4,'inv','きほん'),
+    table:   R(['PP','PP'], G('作業台','さぎょうだい'),1,'inv','きほん'),
+    stick:   R(['P','P'], G('棒','ぼう'),4,'inv','きほん'),
+    torch:   R(['K','S'], G('松明','たいまつ'),4,'inv','きほん'),
+    chest:   R(['PPP','P.P','PPP'], 'チェスト',1,'tbl','きほん'),
+    furnace: R(['CCC','C.C','CCC'], 'かまど',1,'tbl','きほん'),
+    wpick:   R(['PPP','.S.','.S.'], '木の ツルハシ',1,'tbl','どうぐ'),
+    spick:   R(['CCC','.S.','.S.'], '石の ツルハシ',1,'tbl','どうぐ'),
+    ipick:   R(['III','.S.','.S.'], G('鉄','てつ')+'の ツルハシ',1,'tbl','どうぐ'),
+    shovel:  R(['P','S','S'], '木の シャベル',1,'tbl','どうぐ'),
+    axe:     R(['PP','PS','.S'], '木の オノ',1,'tbl','どうぐ'),
+    hoe:     R(['PP','.S','.S'], '木の クワ',1,'tbl','どうぐ'),
+    shears:  R(['.I','I.'], 'ハサミ',1,'inv','どうぐ'),
+    bucket:  R(['I.I','.I.'], 'バケツ',1,'tbl','どうぐ'),
+    ironblock:R(['III','III','III'], G('鉄','てつ')+'ブロック',1,'tbl','どうぐ'),
+    nugget:  R(['I'], G('鉄塊','てっかい'),9,'inv','どうぐ'),
+    door:    R(['PP','PP','PP'], 'ドア',3,'tbl','いえ'),
+    trapdoor:R(['PPP','PPP'], 'トラップドア',2,'tbl','いえ'),
+    stairs:  R(['P..','PP.','PPP'], G('階段','かいだん'),4,'tbl','いえ'),
+    slab:    R(['PPP'], '木の ハーフブロック',6,'tbl','いえ'),
+    fence:   R(['PSP','PSP'], 'フェンス',3,'tbl','いえ'),
+    gate:    R(['SPS','SPS'], 'フェンスゲート',1,'tbl','いえ'),
+    pane:    R(['GGG','GGG'], 'ガラス'+G('板','いた'),16,'tbl','いえ'),
+    ladder:  R(['S.S','SSS','S.S'], 'はしご',3,'tbl','いえ'),
+    bricks:  R(['JJ','JJ'], 'レンガブロック',1,'inv','いえ'),
+    bed:     R(['WWW','PPP'], 'ベッド',1,'tbl','かぐ'),
+    sign:    R(['PPP','PPP','.S.'], G('看板','かんばん'),3,'tbl','かぐ'),
+    lantern: R(['NNN','NXN','NNN'], 'ランタン',1,'tbl','かぐ'),
+    carpet:  R(['WW'], 'カーペット',3,'inv','かぐ'),
+    painting:R(['SSS','SWS','SSS'], G('絵画','かいが'),1,'tbl','かぐ'),
+    pot:     R(['J.J','.J.'], G('植木鉢','うえきばち'),1,'tbl','かぐ'),
+    anvil:   R(['BBB','.I.','III'], G('金床','かなとこ'),1,'tbl','だい'),
+    carto:   R(['AA','PP','PP'], G('製図台','せいずだい'),1,'tbl','だい'),
+    cutter:  R(['.I.','TTT'], G('石切台','いしきりだい'),1,'tbl','だい'),
+    smoker:  R(['.L.','LFL','.L.'], G('燻製器','くんせいき'),1,'tbl','だい'),
+    smithing:R(['II','PP','PP'], G('鍛冶台','かじだい'),1,'tbl','だい'),
+    composter:R(['D.D','D.D','DDD'], 'コンポスター',1,'tbl','だい'),
+    barrel:  R(['PDP','P.P','PDP'], G('樽','たる'),1,'tbl','だい'),
+    bread:   R(['HHH'], 'パン',1,'tbl','たべもの'),
+    bowl:    R(['P.P','.P.'], 'ボウル',4,'tbl','たべもの'),
+    beetsoup:R(['VVV','VVV','.O.'], 'ビートルートスープ',1,'tbl','たべもの',true),
+    stew:    R(['rb','O.'], 'キノコシチュー',1,'inv','たべもの',true),
+    cake:    R(['MMM','ZEZ','HHH'], 'ケーキ',1,'tbl','たべもの'),
+    pie:     R(['kZE'], 'パンプキンパイ',1,'tbl','たべもの',true),
+    cookie:  R(['HcH'], 'クッキー',8,'tbl','たべもの'),
+    sugar:   R(['U'], G('砂糖','さとう'),1,'inv','たべもの'),
+    pseed:   R(['k'], 'カボチャの '+G('種','たね'),4,'inv','たべもの'),
+    mseed:   R(['m'], 'スイカの '+G('種','たね'),1,'inv','たべもの'),
+    paper:   R(['UUU'], G('紙','かみ'),3,'tbl','ちず'),
+    compass: R(['.I.','IRI','.I.'], 'コンパス',1,'tbl','ちず'),
+    map:     R(['AAA','AQA','AAA'], 'まっさらな '+G('地図','ちず'),1,'tbl','ちず'),
+    emptymap:R(['AAA','AAA','AAA'], G('白紙の地図','はくしのちず'),1,'tbl','ちず'),
+    boat:    R(['P.P','PPP'], 'ボート',1,'tbl','のりもの'),
+    chestboat:R(['qx'], 'チェストつき ボート',1,'inv','のりもの',true),
+    saddle:  R(['.v.','vIv'], G('鞍','くら'),1,'tbl','のりもの'),
+    minecart:R(['I.I','III'], 'トロッコ',1,'tbl','のりもの'),
+    rail:    R(['I.I','ISI','I.I'], 'レール',16,'tbl','のりもの'),
+    prail:   R(['y.y','ySy','yRy'], 'パワードレール',6,'tbl','のりもの'),
+    rod:     R(['..S','.Si','S.i'], 'つりざお',1,'tbl','のりもの'),
+    carrotstick:R(['f.','.n'], 'ニンジンつきの '+G('棒','ぼう'),1,'inv','のりもの')
+  };
+
+  const desc = {
+    plank:'いえや どうぐの ざいりょう。いちばん よく つかう ブロック。',
+    table:'9この ますで、いろいろな ものが つくれる だい。',
+    stick:'どうぐや '+G('松明','たいまつ')+' の もちてに なる。',
+    torch:'まわりを あかるく する。',
+    chest:'ものを たくさん しまえる はこ。2つ ならべると 大きく なる。',
+    furnace:'ものを やいて、べつの ものに かえる。',
+    wpick:'石や '+G('石炭','せきたん')+' を ほれる。',
+    spick:G('鉄鉱石','てっこうせき')+' も ほれる。',
+    ipick:G('金','きん')+' や ダイヤモンドも ほれる。',
+    shovel:'土や '+G('砂','すな')+' を はやく ほれる。',
+    axe:'木を はやく とれる。',
+    hoe:'土を たがやして はたけに する。',
+    shears:'ひつじの けを かったり、はっぱを あつめたり できる。',
+    bucket:'水や ミルクを はこべる。',
+    ironblock:G('鉄','てつ')+' インゴット 9こを 1こに まとめる。'+G('金床','かなとこ')+' の ざいりょう。',
+    nugget:'小さな '+G('鉄','てつ')+'。ランタンの ざいりょう。9こで インゴットに もどせる。',
+    door:'あけたり しめたり できる 入り口。',
+    trapdoor:'ゆかや まどに つける 小さな とびら。',
+    stairs:'かいだんや、ななめの やねに つかう。',
+    slab:'はんぶんの あつさの ブロック。だんさを なだらかに できる。',
+    fence:'とびこえられない かこい。どうぶつが にげない。',
+    gate:'フェンスの 入り口に なる とびら。',
+    pane:'うすい まどガラス。ほんとうの まど みたいに 見える。',
+    ladder:'かべに つけて、上り下り できる。',
+    bricks:'赤い レンガの ブロック。じょうぶな いえに。',
+    bed:'よるに ねると あさに なる。つぎに はじまる ばしょに なる。',
+    sign:'文字を かいて かざれる。チェストの 名まえ ふだにも。',
+    lantern:'つるしたり おいたり できる あかり。',
+    carpet:'ゆかに しく うすい しきもの。',
+    painting:'かべに かざる え。どの えが 出るかは おたのしみ。',
+    pot:'花や '+G('苗木','なえぎ')+' を かざれる。',
+    anvil:'どうぐに 名まえを つけたり、なおしたり できる。',
+    carto:G('地図','ちず')+' を ひろげたり、ふやしたり、とめたり できる。',
+    cutter:'石を '+G('階段','かいだん')+' や かべなど、いろいろな かたちに する。',
+    smoker:'たべものを かまどより はやく やける。',
+    smithing:'どうぐを もっと つよく する ときに つかう。',
+    composter:'草や '+G('種','たね')+' を 入れると '+G('骨粉','こっぷん')+' が できる。',
+    barrel:'ものを しまえる。上に ブロックが あっても ひらける。',
+    bread:'はじめに つくりやすい たべもの。',
+    bowl:'スープや シチューを 入れる うつわ。',
+    beetsoup:'ビートルートの スープ。たべると ボウルが のこる。',
+    stew:'キノコの シチュー。たべると ボウルが のこる。',
+    cake:'おいて つかう。みんなで 7かい たべられる。',
+    pie:'カボチャの パイ。',
+    cookie:'1かいで 8まい できる おかし。',
+    sugar:'ケーキや パイの ざいりょう。',
+    pseed:'うえると カボチャが できる。',
+    mseed:'うえると スイカが できる。',
+    paper:G('地図','ちず')+' の ざいりょう。',
+    compass:'はりが、さいしょに はじまった ばしょ を さす。',
+    map:'じぶんの いる ばしょが わかる '+G('地図','ちず')+'。',
+    emptymap:'じぶんの しるしが 出ない '+G('地図','ちず')+'。',
+    boat:'水の 上を すすむ のりもの。2人 のれる。',
+    chestboat:'ものを たくさん はこべる ボート。のれるのは 1人。',
+    saddle:'うま・ぶた・ラクダ に つけると のれる。'+G('革','かわ')+' は ピースフル では あつめにくいよ。',
+    minecart:'レールの 上を はしる のりもの。トロッコに むかって ZL で のる。',
+    rail:'トロッコが はしる みち。ならべると かども しぜんに まがる。',
+    prail:'レバー などで レッドストーンの ちからを ながすと、トロッコを おして はやく する。',
+    rod:'さかなを つる どうぐ。糸 は、どうくつの クモの すを '+G('剣','けん')+' で こわすと とれる。',
+    carrotstick:G('鞍','くら')+' を つけた ぶたに のって もつと、すすむ ほうを きめられる。'
+  };
+  const smeltDesc = {
+    charcoal:G('石炭','せきたん')+' の かわりに つかえる。',
+    glass:'まどに なる。ガラス'+G('板','いた')+' の ざいりょう。',
+    stone:G('石切台','いしきりだい')+' の ざいりょう。',
+    smooth:'たいらで きれいな 石。',
+    iron:'どうぐや バケツ、コンパスの ざいりょう。',
+    copper:G('銅','どう')+' の ブロックなどの ざいりょう。',
+    gold:G('金','きん')+' の どうぐや かざりの ざいりょう。',
+    brick:'レンガブロックや '+G('植木鉢','うえきばち')+' の ざいりょう。',
+    baked:'やいた ジャガイモ。',
+    driedkelp:'9こ あつめると、よく もえる ブロックに なる。'
+  };
+
+  function buildRecipe(key){
+    const r=recipes[key]; if(!r) return null;
+    const el=document.createElement('div'); el.className='recipe';
+    const size = r.w==='tbl'?3:2;
+    const rows = r.g.map(s=>s.padEnd(size,'.'));
+    while(rows.length<size) rows.push('.'.repeat(size));
+    const grid=document.createElement('div'); grid.className='cgrid';
+    grid.style.gridTemplateColumns=`repeat(${size},auto)`;
+    const used=[];
+    rows.forEach(row=>[...row].forEach(ch=>{
+      const c=document.createElement('div');
+      if(ch==='.'){ c.className='cell empty'; }
+      else { const it=items[ch]; if(!used.includes(ch)) used.push(ch); c.className='cell'; c.style.background=it.c; if(it.fg) c.style.color=it.fg; c.textContent=it.a; }
+      grid.appendChild(c);
+    }));
+    const name=document.createElement('div'); name.className='recipe-name'; name.innerHTML=r.out;
+    const ds=document.createElement('div'); ds.className='recipe-desc'; ds.innerHTML='💡 '+(desc[key]||'');
+    const row=document.createElement('div'); row.className='recipe-row';
+    row.appendChild(grid);
+    const ar=document.createElement('span'); ar.className='arrow'; ar.textContent='▶'; ar.setAttribute('aria-hidden','true'); row.appendChild(ar);
+    const out=document.createElement('div'); out.className='out'; out.textContent='×'+r.n; row.appendChild(out);
+    const lg=document.createElement('div'); lg.className='legend';
+    lg.innerHTML=used.map(k=>`<span class="li"><span class="sw" style="background:${items[k].c}"></span>${items[k].a}＝${items[k].n}</span>`).join('');
+    const wh=document.createElement('div'); wh.className='recipe-where';
+    wh.innerHTML=(r.w==='tbl' ? G('作業台','さぎょうだい')+' で つくる' : 'もちもの でも つくれる') + (r.free ? '。ならべかたは じゆう' : '');
+    el.append(name,ds,row,lg,wh);
+    return el;
+  }
+  document.querySelectorAll('.recipes[data-list]').forEach(box=>{
+    box.dataset.list.split(',').forEach(k=>{ const e=buildRecipe(k.trim()); if(e) box.appendChild(e); });
+  });
+  const chip = k => `<span class="chip"><span class="sw" style="background:${items[k].c}"></span>${items[k].n}</span>`;
+  document.querySelectorAll('.smelts[data-list]').forEach(box=>{
+    box.dataset.list.split(',').forEach(pair=>{
+      const [a,b]=pair.split('>'); if(!items[a]||!items[b]) return;
+      const d=document.createElement('div'); d.className='recipe';
+      d.innerHTML='<div class="recipe-name">'+items[b].n+'</div>'
+        +'<div class="recipe-desc">💡 '+(smeltDesc[b]||'')+'</div>'
+        +'<div class="smelt-row">'+chip(a)+'<span class="smelt-arrow" aria-hidden="true">🔥 ▼</span>'+chip(b)+'</div>'
+        +'<div class="recipe-where">かまど で やく</div>';
+      box.appendChild(d);
+    });
+  });
+  const fuels=[
+    {n:G('溶岩','ようがん')+'バケツ', v:100, t:'100こ', c:'#E8641C', d:'いちばん ながく もえる。からの バケツが のこる。'+G('溶岩','ようがん')+' を くむ ときは あぶないので、おうちの 人と いっしょに。'},
+    {n:G('石炭','せきたん')+'ブロック', v:80, t:'80こ', c:'#222', d:G('石炭','せきたん')+' 9こ で つくれる。'},
+    {n:G('乾燥した昆布','かんそうした こんぶ')+'ブロック', v:20, t:'20こ', c:'#3D4A2E', d:'うみの コンブを やいて、9こ あつめて つくる。'},
+    {n:G('石炭','せきたん'), v:8, t:'8こ', c:'#3A3A3A', d:'いちばん よく つかう ねんりょう。'},
+    {n:G('木炭','もくたん'), v:8, t:'8こ', c:'#2E2E2E', d:G('原木','げんぼく')+' を やいて つくる。'+G('石炭','せきたん')+' と おなじ ちから。'},
+    {n:'ボート', v:6, t:'6こ', c:'#B08950', d:'いらなく なった ボートも もやせる。'},
+    {n:G('原木','げんぼく')+'・'+G('板材','いたざい'), v:1.5, t:'1こと はんぶん', c:'#D2AA6B', d:G('石炭','せきたん')+' が ない ときに。'},
+    {n:'木の ブロック', v:1.5, t:'1こと はんぶん', c:'#C9A060', d:G('作業台','さぎょうだい')+'・フェンス・'+G('階段','かいだん')+' など、木で できた ブロックは もやせる。'},
+    {n:'木の どうぐ', v:1, t:'1こ', c:'#A27A4C', d:'こわれそうな 木の ツルハシ など。'},
+    {n:G('棒','ぼう')+'・'+G('苗木','なえぎ'), v:0.5, t:'はんぶん', c:'#7DAA4F', d:'2つ で 1こ やける。'}
+  ];
+  const fbox=document.getElementById('fuels');
+  fuels.forEach(f=>{
+    const d=document.createElement('div'); d.className='recipe';
+    const w=Math.max(2, Math.round(f.v)); 
+    d.innerHTML='<div class="recipe-name"><span class="sw" style="background:'+f.c+'"></span>'+f.n+'</div>'
+      +'<div class="recipe-desc">🔥 1こで <b>'+f.t+'</b> やける</div>'
+      +'<div class="fuel-bar" style="width:'+w+'%" aria-hidden="true"></div>'
+      +'<div class="fuel-note">'+f.d+'</div>';
+    fbox.appendChild(d);
+  });
+
+  // ずかん
+  const rcats=['ぜんぶ','きほん','どうぐ','いえ','かぐ','だい','たべもの','ちず','のりもの'];
+  const book=document.getElementById('book'), rf=document.getElementById('rfilters');
+  const bookCards=Object.keys(recipes).map(k=>{ const e=buildRecipe(k); e.dataset.cat=recipes[k].cat; book.appendChild(e); return e; });
+  rcats.forEach((cat,i)=>{
+    const b=document.createElement('button'); b.type='button'; b.className='btn'; b.textContent=cat; b.setAttribute('aria-pressed',i===0);
+    b.addEventListener('click',()=>{ rf.querySelectorAll('.btn').forEach(x=>x.setAttribute('aria-pressed',x===b)); bookCards.forEach(c=>{ c.hidden=!(cat==='ぜんぶ'||c.dataset.cat===cat); }); });
+    rf.appendChild(b);
+  });
+  const bsecs=[['つくりかた','book-recipe'],['やくもの','book-yaku'],['こうせき','book-ore'],['どうぶつ','book-animal'],['しょくぶつ','book-plant'],['ばしょ','book-biome']];
+  const cats=bsecs.map(x=>x[0]);
+  function showBookCat(name){ bsecs.forEach(([n,id])=>{ document.getElementById(id).hidden = n!==name; }); }
+
+  // ずかんカード（こうせき・どうぶつ・しょくぶつ・ばしょ）
+  function ecard(box,o){
+    const d=document.createElement('div'); d.className='recipe';
+    const icon = o.c ? `<span class="ecard-icon block" style="background:${o.c}"></span>` : `<span class="ecard-icon" aria-hidden="true">${o.e}</span>`;
+    d.innerHTML='<div class="ecard-head">'+icon+'<div class="recipe-name">'+o.n+'</div></div>'
+      +'<div class="recipe-desc">💡 '+o.d+'</div>'
+      +'<dl class="erows">'+o.r.map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join('')+'</dl>'
+      +(o.x?'<div class="ereal">'+o.x+'</div>':'');
+    box.appendChild(d);
+  }
+  const ores=[
+    {n:G('石炭','せきたん')+' の '+G('鉱石','こうせき'), c:'#3A3A3A', d:G('松明','たいまつ')+' や ねんりょう に なる。さいしょに さがそう。', r:[['ツルハシ','木 から'],['とれる','<b>'+G('石炭','せきたん')+'</b>'],['ある ところ','山の 中や、すこし 下の ほう']]},
+    {n:G('銅鉱石','どうこうせき'), c:'#C8734A', d:G('銅','どう')+' の ブロックは じかんが たつと さびて みどりいろに なる。', r:[['ツルハシ','石 から'],['とれる',G('銅の原石','どうのげんせき')+' → やくと インゴット'],['ある ところ','まんなか くらいの ふかさ']]},
+    {n:G('鉄鉱石','てっこうせき'), c:'#C9A27E', d:'どうぐ・バケツ・コンパス の ざいりょう。いちばん だいじな '+G('鉱石','こうせき')+'。', r:[['ツルハシ','石 から'],['とれる',G('鉄の原石','てつのげんせき')+' → やくと インゴット'],['ある ところ','山の 中や、まんなか くらいの ふかさ']]},
+    {n:'ラピスラズリの '+G('鉱石','こうせき'), c:'#2E57B8', d:'青い '+G('染料','せんりょう')+' に なる。', r:[['ツルハシ','石 から'],['とれる','ラピスラズリ'],['ある ところ','ふかい ところ']]},
+    {n:G('金鉱石','きんこうせき'), c:'#E1B53B', d:'きらきら ひかる。かざりや '+G('金','きん')+' の リンゴの ざいりょう。', r:[['ツルハシ',G('鉄','てつ')+' から'],['とれる',G('金の原石','きんのげんせき')+' → やくと インゴット'],['ある ところ','ふかい ところ。あれち（メサ）には たくさん']]},
+    {n:'レッドストーンの '+G('鉱石','こうせき'), c:'#C0262B', d:'うごく しかけ や コンパスの ざいりょう。', r:[['ツルハシ',G('鉄','てつ')+' から'],['とれる','レッドストーン'],['ある ところ','とても ふかい ところ']]},
+    {n:'ダイヤモンドの '+G('鉱石','こうせき'), c:'#5FE0E0', d:'いちばん つよい どうぐの ざいりょう。めずらしい。', r:[['ツルハシ',G('鉄','てつ')+' から'],['とれる','ダイヤモンド'],['ある ところ','いちばん ふかい ところ']]},
+    {n:'エメラルドの '+G('鉱石','こうせき'), c:'#2FB55A', d:'村人と こうかん する ときに つかう。', r:[['ツルハシ',G('鉄','てつ')+' から'],['とれる','エメラルド'],['ある ところ','たかい 山の 中 だけ']]},
+    {n:'アメジスト', c:'#9A5CC6', d:'どうくつの 中の むらさきの '+G('晶洞','しょうどう')+'。たたくと きれいな 音が する。', r:[['ツルハシ','どれでも'],['とれる','アメジストの かけら'],['ある ところ','ちかの まるい '+G('晶洞','しょうどう')]]},
+    {n:G('黒曜石','こくようせき'), c:'#2A1B3D', d:'とても かたい くろい 石。'+G('溶岩','ようがん')+' に 水が かかると できる。', r:[['ツルハシ','ダイヤモンド だけ'],['とれる',G('黒曜石','こくようせき')],['ある ところ',G('溶岩','ようがん')+' の ちかく']]},
+    {n:G('深層岩','しんそうがん'), c:'#4A4A50', d:'ずっと 下の ほうに ある、こい はいいろの かたい 石。', r:[['ツルハシ','木 から'],['とれる',G('深層岩','しんそうがん')+' の '+G('丸石','まるいし')],['ある ところ','とても ふかい ところ']]}
+  ];
+  ores.forEach(o=>ecard(document.getElementById('ores'),o));
+
+  const animals=[
+    {n:'うし', e:'🐄', d:'バケツを もって ZL で ミルクが もらえる。', r:[['すきな もの',G('小麦','こむぎ')],['もらえる','ミルク'],['いる ところ','草はら・森']]},
+    {n:'ひつじ', e:'🐑', d:'ハサミで けを かれる。けは 草を たべると また 生える。', r:[['すきな もの',G('小麦','こむぎ')],['もらえる',G('羊毛','ようもう')],['いる ところ','草はら・山']]},
+    {n:'ぶた', e:'🐖', d:'くら を つけると のる ことが できる。', r:[['すきな もの','ニンジン・ジャガイモ・ビートルート'],['いる ところ','草はら・森']]},
+    {n:'にわとり', e:'🐔', d:'ときどき たまご を うむ。たまご は ケーキの ざいりょう。', r:[['すきな もの','いろいろな '+G('種','たね')],['もらえる','たまご'],['いる ところ','草はら・森']]},
+    {n:'うさぎ', e:'🐇', d:'すばしっこい。すんでいる ばしょで けの いろが ちがう。', r:[['すきな もの','ニンジン・タンポポ'],['いる ところ','さばく・ゆきの ばしょ・草はら']]},
+    {n:'うま', e:'🐴', d:'なんども のって なかよく なると、くら を つけて はしれる。とても はやい。', r:[['すきな もの',G('小麦','こむぎ')+'・リンゴ・'+G('砂糖','さとう')],['いる ところ','草はら・サバンナ']]},
+    {n:'ラクダ', e:'🐫', d:'せが たかく、2人 のれる。', r:[['すきな もの','サボテン'],['いる ところ','さばくの 村']]},
+    {n:'ねこ', e:'🐱', d:'なかよく なると ついて くる。', r:[['すきな もの','さかな'],['いる ところ','村']]},
+    {n:'きつね', e:'🦊', d:'こわがりで、ちかづくと にげる。よるに よく うごく。', r:[['すきな もの','スイートベリー'],['いる ところ','タイガ（さむい 森）']]},
+    {n:'パンダ', e:'🐼', d:'のんびり やの パンダ や、くいしんぼう の パンダ など、せいかくが いろいろ。', r:[['すきな もの',G('竹','たけ')],['いる ところ',G('竹','たけ')+' の ジャングル']]},
+    {n:'オウム', e:'🦜', d:G('種','たね')+' を あげると なかよく なる。クッキー は ぜったい あげないで（どくに なる）。', r:[['すきな もの',G('種','たね')],['いる ところ','ジャングル']]},
+    {n:'イルカ', e:'🐬', d:'いっしょに およぐと、はやく およげる。', r:[['すきな もの','なまの さかな'],['いる ところ','あたたかい うみ・ふつうの うみ']]},
+    {n:'かめ', e:'🐢', d:'すなはまに たまごを うむ。たまごは ふむと われるので き を つけて。', r:[['すきな もの',G('海草','かいそう')],['いる ところ','すなはま']]},
+    {n:'ウーパールーパー', e:'🦎', d:'水の 中で なかまを たすけて くれる。いろが 5しゅるい あるよ。', r:[['すきな もの','ねったいぎょ（バケツに 入れて）'],['いる ところ','ちかの みどりの どうくつ']]},
+    {n:'かえる', e:'🐸', d:'オタマジャクシが そだつ ばしょで いろが かわる。あたたかい ところ は 白、さむい ところ は みどり、その あいだは オレンジ。', r:[['いる ところ','ぬま・マングローブの ぬま']], x:'🌏 まなび：きおん で いきものの すがたが かわる ふしぎ。'},
+    {n:'はち', e:'🐝', d:'花から 花へ とびまわる。おこらせると さすので、そっと 見よう。', r:[['すきな もの','花'],['いる ところ','花の おおい 草はら・森']]},
+    {n:'ムーシュルーム', e:'🍄', d:'キノコの はえた うし。ボウルを つかうと キノコシチューが もらえる。', r:[['いる ところ','キノコの しま']]}
+  ];
+  animals.forEach(o=>ecard(document.getElementById('animals'),o));
+
+  const plants=[
+    {n:'ヒマワリ', e:'🌻', d:'花は いつも ひがしを むいて いる。ほうがくを しらべる 目じるしに なる！', r:[['ある ところ','ヒマワリの 草はら'],['つかいみち','きいろの '+G('染料','せんりょう')]], x:'🧭 まなび：ヒマワリの むきで ひがしが わかる。'},
+    {n:'ポピー・タンポポ', e:'🌺', d:'よく 見かける 赤と きいろの 花。', r:[['ある ところ','草はら・森'],['つかいみち','赤・きいろの '+G('染料','せんりょう')+'。タンポポは うさぎの えさ']]},
+    {n:'ヤグルマギク・チューリップ', e:'🌷', d:'青い ヤグルマギク、いろいろな いろの チューリップ。', r:[['ある ところ','草はら・花の 森'],['つかいみち','いろいろな '+G('染料','せんりょう')]]},
+    {n:'サクラ', e:'🌸', d:'ピンクの 花びらが ちる 木。', r:[['ある ところ','山の ちかくの さくらの 林'],['つかいみち','ピンクの '+G('板材','いたざい')]], x:'🗾 にている ところ：日本の さくら'},
+    {n:'サボテン', e:'🌵', d:'さわると いたい。となりに ブロックが あると そだたない。', r:[['ある ところ','さばく・あれち（'+G('砂','すな')+' の 上）'],['つかいみち','かまどで やくと みどりの '+G('染料','せんりょう')]]},
+    {n:G('竹','たけ'), e:'🎋', d:'とても はやく のびる。パンダの だいこうぶつ。', r:[['ある ところ','ジャングル'],['つかいみち','パンダの えさ・ねんりょう']]},
+    {n:'ココアまめ', e:'🫘', d:'ジャングルの 木の みきに なる まめ。', r:[['ある ところ','ジャングル'],['つかいみち','クッキー・ちゃいろの '+G('染料','せんりょう')]]},
+    {n:'スイートベリー', e:'🍒', d:'あまい みが なる。ふれると ちくっと するので き を つけて。', r:[['ある ところ','タイガ（さむい 森）'],['つかいみち','たべもの・きつねの えさ']]},
+    {n:'サトウキビ', e:'🎍', d:'水の となりで、上へ 3だん まで のびる。', r:[['ある ところ','川や うみの へり'],['つかいみち',G('紙','かみ')+'・'+G('砂糖','さとう')]]},
+    {n:'カボチャ・スイカ', e:'🎃', d:'くきの となりに みが できる。', r:[['ある ところ','カボチャは 草はら、スイカは ジャングル'],['つかいみち','パイ・'+G('種','たね')+'・ゆきだるま の あたま（カボチャ）']]},
+    {n:'キノコ', e:'🍄', d:'くらい ところ でも そだつ。赤と ちゃいろ が ある。', r:[['ある ところ','くらい 森・どうくつ・キノコの しま'],['つかいみち','キノコシチュー']]},
+    {n:'コンブ', e:'🌿', d:'うみの そこから 上へ のびる。', r:[['ある ところ','うみ'],['つかいみち','やくと '+G('乾燥した昆布','かんそうした こんぶ')+'（たべもの・ねんりょう）']]},
+    {n:G('スイレンの葉','すいれんのは'), e:'🪷', d:'水の 上に うかぶ はっぱ。上を あるいて わたれる。', r:[['ある ところ','ぬま'],['つかいみち','川を わたる あしば']]},
+    {n:'ツタ', e:'🌱', d:'木や かべに たれさがる。はしごの ように 上れる。', r:[['ある ところ','ジャングル・ぬま'],['つかいみち','かべの かざり・上り下り']]},
+    {n:'グロウベリー', e:'✨', d:'ひかる みが なる つる。くらい ところを あかるく する。', r:[['ある ところ','ちかの みどりの どうくつ'],['つかいみち','たべもの・あかり']]}
+  ];
+  plants.forEach(o=>ecard(document.getElementById('plants'),o));
+
+  const biomes=[
+    {n:'草はら', e:'🌾', d:'ひらたくて 見とおしが よい。いえを たてるのに ぴったり。', r:[['見られる もの','花・うま・うし・ひつじ'],['きおん','ふつう']], x:'🌏 にている ところ：日本の 田んぼや はたけの ひろがる へいや'},
+    {n:'森', e:'🌳', d:'オークや シラカバの 木が たくさん。', r:[['見られる もの','木・花・はち'],['きおん','ふつう']], x:'🌏 にている ところ：日本の 山の 森'},
+    {n:'さばく', e:'🏜', d:G('砂','すな')+' ばかりで、雨が ふらない。', r:[['見られる もの','サボテン・うさぎ・ラクダ'],['きおん','とても あつい']], x:'🌏 にている ところ：アフリカの サハラさばく'},
+    {n:'サバンナ', e:'🦒', d:'かわいた 草はらに、アカシアの 木が ぽつぽつ。', r:[['見られる もの','アカシア・うま'],['きおん','あつい']], x:'🌏 にている ところ：アフリカの サバンナ'},
+    {n:'ジャングル', e:'🌴', d:'大きな 木と つるが しげる。雨が よく ふる。', r:[['見られる もの',G('竹','たけ')+'・スイカ・ココアまめ・パンダ・オウム'],['きおん','あつい']], x:'🌏 にている ところ：みなみアメリカの アマゾン'},
+    {n:'タイガ', e:'🌲', d:'さむい ところの、とがった 木の 森。', r:[['見られる もの','トウヒ・スイートベリー・きつね'],['きおん','すずしい ～ さむい']], x:'🌏 にている ところ：ロシアや カナダの 森'},
+    {n:'ゆきの ばしょ', e:'❄', d:'雨の かわりに ゆきが ふり、水が こおる。', r:[['見られる もの','ゆき・こおり・うさぎ'],['きおん','とても さむい']], x:'🌏 にている ところ：ほっきょく に ちかい ところ'},
+    {n:'山', e:'⛰', d:'たかい ところ ほど さむく、てっぺんは ゆき。', r:[['見られる もの','エメラルド・'+G('鉄鉱石','てっこうせき')+'・ヤギ'],['きおん','上ほど さむい']], x:'🌏 にている ところ：ふじ山（上の ほうは ゆき）'},
+    {n:'うみ', e:'🌊', d:'あたたかい うみには サンゴ、つめたい うみには こおり。', r:[['見られる もの','さかな・イルカ・かめ・コンブ'],['きおん','ばしょで ちがう']], x:'🌏 にている ところ：おきなわの サンゴの うみ'},
+    {n:'マングローブの ぬま', e:'🌳', d:'ねっこが 水の 上に 出た 木が しげる。どろの ブロックが ある。', r:[['見られる もの','マングローブ・かえる'],['きおん','あたたかい']], x:'🌏 にている ところ：おきなわの いりおもてじま'},
+    {n:'ぬま', e:'🐸', d:'あさい 水と ツタの 木。', r:[['見られる もの',G('スイレンの葉','すいれんのは')+'・かえる・キノコ'],['きおん','ふつう']], x:'🌏 にている ところ：しつげん'},
+    {n:'さくらの 林', e:'🌸', d:'山の ちかくに ある、ピンクの 木の 林。', r:[['見られる もの','サクラ・はち・ぶた'],['きおん','ふつう']], x:'🌏 にている ところ：日本の 花見の 名しょ'},
+    {n:'あれち（メサ）', e:'🏜', d:'赤や オレンジの しまもようの がけ。', r:[['見られる もの',G('金鉱石','きんこうせき')+'・サボテン'],['きおん','とても あつい']], x:'🌏 にている ところ：アメリカの グランドキャニオン'},
+    {n:'キノコの しま', e:'🍄', d:'うみの まんなかの、大きな キノコが 生える めずらしい しま。', r:[['見られる もの','ムーシュルーム・大きな キノコ'],['きおん','ふつう']]}
+  ];
+  biomes.forEach(o=>ecard(document.getElementById('biomes'),o));
+
+  // 章ごとに まとめる
+  const groups={};
+  ['p-start','p-survival','p-creative','p-parent'].forEach(pid=>{
+    const panel=document.getElementById(pid);
+    const heads=[...panel.querySelectorAll(':scope > h2.chapter')];
+    groups[pid]=heads.map(h=>{
+      const g=document.createElement('div'); g.className='cgroup';
+      g.dataset.short=h.dataset.short||h.textContent.trim();
+      h.before(g);
+      let n=h;
+      while(n && !(n!==h && n.matches && n.matches('h2.chapter'))){ const next=n.nextElementSibling; g.appendChild(n); n=next; }
+      return g;
+    });
+    const gs=groups[pid];
+    gs.forEach((g,i)=>{
+      const nav=document.createElement('div'); nav.className='chapnav';
+      const prev=document.createElement('button'); prev.type='button'; prev.className='btn';
+      const next=document.createElement('button'); next.type='button'; next.className='btn';
+      if(i>0){ prev.textContent='◀ '+gs[i-1].dataset.short; prev.addEventListener('click',()=>showChapter(pid,i-1)); } else prev.style.visibility='hidden';
+      if(i<gs.length-1){ next.textContent=gs[i+1].dataset.short+' ▶'; next.addEventListener('click',()=>showChapter(pid,i+1)); } else next.style.visibility='hidden';
+      nav.append(prev,next); g.appendChild(nav);
+    });
+  });
+  const current={'p-start':0,'p-survival':0,'p-creative':0,'p-parent':0,'p-book':0};
+  const subtabs=document.getElementById('subtabs');
+  const anchor=document.getElementById('topbar-anchor');
+  let activePanel='p-start';
+  function scrollTop(){ const y=anchor.getBoundingClientRect().top+window.scrollY; if(window.scrollY>y) window.scrollTo(0,y); }
+  function starText(g){
+    const ms=g.querySelectorAll('.mission[data-tab]'); if(!ms.length) return '';
+    const d=g.querySelectorAll('.mission.is-done[data-tab]').length;
+    return '★ '+d+' / '+ms.length;
+  }
+  function renderSubtabs(){
+    subtabs.innerHTML='';
+    const pid=activePanel;
+    const labels = pid==='p-book' ? cats : (groups[pid]||[]).map(g=>g.dataset.short);
+    labels.forEach((lab,i)=>{
+      const b=document.createElement('button'); b.type='button'; b.className='subtab'; b.setAttribute('role','tab');
+      b.setAttribute('aria-selected', i===current[pid]);
+      b.textContent=lab;
+      if(groups[pid]){ const st=starText(groups[pid][i]); if(st){ const sm=document.createElement('small'); sm.textContent=st; b.appendChild(sm); } }
+      b.addEventListener('click',()=>showChapter(pid,i));
+      subtabs.appendChild(b);
+    });
+    const sel=subtabs.querySelector('[aria-selected="true"]');
+    if(sel) subtabs.scrollLeft = sel.offsetLeft - 40;
+  }
+  function showChapter(pid,i){
+    current[pid]=i;
+    if(pid==='p-book') showBookCat(cats[i]);
+    else groups[pid].forEach((g,j)=>{ g.hidden = j!==i; });
+    stopSpeak(); renderSubtabs(); scrollTop();
+  }
+  const tabs=[...document.querySelectorAll('.tab')];
+  function selectTab(btn){
+    tabs.forEach(t=>{
+      const on=t===btn;
+      t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+    });
+    document.body.dataset.mode=btn.dataset.mode;
+    activePanel=btn.getAttribute('aria-controls');
+    showChapter(activePanel,current[activePanel]);
+  }
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>selectTab(t));
+    t.addEventListener('keydown',e=>{
+      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+        const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]; n.focus(); selectTab(n);
+      }
+    });
+  });
+
+  // よみあげ
+  const canSpeak='speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  let speakingBtn=null;
+  function textFor(node){
+    const clone=node.cloneNode(true);
+    clone.querySelectorAll('.noread,.tools').forEach(n=>n.remove());
+    clone.querySelectorAll('.g').forEach(g=>g.replaceWith(document.createTextNode(g.dataset.y)));
+    return clone.textContent.replace(/\s+/g,' ').trim();
+  }
+  function stopSpeak(){
+    if(!canSpeak) return;
+    window.speechSynthesis.cancel();
+    if(speakingBtn){ speakingBtn.classList.remove('speaking'); speakingBtn.textContent='🔊 よむ'; speakingBtn=null; }
+  }
+  function speak(btn,node,title){
+    if(speakingBtn===btn){ stopSpeak(); return; }
+    stopSpeak();
+    const u=new SpeechSynthesisUtterance((title?title+'。 ':'')+textFor(node));
+    u.lang='ja-JP'; u.rate=0.85; u.pitch=1.05;
+    const v=window.speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith('ja'));
+    if(v) u.voice=v;
+    u.onend=()=>{ if(speakingBtn===btn) stopSpeak(); };
+    speakingBtn=btn; btn.classList.add('speaking'); btn.textContent='⏹ とめる';
+    window.speechSynthesis.speak(u);
+  }
+
+  // スタンプ
+  const counts={survival:0,creative:0};
+  const totals={survival:document.querySelectorAll('.mission[data-tab="survival"]').length, creative:document.querySelectorAll('.mission[data-tab="creative"]').length};
+  function updateCounts(){ document.querySelectorAll('[data-count]').forEach(el=>{ const k=el.dataset.count; el.textContent='★ '+counts[k]+' / '+totals[k]; }); }
+  updateCounts();
+  document.querySelectorAll('.mission[data-tab]').forEach(m=>{
+    const body=m.querySelector('.mission-body'), title=m.querySelector('h3');
+    const tools=document.createElement('div'); tools.className='tools';
+    if(canSpeak){
+      const sb=document.createElement('button'); sb.type='button'; sb.className='btn'; sb.textContent='🔊 よむ';
+      sb.addEventListener('click',()=>speak(sb,body,textFor(title)));
+      tools.appendChild(sb);
+    }
+    const db=document.createElement('button'); db.type='button'; db.className='btn'; db.textContent='⭐ できた！';
+    db.setAttribute('aria-pressed','false');
+    db.addEventListener('click',()=>{
+      const on=!m.classList.contains('is-done');
+      m.classList.toggle('is-done',on); db.classList.toggle('done',on); db.setAttribute('aria-pressed',on);
+      db.textContent=on?'⭐ できたね！':'⭐ できた！';
+      counts[m.dataset.tab]+=on?1:-1; updateCounts(); renderSubtabs();
+    });
+    tools.appendChild(db);
+    body.appendChild(tools);
+  });
+  if(canSpeak){
+    document.querySelectorAll('.speak-only').forEach(inner=>{
+      const sb=document.createElement('button'); sb.type='button'; sb.className='btn'; sb.textContent='🔊 よむ'; sb.style.marginTop='10px';
+      sb.addEventListener('click',()=>speak(sb,inner,''));
+      inner.appendChild(sb);
+    });
+    if('onvoiceschanged' in window.speechSynthesis) window.speechSynthesis.onvoiceschanged=()=>{};
+  }
+
+  // ゆか 5×5
+  const floor=document.getElementById('floor'), fs=document.getElementById('floor-status');
+  floor.style.gridTemplateColumns='repeat(5,auto)';
+  let placed=0;
+  for(let i=0;i<25;i++){
+    const b=document.createElement('button'); b.type='button'; b.className='bcell'; b.setAttribute('aria-label','ます '+(i+1));
+    b.addEventListener('click',()=>{
+      b.classList.toggle('on'); placed+=b.classList.contains('on')?1:-1;
+      fs.textContent = placed===25 ? 'ぜんぶで 25こ！ 5こが 5れつ で 25こ だね。' : 'おいた かず：'+placed+'こ';
+    });
+    floor.appendChild(b);
+  }
+  document.getElementById('floor-reset').addEventListener('click',()=>{ floor.querySelectorAll('.bcell').forEach(c=>c.classList.remove('on')); placed=0; fs.textContent='おいた かず：0こ'; });
+
+  // せっけいず 8×8
+  const colors=[{n:'あか',c:'#B02E26'},{n:'だいだい',c:'#F9801D'},{n:'きいろ',c:'#FED83D'},{n:'みどり',c:'#5E7C16'},{n:'みずいろ',c:'#3AB3DA'},{n:'あお',c:'#3C44AA'},{n:'むらさき',c:'#8932B8'},{n:'しろ',c:'#F2F2F2'},{n:'くろ',c:'#1D1D21'},{n:'けす',c:null}];
+  const pal=document.getElementById('palette'), px=document.getElementById('pixel'), pc=document.getElementById('pixel-counts');
+  let cur=0; const NN=8; const state=new Array(NN*NN).fill(-1);
+  colors.forEach((col,i)=>{
+    const s=document.createElement('button'); s.type='button'; s.className='swatch';
+    s.style.background=col.c||'repeating-linear-gradient(45deg,#fff 0 6px,#ddd 6px 12px)';
+    if(col.c==null) s.textContent='けす';
+    s.setAttribute('aria-label',col.n); s.setAttribute('aria-pressed',i===0);
+    s.addEventListener('click',()=>{ cur=i; pal.querySelectorAll('.swatch').forEach((x,j)=>x.setAttribute('aria-pressed',j===i)); });
+    pal.appendChild(s);
+  });
+  px.style.gridTemplateColumns=`repeat(${NN},auto)`;
+  function renderCounts(){
+    const t={}; state.forEach(v=>{ if(v>=0) t[v]=(t[v]||0)+1; });
+    const ks=Object.keys(t);
+    pc.textContent = ks.length ? ks.map(k=>colors[k].n+' '+t[k]+'こ').join('、') : 'まだ なにも ぬって いないよ。';
+  }
+  for(let i=0;i<NN*NN;i++){
+    const b=document.createElement('button'); b.type='button'; b.className='bcell'; b.style.background='#FFFFFF'; b.setAttribute('aria-label','ます '+(i+1));
+    b.addEventListener('click',()=>{ const col=colors[cur]; if(col.c==null){ state[i]=-1; b.style.background='#FFFFFF'; } else { state[i]=cur; b.style.background=col.c; } renderCounts(); });
+    px.appendChild(b);
+  }
+  document.getElementById('pixel-reset').addEventListener('click',()=>{ state.fill(-1); px.querySelectorAll('.bcell').forEach(b=>b.style.background='#FFFFFF'); renderCounts(); });
+
+  // ざひょう あそび
+  const cmap=document.getElementById('cmap'), cread=document.getElementById('cread'), cmsg=document.getElementById('cmsg');
+  const goals=[{x:3,z:-2,e:'🏠',n:'いえ'},{x:-4,z:1,e:'🌳',n:'森'},{x:2,z:4,e:'🌾',n:'はたけ'},{x:-1,z:-5,e:'⛏',n:'どうくつ'}];
+  let gi=0, px0=0, pz0=0;
+  const dirText=(v,pos,neg)=> v===0 ? '' : (v>0? pos+'へ '+v : neg+'へ '+(-v));
+  function drawMap(){
+    cmap.innerHTML='';
+    const g=goals[gi];
+    for(let z=-5; z<=5; z++){ for(let x=-5; x<=5; x++){
+      const s=document.createElement('span');
+      if(x===0||z===0) s.className='axis';
+      if(x===px0&&z===pz0) s.textContent='🙂';
+      else if(x===g.x&&z===g.z) s.textContent=g.e;
+      cmap.appendChild(s);
+    }}
+    cread.textContent='X：'+px0+'　Z：'+pz0;
+  }
+  document.querySelectorAll('.cpad .btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const [dx,dz]=b.dataset.d.split(',').map(Number);
+      px0=Math.max(-5,Math.min(5,px0+dx)); pz0=Math.max(-5,Math.min(5,pz0+dz));
+      const g=goals[gi];
+      if(px0===g.x&&pz0===g.z){
+        const parts=[dirText(g.x,'ひがし','にし'),dirText(g.z,'みなみ','きた')].filter(Boolean).join('、');
+        cmsg.textContent=g.e+' '+g.n+'に ついた！ X は '+g.x+'、Z は '+g.z+'。まんなか から '+parts+' だね。';
+        gi=(gi+1)%goals.length; px0=0; pz0=0;
+        setTimeout(()=>{ drawMap(); cmsg.textContent+=' つぎは '+goals[gi].e+' へ いこう。'; },1200);
+      } else {
+        cmsg.textContent='🙂 から '+g.e+' まで いって みよう。';
+      }
+      drawMap();
+    });
+  });
+  drawMap();
+  selectTab(document.getElementById('tab-start'));
+})();
+</script>
+</body>
+</html>
