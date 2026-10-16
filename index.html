@@ -202,6 +202,12 @@ header.site{
 .mini .mfoot{padding:10px 18px;border-top:1px solid var(--line-soft);font-size:.78rem;font-weight:700;color:var(--c)}
 .mini.ghost{border-style:dashed;background:transparent;box-shadow:none;display:grid;place-items:center;min-height:150px;text-align:center;color:var(--muted)}
 .mini.ghost:hover{transform:none}
+.mgroup{--c:var(--pine);display:flex;align-items:center;gap:12px;margin:40px 0 16px}
+.mgroup.first{margin-top:0}
+.mgroup::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
+.mgroup h3{font-family:var(--serif);font-size:1.05rem;font-weight:800;color:var(--c);letter-spacing:.06em;white-space:nowrap}
+.mgroup .cnt{font-size:.74rem;color:var(--muted);white-space:nowrap}
+.mgroup::after{content:"";flex:1;height:1px;background:var(--line)}
 .mini.ghost .g{padding:20px;font-size:.86rem;line-height:1.7}
 
 /* ===== 学び方（進め方） ===== */
@@ -443,11 +449,26 @@ footer .cc a{color:#bfe0c4;font-weight:700;text-decoration:underline;text-underl
     <div class="sec-head">
       <span class="eyebrow">PICK UP</span>
       <h2>個別教材・新着</h2>
-      <p>特定のテーマに特化した単発教材です。ここから少しずつ増えていきます。</p>
+      <p>特定のテーマに特化した単発教材です。分野ごとにまとめています。</p>
     </div>
 
+    <!-- ▼ 新しい個別教材は、該当する分野の .minis 内に .mini ブロックを複製して追加 -->
+
+    <div class="mgroup first" style="--c:var(--c-basic)"><h3>地理総合</h3><span class="cnt">1件</span></div>
     <div class="minis">
-      <!-- ▼ 新しい個別教材は、この .mini ブロックを複製して追加 -->
+      <a class="mini" href="/geography-basic/K%C3%B6ppen/" style="--c:var(--c-basic)">
+        <div class="bar"></div>
+        <div class="mbody">
+          <span class="mcat">気候</span>
+          <h4>世界の気候と人々のくらし</h4>
+          <p>ケッペンの気候区分をもとに、世界各地の気候と暮らしのつながりを体験的に学べる教材。</p>
+        </div>
+        <div class="mfoot">→ ひらく</div>
+      </a>
+    </div>
+
+    <div class="mgroup" style="--c:var(--c-sys)"><h3>系統地理</h3><span class="cnt">3件</span></div>
+    <div class="minis">
       <a class="mini" href="/thematic/industrial01/" style="--c:var(--c-sys)">
         <div class="bar"></div>
         <div class="mbody">
@@ -457,17 +478,6 @@ footer .cc a{color:#bfe0c4;font-weight:700;text-decoration:underline;text-underl
         </div>
         <div class="mfoot">→ ひらく</div>
       </a>
-
-      <a class="mini" href="/thematic/urban-problems/" style="--c:var(--c-thm)">
-        <div class="bar"></div>
-        <div class="mbody">
-          <span class="mcat">シミュレーター<span class="new">NEW</span></span>
-          <h4>都市問題シミュレーター</h4>
-          <p>発展途上国のプッシュ型と先進国のプル型、2つの人口移動モデルを左右で比較。スラムの形成や再開発のちがいを可視化します。</p>
-        </div>
-        <div class="mfoot">→ ひらく</div>
-      </a>
-
       <a class="mini" href="/thematic/industrial02/" style="--c:var(--c-sys)">
         <div class="bar"></div>
         <div class="mbody">
@@ -477,7 +487,6 @@ footer .cc a{color:#bfe0c4;font-weight:700;text-decoration:underline;text-underl
         </div>
         <div class="mfoot">→ ひらく</div>
       </a>
-
       <a class="mini" href="/thematic/industrial03/" style="--c:var(--c-sys)">
         <div class="bar"></div>
         <div class="mbody">
@@ -487,29 +496,28 @@ footer .cc a{color:#bfe0c4;font-weight:700;text-decoration:underline;text-underl
         </div>
         <div class="mfoot">→ ひらく</div>
       </a>
+    </div>
 
-      <a class="mini" href="/geography-basic/K%C3%B6ppen/" style="--c:var(--c-basic)">
+    <div class="mgroup" style="--c:var(--c-thm)"><h3>テーマ別</h3><span class="cnt">2件</span></div>
+    <div class="minis">
+      <a class="mini" href="/thematic/urban-problems/" style="--c:var(--c-thm)">
         <div class="bar"></div>
         <div class="mbody">
-          <span class="mcat">地理総合</span>
-          <h4>世界の気候と人々のくらし</h4>
-          <p>ケッペンの気候区分をもとに、世界各地の気候と暮らしのつながりを体験的に学べる教材。</p>
+          <span class="mcat">シミュレーター<span class="new">NEW</span></span>
+          <h4>都市問題シミュレーター</h4>
+          <p>発展途上国のプッシュ型と先進国のプル型、2つの人口移動モデルを左右で比較。スラムの形成や再開発のちがいを可視化します。</p>
         </div>
         <div class="mfoot">→ ひらく</div>
       </a>
-
-      <a class="mini" href="/geography-advanced/japan-agriculture1/" style="--c:var(--c-sys)">
+      <a class="mini" href="/thematic/rain-temp-chart/" style="--c:var(--c-thm)">
         <div class="bar"></div>
         <div class="mbody">
           <span class="mcat">地図教材</span>
-          <h4>日本の農業地図</h4>
-          <p>日本各地の農業地帯・主要産物を地図上でインタラクティブに確認できる教材。</p>
+          <h4>世界の雨温図・ハイサーグラフ マップ</h4>
+          <p>気象庁の平年値（1991〜2020年）106地点の雨温図・ハイサーグラフを地図から表示。最大4地点を、目盛りをそろえて比較できます。</p>
         </div>
         <div class="mfoot">→ ひらく</div>
       </a>
-
-      <!-- 成長領域：教材が増えるまでのプレースホルダー -->
-      <div class="mini ghost"><div class="g">🌱<br>新しい教材を準備中</div></div>
     </div>
   </div>
 </section>
