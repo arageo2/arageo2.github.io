@@ -228,6 +228,24 @@ footer .cc{margin:10px 0 6px}
 .page[id^="p15"] .chip.on{background:var(--c5);border-color:var(--c5)}
 .page[id^="p15"] .diagram-info,.page[id^="p15"] .climate-info{background:var(--c5soft)}
 .page[id^="p15"] .diagram-info h3,.page[id^="p15"] .climate-info h3{color:var(--c5)}
+
+/* ===== 編集方針(独自設計の明示) ===== */
+.manifesto{max-width:980px;margin:14px auto 0;padding:0 16px}
+.manifesto-box{background:linear-gradient(180deg,var(--c1soft),#fff);border:2px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:0 2px 10px rgba(31,51,64,.05)}
+.manifesto-eyebrow{font-size:.72rem;letter-spacing:.16em;font-weight:800;color:var(--c1);text-transform:uppercase}
+.manifesto-lead{margin:6px 0 0;font-size:.95rem;font-weight:700;color:var(--ink);line-height:1.7}
+.manifesto details{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.manifesto summary{cursor:pointer;font-size:.86rem;font-weight:700;color:var(--c1);list-style:none;display:flex;align-items:center;gap:6px}
+.manifesto summary::-webkit-details-marker{display:none}
+.manifesto summary::before{content:"▶";font-size:.7rem;transition:transform .2s}
+.manifesto details[open] summary::before{transform:rotate(90deg)}
+.manifesto-body{margin-top:10px;font-size:.86rem;line-height:1.85;color:#33474f}
+.manifesto-body h4{margin:12px 0 4px;font-size:.9rem;color:var(--ink)}
+.manifesto-body p{margin:4px 0}
+.manifesto-body .mf-principle{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}
+.manifesto-body .mf-principle b{color:var(--c1)}
+.manifesto-note{margin-top:12px;padding:10px 12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;font-size:.8rem;color:#51626d;line-height:1.75}
+@media(max-width:600px){.manifesto-lead{font-size:.9rem}.manifesto-body{font-size:.82rem}}
 </style>
 </head>
 <body>
@@ -247,44 +265,69 @@ footer .cc{margin:10px 0 6px}
   <p class="lead">「なぜそこに?」を問う系統地理の旅へ。自然環境・産業・人口・文化を、手を動かしながら探究しよう。上のタブで章を、下のチップで節を選べます。</p>
 </div>
 </header>
+<div class="manifesto">
+<div class="manifesto-box">
+<div class="manifesto-eyebrow">この教材について ─ 編集方針</div>
+<p class="manifesto-lead">この教材は、一人の高校地理教員が「生徒の知的好奇心をどう引き出すか」を軸に、独自に設計・自作したインタラクティブ学習教材です。</p>
+<details>
+<summary>なぜ、この構成・この順序なのか（設計の考え方を読む）</summary>
+<div class="manifesto-body">
+<p>系統地理という分野を、単なる用語の暗記ではなく「<b>なぜそこに、そうなっているのか</b>」を問い続ける探究の旅として設計しました。その考えのもとに、以下の方針で構成の順序と各ページを組み立てています。</p>
+
+<div class="mf-principle"><b>① 問いから始める。</b> すべてのページの冒頭に、生徒自身が考えたくなる「問い」を置きました。答えを教わるのではなく、問いを入り口に、自分で資料を読み解き、考察へ向かう流れを大切にしています。</div>
+
+<div class="mf-principle"><b>② 「土台」から「営み」へ積み上げる。</b> 最初に地形・気候という<b>自然環境</b>を土台として押さえ、その上に、人間の営みである産業・人口・生活文化を順に重ねていきます。自然という舞台があってはじめて、その上での人々の暮らしが理解できる ─ この「土台→営み」の積み上げが、章の並び順の背骨です。前の章で得た見方を、次の章で使えるように配列しています。</div>
+
+<div class="mf-principle"><b>③ 手を動かして体感する。</b> 気候区分を判定するシミュレーション、用語を仕分けるゲーム、事例を地図で確かめる操作など、読むだけでなく<b>手を動かす体験</b>を各ページに組み込みました。抽象的な概念を、操作を通じて自分のものにするための設計です。</div>
+
+<div class="mf-principle"><b>④ 「考察」から「構想」へ。</b> 各ページの最後の「Think!」では、学んだことをもとに、身近な問題や将来の課題を自分の言葉で考える問いを用意しました。知識の獲得（考察）から、それを使って未来を描く（構想）へとつなぐことをねらいとしています。</div>
+
+<p>この順序と構成は、こうした教育的な意図にもとづいて独自に組み立てたものです。</p>
+</div>
+<div class="manifesto-note">📘 本教材は、一教員が個人で自主制作した非公式の学習補助教材です。特定の教科書会社・出版社・資料集とは一切関係がなく、公認・提携・監修を受けたものではありません。図版・地図・解説文・模式図はすべて本教材のために独自に作成したものです。</div>
+</details>
+</div>
+</div>
+
+
 
 <nav class="tabs">
-  <button class="tab active" data-u="1">第1章 自然環境<small>地形/気候/災害/環境問題</small></button>
-  <button class="tab" data-u="2">第2章 産業と資源<small>農業/資源/工業/サービス</small></button>
-  <button class="tab" data-u="3">第3章 交通・貿易・観光<small>結びつく世界</small></button>
-  <button class="tab" data-u="4">第4章 人口・村落・都市<small>人の集まり方</small></button>
-  <button class="tab" data-u="5">第5章 生活文化・民族<small>民族/言語/宗教/領土</small></button>
+  <button class="tab active" data-u="1">第1章 地球と自然のしくみ<small>地形/気候/災害/環境問題</small></button>
+  <button class="tab" data-u="2">第2章 くらしを支える産業<small>農業/資源/工業/サービス</small></button>
+  <button class="tab" data-u="3">第3章 世界を結ぶネットワーク<small>交通・貿易・観光</small></button>
+  <button class="tab" data-u="4">第4章 人はどこに集まるか<small>人口・村落・都市</small></button>
+  <button class="tab" data-u="5">第5章 文化と国家のかたち<small>生活文化/民族/宗教/領土</small></button>
 </nav>
 
 <div class="chipbar cb1 active" id="chips1">
-  <span class="chiplabel">▼ 第1章 自然環境 ─ 地球という舞台のしくみ</span>
+  <span class="chiplabel">▼ 第1章 地球と自然のしくみ ─ 地球という舞台を読む</span>
   <button class="pagechip active" data-page="p111">1 世界の地形</button>
   <button class="pagechip" data-page="p112">2 気候① 大気大循環</button>
   <button class="pagechip" data-page="p113">3 気候② 気候区分</button>
   <button class="pagechip" data-page="p114">4 日本の自然と環境問題</button>
 </div>
 <div class="chipbar cb2" id="chips2">
-  <span class="chiplabel">▼ 第2章 産業と資源 ─ 食べる・つくる・つなぐ</span>
+  <span class="chiplabel">▼ 第2章 くらしを支える産業 ─ 食べる・つくる・つなぐ</span>
   <button class="pagechip" data-page="p121">1 農林水産業</button>
   <button class="pagechip" data-page="p122">2 食料問題</button>
   <button class="pagechip" data-page="p123">3 資源・エネルギー</button>
   <button class="pagechip" data-page="p124">4 工業と第三次産業</button>
 </div>
 <div class="chipbar cb3" id="chips3">
-  <span class="chiplabel">▼ 第3章 交通・通信，貿易，観光 ─ 結びつく世界</span>
+  <span class="chiplabel">▼ 第3章 世界を結ぶネットワーク ─ 交通・貿易・観光</span>
   <button class="pagechip" data-page="p131">1 交通・通信</button>
   <button class="pagechip" data-page="p132">2 貿易と経済連携</button>
   <button class="pagechip" data-page="p133">3 観光</button>
 </div>
 <div class="chipbar cb4" id="chips4">
-  <span class="chiplabel">▼ 第4章 人口，村落・都市 ─ 人の集まり方</span>
+  <span class="chiplabel">▼ 第4章 人はどこに集まるか ─ 人の集まり方</span>
   <button class="pagechip" data-page="p141">1 人口</button>
   <button class="pagechip" data-page="p142">2 人口問題</button>
   <button class="pagechip" data-page="p143">3 村落・都市</button>
   <button class="pagechip" data-page="p144">4 居住・都市問題</button>
 </div>
 <div class="chipbar cb5" id="chips5">
-  <span class="chiplabel">▼ 第5章 生活文化，民族・宗教 ─ 多様な人々と世界</span>
+  <span class="chiplabel">▼ 第5章 文化と国家のかたち ─ 多様な人々と世界</span>
   <button class="pagechip" data-page="p151">1 生活文化の地域性</button>
   <button class="pagechip" data-page="p152">2 民族・言語・宗教</button>
   <button class="pagechip" data-page="p153">3 民族問題</button>
@@ -292,13 +335,13 @@ footer .cc{margin:10px 0 6px}
 </div>
 
 <main>
-<!-- ===================== 第1章1節 世界の地形 ===================== -->
+<!-- section -->
 <section class="page active" id="p111">
-<div class="crumb">第1編 現代世界の系統地理的考察 ＞ 第1章 自然環境 ＞ 1節 世界の地形</div>
-<div class="pagetitle">🌋 世界の地形 ─ 大地はどんな力でつくられる? </div>
+<div class="crumb">第1編 現代世界の系統地理的考察 ＞ 第1章 地球と自然のしくみ ＞ 変動する大地</div>
+<div class="pagetitle">🌋 変動する大地 ─ 地形は何の力でつくられるのか </div>
 <div class="pagelead">私たちの生活はすべて「地形」の上で営まれている。その地形を、二つの力とプレートの動きから読み解こう。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">地震や火山が集中する地域と、まったくない地域があるのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>規模(スケール)・成因・分布</b><br>地形は「内からの力」と「外からの力」のせめぎ合いの産物。地球規模のプレートの動きが、地震・火山・山脈の分布を決めている。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">地震や火山が起こる場所には、どんな「かたより」があるのだろう? そして、それは何によって決まるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>規模(スケール)・成因・分布</b><br>地形は「内からの力」と「外からの力」のせめぎ合いの産物。地球規模のプレートの動きが、地震・火山・山脈の分布を決めている。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>冒頭の「問い」に、いまの自分の予想を1行メモ。「地震が多い国・少ない国」を3つずつ挙げてみよう。</li>
@@ -402,13 +445,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第1章2節 気候①大気大循環 ===================== -->
+<!-- section -->
 <section class="page" id="p112">
-<div class="crumb">第1編 ＞ 第1章 自然環境 ＞ 2節 気候と自然環境</div>
-<div class="pagetitle">🌬️ 世界の気候① ─ 大気大循環が気候をつくる </div>
+<div class="crumb">第1編 ＞ 第1章 地球と自然のしくみ ＞ 気候のしくみ①</div>
+<div class="pagetitle">🌬️ 気候のしくみ① ─ 大気の大循環が気候を決める </div>
 <div class="pagelead">なぜ赤道はジメジメ、緯度20〜30度は砂漠だらけ? 地球をめぐる風と気圧帯のしくみが、降水量の世界地図を決めている。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">同じ緯度なのに、大陸の西岸と東岸で気候がちがうのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>因果・相互作用</b><br>気温と降水は「気候要素」、それを左右する緯度・海流・風などが「気候因子」。地球規模の大気大循環という"装置"を理解すれば、世界の気候の骨格が見えてくる。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">緯度が同じでも、大陸の西と東で気候が大きく変わる ─ その「しくみ」を説明できるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>因果・相互作用</b><br>気温と降水は「気候要素」、それを左右する緯度・海流・風などが「気候因子」。地球規模の大気大循環という"装置"を理解すれば、世界の気候の骨格が見えてくる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「砂漠が多い緯度はどこ?」を予想してメモ(赤道? 緯度30度? 極?)。</li>
@@ -480,13 +523,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第1章3節 気候②気候区分 ===================== -->
+<!-- section -->
 <section class="page" id="p113">
-<div class="crumb">第1編 ＞ 第1章 自然環境 ＞ 3節 気候と人々の生活</div>
-<div class="pagetitle">🗺️ 世界の気候② ─ ケッペンの気候区分 </div>
+<div class="crumb">第1編 ＞ 第1章 地球と自然のしくみ ＞ 気候のしくみ②</div>
+<div class="pagetitle">🗺️ 気候のしくみ② ─ 気候区分で世界を読む </div>
 <div class="pagelead">「植生のちがい」で世界を区分する ─ ケッペンの発想を体感しよう。雨温図を読めば、その土地の暮らしまで見えてくる。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">気温と降水量のグラフ(雨温図)だけで、その土地の気候や暮らしを当てられるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>分類・地域性</b><br>ケッペンは植物が育つ条件(気温・降水)に注目して世界を区分した。記号のしくみがわかれば、雨温図は"暗号"から"地図"に変わる。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">雨温図という2つの数字の並びから、その土地の風景や人々の暮らしまで読み解けるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>分類・地域性</b><br>ケッペンは植物が育つ条件(気温・降水)に注目して世界を区分した。記号のしくみがわかれば、雨温図は"暗号"から"地図"に変わる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>自分の住む町は何気候だと思う? ケッペンの記号で予想してメモ(日本の大部分はCfa)。</li>
@@ -563,13 +606,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第1章4・5節 日本の自然と環境問題 ===================== -->
+<!-- section -->
 <section class="page" id="p114">
-<div class="crumb">第1編 ＞ 第1章 自然環境 ＞ 4節 日本の自然環境と自然災害／5節 世界の環境問題</div>
-<div class="pagetitle">🗾 日本の自然環境と地球的環境問題 </div>
+<div class="crumb">第1編 ＞ 第1章 地球と自然のしくみ ＞ 日本の自然と地球環境課題</div>
+<div class="pagetitle">🗾 日本の自然と、地球規模の環境課題 </div>
 <div class="pagelead">変動帯の上に乗り、四季がめぐる日本列島。災害とどう向き合うか、そして地球規模の環境問題を、自分ごととして考えよう。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">日本に自然災害が多いのはなぜか。そして私たちはどう備えればよいのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置・相互作用・持続可能性</b><br>日本は変動帯の真上にあり、四季の気団がせめぎ合う。災害の多さは「位置」の宿命。だからこそ防災・減災と、地球環境への責任が問われる。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">日本という国土は、なぜこれほど災害と隣り合わせなのだろう? そのなかで、私たちに何ができるだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>位置・相互作用・持続可能性</b><br>日本は変動帯の真上にあり、四季の気団がせめぎ合う。災害の多さは「位置」の宿命。だからこそ防災・減災と、地球環境への責任が問われる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>自分の住む地域で起こりうる災害を3つ予想してメモ(地震・水害・土砂…)。</li>
@@ -639,13 +682,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第2章1節 農林水産業 ===================== -->
+<!-- section -->
 <section class="page" id="p121">
-<div class="crumb">第1編 ＞ 第2章 産業と資源 ＞ 1 農林水産業</div>
-<div class="pagetitle">🌾 農林水産業 ─ どこで・どんな形で食べ物をつくる? </div>
+<div class="crumb">第1編 ＞ 第2章 くらしを支える産業 ＞ 食料をつくる営み</div>
+<div class="pagetitle">🌾 食料をつくる営み ─ どこで・どんな形で生産するか </div>
 <div class="pagelead">同じ「農業」でも、焼畑・遊牧・酪農・巨大穀倉地帯と、世界でその姿はまるでちがう。なぜ? 自然条件・市場・歴史が、農業の形を決めている。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">農業の形が地域によって大きくちがうのは、何によって決まるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>立地・相互依存</b><br>農業は人間が自然に働きかける特殊な産業。気候・地形・土壌などの<b>自然条件</b>と、市場・政策・資本などの<b>社会条件</b>が組み合わさって立地が決まる。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">同じ「農業」でも、地域ごとにまるで姿が違う ─ その違いを生み出しているものは何だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>立地・相互依存</b><br>農業は人間が自然に働きかける特殊な産業。気候・地形・土壌などの<b>自然条件</b>と、市場・政策・資本などの<b>社会条件</b>が組み合わさって立地が決まる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>自分が今日食べたものの「産地」を思い出してメモ。国産? 外国産?</li>
@@ -716,13 +759,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第2章2節 食料問題 ===================== -->
+<!-- section -->
 <section class="page" id="p122">
-<div class="crumb">第1編 ＞ 第2章 産業と資源 ＞ 2 食料問題</div>
+<div class="crumb">第1編 ＞ 第2章 くらしを支える産業 ＞ 食料問題</div>
 <div class="pagetitle">🍚 食料問題 ─ 余る国と、足りない国 </div>
 <div class="pagelead">世界の穀物生産は増え続けているのに、飢える人は減っていない。一方で大量の食べ物が捨てられる。この「ねじれ」はなぜ生まれるのか。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">食料は世界全体では足りているのに、なぜ飢える人がいなくならないのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域的偏り・持続可能性</b><br>食料問題は「生産量」だけの問題ではない。<b>需給の地域的な偏り</b>と、貧困・紛争・貿易のしくみが、必要な人に食料が届かない状況を生む。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">世界全体で見れば食料は足りている ─ それなのに飢えが消えないのは、いったいなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域的偏り・持続可能性</b><br>食料問題は「生産量」だけの問題ではない。<b>需給の地域的な偏り</b>と、貧困・紛争・貿易のしくみが、必要な人に食料が届かない状況を生む。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「日本の食料自給率は何%くらい?」を予想してメモ(カロリーベース)。</li>
@@ -790,13 +833,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第2章3節 資源・エネルギー ===================== -->
+<!-- section -->
 <section class="page" id="p123">
-<div class="crumb">第1編 ＞ 第2章 産業と資源 ＞ 3 資源・エネルギー</div>
-<div class="pagetitle">⚡ エネルギーと鉱産資源 ─ 偏在する資源をめぐる世界 </div>
+<div class="crumb">第1編 ＞ 第2章 くらしを支える産業 ＞ 資源とエネルギー</div>
+<div class="pagetitle">⚡ 資源とエネルギー ─ かたよる資源をめぐる世界 </div>
 <div class="pagelead">石油はなぜペルシャ湾岸に偏るのか。なぜ日本は資源を輸入に頼るのか。資源の「偏り」が、貿易や国際対立、そして私たちの電気をかたちづくっている。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">エネルギーの生産・消費に大きな地域差があると、世界に何が起こるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>偏在・相互依存・持続可能性</b><br>資源の分布と消費には大きな偏りがある。だから資源は国際商品となり、資源ナショナリズムや国際対立、そして再生可能エネルギーへの転換が問われる。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">エネルギーの「もつ地域」と「使う地域」がずれていると、世界にはどんな動きが生まれるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>偏在・相互依存・持続可能性</b><br>資源の分布と消費には大きな偏りがある。だから資源は国際商品となり、資源ナショナリズムや国際対立、そして再生可能エネルギーへの転換が問われる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>今この部屋の電気は何で発電された? を予想してメモ(火力? 原子力? 太陽光?)。</li>
@@ -867,13 +910,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第2章4節 工業と第三次産業 ===================== -->
+<!-- section -->
 <section class="page" id="p124">
-<div class="crumb">第1編 ＞ 第2章 産業と資源 ＞ 4 工業と第三次産業</div>
-<div class="pagetitle">🏭 工業の立地と第三次産業 ─ つくる場所・つなぐ仕事 </div>
+<div class="crumb">第1編 ＞ 第2章 くらしを支える産業 ＞ 工業とサービス業</div>
+<div class="pagetitle">🏭 工業とサービス業 ─ つくる場所・つなぐ仕事 </div>
 <div class="pagelead">なぜ製鉄所は海ぞいに、ビール工場は都市の近くに? なぜ1台のスマホは世界中でつくられる? 工業の立地と国際分業、そして急成長するサービス産業を読み解こう。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">工業はどこに立地するのか。そしてなぜ、製品は世界中に分かれてつくられるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>立地・国際分業</b><br>工場は費用が最小になる場所に立地する(原料・市場・労働力・集積)。グローバル化が進むと、工程ごとに最適な国へ分かれる国際分業が世界規模で広がる。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">工場はどんな場所を選んで建つのだろう? そして1つの製品が、なぜ世界中に分かれてつくられるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>立地・国際分業</b><br>工場は費用が最小になる場所に立地する(原料・市場・労働力・集積)。グローバル化が進むと、工程ごとに最適な国へ分かれる国際分業が世界規模で広がる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>身の回りの工業製品の「Made in」を3つ調べてメモ。</li>
@@ -944,13 +987,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第3章1節 交通・通信 ===================== -->
+<!-- section -->
 <section class="page" id="p131">
-<div class="crumb">第1編 ＞ 第3章 交通・通信，貿易，観光 ＞ 1 交通・通信</div>
-<div class="pagetitle">🚄 交通・通信 ─ 縮む世界、つながる世界 </div>
+<div class="crumb">第1編 ＞ 第3章 世界を結ぶネットワーク ＞ 交通と通信</div>
+<div class="pagetitle">🚄 交通と通信 ─ 縮む世界、つながる世界 </div>
 <div class="pagelead">江戸時代、太平洋を渡るのに38日かかった。今は約9時間。交通と通信の発達は世界の「時間距離」を一気に縮めた。一方で、取り残される地域や情報格差も生まれている。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">交通・通信の発達は、世界に何をもたらしたのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>時間距離・結びつき・格差</b><br>交通・通信は世界を結びつけ「時間距離」を縮めた。しかし、その恩恵は均等ではなく、取り残される地域や情報格差(デジタルデバイド)も生む。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">交通と通信の進歩は、世界の「距離」をどう変え、私たちに何をもたらしたのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>時間距離・結びつき・格差</b><br>交通・通信は世界を結びつけ「時間距離」を縮めた。しかし、その恩恵は均等ではなく、取り残される地域や情報格差(デジタルデバイド)も生む。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>今朝あなたが使った「移動手段」と「通信手段」を書き出してみよう。</li>
@@ -1022,13 +1065,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第3章2節 貿易と経済連携 ===================== -->
+<!-- section -->
 <section class="page" id="p132">
-<div class="crumb">第1編 ＞ 第3章 交通・通信，貿易，観光 ＞ 2 貿易と経済連携</div>
-<div class="pagetitle">📦 貿易と経済連携 ─ 自由に、でも地域ごとに </div>
+<div class="crumb">第1編 ＞ 第3章 世界を結ぶネットワーク ＞ 貿易と経済のまとまり</div>
+<div class="pagetitle">📦 貿易と経済のまとまり ─ 自由に、でも地域ごとに </div>
 <div class="pagelead">二度の大戦の反省から、世界は自由貿易を進めてきた。けれど近年は、地域ごとの経済連携が広がり、同時に「自国を守ろう」とする保護主義も強まっている。なぜ?</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">世界全体で自由貿易が進む一方で、なぜ地域ごとの結びつきや保護主義も強まるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>グローバル化・地域統合・相互依存</b><br>自由貿易は世界を一体化させる。同時に、地域ごとのFTA・EPAによる統合や、自国産業を守る保護主義も生まれ、両者がせめぎ合う。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">世界は自由貿易へ向かうはずなのに、地域ごとのまとまりや保護の動きも強まる ─ この2つの力はなぜ同時に働くのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>グローバル化・地域統合・相互依存</b><br>自由貿易は世界を一体化させる。同時に、地域ごとのFTA・EPAによる統合や、自国産業を守る保護主義も生まれ、両者がせめぎ合う。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>身近な輸入品を3つ思い出し、どこの国から来たか書いてみよう。</li>
@@ -1099,13 +1142,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第3章3節 観光 ===================== -->
+<!-- section -->
 <section class="page" id="p133">
-<div class="crumb">第1編 ＞ 第3章 交通・通信，貿易，観光 ＞ 3 観光</div>
+<div class="crumb">第1編 ＞ 第3章 世界を結ぶネットワーク ＞ 観光</div>
 <div class="pagetitle">🏖️ 観光 ─ 旅が地域を変える </div>
 <div class="pagelead">交通と通信が発達し、世界中が観光の対象になった。観光は地域に雇用と活気をもたらす一方、住民の生活を圧迫するオーバーツーリズムも生む。観光と地域の関係を読み解こう。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">観光は、訪れる地域に何をもたらすのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域変容・持続可能性</b><br>観光は雇用や商機を生み地域を活性化させる一方、オーバーツーリズムや環境破壊も招く。持続可能な観光のあり方が問われている。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">旅行者が訪れることは、その地域に恵みをもたらすのだろうか、それとも負担になるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域変容・持続可能性</b><br>観光は雇用や商機を生み地域を活性化させる一方、オーバーツーリズムや環境破壊も招く。持続可能な観光のあり方が問われている。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>あなたが「行ってみたい場所」を1つ挙げ、その理由(気候? 文化? 自然?)を書こう。</li>
@@ -1176,13 +1219,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第4章1節 人口 ===================== -->
+<!-- section -->
 <section class="page" id="p141">
-<div class="crumb">第1編 ＞ 第4章 人口，村落・都市 ＞ 1 人口</div>
-<div class="pagetitle">📊 人口 ─ どこに、どれだけ、なぜ </div>
+<div class="crumb">第1編 ＞ 第4章 人はどこに集まるか ＞ 世界の人口</div>
+<div class="pagetitle">📊 世界の人口 ─ どこに・どれだけ・なぜ </div>
 <div class="pagelead">人は地球に均等には住んでいない。アジアのモンスーン地帯には密集し、砂漠や極地はほぼ無人。人口の分布・増え方・移動には、はっきりとした理由がある。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">世界の人口はどこに多く分布し、どのように変化してきたのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>分布・地域差・変化</b><br>人口は自然環境や産業によって偏って分布する。出生率・死亡率の変化(人口転換)が、人口の増減や年齢構成を決めていく。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">世界の人々はどこに集まって暮らし、その数はどのように移り変わってきたのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>分布・地域差・変化</b><br>人口は自然環境や産業によって偏って分布する。出生率・死亡率の変化(人口転換)が、人口の増減や年齢構成を決めていく。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「世界で人が多く住む地域はどこ?」を地図を思い浮かべて予想しよう。</li>
@@ -1255,13 +1298,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第4章2節 人口問題 ===================== -->
+<!-- section -->
 <section class="page" id="p142">
-<div class="crumb">第1編 ＞ 第4章 人口，村落・都市 ＞ 2 人口問題</div>
+<div class="crumb">第1編 ＞ 第4章 人はどこに集まるか ＞ 人口問題</div>
 <div class="pagetitle">⚖️ 人口問題 ─ 増えすぎる国、減りすぎる国 </div>
 <div class="pagelead">発展途上国では人口が増え続け、平均寿命の短さが課題。先進国では少子高齢化が進む。正反対に見える二つの問題は、どちらも「人をどう支えるか」の問いだ。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">発展途上国と先進国は、それぞれどのような人口問題をかかえているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域差・持続可能性</b><br>途上国は人口増加と短い平均寿命、先進国は少子高齢化。背景の違いを理解し、有効な対策を考える。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">「増えすぎ」と「減りすぎ」─ 発展途上国と先進国は、正反対の人口の悩みをどう抱えているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>地域差・持続可能性</b><br>途上国は人口増加と短い平均寿命、先進国は少子高齢化。背景の違いを理解し、有効な対策を考える。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「日本の合計特殊出生率はいくつくらい?」を予想しよう(置換水準は2.1)。</li>
@@ -1331,13 +1374,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第4章3節 村落・都市 ===================== -->
+<!-- section -->
 <section class="page" id="p143">
-<div class="crumb">第1編 ＞ 第4章 人口，村落・都市 ＞ 3 村落・都市</div>
-<div class="pagetitle">🏙️ 村落・都市 ─ 集まりの形と、都市のネットワーク </div>
+<div class="crumb">第1編 ＞ 第4章 人はどこに集まるか ＞ 村落と都市</div>
+<div class="pagetitle">🏙️ 村落と都市 ─ 集まりの形と、都市のつながり </div>
 <div class="pagelead">家がかたまる村、点在する村。都市は政治・商業・工業などの機能をもち、互いに階層的なネットワーク(都市システム)で結ばれている。都市の「内側」と「つながり」を読み解こう。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">村落や都市はどんな形をとり、都市どうしはどのように結びついているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>立地・機能分化・システム</b><br>村落・都市は自然条件や機能によって形づくられる。都市は中心地機能をもち、階層的なネットワーク(都市システム)を形成する。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">人の集まりである村落や都市はどんな形をとり、都市と都市はどうつながり合っているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>立地・機能分化・システム</b><br>村落・都市は自然条件や機能によって形づくられる。都市は中心地機能をもち、階層的なネットワーク(都市システム)を形成する。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>自分の住む地域は「集村」「散村」のどちらに近い? 都市の中心はどこ?を考えよう。</li>
@@ -1409,13 +1452,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第4章4節 居住・都市問題 ===================== -->
+<!-- section -->
 <section class="page" id="p144">
-<div class="crumb">第1編 ＞ 第4章 人口，村落・都市 ＞ 4 居住・都市問題</div>
+<div class="crumb">第1編 ＞ 第4章 人はどこに集まるか ＞ 居住・都市問題</div>
 <div class="pagetitle">🏚️ 居住・都市問題 ─ 増える都市、変わる都心 </div>
 <div class="pagelead">発展途上国では都市人口が急増し、スラムが広がる。先進国ではインナーシティ問題や、都心の再生が進む。日本では東京一極集中と、郊外の縮退(スポンジ化)が同時に起きている。</div>
 
-<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">発展途上国と先進国の都市は、それぞれどのような居住・都市問題をかかえているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>都市化・格差・持続可能性</b><br>急激な都市化が生むスラムや、郊外化が生むインナーシティ問題。問題への対応が、都心回帰やコンパクトシティなどの新しい動きを引きおこす。</div></div></div>
+<div class="toi t2"><div class="qmark">Q</div><div><div class="qtext">急ぶくらみする途上国の都市と、成熟した先進国の都市 ─ それぞれが抱える住まいの課題は何だろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>都市化・格差・持続可能性</b><br>急激な都市化が生むスラムや、郊外化が生むインナーシティ問題。問題への対応が、都心回帰やコンパクトシティなどの新しい動きを引きおこす。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「都市に人が集まりすぎると何が起こる?」を3つ挙げてみよう。</li>
@@ -1485,13 +1528,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第5章1節 生活文化の地域性 ===================== -->
+<!-- section -->
 <section class="page" id="p151">
-<div class="crumb">第1編 ＞ 第5章 生活文化，民族・宗教 ＞ 1 生活文化の地域性</div>
-<div class="pagetitle">🍚 生活文化の地域性 ─ なぜ、食べ方も住まいも違うのか </div>
+<div class="crumb">第1編 ＞ 第5章 文化と国家のかたち ＞ 暮らしの多様性</div>
+<div class="pagetitle">🍚 暮らしの多様性 ─ なぜ食も住まいも地域で違うのか </div>
 <div class="pagelead">「食べる」「住む」「着る」は人類共通。でも「何をどう」は地域でまるで違う。文化は、その土地の自然環境と歴史のなかで形づくられ、そして今、グローバル化で大きく変わりつつある。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">衣食住などの生活文化が、地域によって大きく異なるのはなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>環境との相互作用・変容</b><br>文化は地域の自然環境に適合するように形成される(環境適応)。同時に、人の移動やグローバル化によって歴史的に変容していく。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">衣・食・住といった暮らしの形が、地域ごとにこれほど多彩なのは、いったいなぜだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>環境との相互作用・変容</b><br>文化は地域の自然環境に適合するように形成される(環境適応)。同時に、人の移動やグローバル化によって歴史的に変容していく。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>あなたの「今日の主食」は何だった? それは粉? 粒?を考えよう。</li>
@@ -1563,13 +1606,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第5章2節 民族・言語・宗教 ===================== -->
+<!-- section -->
 <section class="page" id="p152">
-<div class="crumb">第1編 ＞ 第5章 生活文化，民族・宗教 ＞ 2 民族・言語・宗教</div>
-<div class="pagetitle">🗣️ 民族・言語・宗教 ─ 「われわれ」をつくるもの </div>
+<div class="crumb">第1編 ＞ 第5章 文化と国家のかたち ＞ 民族・言語・宗教</div>
+<div class="pagetitle">🗣️ 民族・言語・宗教 ─ 「わたしたち」を形づくるもの </div>
 <div class="pagelead">民族とは何だろう。それは肌の色ではなく、言語や文化を共有する「われわれ意識」だ。言語と宗教は文化の核となり、その分布には人類の移動と歴史が刻まれている。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">民族・言語・宗教は、たがいにどのような関係をもち、世界にどう分布しているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>アイデンティティ・分布・歴史</b><br>民族は帰属意識(アイデンティティ)にもとづく。言語は文化の核であり、宗教の分布には人類の移動と歴史の背景がある。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">民族・言語・宗教はたがいにどう結びつき、世界地図の上にどんな模様を描いているのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>アイデンティティ・分布・歴史</b><br>民族は帰属意識(アイデンティティ)にもとづく。言語は文化の核であり、宗教の分布には人類の移動と歴史の背景がある。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「世界三大宗教」を言えるかな? 思い出してメモしよう。</li>
@@ -1639,13 +1682,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第5章3節 民族問題 ===================== -->
+<!-- section -->
 <section class="page" id="p153">
-<div class="crumb">第1編 ＞ 第5章 生活文化，民族・宗教 ＞ 3 民族問題</div>
+<div class="crumb">第1編 ＞ 第5章 文化と国家のかたち ＞ 民族問題</div>
 <div class="pagetitle">🕊️ 民族問題 ─ なぜ争いが生まれ、どう乗りこえるか </div>
 <div class="pagelead">一つの民族だけの国はほとんどない。言語・宗教・植民地時代の分断が、対立や難民を生む。遠い紛争に見えても、私たちのスマホの中の鉱物が、それを長引かせていることもある。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">民族問題や難民は、どのような背景から生まれ、どう解決へ向かえるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>複合的要因・相互依存・共生</b><br>民族問題の要因は複合的(言語・宗教・植民地支配・資源)。解決には、紛争の停止と平和構築、そして多文化共生の姿勢が必要となる。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">民族をめぐる対立や難民は、どんな事情から生まれ、和解への道はどこにあるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>複合的要因・相互依存・共生</b><br>民族問題の要因は複合的(言語・宗教・植民地支配・資源)。解決には、紛争の停止と平和構築、そして多文化共生の姿勢が必要となる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>ニュースで見た「民族紛争」や「難民」を1つ思い出してみよう。</li>
@@ -1716,13 +1759,13 @@ footer .cc{margin:10px 0 6px}
 
 <div class="pagenav"><button class="pn-btn"></button><button class="pn-btn"></button></div>
 </section>
-<!-- ===================== 第5章4節 現代の国家と領土問題 ===================== -->
+<!-- section -->
 <section class="page" id="p154">
-<div class="crumb">第1編 ＞ 第5章 生活文化，民族・宗教 ＞ 4 国家と領土問題</div>
-<div class="pagetitle">🗾 現代の国家と領土問題 ─ 国の「かたち」と境界 </div>
+<div class="crumb">第1編 ＞ 第5章 文化と国家のかたち ＞ 国家と領域</div>
+<div class="pagetitle">🗾 国家と領域 ─ 国の「かたち」と境界のなりたち </div>
 <div class="pagelead">国家には主権のおよぶ「領域」がある ─ 領土・領海・領空。海の資源が注目されると、各国は権利を主張し、境界をめぐる問題が生じる。海洋国家・日本にとっても重要なテーマだ。</div>
 
-<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">国家の領域はどのように定められ、領土問題はなぜ生じるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>領域・国益・国際協調</b><br>領域は領土・領海・領空からなる。領土問題は各国の主張と国益が密接にかかわり、解決には話し合いや第三者機関の仲介が必要となる。</div></div></div>
+<div class="toi t1"><div class="qmark">Q</div><div><div class="qtext">国の「範囲」はどのように決められ、境界をめぐる対立はなぜ起こるのだろうか?</div><div class="qsub">🔍 働かせたい見方・考え方:<b>領域・国益・国際協調</b><br>領域は領土・領海・領空からなる。領土問題は各国の主張と国益が密接にかかわり、解決には話し合いや第三者機関の仲介が必要となる。</div></div></div>
 
 <details class="plan"><summary>🧑‍🍳 学習のレシピ ─ このページのおいしい進め方</summary><ol>
 <li><b>下ごしらえ:</b>「日本の国土は陸地だけ?」を考えよう(領海・EEZも含めると?)。</li>
@@ -1802,7 +1845,7 @@ footer .cc{margin:10px 0 6px}
 <footer>
 <div class="cc">📘 本教材は、高校地理探究の学習内容にそって<b>一教員が個人で自主制作</b>した、非公式の学習補助教材です（生徒の自学・探究用）。特定の教科書会社・出版社とは一切関係がなく、公認・提携・監修を受けたものではありません。</div>
 <div class="cc">数値・用語は一般的な地理学習で扱われる概数・定義にもとづきます。雨温図は各気候区の特徴を強調した<b>模式図(概念図)</b>であり、特定地点の観測値ではありません。地図上の事例地点の位置は概略です。最新の統計・災害・領土に関する情報は各「信頼できる情報源」で確認してください。図版・地図・解説文・模式図はすべて本教材のために独自に作成したものです。特定の教科書・資料集の図版や文章を複製・転載したものではありません。</div>
-<div class="cc" style="margin-top:8px">地理探究 インタラクティブ・ラボ 第1編「現代世界の系統地理的考察」─ 全5章 完全版（公開対応版 v3）</div>
+<div class="cc" style="margin-top:8px">地理探究 インタラクティブ・ラボ 第1編「現代世界の系統地理的考察」─ 全5章 完全版（公開対応版 v5・編集方針を明示）</div>
 </footer>
 <script>
 /* ================= ナビゲーション ================= */
