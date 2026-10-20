@@ -170,11 +170,17 @@ body.cmpopen .src{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-link{display:inline-flex;align-items:center;flex:0 0 auto;min-height:24px;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1.4;color:inherit;opacity:.8;text-decoration:none;white-space:nowrap}
+.arg-link:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+</style>
 </head>
 <body>
 <div id="map" aria-label="世界地図。観測地点をクリックすると雨温図とハイサーグラフを表示します"></div>
 
 <div id="bar">
+  <a class="arg-link" href="/">← あらじお蔵</a>
   <h1>世界の雨温図・ハイサーグラフ<small>気象庁 平年値（1991〜2020年）106地点</small></h1>
   <div id="searchWrap" role="combobox" aria-expanded="false" aria-owns="results" aria-haspopup="listbox">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg>

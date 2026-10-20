@@ -119,6 +119,11 @@ canvas{display:block}
   background:var(--gold);color:#141005;border:none;border-radius:2px;cursor:pointer;font-weight:900}
 @media (prefers-reduced-motion: reduce){ #telop,#telop.show{transition:none} }
 </style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-link{display:inline-flex;align-items:center;flex:0 0 auto;min-height:24px;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1.4;color:inherit;opacity:.8;text-decoration:none;white-space:nowrap}
+.arg-link:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+</style>
 </head>
 <body>
 <div id="stage"></div>
@@ -161,6 +166,7 @@ canvas{display:block}
   <div id="chips"></div>
   <div id="prog"><div id="progFill"></div></div>
   <div id="time">0:00 / 0:00</div>
+  <a class="arg-link" href="/">← あらじお蔵</a>
 </div>
 
 <div id="splash"><button id="startBtn">▶ 番組をはじめる</button></div>
