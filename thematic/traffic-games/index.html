@@ -229,11 +229,17 @@ button:focus-visible, a:focus-visible{outline:3px solid var(--accent); outline-o
 #toast .txt p{font-size:.75rem; color:#C7D5E2; line-height:1.6;}
 @media (prefers-reduced-motion:reduce){#toast{transition:opacity .2s;}}
 </style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-link{display:inline-flex;align-items:center;flex:0 0 auto;min-height:24px;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1.4;color:inherit;opacity:.8;text-decoration:none;white-space:nowrap}
+.arg-link:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+</style>
 </head>
 <body>
 
 <!-- ===================== タイトル ===================== -->
 <div id="title">
+  <a class="arg-link" style="align-self:flex-start" href="/">← あらじお蔵</a>
   <div class="logo">
     <h1>列島レーサー</h1>
     <p>RETTOU RACER ─ 乗り継ぎで日本を駆け抜けろ</p>
