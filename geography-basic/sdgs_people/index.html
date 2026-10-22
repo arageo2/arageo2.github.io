@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDGs「People」人間 ― 貧困の悪循環を断ち切る</title>
+<meta name="description" content="地理総合 SDGs「People」（人間）の授業用インタラクティブ教材。貧困の定義、貧困の悪循環、6つの課題の調べ学習資料。">
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1f2933; --sub:#52606d; --line:#d9d4c7;
+  --accent:#c2410c; --accent-soft:#fff1e8; --blue:#1d4ed8; --blue-soft:#e8efff;
+  --green:#15803d; --green-soft:#e7f6ec; --purple:#6d28d9; --purple-soft:#f1eaff;
+  --teal:#0f766e; --teal-soft:#e2f5f2; --red:#b91c1c; --red-soft:#fdeaea;
+  --gold:#a16207; --gold-soft:#fdf6e3;
+  --radius:14px; --fs:16px;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","BIZ UDPGothic","Yu Gothic UI","Meiryo",sans-serif;
+  line-height:1.75}
+body.proj{--fs:20px}
+a{color:var(--blue)}
+header.top{background:linear-gradient(120deg,#7c2d12,#c2410c 55%,#ea580c);color:#fff;padding:22px 16px 18px}
+header.top .wrap{max-width:1100px;margin:0 auto}
+.kicker{font-size:.8rem;letter-spacing:.12em;opacity:.9}
+h1{margin:.2em 0 .1em;font-size:1.7rem;line-height:1.35}
+.theme{font-size:1rem;background:rgba(255,255,255,.16);display:inline-block;padding:4px 12px;border-radius:999px;margin-top:6px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.toolbar button{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:5px 14px;font-size:.85rem;cursor:pointer}
+.toolbar button:hover{background:rgba(255,255,255,.3)}
+nav.tabs{position:sticky;top:0;z-index:20;background:#fffaf5;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs .wrap{max-width:1100px;margin:0 auto;display:flex;gap:4px;padding:0 8px}
+nav.tabs button{flex:0 0 auto;border:0;background:none;padding:12px 14px;font-size:.95rem;cursor:pointer;color:var(--sub);border-bottom:3px solid transparent;font-family:inherit}
+nav.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
+nav.tabs .num{display:inline-block;width:1.5em;height:1.5em;line-height:1.5em;text-align:center;border-radius:50%;background:var(--line);color:#fff;font-size:.75rem;margin-right:4px}
+nav.tabs button.on .num{background:var(--accent)}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+section.page{display:none}
+section.page.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-size:1.35rem;margin:0 0 .6em;border-left:6px solid var(--accent);padding-left:10px;line-height:1.4}
+h3{font-size:1.1rem;margin:1.2em 0 .5em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:14px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.pill{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700;margin-right:4px}
+.work{background:var(--gold-soft);border:1px dashed var(--gold);}
+.work>.label{font-weight:700;color:var(--gold)}
+.big{font-size:2rem;font-weight:800;line-height:1.2}
+.unit{font-size:1rem;font-weight:600;margin-left:2px}
+.src{font-size:.75rem;color:var(--sub);margin-top:6px}
+.note{font-size:.85rem;color:var(--sub)}
+.hl{background:linear-gradient(transparent 60%,#fde68a 60%)}
+.def{border-radius:12px;padding:14px;}
+.def.abs{background:var(--red-soft)} .def.rel{background:var(--blue-soft)}
+.def h4{margin:0 0 4px;font-size:1.05rem}
+input[type=number],input[type=text],select{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+input[type=number]{width:6.5em}
+input[type=range]{width:100%}
+textarea{width:100%;min-height:5.2em;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fffef9;resize:vertical}
+.btn{font:inherit;font-size:.9rem;border:1px solid var(--accent);color:var(--accent);background:#fff;border-radius:999px;padding:5px 14px;cursor:pointer}
+.btn:hover,.btn.on{background:var(--accent);color:#fff}
+.btn.sm{font-size:.8rem;padding:3px 10px}
+.blank{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--ink);text-align:center;padding:0 6px;margin:0 2px;color:transparent;cursor:pointer;user-select:none;transition:.2s}
+.blank.show{color:var(--red);font-weight:700}
+.calc-out{background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin-top:10px}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#fff;margin:10px 0}
+details summary{cursor:pointer;font-weight:700;color:var(--blue)}
+details[open] summary{margin-bottom:6px}
+/* bars */
+.bar-row{display:grid;grid-template-columns:9.5em 1fr 4em;align-items:center;gap:8px;margin:6px 0;font-size:.9rem}
+.bar-bg{background:#eee;border-radius:6px;height:22px;overflow:hidden}
+.bar{height:100%;border-radius:6px;width:0;transition:width 1s ease}
+/* cycle */
+#cycleWrap{position:relative}
+#cycle svg{width:100%;height:auto;display:block}
+.node rect{fill:#fff;stroke:#9a3412;stroke-width:2}
+.node text{font-size:15px;fill:#1f2933;font-weight:700}
+.node.cut rect{fill:#dcfce7;stroke:#15803d}
+.edge{stroke:#c2410c;stroke-width:3;fill:none;transition:.3s}
+.edge.cut{stroke:#16a34a;stroke-dasharray:6 6;opacity:.6}
+.scissor{font-size:20px;opacity:0;transition:.3s}
+.scissor.on{opacity:1}
+.toolset{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.tool{font:inherit;font-size:.9rem;border:1px solid var(--green);background:#fff;color:var(--green);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tool.on{background:var(--green);color:#fff}
+#toolMsg{min-height:3.2em}
+/* problem cards */
+.pbtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.pbtn{font:inherit;border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px;cursor:pointer;text-align:left;transition:.2s}
+.pbtn .ic{font-size:1.6rem;display:block}
+.pbtn b{font-size:1rem}
+.pbtn small{display:block;color:var(--sub);font-size:.75rem;line-height:1.4}
+.pbtn.on{border-color:var(--pc);background:var(--pcs);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.pbtn.done::after{content:"✓ メモあり";font-size:.7rem;color:var(--green);font-weight:700}
+.phead{border-radius:var(--radius);padding:16px 18px;color:#fff;background:var(--pc)}
+.phead h3{margin:0;font-size:1.3rem}
+.phead p{margin:.3em 0 0}
+.lens{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.lens span{font-size:.75rem;border-radius:999px;padding:2px 10px;background:#fff;color:var(--pc);border:1px solid var(--pc);font-weight:700}
+.sub-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.sub-tabs button{font:inherit;font-size:.9rem;border:1px solid var(--line);background:#fff;border-radius:10px 10px 0 0;padding:6px 12px;cursor:pointer;color:var(--sub)}
+.sub-tabs button.on{background:var(--pcs);color:var(--ink);border-color:var(--pc);font-weight:700}
+.sub-body{border:1px solid var(--pc);border-radius:0 12px 12px 12px;padding:16px;background:#fff}
+.fact{display:flex;gap:12px;align-items:flex-start;border-bottom:1px dashed var(--line);padding:10px 0}
+.fact:last-child{border-bottom:0}
+.fact .n{font-size:1.45rem;font-weight:800;color:var(--pc);min-width:5.5em;line-height:1.3}
+.case{border-left:5px solid var(--pc);background:var(--pcs);border-radius:0 12px 12px 0;padding:12px 14px;margin:12px 0}
+.case h4{margin:0 0 4px}
+.case .where{font-size:.8rem;color:var(--sub)}
+.lensbox{border-radius:12px;padding:10px 14px;margin:10px 0;background:#f8fafc;border:1px solid #e2e8f0}
+.lensbox b{color:var(--pc)}
+.scale{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.scale div{border-radius:12px;padding:10px 12px;background:#fafaf9;border:1px solid var(--line);font-size:.92rem}
+.scale div b{display:block;color:var(--pc)}
+.hint{margin:8px 0}
+.hint .h{display:none;background:#fffbea;border:1px solid #f5d77a;border-radius:10px;padding:8px 12px;margin-top:6px}
+.hint .h.show{display:block}
+.links li{margin:2px 0}
+.kw span{display:inline-block;background:#f1f5f9;border-radius:6px;padding:1px 8px;margin:2px;font-size:.85rem}
+.memo3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.memo3 label{font-size:.85rem;font-weight:700;color:var(--sub)}
+.links-chip{display:flex;flex-wrap:wrap;gap:6px}
+.links-chip button{font:inherit;font-size:.8rem;border-radius:999px;border:1px solid var(--line);background:#fff;padding:2px 10px;cursor:pointer}
+/* quiz */
+.q{margin:14px 0;padding:14px;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.q .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
+.q .opts button{font:inherit;text-align:left;border:1px solid var(--line);background:#fafaf9;border-radius:10px;padding:8px 12px;cursor:pointer}
+.q .opts button.ok{background:var(--green-soft);border-color:var(--green);font-weight:700}
+.q .opts button.ng{background:var(--red-soft);border-color:var(--red)}
+.q .ex{display:none;margin-top:8px;font-size:.9rem;background:#f8fafc;border-radius:10px;padding:8px 12px}
+.q .ex.show{display:block}
+#score{font-weight:800;color:var(--accent)}
+/* sim */
+.simgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;align-items:start}
+.clock{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px}
+.clock i{width:14px;height:14px;border-radius:3px;background:#e5e7eb;display:block}
+.clock i.w{background:#0ea5e9}
+.donut-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.legend span{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
+footer{border-top:1px solid var(--line);background:#fff;padding:20px 16px;font-size:.8rem;color:var(--sub)}
+footer .wrap{max-width:1100px;margin:0 auto}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .st{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:.9rem}
+.flow .ar{color:var(--accent);font-weight:800}
+.connect{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.connect button{font:inherit;font-size:.8rem;border:1px dashed var(--pc);color:var(--pc);background:#fff;border-radius:999px;padding:2px 10px;cursor:pointer}
+@media print{
+  nav.tabs,.toolbar,.btn,.tool,.sub-tabs{display:none!important}
+  section.page{display:block!important}
+  .card{break-inside:avoid}
+}
+@media (max-width:600px){
+  h1{font-size:1.35rem}
+  .bar-row{grid-template-columns:7em 1fr 3.5em}
+  .fact{flex-direction:column;gap:2px}
+}
+</style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-home{background:#16271c;font:500 13px/1.4 "Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;letter-spacing:.04em}
+.arg-home a{display:inline-flex;align-items:center;min-height:34px;padding:0 16px;color:#dbe6d6;text-decoration:none}
+.arg-home a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.arg-home a:focus-visible{outline:2px solid #9fd0bb;outline-offset:-2px}
+@media print{.arg-home{display:none}}
+</style>
+</head>
+<body>
+<div class="arg-home" role="navigation" aria-label="サイト"><a href="/">← TOPに戻る</a></div>
+<header class="top"><div class="wrap">
+  <div class="kicker">地理総合｜持続可能な地域づくりと私たち ― SDGs 5つのP</div>
+  <h1>SDGs「People」（人間）<br>貧困の悪循環を断ち切るには？</h1>
+  <div class="theme">今日のテーマ：「全ての人々の尊厳と平等が守られる社会」について考えよう</div>
+  <div class="toolbar">
+    <button id="projBtn" type="button">🖥 投影モード（文字を大きく）</button>
+    <button id="exportBtn" type="button">💾 自分のメモを書き出す</button>
+    <button id="printBtn" type="button">🖨 印刷</button>
+  </div>
+</div></header>
+
+<nav class="tabs"><div class="wrap" id="tabbar">
+  <button data-p="p0" class="on"><span class="num">0</span>導入</button>
+  <button data-p="p1"><span class="num">1</span>貧困とは</button>
+  <button data-p="p2"><span class="num">2</span>貧困の悪循環</button>
+  <button data-p="p3"><span class="num">3</span>アイシャの1日</button>
+  <button data-p="p4"><span class="num">4</span>調べ学習資料（6つの問題）</button>
+  <button data-p="p5"><span class="num">5</span>確認クイズ・まとめ</button>
+</div></nav>
+
+<main>
+<!-- ============ 0 導入 ============ -->
+<section class="page on" id="p0">
+  <h2>導入：「People」とは？</h2>
+  <div class="card">
+    <p>SDGs（持続可能な開発目標）の17の目標は、<b>5つのP</b>に整理できます。今日はその1つめ、<b>People（人間）</b>です。</p>
+    <div class="grid3" id="fiveP"></div>
+    <p class="note">「People」には、目標1（貧困）・2（飢餓）・3（保健）・4（教育）・5（ジェンダー）・6（水・衛生）が含まれます。この6つは、今日の調べ学習の6つの問題とぴったり対応しています。</p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">🤔 まず予想しよう</h3>
+    <p>世界で「極度の貧困」（1日3ドル未満）で暮らす人は、およそ何人に1人だと思う？</p>
+    <div class="toolset" id="guessBtns"></div>
+    <div id="guessMsg" class="calc-out" style="display:none"></div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">今日の流れ</h3>
+    <div class="flow">
+      <span class="st">① 貧困とは？（絶対的・相対的）</span><span class="ar">→</span>
+      <span class="st">② 貧困の悪循環</span><span class="ar">→</span>
+      <span class="st">③ 動画：アイシャの1日</span><span class="ar">→</span>
+      <span class="st">④ 6つの問題を調べる</span><span class="ar">→</span>
+      <span class="st">⑤ 確認・まとめ</span>
+    </div>
+    <p class="note" style="margin-top:10px">このページに書いたメモは、この端末のブラウザに自動で保存されます（共用PCでは「メモを書き出す」で保存しておこう）。</p>
+  </div>
+</section>
+
+<!-- ============ 1 貧困とは ============ -->
+<section class="page" id="p1">
+  <h2>【1】貧困とは</h2>
+  <p>貧困が問題になっているのは<b class="hl">途上国だけではない</b>ことに注目！ 貧困には2つの「ものさし」があります。</p>
+  <div class="grid2">
+    <div class="def abs">
+      <h4>🔴 絶対的貧困</h4>
+      <p style="margin:0">生きるために最低限必要な水準を下回る状態。世界銀行は<b>1日3.00ドル未満</b>（2021年購買力平価）で暮らす状態を「極度の貧困」としている。</p>
+      <p class="src">2025年6月に世界銀行が2.15ドル→3.00ドルに改定（物価の変化などを反映）。</p>
+    </div>
+    <div class="def rel">
+      <h4>🔵 相対的貧困</h4>
+      <p style="margin:0">その国の生活水準と比べて貧しい状態。<b>等価可処分所得の中央値の半分（貧困線）</b>に満たない人の割合を「相対的貧困率」という。</p>
+      <p class="src">「中央値」＝全員を所得の低い順に並べたとき、ちょうど真ん中の人の値。</p>
+    </div>
+  </div>
+
+  <div class="card work">
+    <div class="label">〈WORK 1〉絶対的貧困を計算して実感してみよう</div>
+    <div class="grid2" style="margin-top:8px">
+      <div>
+        <p style="margin:0 0 6px">1日あたり <input type="number" id="usd" value="3" min="0.5" step="0.05"> ドル</p>
+        <p style="margin:0 0 6px">為替レート 1ドル＝ <input type="number" id="rate" value="158" min="50" step="1"> 円</p>
+        <p class="note" style="margin:0">※2026年10月上旬は1ドル＝157〜158円前後。授業の日のレートに変えてみよう。</p>
+      </div>
+      <div class="calc-out" id="calcOut"></div>
+    </div>
+    <details>
+      <summary>🧐 発展：最貧国は物価も安いのでは？（購買力平価の考え方）</summary>
+      <p>するどい疑問です。だから世界銀行の「3ドル」は、ふつうの為替レートで換算した3ドルではなく、<b>購買力平価（PPP）</b>で換算した3ドルです。</p>
+      <p>購買力平価とは「<b>同じモノやサービスを買うのにいくら必要か</b>」で通貨を比べる方法。<br>
+      たとえば（※しくみを説明するための架空の例）、アメリカで3ドルのパンと豆のセットが、ある国では現地通貨で300（為替換算だと1ドル分）で買えるとします。このとき、その国で<b>300を使える人は「3ドル分の暮らし」</b>をしていると考えます。</p>
+      <p>つまり「1日3ドル未満」とは、<b>物価の違いを調整したうえでもなお</b>、アメリカで3ドル未満で暮らすのと同じくらいの生活しかできない、という意味です。上の計算（円換算）はあくまで「実感するための目安」と考えましょう。</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">📊 データで見る絶対的貧困（1日3.00ドル基準）</h3>
+    <div class="donut-wrap">
+      <svg id="donut" viewBox="0 0 120 120" width="170" height="170" role="img" aria-label="極度の貧困層の地域内訳"></svg>
+      <div>
+        <p style="margin:0">世界の極度の貧困層 <b>約8億3800万人</b>（2022年）</p>
+        <p style="margin:0" class="legend"><span style="background:#c2410c"></span>サハラ以南のアフリカ：約5億5900万人（<b>約3分の2</b>）</p>
+        <p style="margin:0" class="legend"><span style="background:#d6d3d1"></span>その他の地域：約2億7900万人</p>
+      </div>
+    </div>
+    <h4>極度の貧困率（人口に占める割合・2022年）</h4>
+    <div id="bars1"></div>
+    <p class="src">出典：世界銀行「June 2025 global poverty update」。世界全体は2025年に9.9%へ低下すると推計（ナウキャスト）。</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">🇯🇵 日本の相対的貧困（厚生労働省「2025年国民生活基礎調査」＝2024年の所得）</h3>
+    <div class="grid3">
+      <div><div class="note">相対的貧困率</div><div class="big">15.0<span class="unit">%</span></div><div class="note">約6.7人に1人（前回15.4%）</div></div>
+      <div><div class="note">子どもの貧困率（17歳以下）</div><div class="big">11.0<span class="unit">%</span></div><div class="note">前回11.5%</div></div>
+      <div><div class="note">子どもがいる現役世帯のうち<br>大人が1人の世帯</div><div class="big" style="color:var(--red)">44.7<span class="unit">%</span></div><div class="note">ひとり親世帯の厳しさがわかる</div></div>
+      <div><div class="note">貧困線（年額）</div><div class="big">138<span class="unit">万円</span></div><div class="note" id="monthLine"></div></div>
+    </div>
+    <p class="src">出典：厚生労働省「2025（令和7）年 国民生活基礎調査の概況」。貧困線は等価可処分所得（世帯の手取り収入を世帯人数の平方根で割った値）の中央値の半分。</p>
+  </div>
+
+  <div class="card work">
+    <div class="label">〈WORK 2・3〉資料を読み取ろう（空欄をタップすると答えが表示されます）</div>
+    <p>② 世界全体の貧困率は<span class="blank">年々低下</span>しているが、<span class="blank">サハラ以南のアフリカ（サブサハラ・アフリカ）</span>は未だに40％を超す。</p>
+    <p>③ 日本の相対的貧困率は、OECDの中でも<span class="blank">上位</span>に位置する。<br>ヨーロッパは<span class="blank">若者</span>の貧困率が高く、日本は<span class="blank">高齢者</span>が高い。</p>
+    <p class="note">③は教科書の年齢層別グラフで確かめよう。<button class="btn sm" id="showAll1" type="button">すべて表示</button></p>
+  </div>
+</section>
+
+<!-- ============ 2 悪循環 ============ -->
+<section class="page" id="p2">
+  <h2>【2】貧困の悪循環を断ち切る</h2>
+  <p>貧困は教育や食料、水、健康などさまざまな問題と密接に関わり、<b class="hl">原因と結果がぐるぐる回る「悪循環」</b>をつくります。親の世代の貧困が子の世代に引き継がれる（<b>負の連鎖</b>）こともあります。</p>
+  <div class="card">
+    <h3 style="margin-top:0">✂ 手立てを選んで、悪循環の「矢印」を切ってみよう</h3>
+    <p class="note" style="margin-top:0">オレンジの矢印＝「〜だから〜になる」というつながり。青い点線＝水の問題がもたらす影響。手立てを選ぶと、その手立てが切る矢印が緑の点線になります（複数選択できます）。</p>
+    <div class="toolset" id="tools"></div>
+    <div id="cycleWrap"><div id="cycle"></div></div>
+    <div class="calc-out" id="toolMsg">手立てを1つ選んでみよう。</div>
+    <div class="grid3" id="loopStatus" style="margin-top:10px"></div>
+    <details>
+      <summary>💡 ここから考えたいこと</summary>
+      <p>どれか1つの手立てだけで、すべての矢印を切ることはできたでしょうか？<br>
+      貧困の悪循環は「食料」「水」「健康」「教育」「仕事」が絡み合っているため、<b>複数の手立てを組み合わせた包括的な取り組み</b>が必要です。これが、SDGsの17の目標がバラバラではなく「つながっている」と言われる理由です。</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 3 アイシャ ============ -->
+<section class="page" id="p3">
+  <h2>【2】WORK：動画「13歳のアイシャの1日〜水を得るために〜」</h2>
+  <p class="note">（日本ユニセフ協会の動画を視聴してから取り組もう）</p>
+  <div class="card">
+    <h3 style="margin-top:0">🪣 水くみシミュレーター：水くみは1日の時間をどれだけ奪う？</h3>
+    <div class="simgrid">
+      <div>
+        <label>水場までの片道：<b id="owv">60</b> 分</label>
+        <input type="range" id="ow" min="5" max="180" step="5" value="60">
+        <label>1日の往復回数：<b id="rtv">2</b> 回</label>
+        <input type="range" id="rt" min="1" max="4" step="1" value="2">
+        <label>1回に運ぶ水：<b id="lv">20</b> L</label>
+        <input type="range" id="lv_r" min="5" max="25" step="5" value="20">
+        <p class="note">※スライダーの値は自分で変えて考えるためのもの。実際の時間や距離は地域・季節によって大きく異なります。</p>
+      </div>
+      <div class="calc-out" id="simOut" style="margin-top:0"></div>
+    </div>
+    <div>
+      <div class="note" style="margin-top:8px">1日24時間（1マス＝15分）のうち、水くみに使う時間</div>
+      <div class="clock" id="clock"></div>
+    </div>
+    <p class="src">世界では約21億人（約4人に1人）が「安全に管理された飲料水」を利用できず、水くみを主に担うのは多くの国で女性や少女。サハラ以南のアフリカや中央・南アジアでは1日30分以上を水くみに費やす女性・少女も多い（WHO・UNICEF 共同監査計画 JMP、2025年公表）。</p>
+  </div>
+
+  <div class="card work">
+    <div class="label">〈WORK〉動画を見て考えよう</div>
+    <div id="aishaQs"></div>
+  </div>
+</section>
+
+<!-- ============ 4 調べ学習資料 ============ -->
+<section class="page" id="p4">
+  <h2>〈WORK〉貧困の悪循環を断ち切る手立てを調べよう！</h2>
+  <div class="card">
+    <p style="margin-top:0">貧困につながる6つの問題について、<b>「どこで何が起きている？」→「なぜ？」→「解決の手立ては？」</b>の順に調べてまとめよう。各問題には、地理の<b>5つの見方（レンズ）</b>で考えるためのヒントと、具体的な事例があります。</p>
+    <details>
+      <summary>🔍 地理的な見方・考え方の「5つのレンズ」とは？</summary>
+      <div class="grid3" id="lensIntro"></div>
+      <p class="note">（文部科学省『高等学校学習指導要領解説 地理歴史編』に示された「地理的な見方・考え方」の視点をもとに整理）</p>
+    </details>
+    <details>
+      <summary>📝 調べ方・まとめ方のコツ</summary>
+      <ol style="margin:0;padding-left:1.4em">
+        <li><b>まず教科書</b>で、その問題が「どこで」起きているかを地図やグラフで確認する。</li>
+        <li>この資料の「データ」「事例」で、<b>具体的な国・地域・数字</b>を1つ以上メモする。</li>
+        <li>「解決の手立て」は、<b>誰が（国際機関／国・日本の協力／企業／地域の人々／私たち）</b>行うのかを意識する。</li>
+        <li>インターネットは、国際機関・官公庁・新聞社など<b>発信者がはっきりしたサイト</b>を使い、数字には「いつの・どこの」データかを添える。</li>
+      </ol>
+    </details>
+  </div>
+  <div class="pbtns" id="pbtns"></div>
+  <div id="pview"></div>
+</section>
+
+<!-- ============ 5 クイズ・まとめ ============ -->
+<section class="page" id="p5">
+  <h2>確認クイズ・まとめ</h2>
+  <div class="card">
+    <h3 style="margin-top:0">🧠 確認クイズ　<span id="score"></span></h3>
+    <div id="quiz"></div>
+    <button class="btn" id="quizReset" type="button">もう一度挑戦</button>
+  </div>
+  <div class="card work">
+    <div class="label">〈まとめ〉「全ての人々の尊厳と平等が守られる社会」について考えよう</div>
+    <p><b>Q1.</b> 6つの問題のうち、2つ以上がつながっている例を「〜だから〜になり、〜になる」の形で書こう。</p>
+    <textarea data-key="sum1" placeholder="例）水くみに時間がかかるから、女の子が学校に通えず、…"></textarea>
+    <p><b>Q2.</b> 悪循環を断ち切るために最も効果的だと思う手立てを1つ選び、理由を「地理的な見方」を使って説明しよう。</p>
+    <textarea data-key="sum2"></textarea>
+    <p><b>Q3.</b> 高校生の自分にできること（マイ・アクション）を選んで、具体的に書こう。</p>
+    <div class="toolset" id="actions"></div>
+    <textarea data-key="sum3" placeholder="例）買い物でフェアトレード認証の商品を選ぶ。まずは家族にも理由を説明してみる。"></textarea>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <p><b>主な出典</b>（数値はいずれも本教材作成時点＝2026年10月に確認した公表値）：世界銀行「June 2025 global poverty update」／厚生労働省「2025年国民生活基礎調査の概況」／UN IGME（UNICEF等）「Levels and Trends in Child Mortality 2025」／UNAIDS「Global HIV Factsheet 2026」／WHO・UNICEF JMP「Progress on household drinking water, sanitation and hygiene 2000–2024」／UNESCO（識字・不就学児童）／UNICEF（児童婚）／世界経済フォーラム「Global Gender Gap Report 2026」（報道による）／NORC（シカゴ大学）カカオ児童労働調査（2020年）／JICA・外務省・福岡県・ペシャワール会関連公表資料／World Bank Blogs（バングラデシュ）／列国議会同盟（IPU）関連報道（ルワンダ）。</p>
+  <p>この教材は、教科書とは独立した独自の教材です（特定の教科書の著作物ではありません）。構成は文部科学省「高等学校学習指導要領（平成30年告示）地理総合」に基づいています。</p>
+  <p>© あらじお蔵　ライセンス：CC BY-NC 4.0（クリエイティブ・コモンズ 表示-非営利 4.0 国際）</p>
+</div></footer>
+<script>
+/* ===== データ（数値は出典とともに管理） ===== */
+const LENS = {
+  pos:  {name:"位置や分布", q:"それは どこに あるか？ どのように広がっているか？"},
+  place:{name:"場所", q:"そこは どのような 場所か？（自然・社会の特徴）"},
+  nat:  {name:"人間と自然環境との相互依存関係", q:"そこでの人々の生活は、自然環境から どのような影響を受け、どう働きかけているか？"},
+  inter:{name:"空間的相互依存作用", q:"そこは、それ以外の場所と どのような関係（人・モノ・情報の移動）をもっているか？"},
+  reg:  {name:"地域", q:"その地域は どのような特徴があり、他の地域と比べてどう違うか？"}
+};
+
+const FIVE_P = [
+  {p:"People",jp:"人間",g:"目標1〜6",c:"#c2410c",on:true},
+  {p:"Prosperity",jp:"豊かさ",g:"目標7〜11",c:"#a16207"},
+  {p:"Planet",jp:"地球",g:"目標12〜15",c:"#15803d"},
+  {p:"Peace",jp:"平和",g:"目標16",c:"#1d4ed8"},
+  {p:"Partnership",jp:"パートナーシップ",g:"目標17",c:"#6d28d9"}
+];
+
+const PROBLEMS = [
+/* ---------------- 人口 ---------------- */
+{id:"pop", icon:"👪", name:"人口問題", sdg:"SDG 3・5", color:"#7c3aed", soft:"#f3edff",
+ catch:"子どもが多いのはなぜ？",
+ summary:"アジアやアフリカの発展途上国では社会保障に頼ることができないため、子どもが労働力となる。そのため出生率が高く、医療や教育の質が下がる悪循環が発生している。",
+ lenses:["pos","reg","nat"],
+ facts:[
+  {n:"6前後",t:"ニジェールなどサハラ以南のアフリカの一部の国の合計特殊出生率（1人の女性が一生に産む子どもの数の平均）。世界で最も高い水準。",s:"国連「世界人口推計」"},
+  {n:"6.9→2.0",t:"バングラデシュの合計特殊出生率の変化（1970年代前半→2020年）。同じ途上国でも、取り組み次第で大きく変わる。",s:"世界銀行ブログ（2021）"},
+  {n:"約3倍",t:"バングラデシュで、女子への中等教育奨学金の導入後に増えた女子の中等教育就学者数。早婚も減少した。",s:"同上"}
+ ],
+ why:[
+  "家の仕事や農作業の<b>働き手</b>として子どもが必要とされる（特に農村）。",
+  "年金や医療保険などの<b>社会保障が不十分</b>で、老後は子どもに頼るしかない。",
+  "<b>乳幼児死亡率が高い</b>ため、「何人かは亡くなるかもしれない」と多く産む。",
+  "女性が<b>教育や家族計画の情報・手段</b>に届きにくい。早婚で出産の開始が早い。"
+ ],
+ lensQ:[
+  ["pos","合計特殊出生率が高い国は、世界のどこに集中している？ 教科書の分布図で確かめよう。"],
+  ["reg","<b>人口転換</b>（多産多死→多産少死→少産少死）のどの段階にあるか、アフリカ・南アジア・日本を比べよう。"],
+  ["nat","農業中心の農村では、なぜ子どもが「働き手」になりやすいのだろう？"]
+ ],
+ cases:[
+  {t:"女性が女性に届ける家族計画",w:"バングラデシュ（南アジア）",lens:"reg",
+   b:"1970年代から人口問題を国の最重要課題に位置づけ、<b>地域出身の女性職員が家庭を一軒ずつ訪問</b>して家族計画を説明する方式を広げた。イスラームの指導者に研修を行い、宗教的にも理解を得た。1990年代半ばからは<b>女子の中等教育奨学金</b>（出席や成績、18歳まで結婚しないことなどが条件）を導入し、女子の就学が約3倍に増え、早婚も減った。合計特殊出生率は1970年代前半の6.9から2020年には2.0まで低下した。",
+   s:"世界銀行ブログ「How Bangladesh effectively invested in its people by focusing on women’s health」"}
+ ],
+ actors:[
+  ["国際機関","国連人口基金（UNFPA）などが家族計画や母子保健を支援する。"],
+  ["国・日本の協力","母子保健の向上（日本発の母子健康手帳の普及など）、女子教育の推進。"],
+  ["地域の人々","地域の女性ワーカーや宗教指導者が、住民の理解を広げる。"],
+  ["私たち","人口を「数の問題」ではなく、一人ひとりが子どもの数や出産を自分で決められる権利（リプロダクティブ・ヘルス／ライツ）の問題として考える。"]
+ ],
+ think:{q:"なぜ途上国は出生率が高いのだろう？",
+  h:["農村の家族にとって、子どもはどんな「役割」を期待されている？",
+     "年金や医療保険がない社会で、年をとったら誰に支えてもらう？",
+     "生まれた子どもが5歳まで生きられないかもしれない社会だとしたら？ 女性が学校に通えるかどうかも関係しそう。"],
+  ex:"社会保障が不十分で、子どもが家の働き手や老後の支えになるうえ、乳幼児死亡率が高いため多くの子どもを産む傾向がある。女性が教育や家族計画の情報・手段を得にくいことや、早婚も出生率を高めている。"},
+ kw:["人口転換","合計特殊出生率","家族計画","リプロダクティブ・ヘルス／ライツ","バングラデシュ 出生率 低下"],
+ links:[["国連人口基金（UNFPA）","https://www.unfpa.org/"],["世界銀行","https://www.worldbank.org/"],["JICA（国際協力機構）","https://www.jica.go.jp/"]],
+ conn:[["health","乳幼児死亡率が下がると、多く産む必要が小さくなる"],["edu","女子が教育を受けると、結婚・出産の時期が遅くなる傾向"],["gender","早婚（児童婚）は出生率を高める"]]
+},
+/* ---------------- 食料 ---------------- */
+{id:"food", icon:"🌾", name:"食料問題", sdg:"SDG 2", color:"#b45309", soft:"#fdf3e3",
+ catch:"食べ物が足りないのに、なぜカカオ？",
+ summary:"貧困な農村部では降水量で収穫量が変動するため、食糧難に陥りやすい。旧植民地地域では輸出用の商品作物の生産が盛んなため、自国民向けの穀物は輸入に依存している状況もある。",
+ lenses:["nat","inter","place"],
+ facts:[
+  {n:"世界1位",t:"コートジボワールのカカオ豆生産量。隣国ガーナと合わせると世界の生産の約6割を占める（年によって変動）。",s:"FAO統計などの各種集計"},
+  {n:"約156万人",t:"コートジボワールとガーナのカカオ生産で、児童労働に従事していた子どもの推計（2018/19年）。そのほとんどが危険な作業を含む。",s:"NORC（シカゴ大学）調査、2020年"},
+  {n:"1,400万t→2,800万t",t:"サブサハラ・アフリカのコメ生産量。日本（JICA）などが進めた「アフリカ稲作振興のための共同体（CARD）」の目標どおり、2008→2018年に倍増。2030年に5,600万tをめざす。",s:"JICA「CARD」"}
+ ],
+ why:[
+  "灌漑施設が少なく雨に頼る<b>天水農業</b>のため、降水量の変動がそのまま収穫量の変動になる。",
+  "植民地時代に始まった<b>輸出向けの商品作物</b>（カカオ・コーヒーなど）の栽培が、独立後も外貨を稼ぐ柱として続いている。",
+  "特定の作物の輸出に頼る<b>モノカルチャー経済</b>は、国際価格や天候の影響を受けやすく、農家の収入が不安定になる。",
+  "主食の穀物を輸入に頼ると、国際価格が上がったときに食料を買えなくなる。"
+ ],
+ lensQ:[
+  ["place","カカオが育つのはどんな気候の場所？ コートジボワールの気候区分を確かめよう。"],
+  ["inter","コートジボワールのカカオは、どこへ運ばれて私たちのチョコレートになる？ 反対に、主食の米はどこから来ている？"],
+  ["nat","灌漑施設のない天水農業では、なぜ雨の降り方が食糧難に直結するのだろう？"]
+ ],
+ cases:[
+  {t:"コートジボワールのカカオとモノカルチャー経済",w:"コートジボワール（西アフリカ・ギニア湾岸）",lens:"inter",
+   b:"高温多湿な南部を中心に、植民地時代から輸出向けのカカオ栽培が広がり、独立後も外貨を稼ぐ柱として拡大した。現在は世界最大のカカオ豆生産国。一方で、主食の米は国内消費の多くを輸入に頼ってきた。カカオ農家の多くは小規模で収入が低く、家計を助けるために子どもが危険な作業に従事する<b>児童労働</b>も問題となっている。",
+   s:"NORC調査（2020年）ほか"},
+  {t:"アフリカのコメを倍増させる「CARD」",w:"サブサハラ・アフリカの37か国（2026年時点）",lens:"nat",
+   b:"2008年の第4回アフリカ開発会議（TICAD IV）で、JICAとアフリカ緑の革命のための同盟（AGRA）が立ち上げた。灌漑の整備や品種・栽培技術の普及などを進め、10年でコメの生産量を1,400万tから2,800万tへ倍増させる目標を2018年に達成した。第2フェーズ（2019〜2030年）では5,600万tをめざす。",
+   s:"JICA「アフリカ稲作振興のための共同体（CARD）」"},
+  {t:"フェアトレード（公正な貿易）",w:"生産国と消費国（日本を含む）を結ぶしくみ",lens:"inter",
+   b:"生産者に<b>最低価格</b>を保証し、地域の発展に使う<b>奨励金（プレミアム）</b>を上乗せして取り引きするしくみ。認証の基準には児童労働の禁止なども含まれる。消費者の「選ぶ」行動が、遠く離れた生産地の暮らしとつながる。",
+   s:"フェアトレード・ラベル・ジャパン"}
+ ],
+ actors:[
+  ["国際機関","国連世界食糧計画（WFP）の食料支援、国連食糧農業機関（FAO）の農業支援。"],
+  ["国・日本の協力","CARDによる稲作振興、灌漑施設の整備、農業技術の研修。"],
+  ["企業","カカオの調達で児童労働をなくす取り組み、生産者への技術支援。"],
+  ["私たち","フェアトレード認証などの商品を選ぶ。食品ロスを減らす。"]
+ ],
+ think:{q:"なぜ食糧難のコートジボワールでは、穀物よりもカカオを栽培するのだろう？",
+  h:["カカオは「自分たちで食べる作物」？ それとも「売ってお金にする作物」？",
+     "カカオ栽培が広がったのは、いつ、どんな歴史の中でだろう？（植民地時代）",
+     "1つの作物の輸出に頼る経済（モノカルチャー経済）には、どんな弱点がある？"],
+  ex:"カカオは高温多湿な気候に適した商品作物で、植民地時代に輸出向けの栽培が始まり、独立後も外貨を稼ぐ重要な産業となったため。しかし輸出に頼るモノカルチャー経済は国際価格や天候に左右されやすく、主食を輸入に頼ることで食料不足に陥りやすい。"},
+ kw:["モノカルチャー経済","商品作物","プランテーション","フェアトレード","カカオ 児童労働","CARD アフリカ稲作振興"],
+ links:[["国連WFP","https://ja.wfp.org/"],["国連食糧農業機関（FAO）","https://www.fao.org/"],["JICA（国際協力機構）","https://www.jica.go.jp/"],["フェアトレード・ラベル・ジャパン","https://www.fairtrade-jp.org/"]],
+ conn:[["edu","児童労働で学校に通えない"],["water","灌漑用の水があれば収穫が安定する"],["health","栄養不足は病気にかかりやすくする"]]
+},
+/* ---------------- 水 ---------------- */
+{id:"water", icon:"💧", name:"水問題", sdg:"SDG 6", color:"#0369a1", soft:"#e6f3fb",
+ catch:"水があれば、何が変わる？",
+ summary:"乾燥地域の途上国では、水くみは女性や子どもが行うことが多く、教育・ジェンダー問題につながっている。",
+ lenses:["nat","pos","inter"],
+ facts:[
+  {n:"約21億人",t:"「安全に管理された飲料水」（敷地内にあり、必要なときに使え、汚染されていない水）を利用できない人。世界の約4人に1人。",s:"WHO・UNICEF JMP（2025年公表、2024年のデータ）"},
+  {n:"約1億600万人",t:"川や池などの、処理されていない地表水を直接飲んでいる人。",s:"同上"},
+  {n:"30分以上",t:"サハラ以南のアフリカや中央・南アジアでは、1日30分以上を水くみに費やす女性や少女が多い。多くの国で水くみの主な担い手は女性・少女。",s:"同上"}
+ ],
+ why:[
+  "<b>乾燥帯</b>や、雨季と乾季がはっきりした地域では、川や井戸が季節によって干上がる。",
+  "水道や井戸の<b>建設・維持管理</b>のための資金や技術者が不足している。せっかく造っても、壊れたまま使えなくなることがある。",
+  "水くみが<b>女性や子どもの仕事</b>とされ、学校や仕事の時間が奪われる。",
+  "汚れた水を飲むことで<b>下痢などの感染症</b>にかかり、特に幼い子どもの命が危険にさらされる。"
+ ],
+ lensQ:[
+  ["pos","安全な水を利用できない人が多い地域を、乾燥帯（B気候）の分布と重ねてみよう。重なるところ・重ならないところは？"],
+  ["nat","降水量が少ない、または季節によって偏る場所では、人々はどこから水を得ている？"],
+  ["inter","日本の川の技術がアフガニスタンで役立った。技術は、どのように国境を越えて伝わったのだろう？"]
+ ],
+ cases:[
+  {t:"「百の診療所より一本の用水路」― 中村哲医師とマルワリード用水路",w:"アフガニスタン東部ナンガルハル州（クナール川流域）",lens:"nat",
+   b:"医師の中村哲さん（ペシャワール会）は、大干ばつで多くの人が病気や飢えに苦しむ姿を見て、2000年から井戸掘りなどの水事業を始めた。さらに農地をよみがえらせるため用水路を建設し、2010年に完成（全長約25km、現在は約27km）。約1万6,500ha（福岡市の約半分）の荒れ地が農地に変わり、約65万人の暮らしを支えている。取水堰のモデルは、<b>福岡県朝倉市の筑後川にある「山田堰」</b>。江戸時代から続く石張りの堰の技術を応用し、現地の石や人力でつくり、地域の人々が自分たちで修理・維持できることを重視した。",
+   s:"福岡県広報誌「グラフふくおか」2020年冬号、農林水産省「aff」2024年9月号"},
+  {t:"「プノンペンの奇跡」― 北九州市の水道技術",w:"カンボジアの首都プノンペン",lens:"inter",
+   b:"内戦で荒廃したプノンペンの水道に、1999年から北九州市がJICAと連携して協力した。浄水場の運転や管理、漏水対策などの技術を伝え、現地の職員を育成した結果、<b>無収水率</b>（漏水や盗水で料金を回収できない水の割合）は72%（1993年）から8%（2006年）へ下がり、給水時間も1日10時間から24時間になった。",
+   s:"JICA広報誌「mundi」2020年6月号"}
+ ],
+ actors:[
+  ["国際機関","UNICEFなどによる給水設備や衛生施設（トイレ）の整備、衛生教育。"],
+  ["国・日本の協力","JICAや自治体（北九州市など）による水道技術の協力、人材育成。"],
+  ["NGO・地域の人々","ペシャワール会のように現地の人と一緒に造り、住民の水管理組合などが維持する。"],
+  ["私たち","寄付やボランティアのほか、日本の技術がどう役立っているかを知り、伝える。"]
+ ],
+ think:{q:"すべての人が安全な水を持続的に利用するためには？",
+  h:["造った井戸やポンプが壊れたら、誰が、どうやって直す？",
+     "大規模な浄水場と手押しポンプの井戸、現地の人が維持しやすいのはどっち？ その理由は？",
+     "水くみの時間が減ると、誰の、どんな時間が増える？"],
+  ex:"設備を「造って終わり」にせず、現地の技術・資金・材料で維持管理できるしくみ（住民の管理組織や技術者の育成）をつくることが大切。水くみの負担が減れば、女性や子どもが学校や仕事に使える時間が増え、教育やジェンダーの問題の改善にもつながる。"},
+ kw:["安全な飲料水","水くみ 女性 子ども","ペシャワール会 用水路","山田堰","プノンペン 水道 北九州市","無収水率"],
+ links:[["日本ユニセフ協会","https://www.unicef.or.jp/"],["ペシャワール会","https://www.peshawar-pms.com/"],["JICA（国際協力機構）","https://www.jica.go.jp/"],["WHO","https://www.who.int/"]],
+ conn:[["edu","水くみで学校に通えない"],["gender","水くみの負担が女性・少女に偏る"],["health","汚れた水が感染症の原因に"],["food","灌漑で農業が安定する"]]
+},
+/* ---------------- 健康 ---------------- */
+{id:"health", icon:"🏥", name:"健康問題", sdg:"SDG 3", color:"#be123c", soft:"#fdecef",
+ catch:"5歳まで生きられない子どもがいるのはなぜ？",
+ summary:"乳幼児死亡率は改善しているが、未だにサブサハラや南アジアなどの途上国では、感染症などによる乳幼児死亡率が高い。",
+ lenses:["pos","nat","inter"],
+ facts:[
+  {n:"約490万人",t:"5歳になる前に亡くなった子ども（2024年）。そのうち<b>58%</b>がサハラ以南のアフリカ。",s:"国連子ども死亡推計グループ（UN IGME）2025年報告"},
+  {n:"19倍",t:"サハラ以南のアフリカの5歳未満児死亡率は、オーストラリア・ニュージーランドの19倍。",s:"同上"},
+  {n:"54%",t:"サハラ以南のアフリカで、5歳未満児の死因に占める感染症（肺炎・マラリア・下痢など）の割合（世界全体では43%）。",s:"同上"},
+  {n:"約4,100万人",t:"HIV陽性者（2025年）。そのうち約2,110万人、<b>約半数</b>が東部・南部アフリカに集中している。",s:"UNAIDS ファクトシート2026"}
+ ],
+ why:[
+  "高温多湿な熱帯では、<b>マラリア</b>を運ぶ蚊などが多く、感染症にかかりやすい。",
+  "<b>安全な水やトイレ</b>が不足し、下痢などの感染症が広がりやすい。",
+  "<b>栄養不足</b>で体の抵抗力が弱く、病院までの距離が遠い、ワクチンや薬が届かない。",
+  "HIVは、<b>出稼ぎなどの人の移動</b>、女性の立場の弱さ、予防の知識不足などで広がった。"
+ ],
+ lensQ:[
+  ["pos","乳幼児死亡率が高い国の分布を、熱帯（A気候）の分布と比べよう。"],
+  ["nat","マラリアを運ぶ蚊が多いのは、どんな自然環境の場所だろう？"],
+  ["inter","鉱山への出稼ぎや長距離トラックの道など、人の移動は感染症の広がりにどう関係する？"]
+ ],
+ cases:[
+  {t:"鉱山への出稼ぎとHIV",w:"南部アフリカ（レソト・エスワティニ→南アフリカ共和国）",lens:"inter",
+   b:"レソトなどの周辺国からは、多くの男性が南アフリカ共和国の鉱山へ出稼ぎに行ってきた。世界銀行の研究者の調査によると、家族と長期間離れて暮らす出稼ぎ鉱山労働者（30〜44歳）はHIV陽性である可能性が約15ポイント高く、そのパートナーの女性にも感染が広がっていた。一方、国内に鉱山があり出稼ぎの少ないジンバブエでは、こうした関係は見られなかった。<b>人の移動（空間的相互依存作用）</b>が病気の分布をつくる例である。",
+   s:"de Walque & Corno「Mines, Migration and HIV/AIDS in southern Africa」（英国政府 研究成果データベース）"},
+  {t:"蚊帳の工場が「健康」と「仕事」をつくる",w:"タンザニア（東アフリカ）",lens:"reg",
+   b:"日本の住友化学が開発した「オリセットネット」は、樹脂に防虫剤を練り込み、効果が長持ちする蚊帳。2001年にWHOから世界初の長期残効型蚊帳として認められ、80か国以上に供給された。2008年にはタンザニアの企業との合弁で現地に工場をつくり、最大約7,000人の雇用を生んだ。<b>病気を防ぐ</b>と同時に<b>収入を得る仕事</b>もつくり、悪循環の2か所を同時に断ち切る試み。",
+   s:"JICA広報誌「mundi」2017年9月号"},
+  {t:"日本生まれの「母子健康手帳」",w:"インドネシアなど約50か国",lens:"inter",
+   b:"妊娠・出産・子どもの成長や予防接種を1冊に記録する母子健康手帳は日本で生まれ、現在はアジア・アフリカを中心に約50か国で使われている。インドネシアでは、JICAの専門家と現地の医師が協力して導入し、<b>文字が読めなくても分かるようにイラストを多く使う</b>など、現地に合わせて工夫した。",
+   s:"nippon.com「母子手帳」特集"}
+ ],
+ actors:[
+  ["国際機関","WHO・UNICEF・UNAIDSなどによるワクチン、治療薬、蚊帳の普及。"],
+  ["国・日本の協力","母子健康手帳の普及、病院や保健所の整備、医療人材の育成。"],
+  ["企業","オリセットネットのように、製品と雇用を現地でつくる。"],
+  ["私たち","感染症の正しい知識をもつ。偏見をなくす。国際協力の募金やボランティアに参加する。"]
+ ],
+ think:{q:"なぜアフリカはHIV感染者が多いのだろう？",
+  h:["南部アフリカの鉱山と、周辺国からの出稼ぎにはどんな関係がある？",
+     "女性が自分の体を守る選択をしにくい社会とは、どんな社会だろう？（ジェンダー・教育）",
+     "予防の知識や治療薬は、貧しい人や遠くの村の人まで届いている？"],
+  ex:"鉱山への出稼ぎなどで男性が長期間家族と離れて暮らし、人の移動とともに感染が広がった。さらに、貧困や教育の不足で予防の知識が十分に広まらず、女性の立場が弱いことや、治療薬が高価で届きにくかったことも感染者を増やした。"},
+ kw:["乳幼児死亡率","5歳未満児死亡率","マラリア 蚊帳","HIV 出稼ぎ 鉱山","母子健康手帳 海外"],
+ links:[["WHO","https://www.who.int/"],["UNAIDS","https://www.unaids.org/"],["日本ユニセフ協会","https://www.unicef.or.jp/"],["JICA（国際協力機構）","https://www.jica.go.jp/"]],
+ conn:[["water","安全な水があれば下痢などの病気が減る"],["food","栄養が足りると抵抗力が高まる"],["pop","子どもが育つようになると出生率が下がる"],["edu","予防の知識は教育から"]]
+},
+/* ---------------- 教育 ---------------- */
+{id:"edu", icon:"📚", name:"教育問題", sdg:"SDG 4", color:"#15803d", soft:"#e9f7ee",
+ catch:"読み書きができないと、何が困る？",
+ summary:"紛争が行われている地域では、紛争の長期化により教育機会を奪われることがある。",
+ lenses:["pos","inter","reg"],
+ facts:[
+  {n:"約2億7,200万人",t:"学校に通えていない子ども・若者。学齢期の約6人に1人。",s:"UNESCO「グローバル・エデュケーション・モニタリング・レポート」2025年"},
+  {n:"約7億3,900万人",t:"基本的な読み書きができない大人。その<b>約3分の2が女性</b>。",s:"UNESCO（国際識字デー関連公表）"}
+ ],
+ why:[
+  "<b>紛争</b>で学校が壊されたり、避難や難民生活で学びが中断されたりする。",
+  "<b>貧困</b>で学費・制服・教材を払えない。子どもが家計を助けるために働く（児童労働）。",
+  "学校が遠い、<b>水くみ</b>などの家事で時間がない。",
+  "「女子に教育は必要ない」という考えや、<b>早婚</b>による退学。教員や教室の不足。"
+ ],
+ lensQ:[
+  ["pos","学校に通えない子どもや識字率の低い国はどこに多い？ 紛争が続く地域の分布と重ねてみよう。"],
+  ["inter","紛争で国外へ逃れた難民の子どもたちは、どこで、どのように学んでいるのだろう？"],
+  ["reg","同じ国の中でも、都市と農村、男子と女子で、就学の状況はどう違う？"]
+ ],
+ cases:[
+  {t:"紛争と教育 ― 奪われる学びの機会",w:"アフガニスタン、シリア、スーダンなど",lens:"pos",
+   b:"紛争が長引くと、学校の破壊、教員の不足、避難生活などで、子どもたちは長い期間学ぶ機会を失う。アフガニスタンでは2021年の政権交代以降、女子が中等教育以上の学校で学ぶことが制限され、国際社会が強い懸念を示している。教育を受けられないまま大人になると、仕事の選択肢が狭まり、貧困が次の世代に引き継がれやすい。",
+   s:"UNESCO・UNICEFの公表情報"},
+  {t:"住民がつくる「みんなの学校」",w:"ニジェールから西アフリカ各国へ",lens:"reg",
+   b:"JICAの協力で2004年にニジェールの小学校23校から始まったプロジェクト。保護者・教員・地域住民が<b>学校運営委員会</b>をつくり、行政と協力して学校の課題を話し合い、補習や教室の修理などを自分たちで行う。2021年時点でアフリカ8か国・約5万3,000校に広がった。マリでは2012年のクーデターで活動が長く中断したが、その間も住民が自主的に活動を続けていた。",
+   s:"JICA「みんなの学校」（2021年4月）"},
+  {t:"学校給食が「学ぶ」と「食べる」を支える",w:"世界各地（国連WFPなど）",lens:"place",
+   b:"学校で給食が出ると、子どもにとっては栄養がとれ、家庭にとっては「学校に通わせる理由」になる。国連WFPは各国で学校給食を支援し、地元の農家から食材を買うことで地域の農業も支えている。",
+   s:"国連WFP"}
+ ],
+ actors:[
+  ["国際機関","UNESCO・UNICEFによる学校づくり、難民の子どもの教育支援、WFPの学校給食。"],
+  ["国・日本の協力","「みんなの学校」、学校建設、算数・理科教育の協力、青年海外協力隊の教員派遣。"],
+  ["地域の人々","学校運営委員会、保護者による補習や学校の修理。"],
+  ["私たち","文房具の寄付やスタディツアーだけでなく、自分の学びを世界の課題とつなげて発信する。"]
+ ],
+ think:{q:"識字率が低いと、どんな問題が起こるのだろう？",
+  h:["薬の説明書や仕事の契約書が読めないと、どうなる？",
+     "選挙、災害の情報、仕事探しで困ることは？",
+     "母親が読み書きできるかどうかは、子どもの健康とどう関係する？（母子健康手帳のイラストの工夫も思い出そう）"],
+  ex:"薬の正しい飲み方や契約の内容が分からず、病気やだまされる被害にあいやすい。情報を得られず、選べる仕事も限られるため収入が低くなりやすい。母親が読み書きできないと子どもの健康管理にも影響し、貧困の悪循環が次の世代に引き継がれる。"},
+ kw:["識字率","不就学児童","紛争と教育","難民 教育","みんなの学校 JICA","学校給食 WFP"],
+ links:[["UNESCO","https://www.unesco.org/"],["日本ユニセフ協会","https://www.unicef.or.jp/"],["国連WFP","https://ja.wfp.org/"],["JICA（国際協力機構）","https://www.jica.go.jp/"]],
+ conn:[["gender","女子の教育が遅れやすい"],["health","予防や栄養の知識が広がる"],["pop","教育を受けた女性は出産が遅くなる傾向"],["food","児童労働が通学をさまたげる"]]
+},
+/* ---------------- ジェンダー ---------------- */
+{id:"gender", icon:"⚖️", name:"ジェンダー問題", sdg:"SDG 5", color:"#a21caf", soft:"#fbeefc",
+ catch:"日本も「課題の大きい国」？",
+ summary:"日本はジェンダーギャップ指数が高い（男女格差が大きい）先進国として知られており、管理職や政治家などの女性比率が低いため、女性の地位向上が遅れている。",
+ lenses:["reg","pos","place"],
+ facts:[
+  {n:"117位",t:"日本のジェンダーギャップ指数の順位（2026年、145か国中）。分野別では経済119位・政治121位と特に低い（教育68位・健康49位）。1位はアイスランド（17年連続）。",s:"世界経済フォーラム「Global Gender Gap Report 2026」（報道による）"},
+  {n:"約1,200万人",t:"毎年、18歳未満で結婚する少女の数（児童婚）。",s:"UNICEF"},
+  {n:"76%",t:"ニジェールで18歳未満で結婚した女性の割合。世界で最も高い水準。",s:"UNICEFの調査データ"},
+  {n:"約64%",t:"ルワンダの下院（2024年選挙後）に占める女性議員の割合。80議席のうち24議席を女性に割り当てる制度がある。",s:"列国議会同盟（IPU）関連報道"}
+ ],
+ why:[
+  "<b>貧困</b>：娘を早く結婚させることで家族の生活費の負担を減らそうとする（婚資のやりとりがある地域も）。",
+  "<b>慣習や考え方</b>：「女子に教育は不要」「早く結婚させるのが娘のため」という考え。",
+  "<b>治安の悪化や紛争・災害</b>：結婚させることで娘を守ろうとする。",
+  "日本では、<b>性別による役割分担の意識</b>や長時間労働などが、管理職や政治家の女性の少なさにつながっていると指摘される。"
+ ],
+ lensQ:[
+  ["pos","児童婚が多いのは世界のどの地域？（南アジア、サハラ以南のアフリカなど）"],
+  ["reg","日本のジェンダーギャップは、経済・教育・健康・政治のどの分野で大きい？ 他の先進国と比べよう。"],
+  ["place","同じ国でも、農村と都市、教育を受けた家庭とそうでない家庭で、児童婚の割合はどう違う？"]
+ ],
+ cases:[
+  {t:"世界で最も児童婚が多い国の一つ",w:"ニジェール（西アフリカ・サヘル地域）",lens:"place",
+   b:"ニジェールでは、18歳未満で結婚した女性が76%にのぼる。特に貧しく、教育を受ける機会の少ない農村部に多い。結婚すると学校をやめることが多く、10代での妊娠・出産は母子の健康を危険にさらす。教育・健康・人口の問題が重なり合う「悪循環の交差点」といえる。",
+   s:"UNICEFの調査データ、Humanium"},
+  {t:"女性議員が半数を超える国",w:"ルワンダ（東アフリカ）",lens:"reg",
+   b:"ルワンダでは下院80議席のうち24議席を女性に割り当てる制度があり、2024年の選挙後、女性議員の割合は約64%となった。制度によって女性の政治参加を進めた例として注目されている。日本の政治分野の順位（121位）と比べてみよう。",
+   s:"列国議会同盟（IPU）関連報道"},
+  {t:"奨学金で「早婚」を減らす",w:"バングラデシュ（南アジア）",lens:"reg",
+   b:"「18歳まで結婚しないこと」などを条件に女子へ中等教育の奨学金を支給した結果、女子の就学が約3倍に増え、早婚も減少した（人口問題の事例も参照）。",
+   s:"世界銀行ブログ"}
+ ],
+ actors:[
+  ["国際機関","UNICEF・UN Womenなどによる児童婚の撤廃、女子教育の支援。"],
+  ["国・日本の協力","女子教育・母子保健の協力。国内では男女共同参画の推進（女性の管理職・議員を増やす取り組み）。"],
+  ["地域の人々","宗教指導者や長老が児童婚に反対し、地域の意識を変える。"],
+  ["私たち","身の回りの「男だから」「女だから」に気づく。進路や役割を性別で決めつけない。"]
+ ],
+ think:{q:"児童婚はなぜ行われるのだろう？",
+  h:["娘が早く結婚すると、貧しい家族の生活はどう変わる？（食べる人数・婚資）",
+     "その地域では、女子が学校に通うことはどう考えられている？",
+     "治安が悪い地域や紛争・災害のときに、親は娘をどう守ろうとする？"],
+  ex:"貧しい家庭では、娘を早く結婚させることで家族の負担を減らそうとし、女子の教育を重視しない慣習や、治安の悪化から娘を守るためという考えも背景にある。児童婚は女子の教育機会を奪い、早い出産で母子の健康を危険にさらし、貧困を次の世代に引き継ぐ。"},
+ kw:["ジェンダーギャップ指数","児童婚","女子教育","クオータ制","ルワンダ 女性議員","男女共同参画"],
+ links:[["日本ユニセフ協会","https://www.unicef.or.jp/"],["内閣府 男女共同参画局","https://www.gender.go.jp/"],["世界経済フォーラム","https://www.weforum.org/"],["国連広報センター","https://www.unic.or.jp/"]],
+ conn:[["edu","児童婚で学校をやめてしまう"],["pop","早婚は出生率を高める"],["health","10代の出産は母子の健康リスクが高い"],["water","水くみの負担が女性に偏る"]]
+}
+];
+
+const TOOLS = [
+  {id:"agri", n:"🌾 農業支援（灌漑・技術）", cut:["e01"], m:"灌漑や栽培技術で収穫が安定すると、収入が少なくても自分たちで食料を確保しやすくなる（例：CARD）。"},
+  {id:"meal", n:"🍱 学校給食", cut:["e12","e05"], m:"給食で栄養がとれ、家庭にとっては「学校に通わせる理由」にもなる。1つの手立てで2本の矢印を切れる！"},
+  {id:"water",n:"💧 井戸・水道の整備", cut:["w73","w75"], m:"安全な水が近くにあれば、汚れた水による病気が減り、水くみの時間を学校に使える（例：ペシャワール会、プノンペン）。"},
+  {id:"med",  n:"🦟 予防接種・蚊帳・母子手帳", cut:["e23","e34"], m:"病気を防ぎ、早く治療できれば、働けなくなることを防げる（例：オリセットネット、母子健康手帳）。"},
+  {id:"school",n:"🏫 学費の無償化・奨学金", cut:["e05"], m:"お金がなくても学校に通えるようにする（例：バングラデシュの女子奨学金）。"},
+  {id:"comm", n:"🤝 住民参加の学校運営", cut:["e56"], m:"学校に通っても学べなければ技術は身につかない。地域で学びの質を高める（例：みんなの学校）。"},
+  {id:"job",  n:"🏭 雇用をつくる・公正な取引", cut:["e40"], m:"現地で仕事が生まれたり、公正な価格で取り引きされたりすれば、収入が増える（例：蚊帳工場、フェアトレード）。"}
+];
+
+const AISHA_Q = [
+  {k:"a1", q:"水を得るためにアイシャが犠牲にしているものについて考えよう。",
+   h:["1日の時間の使い方を、自分の1日と比べてみよう。","20Lの水は約20kg。体への負担は？"]},
+  {k:"a2", q:"成人したアイシャがどのような人生を歩むか考えよう。",
+   h:["【2】の悪循環の図で、アイシャはどこにいる？","学校に通えなかった場合、どんな仕事を選べるだろう？"]},
+  {k:"a3", q:"アイシャを救うために日本は何をしたらいいか、何ができるか？",
+   h:["「もの」を届けることと「技術」を伝えることの違いは？","大きな浄水場と井戸、壊れたときに現地の人だけで直せるのはどっち？","④の「水問題」の事例（ペシャワール会、プノンペン）を読んでみよう。"]},
+  {k:"a4", q:"安全な水を得られた世界で、アイシャの子はどのような人生を歩めるか想像しよう。",
+   h:["水くみの時間は、何の時間に変わる？","病気が減ると、家族の暮らしはどう変わる？"]}
+];
+
+const ACTIONS = ["フェアトレード商品を選ぶ","学んだことを発信する（文化祭・SNSなど）","募金・寄付に参加する","国際協力のイベントに参加する","将来の進路として国際協力を考える","身近な地域の貧困（子ども食堂など）に目を向ける","食品ロスを減らす"];
+
+const QUIZ = [
+  {q:"世界銀行が2025年6月に改定した「国際貧困ライン」は、1日あたりいくら？",o:["2.15ドル","3.00ドル","4.20ドル","8.30ドル"],a:1,e:"2.15ドルから3.00ドル（2021年購買力平価）に改定された。4.20ドルは低中所得国、8.30ドルは高中所得国向けの貧困ライン。"},
+  {q:"世界の極度の貧困層（2022年）のうち、約3分の2が暮らす地域は？",o:["南アジア","東アジア・太平洋","サハラ以南のアフリカ","ラテンアメリカ"],a:2,e:"約8億3,800万人のうち約5億5,900万人がサハラ以南のアフリカ。地域の人口の45.5%が極度の貧困層。"},
+  {q:"日本の相対的貧困率（2024年の所得）はおよそ何%？",o:["約6%","約11%","約15%","約25%"],a:2,e:"15.0%で、約6.7人に1人。約11%は子どもの貧困率（11.0%）。"},
+  {q:"子どもがいる現役世帯のうち「大人が1人の世帯」の貧困率（2024年）は？",o:["約15%","約30%","約45%","約60%"],a:2,e:"44.7%。ひとり親世帯の半数近くが貧困線を下回っている。"},
+  {q:"世界最大のカカオ豆生産国は？",o:["ガーナ","コートジボワール","インドネシア","ブラジル"],a:1,e:"コートジボワール。ガーナと合わせて世界の約6割を生産する。ギニア湾岸の高温多湿な気候が栽培に適している。"},
+  {q:"「安全に管理された飲料水」を利用できない人は、世界のおよそ何人に1人？",o:["約10人に1人","約8人に1人","約4人に1人","約2人に1人"],a:2,e:"約21億人で、約4人に1人（WHO・UNICEF JMP、2024年のデータ）。"},
+  {q:"世界のHIV陽性者の約半数が暮らす地域は？",o:["西部・中部アフリカ","東部・南部アフリカ","南アジア","東ヨーロッパ・中央アジア"],a:1,e:"約4,100万人のうち約2,110万人が東部・南部アフリカ（2025年）。鉱山への出稼ぎなど人の移動も感染拡大に関係した。"},
+  {q:"中村哲医師がアフガニスタンで用水路の取水堰をつくるときにモデルにした、日本の堰は？",o:["山田堰（福岡県・筑後川）","信玄堤（山梨県・釜無川）","見沼代用水（埼玉県・利根川）","玉川上水（東京都・多摩川）"],a:0,e:"福岡県朝倉市の筑後川にある山田堰。現地の石と人力でつくれて、住民が維持管理できる技術だった。"},
+  {q:"北九州市の協力で、プノンペンの水道の無収水率（漏水などで料金を回収できない水の割合）は72%から何%になった？",o:["約50%","約30%","約8%","0%"],a:2,e:"1993年の72%から2006年には8%に。給水時間も1日10時間から24時間に延びた。"},
+  {q:"日本のジェンダーギャップ指数（2026年）の順位は？",o:["49位","68位","117位","140位"],a:2,e:"145か国中117位。49位は健康分野、68位は教育分野の順位。経済（119位）と政治（121位）の分野が特に低い。"}
+];
+/* ===== 共通 ===== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const KEY = "arageo_sdgs_people_v1";
+let store = {};
+try { store = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { store = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e) {} }
+function bindTextareas(root=document){
+  $$("textarea[data-key]", root).forEach(t=>{
+    const k = t.dataset.key;
+    if (store[k]) t.value = store[k];
+    t.addEventListener("input", ()=>{ store[k] = t.value; save(); markDone(); });
+  });
+}
+const fmt = n => n.toLocaleString("ja-JP");
+
+/* ===== タブ ===== */
+function showPage(id){
+  $$("#tabbar button").forEach(b=>b.classList.toggle("on", b.dataset.p===id));
+  $$("section.page").forEach(s=>s.classList.toggle("on", s.id===id));
+  store._tab = id; save();
+  window.scrollTo({top:0, behavior:"smooth"});
+  if (id==="p1") animateBars();
+}
+$$("#tabbar button").forEach(b=>b.addEventListener("click", ()=>showPage(b.dataset.p)));
+
+/* ===== ツールバー ===== */
+$("#projBtn").addEventListener("click", ()=>{
+  document.body.classList.toggle("proj");
+  store._proj = document.body.classList.contains("proj"); save();
+});
+if (store._proj) document.body.classList.add("proj");
+$("#printBtn").addEventListener("click", ()=>window.print());
+$("#exportBtn").addEventListener("click", ()=>{
+  const lines = ["SDGs「People」（人間）　自分のメモ", "書き出し日時：" + new Date().toLocaleString("ja-JP"), ""];
+  AISHA_Q.forEach(q=>{ lines.push("■ アイシャ：" + q.q, store[q.k]||"（未記入）", ""); });
+  PROBLEMS.forEach(p=>{
+    lines.push("■ " + p.name);
+    lines.push("【どこで何が起きている？】", store[p.id+"_where"]||"（未記入）");
+    lines.push("【解決の手立ては？】", store[p.id+"_sol"]||"（未記入）");
+    lines.push("【考えよう：" + p.think.q + "】", store[p.id+"_think"]||"（未記入）", "");
+  });
+  lines.push("■ まとめQ1", store.sum1||"（未記入）", "", "■ まとめQ2", store.sum2||"（未記入）", "", "■ マイ・アクション：" + (store.actions||[]).join("、"), store.sum3||"（未記入）");
+  const blob = new Blob([lines.join("\n")], {type:"text/plain;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "SDGs_People_メモ.txt";
+  document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ===== 0 導入 ===== */
+$("#fiveP").innerHTML = FIVE_P.map(f=>`<div style="border-radius:12px;padding:10px 12px;border:2px solid ${f.c};background:${f.on?f.c:'#fff'};color:${f.on?'#fff':f.c}">
+  <b style="font-size:1.1rem">${f.p}</b>　${f.jp}<br><small>${f.g}${f.on?' ← 今日':''}</small></div>`).join("");
+const GUESS = [["2人に1人",false],["4人に1人",false],["10人に1人",true],["50人に1人",false]];
+$("#guessBtns").innerHTML = GUESS.map((g,i)=>`<button class="tool" data-i="${i}" type="button">${g[0]}</button>`).join("");
+$$("#guessBtns .tool").forEach(b=>b.addEventListener("click", ()=>{
+  $$("#guessBtns .tool").forEach(x=>x.classList.remove("on")); b.classList.add("on");
+  const ok = GUESS[b.dataset.i][1];
+  const m = $("#guessMsg"); m.style.display="block";
+  m.innerHTML = (ok? "⭕ 正解！ ":"答えは<b>約10人に1人</b>。 ") +
+   "世界銀行の推計では、2022年に約8億3,800万人（世界人口の10.5%）が1日3ドル未満で暮らしていました。数十年前には2〜3人に1人が極度の貧困だったので大きく減りましたが、<b>減るペースは鈍っています</b>。そして、その<b>約3分の2がサハラ以南のアフリカ</b>に集中しています。";
+}));
+
+/* ===== 1 貧困とは ===== */
+function calc(){
+  const usd = parseFloat($("#usd").value)||0, rate = parseFloat($("#rate").value)||0;
+  const d = usd*rate, m = d*30, y = d*365;
+  $("#calcOut").innerHTML = `1日 <b class="big" style="font-size:1.6rem">${fmt(Math.round(d))}</b> 円<br>
+   1か月（30日）約 <b style="font-size:1.3rem">${(m/10000).toFixed(1)}</b> 万円（${fmt(Math.round(m))}円）<br>
+   1年（365日）約 <b>${(y/10000).toFixed(1)}</b> 万円
+   <div class="note" style="margin-top:6px">🍙 コンビニのおにぎり1個を180円とすると、1日 約${(d/180).toFixed(1)}個分。<br>この中に、食費・住まい・水・電気・医療・学用品…すべてが含まれます。</div>`;
+}
+["usd","rate"].forEach(id=>$("#"+id).addEventListener("input", calc)); calc();
+$("#monthLine").textContent = "月あたり 約" + (138/12).toFixed(1) + "万円（1人あたり換算）";
+
+(function donut(){
+  const total = 838.0, ssa = 558.8, r=48, c=2*Math.PI*r, frac = ssa/total;
+  $("#donut").innerHTML = `<circle cx="60" cy="60" r="${r}" fill="none" stroke="#d6d3d1" stroke-width="20"/>
+   <circle cx="60" cy="60" r="${r}" fill="none" stroke="#c2410c" stroke-width="20" stroke-dasharray="${(c*frac).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 60 60)"/>
+   <text x="60" y="58" text-anchor="middle" font-size="16" font-weight="800" fill="#1f2933">${Math.round(frac*100)}%</text>
+   <text x="60" y="74" text-anchor="middle" font-size="8" fill="#52606d">サハラ以南</text>`;
+})();
+const BARS1 = [["世界全体",10.5,"#78716c"],["サハラ以南のアフリカ",45.5,"#c2410c"]];
+$("#bars1").innerHTML = BARS1.map(b=>`<div class="bar-row"><span>${b[0]}</span><div class="bar-bg"><div class="bar" data-w="${b[1]}" style="background:${b[2]}"></div></div><b>${b[1]}%</b></div>`).join("");
+function animateBars(){ setTimeout(()=>$$(".bar").forEach(b=>b.style.width=b.dataset.w+"%"), 80); }
+$$(".blank").forEach(b=>{ b.addEventListener("click", ()=>b.classList.toggle("show")); });
+$("#showAll1").addEventListener("click", ()=>$$("#p1 .blank").forEach(b=>b.classList.add("show")));
+
+/* ===== 2 悪循環 ===== */
+const NODES = {
+  N0:{x:410,y:55,t:"収入が少ない"}, N1:{x:680,y:140,t:"食料が買えない"}, N2:{x:680,y:270,t:"十分な栄養が取れない"},
+  N3:{x:600,y:400,t:"病気になりやすい"}, N4:{x:410,y:455,t:"仕事に就けない"}, N5:{x:140,y:140,t:"学校に行けない"},
+  N6:{x:140,y:270,t:"技術や能力が身につかない"}, N7:{x:540,y:205,t:"安全な水が近くにない",water:true}
+};
+const EDGES = [
+  ["e01","N0","N1"],["e12","N1","N2"],["e23","N2","N3"],["e34","N3","N4"],["e40","N4","N0","curve"],
+  ["e05","N0","N5"],["e56","N5","N6"],["e64","N6","N4"],["w73","N7","N3","w"],["w75","N7","N5","w"]
+];
+const nodeW = t => t.length*15+28, NH = 40;
+function clip(x1,y1,x2,y2,w,h){ // 中心(x2,y2)の矩形の境界と線分の交点
+  const dx=x1-x2, dy=y1-y2; const sx = (w/2+6)/Math.abs(dx||1e-6), sy=(h/2+6)/Math.abs(dy||1e-6); const s=Math.min(sx,sy,1);
+  return [x2+dx*s, y2+dy*s];
+}
+function drawCycle(){
+  let s = `<svg viewBox="0 0 820 500" role="img" aria-label="貧困の悪循環の図">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+  <marker id="ahw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0284c7"/></marker></defs>`;
+  EDGES.forEach(([id,a,b,type])=>{
+    const A=NODES[a], B=NODES[b];
+    if (type==="curve"){
+      s += `<line id="${id}" class="edge" x1="410" y1="433" x2="410" y2="83" marker-end="url(#ah)"/>
+      <text x="420" y="345" font-size="15" fill="#c2410c" font-weight="800">繰り返す</text>`;
+      return;
+    }
+    const [x1,y1] = clip(B.x,B.y,A.x,A.y,nodeW(A.t),NH);
+    const [x2,y2] = clip(A.x,A.y,B.x,B.y,nodeW(B.t),NH);
+    s += `<line id="${id}" class="edge" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" ${type==="w"?'style="stroke:#0284c7;stroke-dasharray:7 5" marker-end="url(#ahw)"':'marker-end="url(#ah)"'}/>
+    <text class="scissor" id="sc_${id}" x="${((x1+x2)/2).toFixed(1)}" y="${((y1+y2)/2+7).toFixed(1)}" text-anchor="middle">✂</text>`;
+  });
+  s += `<text class="scissor" id="sc_e40" x="410" y="290" text-anchor="middle">✂</text>`;
+  Object.entries(NODES).forEach(([k,n])=>{
+    const w=nodeW(n.t);
+    s += `<g class="node" id="nd_${k}"><rect x="${n.x-w/2}" y="${n.y-NH/2}" width="${w}" height="${NH}" rx="12" ${n.water?'style="stroke:#0284c7;fill:#e0f2fe"':''}/>
+    <text x="${n.x}" y="${n.y+5}" text-anchor="middle">${n.t}</text></g>`;
+  });
+  s += `<text x="410" y="492" text-anchor="middle" font-size="13" fill="#52606d">→ 自分の子どもも貧しいまま（負の連鎖）</text></svg>`;
+  $("#cycle").innerHTML = s;
+}
+drawCycle();
+const active = new Set();
+$("#tools").innerHTML = TOOLS.map(t=>`<button class="tool" data-id="${t.id}" type="button">${t.n}</button>`).join("") + `<button class="btn sm" id="toolReset" type="button">リセット</button>`;
+function updateCycle(lastId){
+  const cut = new Set(); TOOLS.filter(t=>active.has(t.id)).forEach(t=>t.cut.forEach(c=>cut.add(c)));
+  EDGES.forEach(([id])=>{ $("#"+id).classList.toggle("cut", cut.has(id)); const sc=$("#sc_"+id); if(sc) sc.classList.toggle("on", cut.has(id)); });
+  const loops = [
+    ["🍚 食料・健康の輪", ["e01","e12","e23","e34","e40"]],
+    ["📚 教育の輪", ["e05","e56","e64","e40"]],
+    ["💧 水がもたらす影響", ["w73","w75"]]
+  ];
+  $("#loopStatus").innerHTML = loops.map(([n,es])=>{
+    const k = es.filter(e=>cut.has(e)).length;
+    const broken = n.includes("水") ? k===es.length : k>0;
+    return `<div class="calc-out" style="margin:0;background:${broken?'#e7f6ec':'#fff1e8'}"><b>${n}</b><br>${broken?'✅ 断ち切れた':'🔁 まだつながっている'}<span class="note">（${k}/${es.length}本を切断）</span></div>`;
+  }).join("");
+  const t = TOOLS.find(x=>x.id===lastId);
+  if (!active.size) $("#toolMsg").textContent = "手立てを1つ選んでみよう。";
+  else if (t && active.has(t.id)) $("#toolMsg").innerHTML = `<b>${t.n}</b>：${t.m}`;
+  if (active.size>=4) $("#toolMsg").innerHTML += `<br><b style="color:var(--green)">複数の手立てを組み合わせると、悪循環のあちこちを同時に断ち切れます。これが「包括的な取り組み」です。</b>`;
+}
+$$("#tools .tool").forEach(b=>b.addEventListener("click", ()=>{
+  const id=b.dataset.id; if (active.has(id)) active.delete(id); else active.add(id);
+  b.classList.toggle("on", active.has(id)); updateCycle(id);
+}));
+$("#toolReset").addEventListener("click", ()=>{ active.clear(); $$("#tools .tool").forEach(b=>b.classList.remove("on")); updateCycle(); });
+updateCycle();
+
+/* ===== 3 アイシャ ===== */
+const SCHOOL_H = 35*30*50/60; // 年35週×週30単位時間×50分＝875時間（目安）
+function sim(){
+  const ow=+$("#ow").value, rt=+$("#rt").value, l=+$("#lv_r").value;
+  $("#owv").textContent=ow; $("#rtv").textContent=rt; $("#lv").textContent=l;
+  const day = ow*2*rt, yearH = day*365/60;
+  $("#simOut").innerHTML = `1日に水くみに使う時間：<b class="big" style="font-size:1.6rem">${Math.floor(day/60)}時間${day%60}分</b><br>
+   1年間で：約 <b style="font-size:1.3rem">${fmt(Math.round(yearH))}</b> 時間<br>
+   <span class="note">日本の高校の1年間の授業時間（目安：年35週×週30コマ×50分＝約875時間）の <b>${(yearH/SCHOOL_H).toFixed(1)}倍</b></span><br>
+   1日に運ぶ水：${l*rt}L ＝ 約${l*rt}kg（2Lペットボトル${l*rt/2}本分）`;
+  const cells = Math.min(96, Math.round(day/15));
+  $("#clock").innerHTML = Array.from({length:96},(_,i)=>`<i class="${i<cells?'w':''}"></i>`).join("");
+}
+["ow","rt","lv_r"].forEach(id=>$("#"+id).addEventListener("input", sim)); sim();
+$("#aishaQs").innerHTML = AISHA_Q.map((q,i)=>`<div style="margin:12px 0">
+  <p style="margin:0 0 4px"><b>・${q.q}</b></p>
+  <div class="hint">${q.h.map((h,j)=>`<button class="btn sm" type="button" data-h="${i}_${j}">ヒント${j+1}</button>`).join(" ")}
+  ${q.h.map((h,j)=>`<div class="h" id="h_${i}_${j}">💡 ${h}${q.k==="a3"&&j===2?' <button class="btn sm" type="button" data-go="water">水問題の事例へ →</button>':''}</div>`).join("")}</div>
+  <textarea data-key="${q.k}"></textarea></div>`).join("");
+$$("#aishaQs [data-h]").forEach(b=>b.addEventListener("click", ()=>$("#h_"+b.dataset.h).classList.toggle("show")));
+$$("#aishaQs [data-go]").forEach(b=>b.addEventListener("click", ()=>{ showPage("p4"); openProblem(b.dataset.go,"case"); }));
+
+/* ===== 4 調べ学習 ===== */
+$("#lensIntro").innerHTML = Object.values(LENS).map(l=>`<div class="lensbox" style="margin:0"><b style="color:var(--accent)">${l.name}</b><br><span class="note">${l.q}</span></div>`).join("");
+$("#pbtns").innerHTML = PROBLEMS.map(p=>`<button class="pbtn" type="button" data-id="${p.id}" style="--pc:${p.color};--pcs:${p.soft}"><span class="ic">${p.icon}</span><b>${p.name}</b><small>${p.catch}</small></button>`).join("");
+$$("#pbtns .pbtn").forEach(b=>b.addEventListener("click", ()=>openProblem(b.dataset.id)));
+const SUBS = [["data","① どこで何が？"],["why","② なぜ？（5つのレンズ）"],["case","③ 事例と手立て"],["think","④ 考えよう"],["memo","⑤ まとめメモ"]];
+let curP = null, curSub = "data";
+function openProblem(id, sub, noScroll){
+  const p = PROBLEMS.find(x=>x.id===id); curP = p; curSub = sub || "data";
+  $$("#pbtns .pbtn").forEach(b=>b.classList.toggle("on", b.dataset.id===id));
+  const v = $("#pview"); v.style.setProperty("--pc", p.color); v.style.setProperty("--pcs", p.soft);
+  v.innerHTML = `<div class="phead"><h3>${p.icon} ${p.name}　<small style="font-size:.8rem;opacity:.9">${p.sdg}</small></h3><p>${p.catch}</p></div>
+   <div class="sub-tabs">${SUBS.map(s=>`<button type="button" data-s="${s[0]}">${s[1]}</button>`).join("")}</div>
+   <div class="sub-body" id="subBody"></div>`;
+  $$("#pview .sub-tabs button").forEach(b=>b.addEventListener("click", ()=>renderSub(b.dataset.s)));
+  renderSub(curSub);
+  if(!noScroll) v.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function lensTag(k){ return `<span class="pill" style="background:var(--pcs);color:var(--pc)">🔍 ${LENS[k].name}</span>`; }
+function renderSub(s){
+  curSub = s; const p = curP;
+  $$("#pview .sub-tabs button").forEach(b=>b.classList.toggle("on", b.dataset.s===s));
+  let h = "";
+  if (s==="data"){
+    h = `<div class="lensbox" style="background:#fffbeb;border-color:#fcd34d"><b style="color:#a16207">ワークシートの要約</b><br>${p.summary}</div>
+     <h4>📊 データで確かめよう</h4>${p.facts.map(f=>`<div class="fact"><div class="n">${f.n}</div><div>${f.t}<div class="src">出典：${f.s}</div></div></div>`).join("")}
+     <h4>🧭 この問題を見るときの主なレンズ</h4><div class="lens">${p.lenses.map(k=>`<span>${LENS[k].name}</span>`).join("")}</div>`;
+  } else if (s==="why"){
+    h = `<h4 style="margin-top:0">なぜ起きる？ ― 主な原因</h4><ul>${p.why.map(w=>`<li>${w}</li>`).join("")}</ul>
+     <h4>🔍 地理のレンズで考えよう</h4>${p.lensQ.map(([k,q])=>`<div class="lensbox"><b>${LENS[k].name}</b>　<span class="note">${LENS[k].q}</span><br>➡ ${q}</div>`).join("")}
+     <h4>🔗 ほかの問題とのつながり</h4><div class="connect">${p.conn.map(([id,r])=>{const q=PROBLEMS.find(x=>x.id===id);return `<button type="button" data-go="${id}">${q.icon} ${q.name}：${r}</button>`}).join("")}</div>`;
+  } else if (s==="case"){
+    h = `<h4 style="margin-top:0">📍 具体的な事例</h4>${p.cases.map(c=>`<div class="case"><h4>${c.t}</h4><div class="where">📍 ${c.w}　${lensTag(c.lens)}</div><p style="margin:.4em 0">${c.b}</p><div class="src">出典：${c.s}</div></div>`).join("")}
+     <h4>🛠 解決の手立て ― 「誰が」行う？</h4><div class="scale">${p.actors.map(a=>`<div><b>${a[0]}</b>${a[1]}</div>`).join("")}</div>`;
+  } else if (s==="think"){
+    h = `<h4 style="margin-top:0">❓ ${p.think.q}</h4>
+     <div class="hint">${p.think.h.map((x,j)=>`<button class="btn sm" type="button" data-th="${j}">ヒント${j+1}</button>`).join(" ")} <button class="btn sm" type="button" data-th="ex">考え方の例</button>
+     ${p.think.h.map((x,j)=>`<div class="h" id="th_${j}">💡 ${x}</div>`).join("")}<div class="h" id="th_ex">📝 ${p.think.ex}<br><span class="note">※あくまで一例。自分の言葉で、具体的な国名やデータを入れて書こう。</span></div></div>
+     <textarea data-key="${p.id}_think" placeholder="自分の考えを書こう"></textarea>
+     <h4>🔑 調べるときのキーワード</h4><div class="kw">${p.kw.map(k=>`<span>${k}</span>`).join("")}</div>
+     <h4>🌐 信頼できる情報源</h4><ul class="links">${p.links.map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a></li>`).join("")}</ul>`;
+  } else {
+    h = `<p class="note" style="margin-top:0">ワークシートの表と同じ3つの欄です。調べたことを自分の言葉でまとめよう（具体的な国名・数字・出典を入れるとGood）。</p>
+     <div class="memo3">
+      <div><label>どこで何が起きている？</label><textarea data-key="${p.id}_where" placeholder="例）${p.facts[0].n}…"></textarea></div>
+      <div><label>解決の手立ては？</label><textarea data-key="${p.id}_sol" placeholder="誰が・何をする？"></textarea></div>
+      <div><label>考えよう：${p.think.q}</label><textarea data-key="${p.id}_think"></textarea></div>
+     </div>`;
+  }
+  $("#subBody").innerHTML = h;
+  $$("#subBody [data-th]").forEach(b=>b.addEventListener("click", ()=>$("#th_"+b.dataset.th).classList.toggle("show")));
+  $$("#subBody [data-go]").forEach(b=>b.addEventListener("click", ()=>openProblem(b.dataset.go,"why")));
+  bindTextareas($("#subBody"));
+}
+function markDone(){
+  $$("#pbtns .pbtn").forEach(b=>{ const id=b.dataset.id; b.classList.toggle("done", !!(store[id+"_where"]||store[id+"_sol"]||store[id+"_think"])); });
+}
+markDone();
+
+/* ===== 5 クイズ ===== */
+let qState = {};
+function renderQuiz(){
+  qState = {};
+  $("#quiz").innerHTML = QUIZ.map((q,i)=>`<div class="q" id="q${i}"><b>Q${i+1}.</b> ${q.q}
+   <div class="opts">${q.o.map((o,j)=>`<button type="button" data-q="${i}" data-o="${j}">${["ア","イ","ウ","エ"][j]}．${o}</button>`).join("")}</div>
+   <div class="ex" id="ex${i}"></div></div>`).join("");
+  $$("#quiz [data-q]").forEach(b=>b.addEventListener("click", ()=>{
+    const i=+b.dataset.q, j=+b.dataset.o, q=QUIZ[i]; if (i in qState) return;
+    qState[i] = (j===q.a);
+    $$(`#q${i} button`).forEach((x,k)=>{ if(k===q.a) x.classList.add("ok"); else if(k===j) x.classList.add("ng"); });
+    const ex=$("#ex"+i); ex.innerHTML = (qState[i]?"⭕ 正解！ ":"❌ 正解は「"+q.o[q.a]+"」。 ")+q.e; ex.classList.add("show");
+    score();
+  }));
+  score();
+}
+function score(){ const n=Object.keys(qState).length, ok=Object.values(qState).filter(Boolean).length; $("#score").textContent = n? `${ok} / ${n} 問正解（全${QUIZ.length}問）`:""; }
+$("#quizReset").addEventListener("click", renderQuiz); renderQuiz();
+store.actions = store.actions || [];
+$("#actions").innerHTML = ACTIONS.map(a=>`<button class="tool${store.actions.includes(a)?' on':''}" type="button">${a}</button>`).join("");
+$$("#actions .tool").forEach(b=>b.addEventListener("click", ()=>{
+  const a=b.textContent; const i=store.actions.indexOf(a);
+  if (i>=0) store.actions.splice(i,1); else store.actions.push(a);
+  b.classList.toggle("on"); save();
+}));
+
+/* ===== 初期化 ===== */
+bindTextareas(document);
+openProblem("pop", "data", true);
+if (store._tab && $("#"+store._tab)) showPage(store._tab); else window.scrollTo(0,0);
+
+</script>
+</body>
+</html>
+
