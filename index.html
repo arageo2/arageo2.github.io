@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>あらじお蔵 ｜ 高校地理のインタラクティブ教材</title>
-<meta name="description" content="日々の授業から生まれた、体験型の高校地理教材サイト。シミュレーター・地図・3D・ゲームなどの個別教材と、地理総合・地理探究の年間総合ラボ（資料集）を公開しています。">
+<meta name="description" content="日々の授業から生まれた、体験型の高校地理教材サイト。シミュレーター・地図・3D・ゲームなどの個別教材と、地理総合・地理探究の総合資料を公開しています。">
 
 <!-- OGP（SNS・検索で共有されたときの表示） -->
 <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
 <style>
 /* =========================================================
    あらじお蔵 ─ トップページ
-   ・構成は「個別教材（メイン）」と「年間総合ラボ（資料集）」の2本立て
+   ・構成は「個別教材（メイン）」と「総合資料」の2本立て
    ・個別教材はカードを1ブロック複製するだけで追加できる
      （並び順・NEW表示・分野の絞り込みは自動）
    ========================================================= */
@@ -41,7 +41,7 @@
   --line:#d7dcc8;
   --line-soft:#e6e4d6;
 
-  /* 年間総合ラボの識別色 */
+  /* 総合資料の識別色 */
   --c-basic:#3e7d54;     /* 地理総合 */
   --c-sys:#9a6a2c;       /* 系統地理 */
   --c-reg:#2f6d6a;       /* 地誌 */
@@ -209,7 +209,7 @@ header.site{
 }
 .card time{color:var(--muted)}
 
-/* ===== 年間総合ラボ（資料集） ===== */
+/* ===== 総合資料 ===== */
 .labs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .lab{
   --c:var(--pine);
@@ -309,7 +309,7 @@ footer .cc a{color:#c4e4c8;font-weight:700;text-decoration:underline;text-underl
     </a>
     <nav class="site-nav" aria-label="サイト内">
       <a href="#materials">個別教材</a>
-      <a href="#labs">年間総合ラボ</a>
+      <a href="#labs">総合資料</a>
       <a href="#about">このサイトについて</a>
     </nav>
   </div>
@@ -343,7 +343,7 @@ footer .cc a{color:#c4e4c8;font-weight:700;text-decoration:underline;text-underl
         <a class="btn primary" href="#materials">個別教材を見る
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
         </a>
-        <a class="btn ghost" href="#labs">年間総合ラボ（資料集）</a>
+        <a class="btn ghost" href="#labs">総合資料</a>
       </div>
     </div>
 
@@ -429,19 +429,19 @@ footer .cc a{color:#c4e4c8;font-weight:700;text-decoration:underline;text-underl
   </div>
 </section>
 
-<!-- ===================== 年間総合ラボ（資料集） ===================== -->
+<!-- ===================== 総合資料 ===================== -->
 <section class="band alt" id="labs">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">REFERENCE</span>
-      <h2>年間総合ラボ（資料集）</h2>
+      <h2>総合資料</h2>
       <p>地理総合・地理探究の1年分の学習内容を、学習指導要領の構成に沿って編ごとに1ページにまとめた総合ページです。単元全体を見渡したいときや、復習・調べものの資料集として活用してください。</p>
     </div>
 
     <div class="labs">
       <a class="lab" href="/geography-basic/" style="--c:var(--c-basic)">
         <span class="subj">地理総合</span>
-        <h3>地理総合 インタラクティブ・ラボ 年間版</h3>
+        <h3>地理総合 総合資料</h3>
         <ul class="toc">
           <li>第1編 地図とGIS</li>
           <li>第2編 国際理解と国際協力</li>
@@ -452,8 +452,8 @@ footer .cc a{color:#c4e4c8;font-weight:700;text-decoration:underline;text-underl
       </a>
 
       <a class="lab" href="/geography-advanced/" style="--c:var(--c-sys)">
-        <span class="subj">地理探究 第1編</span>
-        <h3>現代世界の系統地理的考察</h3>
+        <span class="subj">地理探究</span>
+        <h3>地理探究 系統地理編</h3>
         <ul class="toc">
           <li>第1章 地球と自然のしくみ</li>
           <li>第2章 くらしを支える産業</li>
@@ -466,8 +466,8 @@ footer .cc a{color:#c4e4c8;font-weight:700;text-decoration:underline;text-underl
       </a>
 
       <a class="lab" href="/geography-advanced/regional/" style="--c:var(--c-reg)">
-        <span class="subj">地理探究 第2編</span>
-        <h3>現代世界の地誌的考察</h3>
+        <span class="subj">地理探究</span>
+        <h3>地理探究 地誌編</h3>
         <ul class="toc inline">
           <li>東アジア</li><li>東南アジア</li><li>南アジア</li><li>西・中央アジア</li><li>アフリカ</li>
           <li>ヨーロッパ</li><li>ロシア</li><li>アングロアメリカ</li><li>ラテンアメリカ</li><li>オセアニア</li>
@@ -561,7 +561,7 @@ footer .cc a{color:#c4e4c8;font-weight:700;text-decoration:underline;text-underl
       <span class="foot-name">あらじお蔵</span>
       <nav class="foot-links" aria-label="フッター">
         <a href="#materials">個別教材</a>
-        <a href="#labs">年間総合ラボ</a>
+        <a href="#labs">総合資料</a>
         <a href="#site-policy">サイトポリシー</a>
         <a href="#privacy">プライバシーポリシー</a>
       </nav>
