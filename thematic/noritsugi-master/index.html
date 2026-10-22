@@ -185,6 +185,18 @@ body.ingame{ display:flex; flex-direction:column; }
 .foot{ max-width:760px; font-size:.66rem; color:var(--ink2); line-height:1.8; text-align:center; }
 .foot button{ background:none; border:none; text-decoration:underline; font-size:.7rem; color:var(--ink); }
 
+/* ===== コース一覧の難易度見出し・ストーリー ===== */
+.lvhd{ grid-column:1/-1; font-size:.78rem; letter-spacing:.2em; color:var(--accent); font-weight:800; margin-top:6px; border-bottom:2px solid var(--line); padding-bottom:3px; }
+.course .h{ gap:8px; }
+.course .h span:first-child{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.course .h span:last-child{ flex-shrink:0; }
+.course .b .pc{ font-family:var(--led-font); color:var(--ink); }
+.story .mission{ display:inline-block; background:var(--led-bg); color:var(--led-amber); font-size:.75rem; padding:2px 10px; border-radius:4px; letter-spacing:.3em; margin-bottom:8px; }
+.story .route{ font-size:1.3rem; font-weight:800; letter-spacing:.04em; margin-bottom:2px; }
+.story .meta{ font-size:.75rem; color:var(--ink2); margin-bottom:10px; }
+.story .intro{ font-size:.9rem; color:var(--ink); line-height:1.95; border-left:4px solid var(--accent); padding-left:12px; }
+.story .kw{ font-size:.78rem; color:var(--accent); font-weight:700; margin-top:8px; }
+
 /* ===== モーダル・トースト ===== */
 .ov{ position:fixed; inset:0; background:rgba(8,12,16,.6); display:none; align-items:center; justify-content:center; z-index:50; padding:14px; }
 .ov.on{ display:flex; }
@@ -225,8 +237,8 @@ body.ingame{ display:flex; flex-direction:column; }
     <h2>▍ルール</h2>
     ① 限られた<b>予算</b>で、公共交通(鉄道・バス・フェリー)を乗り継いでゴールをめざす。<b>飛行機とタクシーは使用禁止。</b><br>
     ② 移動できるのは<b>5時〜23時</b>。23時を過ぎたら宿泊(夜行列車・夜行バス・フェリーに乗っていれば夜も移動できる)。<b>半径10km以内なら歩いて移動</b>もできる(道のりは直線の約1.3倍、1kmあたり12分)。<br>
-    ③ お金が足りなくなったら、各地で<b>アルバイト(8時間で1万円)</b>。地域の産業にちなんだ仕事が待っている。<br>
-    ④ 到着までの<b>経過時間</b>でランクが決まる。ゴール後は、ゲームのAIが見つけた「予算内の最速ルート」と比べられる。
+    ③ お金が足りなくなったら、各地で<b>アルバイト(8時間で1万円)</b>。地域の産業にちなんだ仕事が待っている。宿泊はホテル(5:30から行動)・ネットカフェ(6:30から)・待合室で仮眠(無料だが9:00から)の3択。<br>
+    ④ 到着までの<b>経過時間</b>でランクが決まる。ゴールするたびに<b>AIライバルのヒント</b>が1つずつ公開され、5回ゴールするとAIの最速ルートがすべてわかる。
   </div>
   <div class="courses" id="courses"></div>
   <div class="panel">
@@ -293,10 +305,21 @@ body.ingame{ display:flex; flex-direction:column; }
   <p id="rd">夜間は移動できません。今夜の過ごし方を選んでください。</p>
   <div class="row">
     <button class="btn" id="r1">ビジネスホテル<small>¥6,000 / 翌5:30から行動</small></button>
-    <button class="btn sub" id="r2">ネットカフェ<small>¥2,500 / 翌5:30から行動(都市部のみ)</small></button>
-    <button class="btn sub" id="r3">駅の待合室で仮眠<small>無料 / 翌6:30から行動</small></button>
+    <button class="btn sub" id="r2">ネットカフェ<small>¥2,500 / 翌6:30から行動(都市部のみ)</small></button>
+    <button class="btn sub" id="r3">駅の待合室で仮眠<small>無料 / 疲れが残り翌9:00から行動</small></button>
   </div>
   <div class="row"><button class="btn sub" id="r0" style="display:none">やっぱりやめる</button></div>
+</div></div>
+
+<div class="ov" id="storyov"><div class="modal story">
+  <div class="mission led">MISSION</div>
+  <h2 id="st_t"></h2>
+  <div class="route" id="st_r"></div>
+  <div class="meta" id="st_b"></div>
+  <p class="intro" id="st_i"></p>
+  <p class="kw" id="st_g"></p>
+  <p class="note" id="st_p"></p>
+  <div class="row"><button class="btn red" id="st_go">出発する</button><button class="btn sub" id="st_back">もどる</button></div>
 </div></div>
 
 <div class="ov" id="brokeov"><div class="modal">
@@ -308,6 +331,7 @@ body.ingame{ display:flex; flex-direction:column; }
 <div class="ov" id="resov"><div class="modal">
   <h2 style="text-align:center">🏁 ゴール!</h2>
   <div id="newrec" style="text-align:center;color:var(--accent);font-weight:800;letter-spacing:.15em;display:none">★ 自己ベスト更新! ★</div>
+  <p id="r_end" style="text-align:center;font-size:.85rem;line-height:1.7;margin:4px 0 6px"></p>
   <div class="rank"><b id="rk">S</b></div>
   <div class="nums">
     <div><b id="r_t">0:00</b><span>経過時間</span></div>
@@ -332,6 +356,8 @@ body.ingame{ display:flex; flex-direction:column; }
     <li>海峡(津軽・関門・瀬戸内)や島(沖縄)へ渡るには? 長距離フェリーが果たす役割は?</li>
     <li>「長期運休中」の区間(地図上の赤い破線)はなぜ生じた? 災害とローカル線の存廃問題。</li>
     <li>アルバイト先は都道府県の代表的な産業にちなむ。その産業が盛んな理由を地図帳で確かめる。</li>
+    <li>全20コースにはストーリーと「地理のキーワード」がある。到着地の地域的特色を事前学習・事後学習につなげられる。</li>
+    <li>宿泊の選択は「時間とお金の交換」。アルバイト時給(約1,250円)を基準に、ホテル代6,000円で3.5時間を買う価値があるかを考えさせると、機会費用の考え方にもつながる。</li>
   </ul>
   <p><b>展開例:</b>①個人で1回プレー → ②班でルート作戦会議 → ③タイムアタック → ④ゴール後に表示される「AIの最速ルート」と自分のルートを比較し、違いの理由を地理的に説明する。</p>
   <h2 style="margin-top:12px">📚 データの出典と精度</h2>
@@ -491,6 +517,14 @@ function makeEngine(D){
   }
   function destName(p, i){ return nodes[S(p, maxJ(p, i))].n; }
 
+  /* ---------- 宿泊ルール(ゲームとAIで共通) ----------
+     時間とお金の交換レートは、アルバイト(8時間で1万円)≒1時間1,250円。
+     ホテルは仮眠より3.5時間早く動ける(≒4,400円相当)ので、お金があればタイム重視、なければ仮眠、という選択になる */
+  const REST = [
+    { kind:'hotel', name:'ビジネスホテル', cost:6000, wake:330, urban:false },
+    { kind:'net',   name:'ネットカフェ',   cost:2500, wake:390, urban:true  },
+    { kind:'nap',   name:'駅の待合室で仮眠', cost:0,  wake:540, urban:false },
+  ];
   /* ---------- AI:予算内の最速ルート(パレート最適ラベル探索) ---------- */
   function route(start, goal, t0, budget, opts){
     opts = opts || {};
@@ -531,8 +565,8 @@ function makeEngine(D){
       const td = tod(now);
       const mornDay = td < DAY_OPEN ? Math.floor(now / DAYMIN) : Math.floor(now / DAYMIN) + 1;
       if (td >= 1080 || td < DAY_OPEN){
-        offer(u, mornDay * DAYMIN + 330, L.c + 6000, L, { type:'rest', kind:'hotel' });
-        offer(u, mornDay * DAYMIN + 390, L.c, L, { type:'rest', kind:'nap' });
+        for (const r of REST){ if (r.urban && nodes[u].nl < 3) continue;
+          offer(u, mornDay * DAYMIN + r.wake, L.c + r.cost, L, { type:'rest', kind:r.kind }); }
       }
       // 乗車
       const a = at[u];
@@ -575,13 +609,14 @@ function makeEngine(D){
   }
   /* 経路探索用:近い順に8か所+10km圏内の港+ゴール */
   function walkCands(u, goal){
-    const out = [], nb = nearby(u);
+    const out = [], nb = nearby(u); let hubs = 0;
     for (let k = 0; k < nb.length; k++){ const [v, d] = nb[k];
-      if (k < 8 || nodes[v].port || v === goal) out.push([v, walkMin(d)]); }
+      const hub = nodes[v].nl >= 2 && hubs < 6;            // 近くの乗換駅も候補に
+      if (k < 8 || hub || nodes[v].port || v === goal){ out.push([v, walkMin(d)]); if (hub && k >= 8) hubs++; } }
     return out;
   }
 
-  return { nodes, NN, P, KNAME, nearby, walkCands, walkMin, distKm, WALK_KM, S, T, DK, maxJ, off, fare, rideKm, departures, nextDeps, destName, route, tod, windowEnd,
+  return { REST, nodes, NN, P, KNAME, nearby, walkCands, walkMin, distKm, WALK_KM, S, T, DK, maxJ, off, fare, rideKm, departures, nextDeps, destName, route, tod, windowEnd,
            DAYMIN, DAY_OPEN, DAY_CLOSE, at, boardable, validDay };
 }
 if (typeof module !== 'undefined') module.exports = { makeEngine };
@@ -811,17 +846,85 @@ $('#zgsi').onclick = () => setGsi(!gsiOn);
 
 /* ---------- ゲーム状態 ---------- */
 const COURSES = [
-  { id:'tokaido', name:'東海道チャレンジ', a:'東京', b:'大阪', budget:10000, diff:'★☆☆☆ 入門', desc:'新幹線は予算オーバー。高速バスか、在来線の乗り継ぎか?' },
-  { id:'kita', name:'北の大地から首都へ', a:'札幌', b:'東京', budget:30000, diff:'★★☆☆ 中級', desc:'津軽海峡をどう越える? 新幹線か、フェリーか。' },
-  { id:'nishi', name:'西へ、南へ', a:'大阪', b:'鹿児島中央', budget:18000, diff:'★★☆☆ 中級', desc:'夜行バス、フェリー、在来線…。夜の使い方が勝負。' },
-  { id:'nemuro', name:'東端から南端へ', a:'根室', b:'枕崎', budget:60000, diff:'★★★☆ 上級', desc:'日本最東端の駅・根室から、本土最南端の終着駅・枕崎へ。' },
-  { id:'juudan', name:'日本列島大縦断', a:'稚内', b:'鹿児島中央', budget:60000, diff:'★★★☆ 上級', desc:'日本最北端の駅から南九州へ。アルバイトも作戦のうち。' },
-  { id:'okinawa', name:'最北端から沖縄へ', a:'稚内', b:'那覇空港', budget:90000, diff:'★★★★ 超級', desc:'最後は約25時間の船旅。ゆいレールでゴールをめざせ。' },
+  // ★ 入門
+  { id:'tokaido', name:'東海道チャレンジ', a:'東京', b:'大阪', budget:10000, lv:1, tag:'三大都市圏・太平洋ベルト',
+    intro:'大阪のおばあちゃんの家で、いとこの誕生日会が開かれる。使えるのはお年玉の残り1万円だけ。新幹線には乗れない。東京・名古屋・大阪の三大都市圏を結ぶ「東海道」を、知恵で駆け抜けよう。',
+    end:'誕生日会に間に合った! 三大都市圏をつなぐ交通の選択肢の多さを実感した旅だった。' },
+  { id:'narita', name:'首都圏ラビリンス', a:'成田空港', b:'羽田空港第1・第2ターミナル', budget:1200, lv:1, tag:'首都圏の交通網・空港アクセス',
+    intro:'海外旅行から成田空港に帰ってきたあなた。地元へ帰る国内線は羽田空港から出る。所持金は1,200円。複雑に入り組んだ首都圏の路線網から、最適なルートを探し出そう。',
+    end:'羽田空港に到着! 首都圏の鉄道網の密度の高さと、私鉄・地下鉄の直通運転の多さに驚いた。' },
+  { id:'nagasaki', name:'坂と港の街へ', a:'博多', b:'長崎', budget:3000, lv:1, tag:'港町・斜面都市',
+    intro:'平和学習のフィールドワークで長崎へ。特急と西九州新幹線を乗り継ぐか、高速バスで行くか。予算は3,000円。',
+    end:'長崎に到着。港を囲む斜面に家々が建ち並ぶ風景は、教科書の写真どおりだった。' },
+  { id:'alps', name:'北アルプスの向こう側', a:'松本', b:'富山', budget:4500, lv:1, tag:'日本アルプス・急流と扇状地',
+    intro:'北アルプス(飛騨山脈)の向こう側、富山湾へ。山脈を鉄道で正面から越える道はない。北に回るか、南に回るか?',
+    end:'富山に到着。3,000m級の山々から急流が一気に富山湾へ注ぐ、日本らしい地形を実感した。' },
+  { id:'seto', name:'瀬戸内海を渡れ', a:'広島', b:'高松', budget:5000, lv:1, tag:'瀬戸内式気候・本州四国連絡橋',
+    intro:'瀬戸内の島々と本州四国連絡橋を見に行く夏の旅。瀬戸大橋を列車で渡るか、それとも船を使うか。',
+    end:'高松に到着。雨の少ない瀬戸内式気候に備えた、讃岐平野のため池の多さに驚いた。' },
+  { id:'kanazawa', name:'北陸新幹線のライバル', a:'東京', b:'金沢', budget:9000, lv:1, tag:'伝統工業・北陸新幹線',
+    intro:'金沢の伝統工芸・金箔づくりを取材する新聞部員。北陸新幹線で一気に行くか、高速バスで節約するか。予算9,000円で作戦を立てよう。',
+    end:'金沢に到着! 国内で生産される金箔のほとんどが、この街で作られていることを取材ノートに書きとめた。' },
+  { id:'ou', name:'奥羽山脈を越えて', a:'仙台', b:'新潟', budget:10000, lv:1, tag:'日本海側気候と太平洋側気候',
+    intro:'冬、太平洋側の仙台は晴れの日が多いのに、日本海側の新潟は雪や雨の日が多いのはなぜ? 地学部の先輩に頼まれて、山脈の向こう側の天気を確かめに行く。',
+    end:'新潟に到着。季節風と山脈が、太平洋側と日本海側の気候を分けていることを体で感じた。' },
+  // ★★ 中級
+  { id:'matsue', name:'山陰の水の都へ', a:'大阪', b:'松江', budget:7000, lv:2, tag:'中国山地・汽水湖',
+    intro:'宍道湖のしじみ漁を見学しに、山陰の「水の都」松江へ。中国山地を越えるルートはいくつかある。どれを選ぶ?',
+    end:'松江に到着。海水と淡水が混じる汽水湖・宍道湖では、しじみ漁が盛んだった。' },
+  { id:'kyushu', name:'九州山地を越えて', a:'熊本', b:'宮崎', budget:5000, lv:2, tag:'九州山地・促成栽培',
+    intro:'九州山地をはさんだ熊本と宮崎。地図の上では近いのに、両都市を直通する列車はない。山地をどう越える?',
+    end:'宮崎に到着。温暖な気候を生かしたピーマンなどの促成栽培のビニールハウスが広がっていた。' },
+  { id:'tosa', name:'四国山地の向こうへ', a:'名古屋', b:'高知', budget:12000, lv:2, tag:'四国山地・黒潮',
+    intro:'カツオの一本釣りで知られる土佐・高知へ。岡山から特急で四国山地を越えるか、高速バスを使うか。',
+    end:'高知に到着。沖合を黒潮が流れる、太平洋側の温暖な土地だ。' },
+  { id:'shiretoko', name:'オホーツク海を見に行こう', a:'札幌', b:'知床斜里', budget:9000, lv:2, tag:'世界自然遺産・オホーツク海',
+    intro:'世界自然遺産・知床の玄関口、斜里へ。北海道の広さを思い知る長旅になる。特急の本数は少ない。乗り遅れに注意!',
+    end:'知床斜里に到着。オホーツク海の向こうに、知床の山々が連なっていた。' },
+  { id:'seikan', name:'津軽海峡を南へ', a:'函館', b:'仙台', budget:14000, lv:2, tag:'津軽海峡・青函トンネル',
+    intro:'青函トンネルを抜ける北海道新幹線か、津軽海峡を渡るフェリーか。北海道と本州を結ぶ2つのルートを比べてみよう。',
+    end:'仙台に到着。津軽海峡は、動物の分布の境界線(ブラキストン線)としても知られている。' },
+  { id:'awa', name:'海路か陸路か', a:'東京', b:'徳島', budget:13000, lv:2, tag:'長距離フェリー・阿波藍',
+    intro:'阿波おどりで知られる徳島へ。新幹線と高速バスの陸路で行くか、東京港から出るフェリーに乗るか。',
+    end:'徳島に到着。吉野川の流域では、かつて染料になる藍の栽培が盛んだった。' },
+  { id:'nishi', name:'西へ、南へ', a:'大阪', b:'鹿児島中央', budget:15000, lv:2, tag:'火山・シラス台地',
+    intro:'桜島の火山を調べる自由研究のため、鹿児島へ。夜行バス、フェリー、新幹線。夜をどう使うかが勝負。',
+    end:'鹿児島に到着。火山灰などが厚く積もったシラス台地では、畜産や畑作が盛んだ。' },
+  { id:'kita', name:'北の大地から首都へ', a:'札幌', b:'東京', budget:22000, lv:2, tag:'東京一極集中・放射状の交通網',
+    intro:'北海道の高校生が、東京の大学のオープンキャンパスへ。津軽海峡を、新幹線で越えるか、フェリーで越えるか。',
+    end:'東京に到着! 全国の交通網が、放射状に東京へ集まっていることがよくわかった。' },
+  // ★★★ 上級
+  { id:'kitamae', name:'北前船の道', a:'京都', b:'小樽', budget:25000, lv:3, tag:'北前船・日本海航路',
+    intro:'江戸時代、日本海を行き来して各地の産物を運んだ北前船。その航路をたどって京都から北海道・小樽へ。舞鶴からフェリーに乗るか、陸路で北上するか。',
+    end:'小樽に到着。北前船の寄港地としても栄えた港町の歴史を感じた。' },
+  { id:'kushiro', name:'タンチョウに会いに', a:'横浜', b:'釧路', budget:35000, lv:3, tag:'湿原・ラムサール条約',
+    intro:'釧路湿原で暮らすタンチョウを見に行く。大洗から北海道へ渡るフェリーを使うか、新幹線で青函トンネルを抜けるか。',
+    end:'釧路に到着。日本最大の湿原・釧路湿原は、ラムサール条約の登録湿地だ。' },
+  { id:'nemuro', name:'東端から南端へ', a:'根室', b:'枕崎', budget:68000, lv:3, tag:'日本の東西南北',
+    intro:'地理部の卒業旅行のテーマは「日本の東の端から南の端へ」。日本最東端の駅・根室から、本土最南端の終着駅・枕崎をめざす。',
+    end:'枕崎に到着! かつお節の生産で知られる港町が、旅のゴールだった。' },
+  { id:'juudan', name:'日本列島大縦断', a:'稚内', b:'鹿児島中央', budget:62000, lv:3, tag:'日本列島の広がり',
+    intro:'日本最北端の駅・稚内から南九州へ。日本列島の長さを、自分の目と鉄路で確かめる大縦断。アルバイトも作戦のうち。',
+    end:'鹿児島に到着! 北海道から九州まで、気候も景色も大きく変わる日本列島の長さを実感した。' },
+  // ★★★★ 超級
+  { id:'okinawa', name:'最北端から沖縄へ', a:'稚内', b:'那覇空港', budget:90000, lv:4, tag:'気候帯の縦断(冷帯〜亜熱帯)',
+    intro:'冷帯(亜寒帯)の北海道から、亜熱帯の沖縄へ。日本の気候帯を縦断する究極の旅。最後は約25時間の船旅が待っている。',
+    end:'那覇に到着! さとうきび畑と青い海。日本列島の気候の多様さを一度に体験した。' },
 ];
+const LVNAME = ['', '★ 入門', '★★ 中級', '★★★ 上級', '★★★★ 超級'];
+
 function findNode(name){ let best = -1; nodes.forEach((x, i) => { if (x.n === name && (best < 0 || x.nl > nodes[best].nl)) best = i; }); return best; }
 COURSES.forEach(c => { c.ai = findNode(c.a); c.bi = findNode(c.b); });
 
 let G = null, lastCourse = null;
+function openStory(c){
+  $('#st_t').textContent = c.name; $('#st_r').textContent = `${c.a} ➔ ${c.b}`;
+  $('#st_b').textContent = `予算 ${yen(c.budget)} ・ ${LVNAME[c.lv]}`; $('#st_i').textContent = c.intro; $('#st_g').textContent = '地理のキーワード:' + c.tag;
+  const plays = store.get('nm_plays_' + c.id, 0);
+  $('#st_p').textContent = plays ? `これまで ${plays}回プレイ。ゴールするたびにAIのヒントが1つずつ増えていきます。` : 'ゴールするたびに、AIライバルからヒントが1つずつもらえます。';
+  $('#st_go').onclick = () => { $('#storyov').classList.remove('on'); startGame(c); };
+  $('#storyov').classList.add('on');
+}
 function startGame(course){
   lastCourse = course;
   G = { course: { ...course, a: course.ai, b: course.bi }, node: course.ai, time: 360, money: course.budget, spent: 0,
@@ -1004,12 +1107,13 @@ function openRest(forced){
   $('#restov').classList.add('on');
 }
 function doRest(kind){
+  const R = E.REST.find(r => r.kind === kind);
   const td = E.tod(G.time), day = Math.floor(G.time / 1440);
   const md = td < E.DAY_OPEN ? day : day + 1;
-  const cost = kind === 'hotel' ? 6000 : kind === 'net' ? 2500 : 0;
-  const wake = md * 1440 + (kind === 'nap' ? 390 : 330);
-  G.money -= cost; G.spent += cost; G.time = Math.max(G.time, wake); G.nights++; G.lastNight = true;
-  log(`${kind === 'hotel' ? 'ビジネスホテル' : kind === 'net' ? 'ネットカフェ' : '駅の待合室'}で一泊${cost ? '(' + yen(cost) + ')' : ''}。${clockStr(G.time)}から行動開始`);
+  const wake = md * 1440 + R.wake;
+  G.money -= R.cost; G.spent += R.cost; G.time = Math.max(G.time, wake); G.nights++; G.lastNight = true;
+  log(`${R.name}で一泊${R.cost ? '(' + yen(R.cost) + ')' : ''}。${clockStr(G.time)}から行動開始`);
+  if (kind === 'nap') toast('おはようございます', '待合室の仮眠では疲れがとれず、9時まで体力回復に時間がかかった…');
   $('#restov').classList.remove('on'); G.tab = 'dep'; refresh();
 }
 $('#r1').onclick = () => doRest('hotel'); $('#r2').onclick = () => doRest('net'); $('#r3').onclick = () => doRest('nap');
@@ -1021,6 +1125,29 @@ function doJob(){
   toast('アルバイト完了!', `${job}で1万円をかせいだ。${D.trivia[nodes[G.node].n] || ''}`);
   refresh();
   if (E.tod(G.time) >= E.DAY_CLOSE) openRest(true);
+}
+
+/* ---------- AIのヒント(段階公開) ---------- */
+function makeHints(ai){
+  const rides = ai.legs.filter(l => l.type === 'ride').map(L => { const p = P[L.pi];
+    return { p, from: nodes[E.S(p, L.i)].n, to: nodes[E.S(p, L.j)].n, dep: L.D + E.off(p, L.i), dur: E.T(p, L.j) - E.off(p, L.i) }; });
+  const walks = ai.legs.filter(l => l.type === 'walk'), rests = ai.legs.filter(l => l.type === 'rest');
+  const H = [];
+  const kinds = [...new Set(rides.map(r => KNAME[r.p.k]))];
+  H.push(`AIは「${kinds.join('・')}」を使ってゴールしたよ。` + (rests.length ? `途中で${rests.length}泊している。` : ''));
+  const byDur = [...rides].sort((a, b) => b.dur - a.dur);
+  if (byDur[0]) H.push(`${byDur[0].from}から「${byDur[0].p.n}」に乗ってみよう。`);
+  const night = rides.find(r => r.p.nt && r.dur > 300 && r !== byDur[0]);
+  if (night) H.push(`夜は${night.from}から「${night.p.n}」で、移動しながら眠ろう。`);
+  else if (byDur[1]) H.push(`${byDur[1].from}→${byDur[1].to}は「${byDur[1].p.n}」がカギ。`);
+  // 実際に次の乗車につながる、10分以上の徒歩だけをヒントにする
+  const useful = ai.legs.map((l, k) => ({ l, nx: ai.legs[k + 1] })).filter(({ l, nx }) => l.type === 'walk' && l.m >= 10 && nx && nx.type === 'ride' && E.S(P[nx.pi], nx.i) === l.to)
+    .sort((a, b) => b.l.m - a.l.m);
+  if (useful.length && H.length < 4){ const w = useful[0].l; H.push(`${nodes[w.from].n}から${nodes[w.to].n}へは、歩いて向かうのも作戦のうち(約${w.m}分)。`); }
+  if (rides[0]) H.push(`スタートは${hmStr(rides[0].dep)}発の「${rides[0].p.n}」(${rides[0].from}→${rides[0].to})。`);
+  if (H.length < 4) H.push(`AIが使ったお金は${yen(ai.c)}。予算をすべて使い切る必要はない。`);
+  if (H.length < 4) H.push(`AIの乗車回数は${rides.length}回。乗り換えは少ないほうが有利とは限らない。`);
+  return H.slice(0, 4);
 }
 
 /* ---------- ゴール ---------- */
@@ -1037,12 +1164,25 @@ function finish(){
   $('#newrec').style.display = isBest ? 'block' : 'none';
   $('#r_legs').innerHTML = '<b>あなたのルート</b>(' + clockStr(G.time) + '着)<br>' + G.rides.map(r => `${hmStr(r.dep)} ${esc(nodes[r.from].n)} → ${esc(nodes[r.to].n)}〔${esc(P[r.pi].n)}〕${yen(r.f)}`).join('<br>')
     + (G.arbeit ? `<br>アルバイト ${G.arbeit}回` : '') + (G.nights ? ` ・ 宿泊 ${G.nights}泊` : '');
-  if (G.ai){
-    $('#r_ai').innerHTML = `<b>AIが見つけた予算内の最速ルート</b>(${clockStr(G.ai.t)}着・経過${elStr(G.ai.t - 360)}・${yen(G.ai.c)})<br>` + G.ai.legs.map(L => {
-      if (L.type === 'ride'){ const p = P[L.pi]; return `${hmStr(L.D + E.off(p, L.i))} ${esc(nodes[E.S(p, L.i)].n)} → ${esc(nodes[E.S(p, L.j)].n)}〔${esc(p.n)}〕`; }
-      if (L.type === 'walk') return `徒歩・連絡 ${esc(nodes[L.from].n)} → ${esc(nodes[L.to].n)}(${L.m}分)`;
-      return L.kind === 'hotel' ? '🛏 ホテルで宿泊' : '🛏 待合室で仮眠'; }).join('<br>') + '<br><small>※AIはアルバイトを使わず、出発時の予算内で探索しています。</small>';
-  } else $('#r_ai').innerHTML = '<b>AIの最速ルート</b><br>AIは出発時の予算内でゴールにたどり着けませんでした。アルバイトを活用したあなたの勝ちです!';
+  const pkey = 'nm_plays_' + G.course.id; const plays = store.get(pkey, 0) + 1; store.set(pkey, plays);
+  const cdef = COURSES.find(x => x.id === G.course.id);
+  $('#r_end').textContent = cdef ? cdef.end : `${nodes[G.course.b].n}に到着!`;
+  let hh = `<b>💡 AIライバルからのヒント</b>(このコース ${plays}回目のゴール)<br>`;
+  if (!G.ai) hh += 'AIは出発時の予算内でゴールにたどり着けませんでした。アルバイトを活用したあなたの勝ちです!';
+  else {
+    hh += `AIのタイム:経過 ${elStr(G.ai.t - 360)}(${clockStr(G.ai.t)}着)<br>`;
+    if (plays >= 5){
+      hh += '<b>🔓 5回プレイ達成! AIの最速ルートを公開</b><br>' + G.ai.legs.map(L => {
+        if (L.type === 'ride'){ const p = P[L.pi]; return `${hmStr(L.D + E.off(p, L.i))} ${esc(nodes[E.S(p, L.i)].n)} → ${esc(nodes[E.S(p, L.j)].n)}〔${esc(p.n)}〕`; }
+        if (L.type === 'walk') return `${L.how && L.how !== '徒歩' ? esc(L.how) : '徒歩'} ${esc(nodes[L.from].n)} → ${esc(nodes[L.to].n)}(${L.m}分)`;
+        return '🛏 ' + (E.REST.find(r => r.kind === L.kind) || {}).name; }).join('<br>') + '<br><small>※AIはアルバイトを使わず、出発時の予算内で探索しています。</small>';
+    } else {
+      const H = makeHints(G.ai);
+      H.forEach((t, k) => { hh += k < plays ? `${k + 1}. ${esc(t)}<br>` : `${k + 1}. 🔒 あと${k + 1 - plays}回ゴールすると公開<br>`; });
+      hh += `<small>5回ゴールすると、AIの最速ルートがすべて公開されます(あと${5 - plays}回)。</small>`;
+    }
+  }
+  $('#r_ai').innerHTML = hh;
   G.rank = rank;
   $('#resov').classList.add('on');
 }
@@ -1062,12 +1202,16 @@ function toast(t, p){ $('#tt').textContent = t; $('#tp').textContent = p; $('#to
 /* ---------- タイトル ---------- */
 function renderTitle(){
   const wrap = $('#courses'); wrap.innerHTML = '';
-  COURSES.forEach(c => { const b = document.createElement('button'); b.className = 'course';
-    const best = store.get('rr_best_' + c.id, null);
-    b.innerHTML = `<div class="h"><span>${c.diff}</span><span>予算 ${yen(c.budget)}</span></div>
-      <div class="r">${esc(c.a)}<i>➔</i>${esc(c.b)}</div><div class="d"><b>${esc(c.name)}</b><br>${esc(c.desc)}</div>
-      <div class="b">${best !== null ? '🏆 自己ベスト ' + elStr(best) : '─ 記録なし ─'}</div>`;
-    b.onclick = () => startGame(c); wrap.appendChild(b); });
+  for (let lv = 1; lv <= 4; lv++){
+    const hd = document.createElement('div'); hd.className = 'lvhd'; hd.textContent = LVNAME[lv]; wrap.appendChild(hd);
+    COURSES.filter(c => c.lv === lv).forEach(c => { const b = document.createElement('button'); b.className = 'course';
+      const best = store.get('rr_best_' + c.id, null), plays = store.get('nm_plays_' + c.id, 0);
+      const hint = plays >= 5 ? '💡AIルート公開中' : plays ? `💡ヒント ${Math.min(plays, 4)}/4` : '';
+      b.innerHTML = `<div class="h"><span>${esc(c.tag)}</span><span>予算 ${yen(c.budget)}</span></div>
+        <div class="r">${esc(c.a.replace('第1・第2ターミナル',''))}<i>➔</i>${esc(c.b.replace('第1・第2ターミナル',''))}</div><div class="d"><b>${esc(c.name)}</b><br>${esc(c.intro.slice(0, 44))}…</div>
+        <div class="b"><span class="pc">プレイ ${plays}回</span>${best !== null ? ' ・ 🏆 ベスト ' + elStr(best) : ' ・ ─ 記録なし ─'}${hint ? ' ・ ' + hint : ''}</div>`;
+      b.onclick = () => openStory(c); wrap.appendChild(b); });
+  }
 }
 // フリーモード:駅名検索
 const searchIdx = nodes.map((n, i) => i).sort((a, b) => nodes[b].nl - nodes[a].nl);
@@ -1088,6 +1232,7 @@ attachSearch($('#fg'), $('#fgs'), i => { fG = i; upd(); });
 $('#fgo').onclick = () => { const c = { id: 'free_' + fS + '_' + fG + '_' + $('#fb').value, name: 'フリーモード', a: nodes[fS].n, b: nodes[fG].n,
   budget: +$('#fb').value, ai: fS, bi: fG }; startGame(c); };
 
+$('#st_back').onclick = () => $('#storyov').classList.remove('on');
 $('#teachbtn').onclick = () => $('#teachov').classList.add('on');
 $('#teachclose').onclick = () => $('#teachov').classList.remove('on');
 $('#b1').onclick = () => $('#brokeov').classList.remove('on');
