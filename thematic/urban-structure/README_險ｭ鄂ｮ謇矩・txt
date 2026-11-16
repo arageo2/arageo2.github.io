@@ -1,0 +1,46 @@
+都市の内部構造を3Dで旅する ― 東京・9つの地区（Web版）
+====================================================
+
+■ フォルダの中身
+  index.html      ページ本体（3Dの番組プレーヤー。Three.jsとプログラムを同梱）
+  narration.mp3   ナレーション音声（合成音声・約2.4MB）
+  bgm.mp3         BGM・効果音（約4.2MB）
+  thumb.jpg       サムネイル画像（トップページのカードやSNS表示用・1280×720）
+  ※ このREADMEはアップロード不要です。
+
+■ GitHub Pages への設置
+  1. リポジトリ arageo2.github.io の thematic フォルダの中に、
+     この「urban-structure」フォルダをそのままアップロードします。
+  2. 公開URLは次のようになります。
+       https://arageo2.github.io/thematic/urban-structure/
+  3. トップページの教材一覧に、上のURLへのリンク（カード）を追加します。
+     文言の例：
+       種別  ：3D教材
+       題名  ：都市の内部構造を3Dで旅する
+       説明  ：CBDから郊外団地まで。東京の9つの地区を、番組形式の3Dで学ぶ（約5分）
+       画像  ：thematic/urban-structure/thumb.jpg
+
+■ ほかのページに埋め込む場合（iframe）
+  URLの末尾に ?embed=1 を付けると、見出しなどを省いたプレーヤーだけの表示になります。
+
+  <div style="position:relative;width:100%;max-width:1100px;margin:0 auto;padding-bottom:calc(56.25% + 124px)">
+    <iframe src="https://arageo2.github.io/thematic/urban-structure/?embed=1"
+            title="都市の内部構造を3Dで旅する"
+            style="position:absolute;inset:0;width:100%;height:100%;border:0"
+            allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+  </div>
+
+■ 操作
+  ・「番組をはじめる」で再生。画面クリックで再生／一時停止。
+  ・下の番号ボタンで各地区へジャンプ。シークバーで好きな位置へ。
+  ・「ナレーション」「BGM」「字幕」はそれぞれ切り替え可能
+    （ナレーションを切って、先生が解説しながら見せる使い方もできます）。
+  ・一時停止中は画面をドラッグすると視点を回せます（ホイールで拡大縮小）。
+  ・キーボード：スペース＝再生／停止、←→＝5秒移動、1〜9＝各地区、F＝全画面。
+
+■ 動作について
+  ・3D表示にWebGLを使います。Chrome・Edge・Safari・Firefoxの最新版で動作します。
+  ・動きが重い端末では、3Dの解像度を自動的に下げて再生します。
+  ・パソコンに保存した index.html を直接開いても再生できます（音声ファイルは同じフォルダに）。
+  ・文字のデザイン（ウェブフォント）だけ Google Fonts から読み込みます。
+    読み込めない環境では端末のフォントで表示されます。
