@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>同じ“都会に人が集まる”なのに、問題が違うのはなぜ？｜あらじお蔵</title>
+<!--
+  あらじお教材ラボ 標準テンプレート v1.0 ベース
+  地理探究｜居住・都市問題（発展途上国と先進国）  ga_29_toshi-mondai_v1
+  外部ライブラリなし・ブラウザ保存なし・click操作のみ
+-->
+<style>
+  :root{
+    --paper:#F5F7F4; --card:#FFFFFF; --ink:#253341; --ink-weak:#5B6B78;
+    --lake:#1E5A73; --lake-weak:#E3EDF1; --contour:#8A5A33;
+    --ok:#2E7D4F; --ng:#A94436; --line:#D4DAD6; --radius:10px;
+    --center:#D9822B; --suburb:#2E6FDB;
+    --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;
+    --font-display:"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.8;}
+  main{max-width:880px; margin:0 auto; padding:0 16px 64px;}
+
+  header{position:relative; overflow:hidden; background:var(--lake); color:#F2F7F9; padding:28px 16px 24px;}
+  header .contours{position:absolute; inset:0; opacity:.18; pointer-events:none;}
+  header .inner{position:relative; max-width:880px; margin:0 auto;}
+  .eyebrow{font-size:12px; letter-spacing:.18em; opacity:.85; margin:0 0 6px;}
+  h1{font-family:var(--font-display); font-weight:600; font-size:clamp(22px,4.5vw,30px); line-height:1.4; margin:0 0 10px;}
+  .goal{display:inline-block; background:rgba(255,255,255,.12); border-left:3px solid var(--contour); padding:6px 12px; border-radius:0 6px 6px 0; font-size:14px; margin:0;}
+
+  .modebar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:16px 0 8px;}
+  .modebar span{font-size:13px; color:var(--ink-weak);}
+  .modebtn{min-height:44px; min-width:120px; padding:8px 16px; border:1.5px solid var(--lake); border-radius:22px; background:var(--card); color:var(--lake); font-size:15px; font-family:inherit; cursor:pointer; touch-action:manipulation;}
+  .modebtn[aria-pressed="true"]{background:var(--lake); color:#fff;}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px 18px; margin:20px 0;}
+  .seclabel{display:inline-block; font-size:12px; letter-spacing:.22em; color:var(--contour); border-bottom:2px solid var(--contour); padding-bottom:2px; margin:0 0 10px;}
+  h2{font-family:var(--font-display); font-size:21px; margin:0 0 12px; line-height:1.5;}
+  h3{font-size:17px; margin:14px 0 6px;}
+  p{margin:0 0 12px;}
+  .note{font-size:13px; color:var(--ink-weak);}
+  .hatsumon{background:var(--lake-weak); border:none; text-align:center; padding:28px 18px;}
+  .hatsumon p{font-family:var(--font-display); font-size:clamp(19px,3.5vw,25px); margin:0; color:var(--lake);}
+  .mini{margin:12px 0 0; padding:16px;}
+  .mini p{font-size:clamp(17px,3vw,21px);}
+
+  /* ── STEPナビ ── */
+  .stepnav{display:flex; gap:6px; flex-wrap:wrap; margin:18px 0 0; padding:0; list-style:none;}
+  .stepnav button{min-height:44px; padding:6px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font-family:inherit; font-size:14px; cursor:pointer; touch-action:manipulation;}
+  .stepnav button[aria-selected="true"]{border-color:var(--lake); background:var(--lake); color:#fff;}
+  .stepnav .num{font-weight:700; margin-right:4px;}
+  .panel[hidden]{display:none;}
+  .pager{display:flex; justify-content:space-between; gap:8px; margin-top:16px;}
+  .pager button{min-height:44px; padding:8px 18px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:15px; cursor:pointer;}
+  .pager button.next{background:var(--lake); color:#fff;}
+  .pager button:disabled{visibility:hidden;}
+
+  .box{border:1px solid var(--line); border-radius:8px; padding:10px 12px;}
+  .kw{display:inline-block; background:var(--lake); color:#fff; font-size:13px; padding:2px 10px; border-radius:12px; margin-bottom:6px;}
+  .readout{font-size:15px; margin-top:8px; border-left:3px solid var(--lake); padding-left:10px; min-height:1.8em;}
+  .twin{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+  @media (max-width:640px){ .twin{grid-template-columns:1fr;} }
+
+  /* ── STEP1 地形断面 ── */
+  .xsec{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#EEF4F7;}
+  .spot{cursor:pointer;}
+  .spot:focus{outline:none;}
+  .spot:focus-visible .ring{stroke:var(--contour); stroke-width:4;}
+  .spot .ring{fill:#fff; stroke:var(--lake); stroke-width:2.5;}
+  .spot[aria-pressed="true"] .ring{fill:var(--lake);}
+  .spot[aria-pressed="true"] text{fill:#fff;}
+  .spotbtns{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:10px 0 4px;}
+  @media (max-width:640px){ .spotbtns{grid-template-columns:repeat(2,1fr);} }
+  .spotbtns button{min-height:44px; padding:4px 6px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink);}
+  .spotbtns button[aria-pressed="true"]{border-color:var(--lake); background:var(--lake-weak); font-weight:700;}
+  .spotbtns button.found::after{content:" 🏠";}
+  .info{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;}
+  @media (max-width:640px){ .info{grid-template-columns:1fr;} }
+  .meter{display:flex; gap:4px; margin-top:2px;}
+  .meter i{flex:1; height:14px; border-radius:3px; background:#E6E9E7;}
+  .meter i.on{background:var(--lake);}
+  .verdict{font-size:20px; font-weight:700;}
+  .verdict.good{color:var(--ok);} .verdict.mid{color:var(--contour);} .verdict.bad{color:var(--ng);}
+  .progress{font-weight:700; color:var(--ok);}
+
+  /* ── マッチング（STEP2・STEP4共通） ── */
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 12px; padding:0; list-style:none;}
+  .chip{min-height:44px; padding:6px 14px; border:1.5px solid var(--contour); border-radius:22px; background:var(--card); color:var(--contour); font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; touch-action:manipulation;}
+  .chip[aria-pressed="true"]{background:var(--contour); color:#fff;}
+  .chip:disabled{opacity:.35; cursor:default; text-decoration:line-through;}
+  .mgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px;}
+  .mcard{display:block; width:100%; text-align:left; border:1.5px solid var(--line); border-radius:10px; padding:10px; background:var(--card); font-family:inherit; font-size:14px; color:var(--ink); cursor:pointer; touch-action:manipulation;}
+  .mcard:disabled{cursor:default;}
+  .mcard.done{border-color:var(--ok); background:#F3F9F5;}
+  .mcard.miss{border-color:var(--ng); background:#FBF1EF;}
+  .mcard .tag{display:inline-block; font-weight:700; font-size:13px; color:var(--ink-weak);}
+  .mcard .ans{display:inline-block; margin-left:6px; font-weight:700; color:var(--ok);}
+  .mcard svg{width:100%; height:auto; display:block; margin:6px 0; background:#F2F5EE; border-radius:6px;}
+  .mcard .reveal{display:none; margin-top:6px; font-size:13.5px; line-height:1.7;}
+  .mcard.done .reveal{display:block;}
+  .mfb{min-height:1.8em;}
+
+  /* ── STEP3 厚木年表 ── */
+  .eras{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0;}
+  @media (max-width:640px){ .eras{grid-template-columns:repeat(2,1fr);} }
+  .eras button{min-height:52px; padding:4px 6px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; line-height:1.35; cursor:pointer; color:var(--ink);}
+  .eras button[aria-pressed="true"]{border-color:var(--contour); background:#F6EEE6; font-weight:700;}
+  .eras button.seen{border-color:var(--contour);}
+  .eracard{border-left:4px solid var(--contour); background:#FBF7F2; padding:10px 14px; border-radius:0 8px 8px 0; min-height:7em;}
+  .eracard b.y{color:var(--contour); font-size:18px;}
+  .funcs{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px;}
+  @media (max-width:640px){ .funcs{grid-template-columns:repeat(2,1fr);} }
+  .func{border:2px dashed var(--line); border-radius:10px; padding:8px; text-align:center; font-size:14px; color:var(--ink-weak); transition:all .3s;}
+  .func .ic{font-size:26px; display:block; filter:grayscale(1); opacity:.4;}
+  .func.on{border-style:solid; border-color:var(--ok); background:#EAF4EE; color:var(--ink);}
+  .func.on .ic{filter:none; opacity:1;}
+
+  /* ── STEP4 内部構造 ── */
+  .tabs{display:flex; gap:6px; margin-bottom:12px;}
+  .tabs button{flex:1; min-height:48px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:15px; cursor:pointer;}
+  .tabs button[aria-selected="true"]{background:var(--lake); color:#fff;}
+  .model{width:100%; max-width:560px; height:auto; display:block; margin:0 auto;}
+  @keyframes pulse{0%{stroke-opacity:1;}50%{stroke-opacity:.25;}100%{stroke-opacity:1;}}
+  .pulse{animation:pulse 1.6s ease-in-out infinite;}
+
+  /* ── STEP5 発展段階 ── */
+  .stagebtns{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:12px 0 4px;}
+  .stagebtns button{min-height:48px; padding:4px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; line-height:1.3; cursor:pointer; color:var(--ink);}
+  .stagebtns button[aria-pressed="true"]{border-color:var(--contour); background:#F6EEE6; font-weight:700;}
+  input[type="range"]{width:100%; height:44px; margin:0; touch-action:pan-y; accent-color:var(--contour);}
+  .metro{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#F7F9F6;}
+  .stage-caption{font-size:16px; border-left:3px solid var(--contour); padding-left:10px; margin-top:10px;}
+  table.data{border-collapse:collapse; width:100%; font-size:15px; margin:6px 0;}
+  table.data th, table.data td{border:1px solid var(--line); padding:6px 8px; text-align:center;}
+  table.data th{background:var(--lake-weak);}
+  .judge{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+  .judge button{min-height:44px; padding:6px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink);}
+  .judge button[data-state="correct"]{border-color:var(--ok); background:#EAF4EE;}
+  .judge button[data-state="wrong"]{border-color:var(--ng); background:#F7ECEA;}
+
+  /* ── クイズ ── */
+  .quiz-q{font-weight:700; margin-bottom:10px;}
+  .choices{display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .choice{min-height:44px; width:100%; text-align:left; padding:10px 14px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-size:15px; font-family:inherit; cursor:pointer; touch-action:manipulation; color:var(--ink);}
+  .choice[data-state="correct"]{border-color:var(--ok); background:#EAF4EE;}
+  .choice[data-state="wrong"]{border-color:var(--ng); background:#F7ECEA;}
+  .choice:disabled{cursor:default; opacity:.9;}
+  .feedback{min-height:1.6em; font-size:15px; margin-top:8px;}
+  .feedback.ok{color:var(--ok);} .feedback.ng{color:var(--ng);}
+  .kaisetsu{margin-top:10px; padding:10px 12px; font-size:14px; background:var(--lake-weak); border-radius:8px;}
+  .kaisetsu[hidden]{display:none;}
+  .show-kaisetsu{min-height:44px; padding:8px 14px; margin-top:8px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-size:14px; font-family:inherit; cursor:pointer;}
+  hr.sep{border:none; border-top:1px solid var(--line); margin:18px 0;}
+
+  textarea{width:100%; min-height:120px; padding:10px; border:1.5px solid var(--line); border-radius:8px; font-family:inherit; font-size:15px; resize:vertical;}
+  .ticket-foot{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:8px;}
+  .charcount{font-size:13px; color:var(--ink-weak);}
+  .copybtn{min-height:44px; padding:8px 16px; border:none; border-radius:8px; background:var(--lake); color:#fff; font-size:15px; font-family:inherit; cursor:pointer;}
+  .checks{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-wrap:wrap; gap:6px;}
+  .checks li{font-size:13px; padding:2px 10px; border-radius:12px; border:1px solid var(--line); color:var(--ink-weak);}
+  .checks li.hit{border-color:var(--ok); background:#EAF4EE; color:var(--ok);}
+
+  footer{max-width:880px; margin:0 auto; padding:0 16px 40px; font-size:13px; color:var(--ink-weak);}
+  footer h2{font-size:14px; font-family:var(--font-body); margin-bottom:6px;}
+  footer ul{margin:0 0 10px; padding-left:1.4em;}
+
+  body[data-mode="jugyo"] .jishu-only{display:none;}
+  body[data-mode="jishu"] .jugyo-only{display:none;}
+  :focus-visible{outline:3px solid var(--contour); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+  @media print{ header{background:#fff; color:var(--ink);} .modebar,.copybtn,.stepnav,.pager{display:none;} .panel[hidden]{display:block;} }
+  /* ── ga_29 追加 ── */
+  .sortlist{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px;}
+  .scard{border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; font-size:15px;}
+  .scard.ok{border-color:var(--ok); background:#F3F9F5;}
+  .scard .sb{display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px;}
+  .scard .sb button{min-height:44px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:13.5px; line-height:1.3; cursor:pointer; color:var(--ink);}
+  .scard .sb button.push{border-color:#2E7D4F; color:#2E7D4F;}
+  .scard .sb button.pull{border-color:#D9822B; color:#A35E17;}
+  .scard .sb button[data-state="wrong"]{background:#F7ECEA; border-color:var(--ng); color:var(--ng);}
+  .scard .sb button:disabled{cursor:default;}
+  .scard .why{display:none; font-size:13px; color:var(--ink-weak); margin-top:6px;}
+  .scard.ok .why{display:block;}
+  .bins{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0;}
+  .bin{border-radius:10px; padding:8px 10px; min-height:80px; font-size:13.5px;}
+  .bin h3{margin:0 0 4px; font-size:15px;}
+  .bin.push{background:#EAF4EE; border:1.5px solid #2E7D4F;}
+  .bin.pull{background:#FBF1E4; border:1.5px solid #D9822B;}
+  .bin ul{margin:0; padding-left:1.2em;}
+  .city{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#F7F9F6;}
+  .bars{margin:10px 0;}
+  .bar-row{display:grid; grid-template-columns:8.5em 1fr 2.5em; gap:8px; align-items:center; font-size:14px; margin-bottom:6px;}
+  .btrack{height:18px; background:#E6E9E7; border-radius:9px; overflow:hidden;}
+  .bfill{height:100%; border-radius:9px; transition:width .4s;}
+  .zoom{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0;}
+  .zoom button{min-height:52px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; line-height:1.35; cursor:pointer; color:var(--ink);}
+  .zoom button[aria-pressed="true"]{border-color:var(--lake); background:var(--lake); color:#fff; font-weight:700;}
+  .sub-toggle{display:flex; gap:6px; margin:6px 0;}
+  .sub-toggle button{min-height:44px; padding:6px 14px; border:1.5px solid var(--contour); border-radius:22px; background:var(--card); color:var(--contour); font-family:inherit; font-size:14px; cursor:pointer;}
+  .sub-toggle button[aria-pressed="true"]{background:var(--contour); color:#fff;}
+  .ntsvg{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#F7F9F6;}
+  .slots{list-style:none; counter-reset:s; padding:0; margin:8px 0; display:flex; flex-direction:column; gap:6px;}
+  .slots li{counter-increment:s; min-height:44px; border:2px dashed var(--line); border-radius:8px; padding:8px 10px 8px 42px; position:relative; font-size:15px; color:var(--ink-weak);}
+  .slots li::before{content:counter(s); position:absolute; left:10px; top:8px; width:24px; height:24px; border-radius:50%; background:var(--lake); color:#fff; text-align:center; line-height:24px; font-size:13px; font-weight:700;}
+  .slots li.filled{border-style:solid; border-color:var(--lake); color:var(--ink); background:var(--lake-weak);}
+  .slots li.right{border-color:var(--ok); background:#EAF4EE;}
+  .slots li.wrongpos{border-color:var(--ng); background:#F7ECEA;}
+  .slots li.loop{border-style:solid; border-color:var(--ng); color:var(--ng); font-weight:700; background:#FBF1EF;}
+  .slots li.loop::before{content:"↺"; background:var(--ng);}
+  .pool{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:8px;}
+  .pool button{min-height:56px; text-align:left; padding:8px 12px; border:1.5px solid var(--contour); border-radius:8px; background:#FBF7F2; font-family:inherit; font-size:14px; line-height:1.5; cursor:pointer; color:var(--ink);}
+  .pool button:disabled{opacity:.3; cursor:default;}
+  .rowbtns{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;}
+  .rowbtns button{min-height:44px; padding:8px 16px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:14px; cursor:pointer;}
+</style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-home{background:#16271c;font:500 13px/1.4 "Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;letter-spacing:.04em}
+.arg-home a{display:inline-flex;align-items:center;min-height:34px;padding:0 16px;color:#dbe6d6;text-decoration:none}
+.arg-home a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.arg-home a:focus-visible{outline:2px solid #9fd0bb;outline-offset:-2px}
+@media print{.arg-home{display:none}}
+</style>
+</head>
+<body data-mode="jugyo">
+<div class="arg-home" role="navigation" aria-label="サイト"><a href="/">← TOPに戻る</a></div>
+
+<header>
+  <svg class="contours" viewBox="0 0 820 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#FFFFFF" stroke-width="1.2">
+      <ellipse cx="640" cy="80" rx="60" ry="26"/><ellipse cx="640" cy="82" rx="110" ry="50"/>
+      <ellipse cx="640" cy="84" rx="165" ry="76"/><ellipse cx="640" cy="86" rx="225" ry="104"/>
+      <ellipse cx="150" cy="130" rx="50" ry="20"/><ellipse cx="150" cy="132" rx="95" ry="42"/>
+      <ellipse cx="150" cy="134" rx="145" ry="66"/>
+    </g>
+  </svg>
+  <div class="inner">
+    <p class="eyebrow">地理探究｜居住・都市問題（発展途上国と先進国）</p>
+    <h1>同じ“都会に人が集まる”なのに、<br>問題が違うのはなぜ？</h1>
+    <p class="goal">学習目標：発展途上国と先進国の都市問題の違いを、人が集まる理由と都市の広がり方に着目して説明できる。</p>
+  </div>
+</header>
+
+<main>
+  <div class="modebar" role="group" aria-label="表示モード切替">
+    <span>モード：</span>
+    <button type="button" class="modebtn" id="btn-jugyo" aria-pressed="true">授業モード</button>
+    <button type="button" class="modebtn" id="btn-jishu" aria-pressed="false">自習モード</button>
+  </div>
+  <p class="note">授業モード＝発問を大きく表示し、解説は先生が開くまで非表示。自習モード＝解説と振り返りを表示。</p>
+
+  <section class="hatsumon jugyo-only" aria-label="今日の問い">
+    <p class="seclabel">問い</p>
+    <p>途上国の大都市ではスラムが広がり、<br>先進国の大都市では都心のまわりがさびれた。<br>どちらも「都会に人が集まった」結果なのに、なぜ？</p>
+  </section>
+  <section class="jishu-only">
+    <p class="seclabel">導入</p>
+    <h2>この教材で考えること</h2>
+    <p>前回は、大都市圏が「都市化→郊外化→反都市化→再都市化」と変わっていくことを学んだ。今日は、その途中で起こる<strong>都市問題</strong>を、発展途上国と先進国で比べる。</p>
+    <p>カギは、<strong>人が増えるスピード</strong>と、<strong>仕事・住宅・交通が追いつくかどうか</strong>。</p>
+  </section>
+
+  <ul class="stepnav" role="tablist" aria-label="学習のステップ">
+    <li><button type="button" role="tab" id="tab-1" aria-controls="p-1" aria-selected="true"><span class="num">1</span>押し出す？引っぱる？</button></li>
+    <li><button type="button" role="tab" id="tab-2" aria-controls="p-2" aria-selected="false" tabindex="-1"><span class="num">2</span>2つの都市</button></li>
+    <li><button type="button" role="tab" id="tab-3" aria-controls="p-3" aria-selected="false" tabindex="-1"><span class="num">3</span>都市がつながる</button></li>
+    <li><button type="button" role="tab" id="tab-4" aria-controls="p-4" aria-selected="false" tabindex="-1"><span class="num">4</span>ニュータウン比較</button></li>
+    <li><button type="button" role="tab" id="tab-5" aria-controls="p-5" aria-selected="false" tabindex="-1"><span class="num">5</span>インナーシティ問題</button></li>
+    <li><button type="button" role="tab" id="tab-6" aria-controls="p-6" aria-selected="false" tabindex="-1"><span class="num">6</span>確認・振り返り</button></li>
+  </ul>
+
+  <!-- ===== STEP1 ===== -->
+  <section class="panel" id="p-1" role="tabpanel" aria-labelledby="tab-1">
+    <p class="seclabel">STEP 1｜WORK</p>
+    <h2>押し出される？引っぱられる？──人が都市へ向かう理由</h2>
+    <p>農村から都市へ人が移る理由を、<strong>農村から押し出す理由（プッシュ要因）</strong>と<strong>都市が引き寄せる理由（プル要因）</strong>に分けよう。カードごとにどちらかのボタンを押す。</p>
+    <div class="sortlist" id="sortlist"></div>
+    <div class="bins">
+      <div class="bin push"><h3>⬅ 農村から押し出す</h3><ul id="bin-push"></ul></div>
+      <div class="bin pull"><h3>都市が引き寄せる ➡</h3><ul id="bin-pull"></ul></div>
+    </div>
+    <p class="readout" id="sortfb" aria-live="polite">あと8枚。</p>
+    <div class="box" style="font-size:15px">
+      <strong>日本でも起きた：</strong>1950年代半ばからの高度経済成長期に、地方から東京・大阪・名古屋の三大都市圏をふくむ太平洋ベルトへ、たくさんの人が移り住んだ。いま発展途上国で起きていることは、日本もかつて経験したことでもある。
+    </div>
+    <section class="hatsumon jugyo-only mini">
+      <p>押す力と引く力が両方とても強いと、<br>都市はどうなるだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev" disabled>← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP2 ===== -->
+  <section class="panel" id="p-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <p class="seclabel">STEP 2｜シミュレーション</p>
+    <h2>2つの都市シミュレーション──人口に「仕事」と「住まい」は追いつく？</h2>
+    <p>タブで都市を切り替え、①〜④のボタンで時間を進めよう。<strong>人口</strong>のバーと、<strong>仕事・住まい</strong>のバーの差に注目。</p>
+    <div class="tabs" role="tablist" aria-label="都市の切り替え">
+      <button type="button" role="tab" id="ct-0" aria-controls="sim" aria-selected="true">発展途上国の大都市</button>
+      <button type="button" role="tab" id="ct-1" aria-controls="sim" aria-selected="false" tabindex="-1">先進国の大都市</button>
+    </div>
+    <div id="sim" role="tabpanel">
+      <svg class="city" id="city" viewBox="0 0 800 300" role="img" aria-label="都市の模式図"></svg>
+      <div class="stagebtns" id="simbtns" role="group" aria-label="時間を進める"></div>
+      <div class="bars" id="bars"></div>
+      <p class="stage-caption" id="simcap" aria-live="polite"></p>
+    </div>
+    <p class="note">※都市の図とバーは、変化の向きを示す<strong>架空のモデル</strong>です（実際のデータではありません）。</p>
+    <section class="hatsumon jugyo-only mini">
+      <p>同じ「人が集まる」でも、途上国と先進国で<br>足りなくなったもの・あまったものは何だろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP3 ===== -->
+  <section class="panel" id="p-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+    <p class="seclabel">STEP 3｜ズーム</p>
+    <h2>都市がつながる──メトロポリス→コナベーション→メガロポリス</h2>
+    <p>ボタンで地図の範囲を広げていこう。都市が大きくなると、となりの都市と<strong>つながっていく</strong>。</p>
+    <div class="zoom" id="zoom" role="group" aria-label="範囲を選ぶ"></div>
+    <div class="sub-toggle" id="megatoggle" role="group" aria-label="メガロポリスの例" hidden>
+      <button type="button" aria-pressed="true" data-k="us">アメリカ北東部</button>
+      <button type="button" aria-pressed="false" data-k="jp">日本（東海道）</button>
+    </div>
+    <svg class="city" id="zmap" viewBox="0 0 800 320" role="img" aria-label="都市の広がりの模式図"></svg>
+    <p class="stage-caption" id="zcap" aria-live="polite"></p>
+    <p class="note">※位置や大きさを単純化した<strong>模式図</strong>です。</p>
+    <section class="hatsumon jugyo-only mini">
+      <p>厚木から東京まで、建物が途切れずに続いている？<br>電車の窓から見た景色を思い出そう。</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP4 ===== -->
+  <section class="panel" id="p-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+    <p class="seclabel">STEP 4｜比較</p>
+    <h2>ニュータウン比較──イギリスと日本、何が違う？</h2>
+    <p>過密になった大都市の人を郊外へ移すために、どちらの国もニュータウンをつくった。<strong>「通勤の流れを見る」</strong>を押して、働く場所がどこにあるかを比べよう。</p>
+    <div class="rowbtns"><button type="button" id="flowbtn" aria-pressed="false">通勤の流れを見る</button></div>
+    <div class="twin">
+      <div class="box">
+        <span class="kw">イギリス（ロンドン）</span>
+        <svg class="ntsvg" id="nt-uk" viewBox="0 0 360 300" role="img" aria-label="ロンドンとグリーンベルト、その外側のニュータウンの模式図"></svg>
+        <p style="font-size:14.5px;margin:6px 0 0">1944年の<strong>大ロンドン計画</strong>で、市街地のまわりを<strong>グリーンベルト</strong>（開発をおさえる緑地帯）で囲み、その外側にニュータウンを配置した。1946年のニュータウン法で、最初のニュータウンとしてスティーブニッジが指定された。ニュータウンには住宅だけでなく<strong>工場や職場</strong>もつくられた。</p>
+      </div>
+      <div class="box">
+        <span class="kw">日本（東京）</span>
+        <svg class="ntsvg" id="nt-jp" viewBox="0 0 360 300" role="img" aria-label="東京と鉄道沿いの郊外ニュータウンの模式図"></svg>
+        <p style="font-size:14.5px;margin:6px 0 0"><strong>多摩ニュータウン</strong>（1971年入居開始）や千里ニュータウン（大阪）など、大規模な住宅都市が郊外につくられた。多くの人は<strong>鉄道</strong>で都心の会社へ通勤した。住む場所と働く場所が離れているので、ベッドタウンともよばれる。</p>
+      </div>
+    </div>
+    <h3>WORK：住む場所と働く場所が近い「職住近接」なのはどちら？</h3>
+    <div class="judge" id="ntjudge" role="group" aria-label="どちらか選ぶ"></div>
+    <p class="readout" id="ntfb" aria-live="polite"></p>
+    <section class="hatsumon jugyo-only mini">
+      <p>郊外に人が移ったあと、<br>都心のまわりの古い街には、だれが残ったのだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP5 ===== -->
+  <section class="panel" id="p-5" role="tabpanel" aria-labelledby="tab-5" hidden>
+    <p class="seclabel">STEP 5｜WORK</p>
+    <h2>インナーシティ問題の連鎖──さびれていく順番を並べよう</h2>
+    <p>欧米の大都市では、1970〜80年代に都心のまわりの古い市街地（インナーシティ）がさびれた。下のカードを<strong>原因→結果</strong>の順にタップして、1〜5に並べよう。</p>
+    <ol class="slots" id="slots"></ol>
+    <div class="pool" id="pool"></div>
+    <div class="rowbtns"><button type="button" id="resetchain">やり直す</button></div>
+    <p class="readout" id="chainfb" aria-live="polite">カードを順番にタップしよう。</p>
+    <div class="twin">
+      <div class="box">
+        <strong>セグリゲーション（すみ分け）</strong>
+        <p style="margin:4px 0 0;font-size:14.5px">アメリカの大都市では、<strong>人種・民族</strong>や<strong>所得</strong>によって、住む地区が分かれる現象がみられる。郊外には、塀とゲートで出入りを管理する<strong>ゲーテッドコミュニティ</strong>もつくられ、おもに高所得層が住む。</p>
+      </div>
+      <div class="box">
+        <strong>ヨーロッパでは少し違う</strong>
+        <p style="margin:4px 0 0;font-size:14.5px">パリなどでは旧市街の歴史的な建物が大切にされ、そこに高所得層が住む。一方、郊外につくられた公営住宅に、所得の低い移民が多く住む傾向がある。</p>
+      </div>
+    </div>
+    <section class="hatsumon jugyo-only mini">
+      <p>見捨てられた都心は、このままさびれ続けるのだろうか？<br><small>→ 次回「都心に戻ってきたのは誰？」へ</small></p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP6 ===== -->
+  <section class="panel" id="p-6" role="tabpanel" aria-labelledby="tab-6" hidden>
+    <p class="seclabel">STEP 6｜確認</p>
+    <h2>確認クイズ</h2>
+
+    <div class="quiz" data-answer="2">
+      <p class="quiz-q">Q1. 次のうち、農村から人を押し出す「プッシュ要因」にあたるものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">都市には工場の仕事がたくさんある</button></li>
+        <li><button type="button" class="choice" data-i="1">都市には病院や学校が多い</button></li>
+        <li><button type="button" class="choice" data-i="2">農村で人口が増え、耕す土地が足りなくなった</button></li>
+        <li><button type="button" class="choice" data-i="3">都市のにぎやかな暮らしにあこがれる</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>1・2・4は都市側の魅力で、プル要因。農村の土地不足や仕事不足、余った人手は、農村から人を押し出すプッシュ要因になる。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="1">
+      <p class="quiz-q">Q2. 発展途上国の大都市でスラムが形成されやすい場所として、最も適当なものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">高層ビルが並ぶ都心の中心部</button></li>
+        <li><button type="button" class="choice" data-i="1">川沿いや線路沿いの土地、郊外の空き地</button></li>
+        <li><button type="button" class="choice" data-i="2">塀で囲まれた郊外の高級住宅地</button></li>
+        <li><button type="button" class="choice" data-i="3">計画的につくられたニュータウン</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>住宅の供給が追いつかないため、低所得の人々が川沿いや鉄道線路沿い、郊外の空き地などを占拠して家を建てる。電気や水道などのインフラが不十分で、衛生面などの問題をかかえる。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="0">
+      <p class="quiz-q">Q3. イギリスと日本のニュータウンを比べた説明として、正しいものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">イギリスは職場もそなえた職住近接、日本は鉄道で都心へ通う住宅中心のものが多い</button></li>
+        <li><button type="button" class="choice" data-i="1">イギリスは鉄道で都心へ通う住宅中心、日本は職場もそなえた職住近接のものが多い</button></li>
+        <li><button type="button" class="choice" data-i="2">どちらも、都心の中に高層住宅としてつくられた</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>大ロンドン計画では、グリーンベルトの外側に、住宅と職場をあわせもつニュータウンが配置された。日本のニュータウンは住宅中心で、鉄道で都心へ通勤する人が多い（職住分離）。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="3">
+      <p class="quiz-q">Q4. インナーシティ問題の説明として、最も適当なものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">農村から人が急に流れこみ、都心の中心部が過密になる問題</button></li>
+        <li><button type="button" class="choice" data-i="1">となりの都市と市街地がつながり、境目がわからなくなる問題</button></li>
+        <li><button type="button" class="choice" data-i="2">郊外で、市街地が虫食い状に無秩序に広がる問題</button></li>
+        <li><button type="button" class="choice" data-i="3">中・高所得層が郊外へ移り、都心周辺に低所得層が残されて、建物の老朽化や治安の悪化が進む問題</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>1は途上国の急速な都市化、2はコナベーション、3はスプロール現象。インナーシティ問題は、郊外化の「裏側」で、都心周辺の古い市街地がさびれていく先進国の問題。</div>
+    </div>
+
+    <div class="jishu-only">
+      <hr class="sep">
+      <p class="seclabel">振り返り</p>
+      <h2>exit ticket</h2>
+      <p>発展途上国と先進国の大都市で起こる問題の違いを、「<strong>スラム</strong>」「<strong>郊外</strong>」「<strong>インナーシティ</strong>」という語を使って<strong>120字以内</strong>で説明しよう。</p>
+      <textarea id="ticket" aria-label="振り返りの記入欄" placeholder="例：発展途上国の大都市では……一方、先進国の大都市では……"></textarea>
+      <ul class="checks" id="checks" aria-label="使えているキーワード"></ul>
+      <div class="ticket-foot">
+        <span class="charcount" id="charcount" aria-live="polite">0字／120字</span>
+        <button type="button" class="copybtn" id="copybtn">回答をコピー（提出用）</button>
+      </div>
+      <p class="note">コピーした内容を、先生が指定した提出先（Classroom等）に貼り付けて提出します。この教材から自動送信はされません。</p>
+    </div>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next" disabled>次へ →</button></div>
+  </section>
+</main>
+
+<footer>
+  <h2>出典・参考資料</h2>
+  <ul>
+    <li>プッシュ要因・プル要因、発展途上国の都市問題（インフォーマルセクター、スラムの立地、インフラ不足、首位都市）、先進国のインナーシティ問題・セグリゲーション・ゲーテッドコミュニティ、日本の高度経済成長期の人口移動：高等学校地理探究の教科書記述に基づく一般的な説明。</li>
+    <li>メガロポリス（1961年、地理学者ゴットマンがアメリカ北東部のボストン〜ワシントンの都市化地域を命名）：在日米国大使館アメリカンセンター「米国の地理の概要 メガロポリス」。東海道メガロポリス、東名高速道路の全通（1969年5月）：国土交通省「昭和45年度 運輸白書」。</li>
+    <li>大ロンドン計画（1944年、アバークロンビー、グリーンベルトとその外側の雇用をそなえたニュータウン）、ニュータウン法（1946年）：Memorial University「The New Town programme」、Municipal Dreams「Stevenage New Town」ほか。</li>
+    <li>多摩ニュータウンの入居開始（1971年）：多摩市資料。</li>
+    <li>STEP2・STEP3・STEP4の図とバーは、教材作成者が作った模式図・架空のモデルであり、実際の地図・データとは異なります。</li>
+  </ul>
+  <p>本教材は新井貴之が独自に作成したものです。数値は作成時点（2026年11月）に確認したもので、「とされる」と表記した内容は一般的な説明です。授業で使う前に最新の情報をご確認ください。</p>
+  <p>あらじお蔵｜CC BY-NC 4.0｜このページは単体HTMLで動作し、入力内容が外部に送信されることはありません。</p>
+</footer>
+
+<script>
+"use strict";
+(function(){
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent){
+    var e = document.createElementNS(SVGNS, tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    if(parent){ parent.appendChild(e); }
+    return e;
+  }
+  function tx(parent, x, y, s, attrs){
+    var a = {x:x, y:y, "font-size":12, fill:"#253341"};
+    for(var k in (attrs||{})){ a[k] = attrs[k]; }
+    var t = el("text", a, parent); t.textContent = s; return t;
+  }
+  function clear(svg){ while(svg.firstChild){ svg.removeChild(svg.firstChild); } }
+  function isJishu(){ return document.body.getAttribute("data-mode") === "jishu"; }
+  function marker(svg, id, color){
+    var defs = el("defs",{},svg);
+    var m = el("marker",{id:id,markerWidth:8,markerHeight:8,refX:6,refY:4,orient:"auto"},defs);
+    el("path",{d:"M0 0 L8 4 L0 8 Z",fill:color},m);
+  }
+
+  /* ── モード切替 ── */
+  var btnJugyo = document.getElementById("btn-jugyo"), btnJishu = document.getElementById("btn-jishu");
+  function setMode(mode){
+    document.body.setAttribute("data-mode", mode);
+    btnJugyo.setAttribute("aria-pressed", String(mode === "jugyo"));
+    btnJishu.setAttribute("aria-pressed", String(mode === "jishu"));
+  }
+  btnJugyo.addEventListener("click", function(){ setMode("jugyo"); });
+  btnJishu.addEventListener("click", function(){ setMode("jishu"); });
+
+  /* ── STEPナビ ── */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".stepnav [role=tab]"));
+  function showStep(n, focus){
+    tabs.forEach(function(t, i){
+      var on = (i === n);
+      t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if(focus){ tabs[n].focus(); }
+    var nav = document.querySelector(".stepnav");
+    if(nav.getBoundingClientRect && nav.getBoundingClientRect().top < 0 && nav.scrollIntoView){ nav.scrollIntoView({block:"start"}); }
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener("click", function(){ showStep(i); });
+    t.addEventListener("keydown", function(e){
+      if(e.key === "ArrowRight"){ e.preventDefault(); showStep((i + 1) % tabs.length, true); }
+      if(e.key === "ArrowLeft"){ e.preventDefault(); showStep((i - 1 + tabs.length) % tabs.length, true); }
+    });
+  });
+  document.querySelectorAll(".panel").forEach(function(p, i){
+    var prev = p.querySelector(".pager .prev"), next = p.querySelector(".pager .next");
+    if(prev){ prev.addEventListener("click", function(){ showStep(i - 1); }); }
+    if(next){ next.addEventListener("click", function(){ showStep(i + 1); }); }
+  });
+
+  /* =========================================================
+     STEP1：プッシュ／プル仕分け
+     ========================================================= */
+  var CARDS = [
+    ["農村で人口が増え、耕す土地が足りない","push","子どもが多い家では、親の土地を分けると1人分が小さくなりすぎる。"],
+    ["都市には工場や店の仕事がありそう","pull","都市の雇用への期待が人を引き寄せる。実際には仕事が見つからないことも多い。"],
+    ["農業の機械化などで、農村の人手が余る","push","生産性が上がると、少ない人数で農業ができ、余った人が仕事を求めて出ていく。"],
+    ["都市の方が学校や病院が多く、便利","pull","教育や医療などのサービスが、農村より都市に集まっている。"],
+    ["農村には現金収入を得られる仕事が少ない","push","農業以外の仕事が少なく、収入も不安定になりやすい。"],
+    ["都市の方が収入が多そう","pull","農村との収入の差が、都市への移動を後押しする。"],
+    ["干ばつや洪水などで、農業だけでは暮らせない","push","自然災害や環境の悪化も、農村から人を押し出す。"],
+    ["都市のにぎやかな暮らしへのあこがれ","pull","テレビやスマートフォンで見る都市の暮らしも、人を引き寄せる。"]
+  ];
+  var sortWrap = document.getElementById("sortlist"), sortFb = document.getElementById("sortfb"), sorted = 0;
+  CARDS.forEach(function(c){
+    var d = document.createElement("div"); d.className = "scard";
+    d.innerHTML = "<div>" + c[0] + "</div>";
+    var sb = document.createElement("div"); sb.className = "sb"; sb.setAttribute("role","group"); sb.setAttribute("aria-label", c[0]);
+    [["push","⬅ 押し出す"],["pull","引き寄せる ➡"]].forEach(function(o){
+      var b = document.createElement("button"); b.type = "button"; b.className = o[0]; b.textContent = o[1];
+      b.addEventListener("click", function(){
+        if(o[0] === c[1]){
+          d.className = "scard ok";
+          Array.prototype.forEach.call(sb.children, function(x){ x.disabled = true; });
+          var li = document.createElement("li"); li.textContent = c[0];
+          document.getElementById("bin-" + c[1]).appendChild(li);
+          sorted++;
+          sortFb.textContent = sorted === CARDS.length ? "全部できた！発展途上国では、押し出す力（農村）と引き寄せる力（都市）がどちらも強く、都市の人口が急に増える。" : "正解！あと" + (CARDS.length - sorted) + "枚。";
+        }else{
+          b.setAttribute("data-state","wrong"); b.disabled = true;
+          sortFb.textContent = "おしい。それは「農村側の事情」？それとも「都市側の魅力」？";
+        }
+      });
+      sb.appendChild(b);
+    });
+    d.appendChild(sb);
+    var w = document.createElement("div"); w.className = "why"; w.textContent = c[2]; d.appendChild(w);
+    sortWrap.appendChild(d);
+  });
+
+  /* =========================================================
+     STEP2：2つの都市シミュレーション
+     ========================================================= */
+  var SIMS = [
+    { stages:[
+        { n:"人が流れこむ", bars:[["都市の人口",4],["仕事",4],["住まい",4]],
+          cap:"農村から仕事を求めて人がやってくる。はじめのうちは、人口・仕事・住まいのバランスがとれている。" },
+        { n:"人口が先に増える", bars:[["都市の人口",6],["仕事",4.5],["住まい",4]],
+          cap:"出生率が高いうえに、農村からの流入が続き、<strong>人口が仕事や住まいより速く増える</strong>。正式な仕事につけない人は、露天商など公的な許可を受けない<strong>インフォーマルセクター</strong>で暮らす。収入は低く不安定。" },
+        { n:"スラムが広がる", bars:[["都市の人口",8],["仕事",5],["住まい",4.5]],
+          cap:"住宅が足りないため、<strong>川沿いや線路沿い、郊外の空き地</strong>にバラックが建ち並ぶ<strong>スラム</strong>ができる。電気・上下水道などの<strong>インフラ</strong>が不十分で、衛生などの問題をかかえる。" },
+        { n:"高層ビルとスラム", bars:[["都市の人口",10],["仕事",6.5],["住まい",5.5]],
+          cap:"都心には多国籍企業のオフィスビルが建ち、近代的な建物とスラムが<strong>隣り合う</strong>。人と車が集中し、交通渋滞や大気汚染も深刻に。国の中で人口や機能が飛びぬけて集中する都市を<strong>首位都市（プライメートシティ）</strong>という（例：インドネシアのジャカルタ）。" }
+      ] },
+    { stages:[
+        { n:"都心が過密に", bars:[["都心の人口",8],["郊外の人口",2],["古くなった建物",1]],
+          cap:"工業化で都心に人と仕事が集まり、<strong>過密</strong>になる。住宅不足や大気汚染などの都市問題が起こった。" },
+        { n:"郊外へ広がる", bars:[["都心の人口",7],["郊外の人口",6],["古くなった建物",2]],
+          cap:"鉄道や道路がのび、郊外に<strong>ニュータウン</strong>や住宅地がつくられる（<strong>郊外化</strong>）。都心は会社の本社などが集まるオフィス街になっていく。" },
+        { n:"中・高所得層が郊外へ", bars:[["都心の人口",5],["郊外の人口",8],["古くなった建物",5]],
+          cap:"余裕のある<strong>中・高所得層</strong>は、広くて環境のよい郊外へ引っこす。工場も郊外へ移り、都心のまわりの古い市街地から仕事が減る。" },
+        { n:"都心のまわりがさびれる", bars:[["都心の人口",4],["郊外の人口",9],["古くなった建物",8]],
+          cap:"都心のまわり（<strong>インナーシティ</strong>）には、低所得層や高齢者などが残され、空き家の増加や治安の悪化が進む。これが<strong>インナーシティ問題</strong>（STEP5へ）。" }
+      ] }
+  ];
+  var city = document.getElementById("city"), simBtnWrap = document.getElementById("simbtns"), barWrap = document.getElementById("bars"), simCap = document.getElementById("simcap");
+  var curSim = 0, curStage = 0;
+  var BARCOL = [["#D9822B","#2E7D4F","#2E6FDB"],["#D9822B","#2E6FDB","#A94436"]];
+  var simBtns = [0,1,2,3].map(function(i){
+    var b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){ setSim(curSim, i); });
+    simBtnWrap.appendChild(b); return b;
+  });
+  var ctabs = [document.getElementById("ct-0"), document.getElementById("ct-1")];
+  ctabs.forEach(function(t, i){ t.addEventListener("click", function(){ setSim(i, 0); }); });
+  function hut(x, y){ el("rect",{x:x-6,y:y-6,width:12,height:9,fill:"#A9876A",stroke:"#5E4535","stroke-width":.7},city); el("path",{d:"M"+(x-8)+" "+(y-6)+" L"+x+" "+(y-11)+" L"+(x+8)+" "+(y-6)+"Z",fill:"#8E8E88"},city); }
+  function tower(x, h, c){ el("rect",{x:x,y:200-h,width:26,height:h,fill:c||"#8FA9BC",stroke:"#2E4A5E"},city); for(var r=0;r<h/16-1;r++){ el("rect",{x:x+5,y:200-h+8+r*16,width:16,height:6,fill:"#EAF2F8"},city); } }
+  function house(x, y, c){ el("rect",{x:x-7,y:y-6,width:14,height:10,fill:c||"#F4E2C4",stroke:"#7A5C40","stroke-width":.7},city); el("path",{d:"M"+(x-9)+" "+(y-6)+" L"+x+" "+(y-13)+" L"+(x+9)+" "+(y-6)+"Z",fill:c?"#7D7D78":"#9C4F38"},city); }
+  function drawDeveloping(st){
+    el("rect",{x:0,y:0,width:800,height:300,fill:st >= 3 ? "#E9E7E0" : "#EEF4F7"},city);
+    el("rect",{x:0,y:200,width:800,height:100,fill:"#DCD6C8"},city);
+    el("path",{d:"M0 262 Q200 245 400 262 T800 258 L800 282 Q600 286 400 284 T0 284 Z",fill:"#7FB2DD"},city);
+    tx(city,20,296,"川",{"font-size":11,fill:"#1E5A73"});
+    el("line",{x1:0,y1:222,x2:800,y2:222,stroke:"#5B4B3B","stroke-width":3},city);
+    for(var r=0;r<40;r++){ el("line",{x1:r*20,y1:218,x2:r*20,y2:226,stroke:"#5B4B3B","stroke-width":1.5},city); }
+    tx(city,20,216,"鉄道",{"font-size":11,fill:"#5B4B3B"});
+    var hs = [1, 2, 3, 3][st] ;
+    var tw = [[330,60],[370,80],[410,70]];
+    if(st >= 3){ tw = tw.concat([[300,130],[440,150],[350,170],[400,120],[470,110]]); }
+    tw.forEach(function(t){ tower(t[0], t[1]); });
+    tx(city,400,24,st >= 3 ? "都心（高層のオフィスビル）" : "都心",{"text-anchor":"middle","font-size":13,"font-weight":"700"});
+    // 正式な住宅
+    [[120,198],[160,198],[620,198],[660,198],[700,198]].forEach(function(p){ house(p[0],p[1]); });
+    // スラム
+    var nRiver = [0, 6, 16, 18][st], nRail = [0, 3, 10, 12][st], nEdge = [0, 0, 6, 8][st];
+    for(var a=0;a<nRiver;a++){ hut(30 + a * 42, 246 - (a % 2) * 5); }
+    for(var b=0;b<nRail;b++){ hut(60 + b * 64, 238); }
+    for(var c=0;c<nEdge;c++){ hut(c < 4 ? 20 + c * 18 : 720 + (c-4) * 18, 182); }
+    if(st >= 2){ tx(city,520,160,"スラム（川沿い・線路沿い・空き地）",{"font-size":12,"font-weight":"700",fill:"#A94436"}); }
+    // 露天商
+    if(st >= 1){ for(var v=0;v<(st+1)*2;v++){ var x=230+v*24; el("path",{d:"M"+(x-8)+" 204 L"+x+" 196 L"+(x+8)+" 204 Z",fill:["#E0517A","#F2B233","#2EA3C7"][v%3]},city); } tx(city,232,190,"露天商",{"font-size":11}); }
+    // 渋滞・排気
+    if(st >= 3){ for(var k=0;k<12;k++){ el("rect",{x:240+k*28,y:206,width:20,height:9,rx:3,fill:["#C2453C","#2E6FDB","#F2B233"][k%3]},city); } for(var s=0;s<5;s++){ el("circle",{cx:280+s*60,cy:60+(s%2)*12,r:20,fill:"#9A9A93",opacity:.35},city); } tx(city,620,60,"渋滞・大気汚染",{"font-size":12,"font-weight":"700",fill:"#5B6B78"}); }
+    // 流入の矢印
+    el("line",{x1:790,y1:120,x2:730,y2:120,stroke:"#2E7D4F","stroke-width":4,"marker-end":"url(#ag)"},city);
+    tx(city,792,145,"農村から",{"text-anchor":"end","font-size":11,fill:"#2E7D4F"});
+    marker(city,"ag","#2E7D4F");
+  }
+  function drawDeveloped(st){
+    el("rect",{x:0,y:0,width:800,height:300,fill:"#EEF4F7"},city);
+    var cx = 400, cy = 150;
+    el("ellipse",{cx:cx,cy:cy,rx:390,ry:140,fill:"#DDEBC8"},city);
+    el("ellipse",{cx:cx,cy:cy,rx:170,ry:90,fill:st >= 2 ? "#D8D2C8" : "#F6E7B8"},city);
+    el("ellipse",{cx:cx,cy:cy,rx:62,ry:40,fill:"#C2453C"},city);
+    tx(city,cx,cy+5,"都心",{"text-anchor":"middle","font-size":13,"font-weight":"700",fill:"#fff"});
+    tx(city,cx,cy-62,st >= 2 ? "インナーシティ（古い市街地）" : "都心のまわりの住宅地",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:st >= 2 ? "#A94436" : "#6B4E2E"});
+    // インナーシティの家
+    var homes = [[300,120],[320,180],[350,205],[460,205],[490,180],[505,120],[470,95],[330,95],[285,150],[515,150]];
+    var keep = [10, 10, 7, 5][st];
+    homes.forEach(function(p, i){ if(i < keep){ house(p[0], p[1], st >= 2 ? "#BDB7AC" : null); } else { el("rect",{x:p[0]-7,y:p[1]-6,width:14,height:10,fill:"none",stroke:"#A94436","stroke-dasharray":"3 2"},city); tx(city,p[0],p[1]+2,"空",{"text-anchor":"middle","font-size":8,fill:"#A94436"}); } });
+    if(st >= 0 && st < 1){ for(var q=0;q<10;q++){ el("circle",{cx:340+q*12,cy:cy+28+(q%2)*6,r:4,fill:"#D9822B"},city); } tx(city,cx,cy+56,"人が密集（過密）",{"text-anchor":"middle","font-size":11,"font-weight":"700"}); }
+    // 鉄道と郊外
+    if(st >= 1){
+      [[60,60],[60,240],[740,60],[740,240]].forEach(function(p){
+        el("line",{x1:cx,y1:cy,x2:p[0],y2:p[1],stroke:"#253341","stroke-width":2.5,"stroke-dasharray":"8 4"},city);
+        el("rect",{x:p[0]-34,y:p[1]-18,width:68,height:36,rx:6,fill:"#FFFFFF",stroke:"#2E6FDB","stroke-width":2},city);
+        for(var h=0;h<(st>=2?4:2);h++){ house(p[0]-21+h*14, p[1]+6); }
+      });
+      tx(city,60,30,"ニュータウン",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#2E6FDB"});
+      tx(city,740,30,"ニュータウン",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#2E6FDB"});
+      el("ellipse",{cx:cx,cy:cy,rx:62,ry:40,fill:"#C2453C"},city);
+      tx(city,cx,cy+5,"都心",{"text-anchor":"middle","font-size":13,"font-weight":"700",fill:"#fff"});
+    }
+    if(st >= 2){
+      marker(city,"ab","#2E6FDB");
+      [[300,110,150,80],[500,190,650,220]].forEach(function(a){ el("line",{x1:a[0],y1:a[1],x2:a[2],y2:a[3],stroke:"#2E6FDB","stroke-width":4,"marker-end":"url(#ab)"},city); });
+      tx(city,150,118,"中・高所得層が郊外へ",{"font-size":11,"font-weight":"700",fill:"#2E6FDB"});
+    }
+  }
+  function setSim(si, st){
+    curSim = si; curStage = st;
+    var S = SIMS[si].stages[st];
+    ctabs.forEach(function(t, j){ t.setAttribute("aria-selected", String(si === j)); t.tabIndex = si === j ? 0 : -1; });
+    simBtns.forEach(function(b, j){ b.innerHTML = "①②③④".charAt(j) + "<br>" + SIMS[si].stages[j].n; b.setAttribute("aria-pressed", String(j === st)); });
+    clear(city);
+    if(si === 0){ drawDeveloping(st); } else { drawDeveloped(st); }
+    city.setAttribute("aria-label", (si === 0 ? "発展途上国" : "先進国") + "の大都市の模式図：" + S.n);
+    barWrap.innerHTML = "";
+    S.bars.forEach(function(br, j){
+      var row = document.createElement("div"); row.className = "bar-row";
+      row.innerHTML = "<span>" + br[0] + "</span><span class='btrack'><span class='bfill' style='display:block;width:" + (br[1] * 10) + "%;background:" + BARCOL[si][j] + "'></span></span><span>" + br[1] + "</span>";
+      barWrap.appendChild(row);
+    });
+    if(si === 0){
+      var gap = S.bars[0][1] - S.bars[1][1];
+      var row = document.createElement("div"); row.className = "note";
+      row.textContent = gap > 0 ? "人口と仕事の差（仕事が足りない人の多さのイメージ）：" + gap.toFixed(1) : "人口と仕事がつりあっている。";
+      barWrap.appendChild(row);
+    }
+    simCap.innerHTML = S.cap;
+  }
+  setSim(0, 0);
+
+  /* =========================================================
+     STEP3：メトロポリス→コナベーション→メガロポリス
+     ========================================================= */
+  var zmap = document.getElementById("zmap"), zcap = document.getElementById("zcap"), megaKey = "us";
+  var ZOOMS = [
+    { n:"メトロポリス", s:"1つの巨大都市",
+      cap:"<strong>メトロポリス</strong>：大都市圏の中心となる巨大都市。まわりの郊外と、通勤や買い物で強く結びついている（例：東京）。" },
+    { n:"コナベーション", s:"となりの都市とつながる",
+      cap:"<strong>コナベーション（連接都市）</strong>：市街地が広がり、となりあう複数の都市がつながった状態。東京・川崎・横浜のように、市の境目を越えて建物が途切れずに続く。" },
+    { n:"メガロポリス", s:"大都市圏が帯状に連なる",
+      cap:"" }
+  ];
+  var MEGA = {
+    us:{ cap:"<strong>メガロポリス</strong>：いくつもの大都市圏が、高速道路や鉄道で結ばれて帯のように連なる地域。1961年、地理学者ゴットマンがアメリカ北東部の<strong>ボストン〜ワシントン</strong>の一帯をこう名づけた。",
+         cities:[["ボストン",120,70],["ニューヨーク",300,130],["フィラデルフィア",430,175],["ボルティモア",560,215],["ワシントン",680,250]] },
+    jp:{ cap:"日本では、東京・名古屋・大阪の三大都市圏が東海道新幹線や東名・名神高速道路で結ばれた地域を<strong>東海道メガロポリス</strong>とよぶ。東名高速道路は1969年に全線開通し、厚木ICもこの大動脈の上にある。",
+         cities:[["大阪",110,230],["京都",210,200],["名古屋",360,170],["静岡",520,150],["東京・横浜",690,110]] }
+  };
+  var zoomWrap = document.getElementById("zoom"), megaToggle = document.getElementById("megatoggle");
+  var zoomBtns = ZOOMS.map(function(z, i){
+    var b = document.createElement("button"); b.type = "button"; b.innerHTML = "<b>" + z.n + "</b><br>" + z.s; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){ setZoom(i); });
+    zoomWrap.appendChild(b); return b;
+  });
+  Array.prototype.forEach.call(megaToggle.children, function(b){
+    b.addEventListener("click", function(){
+      megaKey = b.getAttribute("data-k");
+      Array.prototype.forEach.call(megaToggle.children, function(c){ c.setAttribute("aria-pressed", String(c === b)); });
+      setZoom(2);
+    });
+  });
+  function blob(x, y, rx, ry, fill){ el("ellipse",{cx:x,cy:y,rx:rx,ry:ry,fill:fill||"#E9B872",opacity:.85},zmap); }
+  function setZoom(i){
+    zoomBtns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(i === j)); });
+    megaToggle.hidden = (i !== 2);
+    clear(zmap);
+    el("rect",{x:0,y:0,width:800,height:320,fill:"#EEF2EA"},zmap);
+    if(i === 0){
+      blob(400,160,200,120,"#F6E7B8"); blob(400,160,90,60,"#E9B872"); blob(400,160,30,22,"#C2453C");
+      tx(zmap,400,165,"中心都市",{"text-anchor":"middle","font-size":13,"font-weight":"700",fill:"#fff"});
+      tx(zmap,400,58,"郊外（住宅地・ニュータウン）",{"text-anchor":"middle","font-size":12});
+      for(var k=0;k<6;k++){ var t=k/6*Math.PI*2; el("line",{x1:400+Math.cos(t)*40,y1:160+Math.sin(t)*28,x2:400+Math.cos(t)*190,y2:160+Math.sin(t)*112,stroke:"#253341","stroke-width":2,"stroke-dasharray":"6 4"},zmap); }
+      tx(zmap,790,310,"破線＝鉄道",{"text-anchor":"end","font-size":11,fill:"#5B6B78"});
+      zcap.innerHTML = ZOOMS[0].cap;
+    }else if(i === 1){
+      blob(250,120,130,80); blob(420,180,100,60); blob(570,240,120,60);
+      blob(340,152,60,36); blob(498,212,60,34);
+      [["東京",250,124],["川崎",420,184],["横浜",570,244]].forEach(function(c){ el("circle",{cx:c[1],cy:c[2]-4,r:8,fill:"#C2453C"},zmap); tx(zmap,c[1],c[2]+22,c[0],{"text-anchor":"middle","font-size":14,"font-weight":"700"}); });
+      el("path",{d:"M330 40 L360 300",stroke:"#5B6B78","stroke-width":1.5,"stroke-dasharray":"3 4",fill:"none"},zmap);
+      el("path",{d:"M470 40 L500 300",stroke:"#5B6B78","stroke-width":1.5,"stroke-dasharray":"3 4",fill:"none"},zmap);
+      tx(zmap,345,32,"市の境",{"text-anchor":"middle","font-size":11,fill:"#5B6B78"});
+      tx(zmap,485,32,"市の境",{"text-anchor":"middle","font-size":11,fill:"#5B6B78"});
+      tx(zmap,640,60,"市街地が境を越えてつながる",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#8A5A33"});
+      zcap.innerHTML = ZOOMS[1].cap;
+    }else{
+      var M = MEGA[megaKey];
+      var d = M.cities.map(function(c, j){ return (j ? "L" : "M") + c[1] + " " + c[2]; }).join(" ");
+      el("path",{d:d,stroke:"#E9B872","stroke-width":46,fill:"none","stroke-linecap":"round",opacity:.45},zmap);
+      el("path",{d:d,stroke:"#253341","stroke-width":3,fill:"none"},zmap);
+      el("path",{d:d,stroke:"#fff","stroke-width":1.2,fill:"none","stroke-dasharray":"8 6",transform:"translate(0,8)"},zmap);
+      M.cities.forEach(function(c){ blob(c[1],c[2],44,30); el("circle",{cx:c[1],cy:c[2],r:7,fill:"#C2453C"},zmap); tx(zmap,c[1],c[2]-38,c[0],{"text-anchor":"middle","font-size":14,"font-weight":"700"}); });
+      tx(zmap,790,310,megaKey === "us" ? "線＝高速道路・鉄道" : "線＝東海道新幹線・東名／名神高速道路",{"text-anchor":"end","font-size":11,fill:"#5B6B78"});
+      zcap.innerHTML = M.cap;
+    }
+  }
+  setZoom(0);
+
+  /* =========================================================
+     STEP4：ニュータウン比較
+     ========================================================= */
+  var ntUk = document.getElementById("nt-uk"), ntJp = document.getElementById("nt-jp"), showFlow = false;
+  function smallHouse(svg, x, y){ el("rect",{x:x-5,y:y-4,width:10,height:8,fill:"#F4E2C4",stroke:"#7A5C40","stroke-width":.6},svg); }
+  function factory(svg, x, y){ el("rect",{x:x-9,y:y-7,width:18,height:12,fill:"#9AA7B2",stroke:"#5B6B78","stroke-width":.6},svg); el("rect",{x:x+4,y:y-15,width:3,height:8,fill:"#5B6B78"},svg); }
+  function drawNT(){
+    clear(ntUk); clear(ntJp);
+    marker(ntUk,"au","#2E7D4F"); marker(ntJp,"aj","#A94436");
+    // UK
+    el("rect",{x:0,y:0,width:360,height:300,fill:"#F7F9F6"},ntUk);
+    el("circle",{cx:180,cy:150,r:118,fill:"#9CCB86"},ntUk);
+    el("circle",{cx:180,cy:150,r:72,fill:"#E9B872"},ntUk);
+    tx(ntUk,180,154,"ロンドン",{"text-anchor":"middle","font-size":13,"font-weight":"700"});
+    tx(ntUk,180,64,"グリーンベルト",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#2E5E22"});
+    [[40,40],[320,46],[30,262],[326,258]].forEach(function(p){
+      el("circle",{cx:p[0],cy:p[1],r:26,fill:"#FFFFFF",stroke:"#2E6FDB","stroke-width":2},ntUk);
+      smallHouse(ntUk,p[0]-8,p[1]+6); smallHouse(ntUk,p[0]+8,p[1]+8); factory(ntUk,p[0],p[1]-6);
+      if(showFlow){ el("path",{d:"M"+(p[0]+16)+" "+(p[1]+12)+" Q"+(p[0]+24)+" "+(p[1]-2)+" "+(p[0]+12)+" "+(p[1]-8),fill:"none",stroke:"#2E7D4F","stroke-width":1.8,"marker-end":"url(#au)"},ntUk); }
+    });
+    tx(ntUk,180,292,"ニュータウン＝住宅＋工場・職場",{"text-anchor":"middle","font-size":11,fill:"#2E6FDB"});
+    // JP
+    el("rect",{x:0,y:0,width:360,height:300,fill:"#F7F9F6"},ntJp);
+    el("circle",{cx:250,cy:150,r:60,fill:"#E9B872"},ntJp);
+    el("circle",{cx:250,cy:150,r:24,fill:"#C2453C"},ntJp);
+    tx(ntJp,250,154,"都心",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#fff"});
+    tx(ntJp,250,226,"会社・オフィス",{"text-anchor":"middle","font-size":11});
+    [[50,60],[40,240]].forEach(function(p){
+      el("line",{x1:p[0],y1:p[1],x2:250,y2:150,stroke:"#253341","stroke-width":2.5,"stroke-dasharray":"8 4"},ntJp);
+      el("circle",{cx:p[0],cy:p[1],r:28,fill:"#FFFFFF",stroke:"#2E6FDB","stroke-width":2},ntJp);
+      for(var h=0;h<5;h++){ smallHouse(ntJp,p[0]-16+h*8,p[1]+(h%2?6:-4)); }
+      if(showFlow){ el("path",{d:"M"+(p[0]+26)+" "+(p[1]+(p[1]<150?14:-14))+" Q130 150 "+(196)+" "+(150+(p[1]<150?-14:14)),fill:"none",stroke:"#A94436","stroke-width":3,"marker-end":"url(#aj)"},ntJp); }
+    });
+    tx(ntJp,50,24,"郊外のニュータウン",{"text-anchor":"middle","font-size":11,"font-weight":"700",fill:"#2E6FDB"});
+    el("circle",{cx:250,cy:150,r:24,fill:"#C2453C"},ntJp);
+    tx(ntJp,250,154,"都心",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#fff"});
+    tx(ntJp,150,292,"破線＝鉄道",{"text-anchor":"middle","font-size":11,fill:"#5B6B78"});
+    if(showFlow){ tx(ntJp,44,154,"毎朝、鉄道で都心へ",{"font-size":11,"font-weight":"700",fill:"#A94436"}); tx(ntUk,180,20,"多くの人がまちの中で働く",{"text-anchor":"middle","font-size":11,"font-weight":"700",fill:"#2E7D4F"}); }
+  }
+  var flowBtn = document.getElementById("flowbtn");
+  flowBtn.addEventListener("click", function(){ showFlow = !showFlow; flowBtn.setAttribute("aria-pressed", String(showFlow)); flowBtn.textContent = showFlow ? "通勤の流れを消す" : "通勤の流れを見る"; drawNT(); });
+  drawNT();
+  var ntJudge = document.getElementById("ntjudge"), ntFb = document.getElementById("ntfb");
+  ["イギリスのニュータウン","日本のニュータウン"].forEach(function(n, i){
+    var b = document.createElement("button"); b.type = "button"; b.textContent = n;
+    b.addEventListener("click", function(){
+      if(i === 0){
+        b.setAttribute("data-state","correct"); Array.prototype.forEach.call(ntJudge.children, function(c){ c.disabled = true; });
+        ntFb.textContent = "正解！イギリスは職場もそなえた「職住近接」。日本は鉄道で都心に通う「職住分離」のものが多い。";
+      }else{
+        b.setAttribute("data-state","wrong"); b.disabled = true;
+        ntFb.textContent = "おしい。日本のニュータウンの人は、毎朝どこへ働きに行っていた？「通勤の流れを見る」を押してみよう。";
+      }
+    });
+    ntJudge.appendChild(b);
+  });
+
+  /* =========================================================
+     STEP5：インナーシティ問題の連鎖
+     ========================================================= */
+  var CHAIN = [
+    "工場が郊外や海外へ移り、中・高所得層も郊外へ引っこす",
+    "都心のまわりから、仕事と税金を納める人が減る",
+    "引っこせない低所得層や高齢者、移民などが残される",
+    "建物が古くなって空き家が増え、治安も悪くなる",
+    "ますます人や会社が離れていく"
+  ];
+  var ORDER = [3,0,4,1,2]; // プールでの並び（シャッフル済み）
+  var slotsEl = document.getElementById("slots"), poolEl = document.getElementById("pool"), chainFb = document.getElementById("chainfb");
+  var placed = [], poolBtns = [], slotLis = [];
+  CHAIN.forEach(function(){ var li = document.createElement("li"); li.textContent = "（ここに入る）"; slotsEl.appendChild(li); slotLis.push(li); });
+  var loopLi = document.createElement("li"); loopLi.className = "loop"; loopLi.textContent = "→ 1にもどる（悪循環）"; loopLi.hidden = true; slotsEl.appendChild(loopLi);
+  ORDER.forEach(function(k){
+    var b = document.createElement("button"); b.type = "button"; b.textContent = CHAIN[k]; b.setAttribute("data-k", k);
+    b.addEventListener("click", function(){
+      if(placed.length >= CHAIN.length){ return; }
+      placed.push(k); b.disabled = true; renderChain();
+    });
+    poolEl.appendChild(b); poolBtns.push(b);
+  });
+  function renderChain(){
+    slotLis.forEach(function(li, i){
+      li.className = i < placed.length ? "filled" : "";
+      li.textContent = i < placed.length ? CHAIN[placed[i]] : "（ここに入る）";
+    });
+    loopLi.hidden = true;
+    if(placed.length === CHAIN.length){
+      var right = 0;
+      placed.forEach(function(k, i){ if(k === i){ right++; slotLis[i].className = "filled right"; } else { slotLis[i].className = "filled wrongpos"; } });
+      if(right === CHAIN.length){
+        loopLi.hidden = false;
+        chainFb.textContent = "完成！5まで進むと1にもどり、さびれる動きが止まらなくなる。これが「悪循環」。";
+      }else{
+        chainFb.textContent = right + "／5が正しい位置。赤いカードの順番を考え直そう（「やり直す」で並べ直せる）。ヒント：最初は「出ていく人」から。";
+      }
+    }else{
+      chainFb.textContent = "あと" + (CHAIN.length - placed.length) + "枚。";
+    }
+  }
+  document.getElementById("resetchain").addEventListener("click", function(){
+    placed = []; poolBtns.forEach(function(b){ b.disabled = false; }); renderChain(); chainFb.textContent = "カードを順番にタップしよう。";
+  });
+
+  window.__kyozai = { setSim:setSim, setZoom:setZoom, showStep:showStep, CHAIN:CHAIN };
+
+  /* ── クイズ（テンプレート共通処理） ── */
+  document.querySelectorAll(".quiz").forEach(function(quiz){
+    var answer = Number(quiz.getAttribute("data-answer"));
+    var choices = quiz.querySelectorAll(".choice"), feedback = quiz.querySelector(".feedback"), kaisetsu = quiz.querySelector(".kaisetsu"), showBtn = quiz.querySelector(".show-kaisetsu");
+    choices.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var i = Number(btn.getAttribute("data-i"));
+        if(i === answer){
+          btn.setAttribute("data-state","correct");
+          feedback.textContent = "正解！"; feedback.className = "feedback ok";
+          choices.forEach(function(b){ b.disabled = true; });
+          if(isJishu()){ kaisetsu.hidden = false; }
+        }else{
+          btn.setAttribute("data-state","wrong"); btn.disabled = true;
+          feedback.textContent = "おしい。もう一度考えてみよう。"; feedback.className = "feedback ng";
+        }
+      });
+    });
+    if(showBtn){ showBtn.addEventListener("click", function(){ kaisetsu.hidden = !kaisetsu.hidden; showBtn.textContent = kaisetsu.hidden ? "解説を表示する" : "解説を閉じる"; }); }
+  });
+
+  /* ── exit ticket ── */
+  var ticket = document.getElementById("ticket"), counter = document.getElementById("charcount"), copyBtn = document.getElementById("copybtn");
+  var KEYS = [["スラム",/スラム/],["郊外",/郊外/],["インナーシティ",/インナーシティ/],["仕事・住宅",/仕事|雇用|住宅|住まい/]];
+  var checks = document.getElementById("checks");
+  var checkEls = KEYS.map(function(k){ var li = document.createElement("li"); li.textContent = k[0]; checks.appendChild(li); return li; });
+  ticket.addEventListener("input", function(){
+    var n = ticket.value.replace(/\s/g, "").length;
+    counter.textContent = n + "字／120字" + (n > 120 ? "（オーバー）" : "");
+    KEYS.forEach(function(k, j){ checkEls[j].className = k[1].test(ticket.value) ? "hit" : ""; });
+  });
+  copyBtn.addEventListener("click", function(){
+    var text = ticket.value;
+    if(!text){ counter.textContent = "まだ何も書かれていません"; return; }
+    function done(ok){ copyBtn.textContent = ok ? "コピーしました" : "コピーできません（手動で選択してください）"; setTimeout(function(){ copyBtn.textContent = "回答をコピー（提出用）"; }, 2000); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ ticket.select(); done(false); }); }
+    else{ ticket.select(); done(false); }
+  });
+})();
+</script>
+</body>
+</html>

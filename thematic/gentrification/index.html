@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>都心に戻ってきたのは誰？──ジェントリフィケーションの光と影｜あらじお蔵</title>
+<!--
+  あらじお教材ラボ 標準テンプレート v1.0 ベース
+  地理探究｜居住・都市問題（先進国の都市問題）  ga_30_gentrification_v1
+  外部ライブラリなし・ブラウザ保存なし・click操作のみ
+-->
+<style>
+  :root{
+    --paper:#F5F7F4; --card:#FFFFFF; --ink:#253341; --ink-weak:#5B6B78;
+    --lake:#1E5A73; --lake-weak:#E3EDF1; --contour:#8A5A33;
+    --ok:#2E7D4F; --ng:#A94436; --line:#D4DAD6; --radius:10px;
+    --old:#D9822B;      /* 元からの住民 */
+    --artist:#7B4FA3;   /* 芸術家 */
+    --newc:#2E6FDB;     /* 新しく来た高所得層 */
+    --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;
+    --font-display:"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.8;}
+  main{max-width:880px; margin:0 auto; padding:0 16px 64px;}
+
+  header{position:relative; overflow:hidden; background:var(--lake); color:#F2F7F9; padding:28px 16px 24px;}
+  header .contours{position:absolute; inset:0; opacity:.18; pointer-events:none;}
+  header .inner{position:relative; max-width:880px; margin:0 auto;}
+  .eyebrow{font-size:12px; letter-spacing:.18em; opacity:.85; margin:0 0 6px;}
+  h1{font-family:var(--font-display); font-weight:600; font-size:clamp(22px,4.5vw,30px); line-height:1.4; margin:0 0 10px;}
+  .goal{display:inline-block; background:rgba(255,255,255,.12); border-left:3px solid var(--contour); padding:6px 12px; border-radius:0 6px 6px 0; font-size:14px; margin:0;}
+
+  .modebar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:16px 0 8px;}
+  .modebar span{font-size:13px; color:var(--ink-weak);}
+  .modebtn{min-height:44px; min-width:120px; padding:8px 16px; border:1.5px solid var(--lake); border-radius:22px; background:var(--card); color:var(--lake); font-size:15px; font-family:inherit; cursor:pointer; touch-action:manipulation;}
+  .modebtn[aria-pressed="true"]{background:var(--lake); color:#fff;}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px 18px; margin:20px 0;}
+  .seclabel{display:inline-block; font-size:12px; letter-spacing:.22em; color:var(--contour); border-bottom:2px solid var(--contour); padding-bottom:2px; margin:0 0 10px;}
+  h2{font-family:var(--font-display); font-size:21px; margin:0 0 12px; line-height:1.5;}
+  h3{font-size:17px; margin:14px 0 6px;}
+  p{margin:0 0 12px;}
+  .note{font-size:13px; color:var(--ink-weak);}
+  .hatsumon{background:var(--lake-weak); border:none; text-align:center; padding:28px 18px;}
+  .hatsumon p{font-family:var(--font-display); font-size:clamp(19px,3.5vw,25px); margin:0; color:var(--lake);}
+
+  /* ── STEPナビ（1画面1焦点） ── */
+  .stepnav{display:flex; gap:6px; flex-wrap:wrap; margin:18px 0 0; padding:0; list-style:none;}
+  .stepnav button{min-height:44px; padding:6px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font-family:inherit; font-size:14px; cursor:pointer; touch-action:manipulation;}
+  .stepnav button[aria-selected="true"]{border-color:var(--lake); background:var(--lake); color:#fff;}
+  .stepnav .num{font-weight:700; margin-right:4px;}
+  .panel[hidden]{display:none;}
+  .pager{display:flex; justify-content:space-between; gap:8px; margin-top:16px;}
+  .pager button{min-height:44px; padding:8px 18px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:15px; cursor:pointer;}
+  .pager button.next{background:var(--lake); color:#fff;}
+  .pager button:disabled{visibility:hidden;}
+
+  /* ── STEP1 街の断面 ── */
+  .street{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#EEF4F7;}
+  .stagebtns{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin:12px 0 4px;}
+  .stagebtns button{min-height:44px; padding:4px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:13px; line-height:1.3; cursor:pointer; color:var(--ink);}
+  .stagebtns button[aria-pressed="true"]{border-color:var(--contour); background:#F6EEE6; font-weight:700;}
+  input[type="range"]{width:100%; height:44px; margin:0; touch-action:pan-y; accent-color:var(--contour);}
+  .status{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;}
+  @media (max-width:640px){ .status{grid-template-columns:1fr;} }
+  .box{border:1px solid var(--line); border-radius:8px; padding:10px 12px;}
+  .meter{display:flex; gap:4px; margin-top:4px;}
+  .meter i{flex:1; height:16px; border-radius:3px; background:#E6E9E7;}
+  .meter i.on{background:var(--contour);}
+  .legend{display:flex; flex-wrap:wrap; gap:10px; font-size:13px; margin-top:4px;}
+  .dot{display:inline-block; width:12px; height:12px; border-radius:50%; vertical-align:-1px; margin-right:4px;}
+  .kw{display:inline-block; background:var(--lake); color:#fff; font-size:13px; padding:2px 10px; border-radius:12px; margin-bottom:6px;}
+  .stage-caption{font-size:16px; border-left:3px solid var(--contour); padding-left:10px; margin-top:10px;}
+
+  /* ── STEP2 事例 ── */
+  .tabs{display:flex; gap:6px; margin-bottom:12px;}
+  .tabs button{flex:1; min-height:48px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:15px; cursor:pointer;}
+  .tabs button[aria-selected="true"]{background:var(--lake); color:#fff;}
+  .timeline{list-style:none; margin:0 0 12px; padding:0; border-left:3px solid var(--lake-weak);}
+  .timeline li{position:relative; padding:4px 0 8px 16px;}
+  .timeline li::before{content:""; position:absolute; left:-8px; top:12px; width:13px; height:13px; border-radius:50%; background:var(--lake);}
+  .timeline b{color:var(--lake);}
+  .kage{background:#F7ECEA; border-left:3px solid var(--ng); padding:8px 12px; border-radius:0 8px 8px 0; font-size:15px;}
+  .hikari{background:#EAF4EE; border-left:3px solid var(--ok); padding:8px 12px; border-radius:0 8px 8px 0; font-size:15px; margin-bottom:8px;}
+
+  /* ── STEP3 立場カード ── */
+  .axis{position:relative; height:66px; margin:8px 0 18px; border-radius:8px;
+        background:linear-gradient(90deg,#F7ECEA 0%,#F5F7F4 50%,#EAF4EE 100%); border:1px solid var(--line);}
+  .axis .lab{position:absolute; bottom:-22px; font-size:12px; color:var(--ink-weak);}
+  .axis .chip{position:absolute; top:8px; transform:translateX(-50%); font-size:12px; line-height:1.2; background:var(--card); border:1.5px solid var(--ink); border-radius:12px; padding:3px 7px; white-space:nowrap; transition:left .3s;}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px;}
+  .scard{border:1.5px solid var(--line); border-radius:10px; padding:12px;}
+  .scard h3{margin:0 0 4px; font-size:16px;}
+  .scard .who{font-size:13px; color:var(--ink-weak); margin:0 0 8px;}
+  .scale{display:grid; grid-template-columns:repeat(5,1fr); gap:4px;}
+  .scale button{min-height:44px; padding:2px; border:1.5px solid var(--line); border-radius:6px; background:var(--card); font-family:inherit; font-size:12px; line-height:1.2; cursor:pointer; color:var(--ink);}
+  .scale button[aria-pressed="true"]{border-color:var(--lake); background:var(--lake); color:#fff;}
+  .view{margin-top:8px; font-size:14px; background:var(--lake-weak); border-radius:8px; padding:8px 10px;}
+  .view[hidden]{display:none;}
+  .viewbtn{min-height:44px; margin-top:8px; padding:6px 12px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:14px; cursor:pointer;}
+
+  /* ── STEP4 グラフ ── */
+  .chart{width:100%; height:auto; display:block;}
+  .chart .bar{cursor:pointer;}
+  .chart .bar:focus-visible{outline:none; stroke:var(--contour); stroke-width:3;}
+  .twin{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+  @media (max-width:640px){ .twin{grid-template-columns:1fr;} }
+  .readout{font-size:15px; margin-top:8px; border-left:3px solid var(--lake); padding-left:10px; min-height:1.8em;}
+
+  /* ── STEP5 構想 ── */
+  .local{background:#F6EEE6; border-radius:8px; padding:10px 12px; font-size:15px; margin-bottom:12px;}
+  .policies{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:8px;}
+  .policy{min-height:56px; text-align:left; padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; line-height:1.5; cursor:pointer; color:var(--ink);}
+  .policy[aria-pressed="true"]{border-color:var(--contour); background:#F6EEE6; font-weight:700;}
+  .policy:disabled{opacity:.45; cursor:default;}
+  .gauges{margin:14px 0 8px;}
+  .gauge{display:grid; grid-template-columns:9em 1fr 3em; align-items:center; gap:8px; margin-bottom:6px; font-size:14px;}
+  .gtrack{position:relative; height:18px; background:#E6E9E7; border-radius:9px; overflow:hidden;}
+  .gtrack::after{content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; background:var(--ink-weak);}
+  .gfill{position:absolute; top:0; bottom:0; transition:all .3s;}
+  .gval{text-align:right; font-variant-numeric:tabular-nums;}
+
+  /* ── クイズ ── */
+  .quiz-q{font-weight:700; margin-bottom:10px;}
+  .choices{display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .choice{min-height:44px; width:100%; text-align:left; padding:10px 14px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-size:15px; font-family:inherit; cursor:pointer; touch-action:manipulation; color:var(--ink);}
+  .choice[data-state="correct"]{border-color:var(--ok); background:#EAF4EE;}
+  .choice[data-state="wrong"]{border-color:var(--ng); background:#F7ECEA;}
+  .choice:disabled{cursor:default; opacity:.9;}
+  .feedback{min-height:1.6em; font-size:15px; margin-top:8px;}
+  .feedback.ok{color:var(--ok);} .feedback.ng{color:var(--ng);}
+  .kaisetsu{margin-top:10px; padding:10px 12px; font-size:14px; background:var(--lake-weak); border-radius:8px;}
+  .kaisetsu[hidden]{display:none;}
+  .show-kaisetsu{min-height:44px; padding:8px 14px; margin-top:8px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-size:14px; font-family:inherit; cursor:pointer;}
+  hr.sep{border:none; border-top:1px solid var(--line); margin:18px 0;}
+
+  textarea{width:100%; min-height:120px; padding:10px; border:1.5px solid var(--line); border-radius:8px; font-family:inherit; font-size:15px; resize:vertical;}
+  .ticket-foot{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:8px;}
+  .charcount{font-size:13px; color:var(--ink-weak);}
+  .copybtn{min-height:44px; padding:8px 16px; border:none; border-radius:8px; background:var(--lake); color:#fff; font-size:15px; font-family:inherit; cursor:pointer;}
+  .checks{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-wrap:wrap; gap:6px;}
+  .checks li{font-size:13px; padding:2px 10px; border-radius:12px; border:1px solid var(--line); color:var(--ink-weak);}
+  .checks li.hit{border-color:var(--ok); background:#EAF4EE; color:var(--ok);}
+
+  footer{max-width:880px; margin:0 auto; padding:0 16px 40px; font-size:13px; color:var(--ink-weak);}
+  footer h2{font-size:14px; font-family:var(--font-body); margin-bottom:6px;}
+  footer ul{margin:0 0 10px; padding-left:1.4em;}
+
+  body[data-mode="jugyo"] .jishu-only{display:none;}
+  body[data-mode="jishu"] .jugyo-only{display:none;}
+  :focus-visible{outline:3px solid var(--contour); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+  @media print{ header{background:#fff; color:var(--ink);} .modebar,.copybtn,.stepnav,.pager{display:none;} .panel[hidden]{display:block;} }
+</style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-home{background:#16271c;font:500 13px/1.4 "Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;letter-spacing:.04em}
+.arg-home a{display:inline-flex;align-items:center;min-height:34px;padding:0 16px;color:#dbe6d6;text-decoration:none}
+.arg-home a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.arg-home a:focus-visible{outline:2px solid #9fd0bb;outline-offset:-2px}
+@media print{.arg-home{display:none}}
+</style>
+</head>
+<body data-mode="jugyo">
+<div class="arg-home" role="navigation" aria-label="サイト"><a href="/">← TOPに戻る</a></div>
+
+<header>
+  <svg class="contours" viewBox="0 0 820 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#FFFFFF" stroke-width="1.2">
+      <ellipse cx="640" cy="80" rx="60" ry="26"/><ellipse cx="640" cy="82" rx="110" ry="50"/>
+      <ellipse cx="640" cy="84" rx="165" ry="76"/><ellipse cx="640" cy="86" rx="225" ry="104"/>
+      <ellipse cx="150" cy="130" rx="50" ry="20"/><ellipse cx="150" cy="132" rx="95" ry="42"/>
+      <ellipse cx="150" cy="134" rx="145" ry="66"/>
+    </g>
+  </svg>
+  <div class="inner">
+    <p class="eyebrow">地理探究｜居住・都市問題（先進国の都市問題）</p>
+    <h1>都心に戻ってきたのは誰？<br>──ジェントリフィケーションの光と影</h1>
+    <p class="goal">学習目標：インナーシティが再生していく過程と、それによって誰が得をし誰が困るのかを、複数の立場から説明できる。</p>
+  </div>
+</header>
+
+<main>
+  <div class="modebar" role="group" aria-label="表示モード切替">
+    <span>モード：</span>
+    <button type="button" class="modebtn" id="btn-jugyo" aria-pressed="true">授業モード</button>
+    <button type="button" class="modebtn" id="btn-jishu" aria-pressed="false">自習モード</button>
+  </div>
+  <p class="note">授業モード＝発問を大きく表示し、解説・別の見方は先生が開くまで非表示。自習モード＝解説と振り返りを表示。</p>
+
+  <section class="hatsumon jugyo-only" aria-label="今日の問い">
+    <p class="seclabel">問い</p>
+    <p>さびれた下町が、おしゃれな街に変わった。<br>これは“良いこと”だろうか？</p>
+  </section>
+  <section class="jishu-only">
+    <p class="seclabel">導入</p>
+    <h2>この教材で考えること</h2>
+    <p>前の時間は、先進国の大都市で中・高所得層が郊外へ移り、古い市街地（インナーシティ）が衰える「インナーシティ問題」を学んだ。では、見捨てられた都心はその後どうなったのだろうか。</p>
+    <p>今日は、衰えた街に高所得層が戻ってくる<strong>ジェントリフィケーション</strong>を、「誰が得をして、誰が困るのか」という視点から考え、最後に地元・本厚木の再開発を構想しよう。</p>
+  </section>
+
+  <ul class="stepnav" role="tablist" aria-label="学習のステップ">
+    <li><button type="button" role="tab" id="tab-1" aria-controls="p-1" aria-selected="true"><span class="num">1</span>ある街の50年</button></li>
+    <li><button type="button" role="tab" id="tab-2" aria-controls="p-2" aria-selected="false" tabindex="-1"><span class="num">2</span>世界の実例</button></li>
+    <li><button type="button" role="tab" id="tab-3" aria-controls="p-3" aria-selected="false" tabindex="-1"><span class="num">3</span>誰が得？誰が困る？</button></li>
+    <li><button type="button" role="tab" id="tab-4" aria-controls="p-4" aria-selected="false" tabindex="-1"><span class="num">4</span>日本では？</button></li>
+    <li><button type="button" role="tab" id="tab-5" aria-controls="p-5" aria-selected="false" tabindex="-1"><span class="num">5</span>本厚木を構想</button></li>
+    <li><button type="button" role="tab" id="tab-6" aria-controls="p-6" aria-selected="false" tabindex="-1"><span class="num">6</span>確認・振り返り</button></li>
+  </ul>
+
+  <!-- ===== STEP1 ===== -->
+  <section class="panel" id="p-1" role="tabpanel" aria-labelledby="tab-1">
+    <p class="seclabel">STEP 1｜操作</p>
+    <h2>ある街の50年──住んでいる人はどう入れ替わる？</h2>
+    <p>スライダー（またはボタン）で時代を進めよう。<strong>建物</strong>・<strong>家賃</strong>・<strong>住んでいる人</strong>の3つに注目。</p>
+    <svg class="street" id="street" viewBox="0 0 800 340" role="img" aria-label="架空の街区の断面図。時代によって建物と住民が変わる"></svg>
+    <div class="stagebtns" role="group" aria-label="時代を選ぶ" id="stagebtns"></div>
+    <label for="stage" class="note">時代のスライダー</label>
+    <input type="range" id="stage" min="0" max="4" step="1" value="0" aria-describedby="stage-caption">
+    <div class="status">
+      <div class="box">
+        <span class="kw" id="stage-kw"></span>
+        <div><strong>家賃・地価（イメージ）</strong></div>
+        <div class="meter" id="rent" aria-hidden="true"></div>
+        <div class="note" id="rent-text"></div>
+      </div>
+      <div class="box">
+        <strong>住んでいる人</strong>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--old)"></span>元からの住民 <b id="c-old"></b>人</span>
+          <span><span class="dot" style="background:var(--artist)"></span>芸術家 <b id="c-art"></b>人</span>
+          <span><span class="dot" style="background:var(--newc)"></span>新しく来た高所得層 <b id="c-new"></b>人</span>
+        </div>
+      </div>
+    </div>
+    <p class="stage-caption" id="stage-caption" aria-live="polite"></p>
+    <p class="note">※この街は、教科書や海外の事例（ニューヨークなど）をもとに作った<strong>架空のモデル</strong>です。人数と家賃は変化の向きを示すイメージで、実際のデータではありません。</p>
+    <section class="hatsumon jugyo-only" style="margin:12px 0 0;padding:16px;">
+      <p style="font-size:clamp(17px,3vw,21px)">最後の場面で、最初からいた住民はどこへ行ったのだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev" disabled>← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP2 ===== -->
+  <section class="panel" id="p-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <p class="seclabel">STEP 2｜実例</p>
+    <h2>世界の実例──街はどうやって“戻ってきた”のか</h2>
+    <p>海外と日本の2つの街を比べよう。どちらも、もとは<strong>船をつくる仕事</strong>と関係の深い街だった。タブを切り替えて見てみよう。</p>
+    <div class="tabs" role="tablist" aria-label="事例の切り替え">
+      <button type="button" role="tab" id="ct-lon" aria-controls="case-lon" aria-selected="true">ロンドン・ドックランズ<br><small>港の跡地を再開発</small></button>
+      <button type="button" role="tab" id="ct-ny" aria-controls="case-ny" aria-selected="false" tabindex="-1">東京・月島<br><small>下町にタワーマンション</small></button>
+    </div>
+
+    <div id="case-lon" role="tabpanel" aria-labelledby="ct-lon">
+      <ol class="timeline">
+        <li><b>〜1960年代</b>　テムズ川沿いに造船所や倉庫が並ぶ、世界有数の港湾地区だった。</li>
+        <li><b>1960〜1980年</b>　港がすべて閉鎖される。コンテナ船の大型化などで古い港が使われなくなったとされ、失業や空き地が広がった。</li>
+        <li><b>1981〜1998年</b>　政府がつくった開発公社（LDDC）が再開発を進め、超高層のオフィス街カナリー・ワーフ、新交通システム（DLR）、空港などが整備された。</li>
+        <li><b>現在</b>　高層マンションやオフィスビルが並び、高所得層が住む地区に生まれ変わった。</li>
+      </ol>
+      <h3>ロンドンの人口の移り変わり（現在の大ロンドンの範囲）</h3>
+      <svg class="chart" id="lon-chart" viewBox="0 0 600 220" role="img" aria-label="ロンドンの人口。1939年約860万人、1988年約670万人まで減少、2015年に約860万人へ回復、2021年約880万人"></svg>
+      <p class="note">1939年：約860万人 → 1988年：約670万人（最少） → 2015年：1939年の水準を回復 → 2021年：約880万人</p>
+      <p class="hikari"><strong>光：</strong>荒れた港湾跡地に雇用とにぎわいが生まれ、ロンドンの人口回復を支えた地区の一つになった。</p>
+      <p class="kage"><strong>影：</strong>新しく生まれた金融・オフィスの仕事は、もとの港湾労働者の暮らしと結びつきにくく、地元住民が恩恵を受けにくかったという批判もある。</p>
+    </div>
+
+    <div id="case-ny" role="tabpanel" aria-labelledby="ct-ny" hidden>
+      <ol class="timeline">
+        <li><b>1892年</b>　東京湾の埋め立てで月島が誕生。となりの佃にあった造船所（石川島造船所）に関係する鉄工所や工場が集まり、そこで働く人々の長屋が並ぶ街になった。</li>
+        <li><b>戦後</b>　駄菓子屋の「文字焼き」がもんじゃ焼きのルーツとされ、西仲通り商店街は「もんじゃストリート」として知られるように。</li>
+        <li><b>1988年</b>　地下鉄有楽町線の月島駅ができ、銀座など都心へのアクセスがぐっと便利に。</li>
+        <li><b>2000年代〜</b>　タワーマンションが次々に建つ。2020年には商店街のとなりで32階建ての再開発ビルが完成し、月島には10棟以上のタワーマンションが並ぶ。</li>
+      </ol>
+      <p class="hikari"><strong>光：</strong>古い木造長屋が密集した地区を建て替え、災害（火事や地震）に強い街にする。新しい住民が増え、街ににぎわいが生まれる。</p>
+      <p class="kage"><strong>影：</strong>「月島にもう超高層はいらない」「日影が長い時間広がる」「人口が急に増える」として、再開発に反対する運動も起きた。路地や長屋、近所づきあいなど、<strong>下町らしさが失われる</strong>心配もある。</p>
+      <p class="note">※欧米のインナーシティのように「荒れて貧しい人が残された街」ではなく、古い木造住宅が多い下町だった点が違う。日本版のジェントリフィケーションとされる例。</p>
+    </div>
+    <section class="hatsumon jugyo-only" style="margin:12px 0 0;padding:16px;">
+      <p style="font-size:clamp(17px,3vw,21px)">ロンドンと月島、再開発の前の街のようすはどう違うだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP3 ===== -->
+  <section class="panel" id="p-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+    <p class="seclabel">STEP 3｜WORK</p>
+    <h2>誰が得をして、誰が困る？</h2>
+    <p>月島のような下町が、再開発でタワーマンションの街に生まれ変わったとする。6つの立場それぞれについて、<strong>得をするか・困るか</strong>を選ぼう。選ぶと上の線に名前が並ぶ。</p>
+    <div class="axis" id="axis" aria-hidden="true">
+      <span class="lab" style="left:4px">← 困る</span>
+      <span class="lab" style="left:50%;transform:translateX(-50%)">どちらとも</span>
+      <span class="lab" style="right:4px">得をする →</span>
+    </div>
+    <div class="cards" id="cards"></div>
+    <p class="readout" id="axis-summary" aria-live="polite"></p>
+    <section class="hatsumon jugyo-only" style="margin:12px 0 0;padding:16px;">
+      <p style="font-size:clamp(17px,3vw,21px)">全員が「得をする」再開発は、ありうるだろうか？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP4 ===== -->
+  <section class="panel" id="p-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+    <p class="seclabel">STEP 4｜日本では？</p>
+    <h2>東京23区の人口──減った都心に、人が戻ってきた</h2>
+    <p>棒をタップ（またはTabキーで選択）すると、その年の人口が表示される。どこで減少から増加に変わったかを探そう。</p>
+    <svg class="chart" id="tky-chart" viewBox="0 0 640 280" role="group" aria-label="東京都区部の人口の推移（国勢調査）"></svg>
+    <p class="readout" id="tky-readout" aria-live="polite">棒を選ぶと数値が表示されます。</p>
+    <div class="twin">
+      <div class="box">
+        <strong>都心では…</strong>
+        <p style="margin:4px 0 0;font-size:15px">高度経済成長期からバブル期にかけて、都心は地価が高く人口が減った（ドーナツ化現象）。<strong>バブル崩壊後</strong>に地価が下がると、空き地や駐車場に分譲マンションが建ち、人口の<strong>都心回帰</strong>が進んだ。</p>
+      </div>
+      <div class="box">
+        <strong>そのころ郊外では…</strong>
+        <p style="margin:4px 0 0;font-size:15px">1970〜80年代に建てられたニュータウンで高齢化が進み、空き家や空き地がまばらに増える<strong>都市のスポンジ化</strong>が課題に。2025年の国勢調査速報では、東京都の区部は増えた一方、<strong>市部（多摩地域）が初めて減少</strong>した。</p>
+      </div>
+    </div>
+    <section class="hatsumon jugyo-only" style="margin:12px 0 0;padding:16px;">
+      <p style="font-size:clamp(17px,3vw,21px)">都心に人が戻ると、郊外では何が起こるだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP5 ===== -->
+  <section class="panel" id="p-5" role="tabpanel" aria-labelledby="tab-5" hidden>
+    <p class="seclabel">STEP 5｜構想</p>
+    <h2>本厚木駅北口の再開発、あなたならどうする？</h2>
+    <div class="local">
+      <strong>地元の今：</strong>本厚木駅の<strong>南口</strong>では、2020年代のはじめに地上22階建ての再開発ビルが完成し、上の階は分譲マンションになった。<strong>北口</strong>では2021年に地権者による再開発の準備組合がつくられ、どんな街にするかの検討が進められている。
+    </div>
+    <p>北口の再開発に取り入れたい政策を<strong>3つまで</strong>選ぼう。3つのメーターがどう変わるかを見て、組み合わせを工夫しよう。</p>
+    <div class="policies" id="policies"></div>
+    <div class="gauges" id="gauges" aria-live="polite"></div>
+    <p class="note">※メーターは考えるための簡易モデルで、点数は教材作成者の仮定です。実際の効果は条件によって変わります。</p>
+    <h3>提案を書こう</h3>
+    <textarea id="proposal" aria-label="北口再開発への提案" placeholder="例：私は北口の再開発に〇〇と〇〇を取り入れることを提案する。なぜなら……。一方で……という課題があるので、……で補う。"></textarea>
+    <div class="ticket-foot">
+      <span class="charcount" id="prop-count" aria-live="polite">0字</span>
+      <button type="button" class="copybtn" id="prop-copy">提案をコピー（提出用）</button>
+    </div>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP6 ===== -->
+  <section class="panel" id="p-6" role="tabpanel" aria-labelledby="tab-6" hidden>
+    <p class="seclabel">STEP 6｜確認</p>
+    <h2>確認クイズ</h2>
+
+    <div class="quiz" data-answer="0">
+      <p class="quiz-q">Q1. ジェントリフィケーションの説明として、最も適当なものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">停滞したインナーシティが再開発などで再生し、高所得層が流入して高級住宅地化する現象</button></li>
+        <li><button type="button" class="choice" data-i="1">郊外で市街地が無秩序に、虫食い状に広がっていく現象</button></li>
+        <li><button type="button" class="choice" data-i="2">都心の人口が減り、郊外の人口が増えていく現象</button></li>
+        <li><button type="button" class="choice" data-i="3">人種や民族、所得などによって住む地区が分かれる現象</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>2はスプロール現象、3はドーナツ化現象（郊外化）、4はセグリゲーション。ジェントリフィケーションは、インナーシティ問題の「その後」に起こる、高所得層の流入による街の変化を指す。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="1">
+      <p class="quiz-q">Q2. ロンドン・ドックランズと東京・月島の説明の組み合わせとして正しいものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">ドックランズ＝木造の長屋が並ぶ下町にタワーマンションが建った／月島＝閉鎖された港の跡地を政府主導で再開発した</button></li>
+        <li><button type="button" class="choice" data-i="1">ドックランズ＝閉鎖された港の跡地を政府主導で再開発した／月島＝木造の長屋が並ぶ下町にタワーマンションが建った</button></li>
+        <li><button type="button" class="choice" data-i="2">どちらも、郊外のニュータウン建設がきっかけ</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>ドックランズは使われなくなった港を開発公社が大規模に再開発した例。月島は造船関係の工場で働く人の長屋が並んだ下町に、地下鉄の開通や再開発でタワーマンションが建ち並んだ例。どちらも新しい住民が増える一方、元からの街の姿や暮らしが変わる点は共通する。なお教科書のニューヨークは、芸術家が住み始めたことがきっかけだった。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="3">
+      <p class="quiz-q">Q3. ジェントリフィケーションの「影」の側面として、<u>適当でない</u>ものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">家賃が上がり、元から住んでいた低所得層が住み続けられなくなる</button></li>
+        <li><button type="button" class="choice" data-i="1">昔からのコミュニティや、地域らしい街並みが失われる</button></li>
+        <li><button type="button" class="choice" data-i="2">テナント料が上がり、昔からの商店が閉店に追い込まれる</button></li>
+        <li><button type="button" class="choice" data-i="3">高所得層が出ていき、自治体の税収が減ってしまう</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>高所得層が出ていき税収が減るのは、ジェントリフィケーションの前に起こる「インナーシティ問題」の特徴。ジェントリフィケーションではむしろ高所得層が流入し、税収は増える方向にはたらく。</div>
+    </div>
+
+    <div class="jishu-only">
+      <hr class="sep">
+      <p class="seclabel">振り返り</p>
+      <h2>exit ticket</h2>
+      <p>ロンドンの人口が1939年から現在までどう変化したかを述べたうえで、都市問題などの現象と関連付けて<strong>140字以内</strong>で説明しよう。</p>
+      <textarea id="ticket" aria-label="振り返りの記入欄" placeholder="例：ロンドンの人口は1939年の約860万人から……"></textarea>
+      <ul class="checks" id="checks" aria-label="使えているキーワード"></ul>
+      <div class="ticket-foot">
+        <span class="charcount" id="charcount" aria-live="polite">0字／140字</span>
+        <button type="button" class="copybtn" id="copybtn">回答をコピー（提出用）</button>
+      </div>
+      <p class="note">コピーした内容を、先生が指定した提出先（Classroom等）に貼り付けて提出します。この教材から自動送信はされません。</p>
+    </div>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next" disabled>次へ →</button></div>
+  </section>
+</main>
+
+<footer>
+  <h2>出典・参考資料</h2>
+  <ul>
+    <li>ロンドンの人口（1939年約860万人、1988年約670万人、2015年に1939年水準を回復）：Greater London Authority「London Plan」各版・London Datastore「Population Change 1939-2015」。2021年：英国国家統計局（ONS）2021年国勢調査。</li>
+    <li>ロンドン・ドックランズ（港の閉鎖1960〜1980年、LDDC 1981〜1998年、カナリー・ワーフ等）：LDDC関連の公開資料・研究文献による。港の閉鎖理由は一般的な説明として「とされる」と表記。</li>
+    <li>東京・月島（1892年の埋め立て、石川島造船所と工業地帯、もんじゃ焼きの由来）：三菱地所ハウスネット「造船ともんじゃ・佃煮の街、月島エリア」「再開発で新たな魅力が加わりつつあるもんじゃのまち、月島エリア」（2020年10月の32階建てビル完成）。月島三丁目南地区の再開発目的（老朽木造長屋の密集解消・防災性向上）：東京都都市整備局。タワーマンションの棟数と反対運動の理由：マネーポストWEB。月島駅の開業（1988年6月）：三菱地所ハウスネット「月島駅」。</li>
+    <li>STEP1の「芸術家が来る」場面は、教科書で紹介されるニューヨークの例（芸術家の流入がきっかけ）を参考にしたモデル。</li>
+    <li>東京都区部の人口：総務省「国勢調査」各年（1965〜2015年は世田谷区資料の国勢調査集計、2020年は確報値9,733,276人）。2025年は東京都総務局「令和7年国勢調査 人口及び世帯数（速報）」（2026年5月29日公表、区部9,953,160人。確報値は総務省が公表予定）。</li>
+    <li>本厚木駅南口・北口の再開発：厚木市「本厚木駅南口地区第一種市街地再開発事業について」、本厚木駅北口地区市街地再開発準備組合「まちづくりニュース」第1号（2022年）、神奈川新聞（2018年3月6日）。</li>
+    <li>STEP1の街とSTEP5のメーターは、教材作成者が作った架空のモデル・仮定であり、実データではありません。</li>
+  </ul>
+  <p>本教材は新井貴之が独自に作成したものです。数値は作成時点（2026年11月）に確認したもので、「とされる」と表記した内容は一般的な説明です。授業で使う前に最新の統計をご確認ください。</p>
+  <p>あらじお蔵｜CC BY-NC 4.0｜このページは単体HTMLで動作し、入力内容が外部に送信されることはありません。</p>
+</footer>
+
+<script>
+"use strict";
+(function(){
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent){
+    var e = document.createElementNS(SVGNS, tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    if(parent){ parent.appendChild(e); }
+    return e;
+  }
+  function isJishu(){ return document.body.getAttribute("data-mode") === "jishu"; }
+
+  /* ── モード切替 ── */
+  var btnJugyo = document.getElementById("btn-jugyo");
+  var btnJishu = document.getElementById("btn-jishu");
+  function setMode(mode){
+    document.body.setAttribute("data-mode", mode);
+    btnJugyo.setAttribute("aria-pressed", String(mode === "jugyo"));
+    btnJishu.setAttribute("aria-pressed", String(mode === "jishu"));
+    // 自習モードでは、選択済みの立場カードの「別の見方」を開く
+    if(mode === "jishu"){ stakes.forEach(function(s){ if(s.val !== null){ s.view.hidden = false; } }); }
+  }
+  btnJugyo.addEventListener("click", function(){ setMode("jugyo"); });
+  btnJishu.addEventListener("click", function(){ setMode("jishu"); });
+
+  /* ── STEPナビ ── */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".stepnav [role=tab]"));
+  function showStep(n, focus){
+    tabs.forEach(function(t, i){
+      var on = (i === n);
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if(focus){ tabs[n].focus(); }
+    var nav = document.querySelector(".stepnav");
+    if(nav.getBoundingClientRect && nav.getBoundingClientRect().top < 0 && nav.scrollIntoView){
+      nav.scrollIntoView({block:"start"});
+    }
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener("click", function(){ showStep(i); });
+    t.addEventListener("keydown", function(e){
+      if(e.key === "ArrowRight"){ e.preventDefault(); showStep((i + 1) % tabs.length, true); }
+      if(e.key === "ArrowLeft"){ e.preventDefault(); showStep((i - 1 + tabs.length) % tabs.length, true); }
+    });
+  });
+  document.querySelectorAll(".panel").forEach(function(p, i){
+    var prev = p.querySelector(".pager .prev"), next = p.querySelector(".pager .next");
+    if(prev){ prev.addEventListener("click", function(){ showStep(i - 1); }); }
+    if(next){ next.addEventListener("click", function(){ showStep(i + 1); }); }
+  });
+
+  /* =========================================================
+     STEP1：ある街の50年（架空のモデル街区）
+     ========================================================= */
+  var STAGES = [
+    { name:"工場の街", kw:"にぎわう工業地区",
+      slots:["factory","factory","house","house","shop","house","house","factory"],
+      rent:2, old:8, art:0, nw:0,
+      cap:"工場で働く人々の家や商店が並び、職場と住まいが近い街。家賃は手ごろで、住民の多くは工場労働者の家族。" },
+    { name:"工場が去る", kw:"郊外化 → インナーシティ問題",
+      slots:["vacant","vacant","house","vacant","closed","house","house","vacant"],
+      rent:1, old:4, art:0, nw:0,
+      cap:"工場が移転・閉鎖し、余裕のある世帯は郊外へ移った。残ったのは高齢者や低所得の世帯。空き家・空き倉庫が増え、治安や税収も悪化した。" },
+    { name:"芸術家が来る", kw:"ジェントリフィケーションのはじまり",
+      slots:["studio","studio","house","studio","vacant","house","house","gallery"],
+      rent:2, old:4, art:3, nw:0,
+      cap:"家賃が安く広い空き倉庫に、芸術家がアトリエ兼住まいとして移り住んだ。ギャラリーもでき、少しずつ街に人が集まり始める。" },
+    { name:"おしゃれな街に", kw:"注目と家賃の上昇",
+      slots:["gallery","studio","house","cafe","boutique","house","cafe","gallery"],
+      rent:3, old:3, art:2, nw:3,
+      cap:"カフェや雑貨店が増え、雑誌などで“おしゃれな街”として紹介される。共働き世帯など高所得の人々が移り住み、家賃が上がり始めた。" },
+    { name:"再開発", kw:"再開発・立ち退き",
+      slots:["tower","tower","tower","tower","chain","cafe","house","boutique"],
+      rent:5, old:1, art:0, nw:7,
+      cap:"高層マンションと大型店が建ち、街は高所得層の住宅地に。家賃が払えなくなった元の住民の多くは街を離れ、街の魅力をつくった芸術家も出ていった。" }
+  ];
+  var street = document.getElementById("street");
+  var stageInput = document.getElementById("stage");
+  var stageBtnWrap = document.getElementById("stagebtns");
+  var stageBtns = [];
+  STAGES.forEach(function(s, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.innerHTML = (i + 1) + "<br>" + s.name;
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function(){ setStage(i); });
+    stageBtnWrap.appendChild(b);
+    stageBtns.push(b);
+  });
+  var rentEl = document.getElementById("rent");
+  for(var r = 0; r < 5; r++){ rentEl.appendChild(document.createElement("i")); }
+  var RENT_TEXT = ["", "とても安い", "安い", "ふつう", "高い", "とても高い"];
+
+  var GROUND = 262, SLOT_W = 92, X0 = 32, BW = 82;
+  function win(g, x, y, w, h, fill){ el("rect",{x:x,y:y,width:w,height:h,fill:fill||"#FDF6D8",stroke:"#6B5B4B","stroke-width":1},g); }
+  function drawBuilding(g, type, x){
+    var b = BW, y;
+    switch(type){
+      case "factory":
+        y = GROUND - 100;
+        el("rect",{x:x,y:y,width:b,height:100,fill:"#A9846A",stroke:"#5E4535"},g);
+        el("path",{d:"M"+x+" "+y+" l20 -22 v22 l20 -22 v22 l21 -22 v22 l21 -22 v22",fill:"#8C6A52",stroke:"#5E4535"},g);
+        el("rect",{x:x+b-16,y:y-60,width:10,height:40,fill:"#6E5443"},g);
+        win(g,x+10,y+30,24,18,"#E8DDC8"); win(g,x+46,y+30,24,18,"#E8DDC8");
+        el("rect",{x:x+30,y:GROUND-30,width:22,height:30,fill:"#5E4535"},g);
+        break;
+      case "house":
+        y = GROUND - 70;
+        el("rect",{x:x+6,y:y,width:b-12,height:70,fill:"#E4C9A8",stroke:"#7A5C40"},g);
+        el("path",{d:"M"+(x)+" "+y+" L"+(x+b/2)+" "+(y-30)+" L"+(x+b)+" "+y+" Z",fill:"#9C4F38",stroke:"#6B3424"},g);
+        win(g,x+16,y+14,18,16); win(g,x+48,y+14,18,16);
+        el("rect",{x:x+34,y:GROUND-28,width:16,height:28,fill:"#7A5C40"},g);
+        break;
+      case "shop": case "closed":
+        y = GROUND - 80;
+        el("rect",{x:x+4,y:y,width:b-8,height:80,fill:type==="closed"?"#B9B9B2":"#F0D9B5",stroke:"#7A5C40"},g);
+        el("rect",{x:x+4,y:y+22,width:b-8,height:12,fill:type==="closed"?"#8E8E88":"#2E8F5A"},g);
+        el("text",{x:x+b/2,y:y+16,"text-anchor":"middle","font-size":11,fill:"#253341"},g).textContent = type==="closed" ? "閉店" : "商店";
+        if(type==="closed"){
+          el("rect",{x:x+12,y:GROUND-40,width:b-24,height:40,fill:"#9A9A93",stroke:"#6E6E68"},g);
+          for(var k=0;k<4;k++){ el("line",{x1:x+12,y1:GROUND-36+k*9,x2:x+b-12,y2:GROUND-36+k*9,stroke:"#6E6E68"},g); }
+        }else{ win(g,x+12,GROUND-40,b-24,30,"#FDF6D8"); }
+        break;
+      case "vacant":
+        y = GROUND - 96;
+        el("rect",{x:x,y:y,width:b,height:96,fill:"#A7A7A2",stroke:"#6E6E68"},g);
+        [[10,24],[46,24]].forEach(function(p){
+          el("rect",{x:x+p[0],y:y+p[1],width:24,height:20,fill:"#7D7D78",stroke:"#5C5C58"},g);
+          el("path",{d:"M"+(x+p[0])+" "+(y+p[1])+" l24 20 M"+(x+p[0]+24)+" "+(y+p[1])+" l-24 20",stroke:"#4B4B47","stroke-width":2},g);
+        });
+        el("text",{x:x+b/2,y:GROUND-14,"text-anchor":"middle","font-size":11,fill:"#F2F2EE"},g).textContent = "空き倉庫";
+        break;
+      case "studio":
+        y = GROUND - 96;
+        el("rect",{x:x,y:y,width:b,height:96,fill:"#C9B6DA",stroke:"#5B3F78"},g);
+        win(g,x+8,y+12,b-16,30,"#F2EAFA");
+        el("circle",{cx:x+24,cy:y+27,r:6,fill:"#E0517A"},g); el("circle",{cx:x+40,cy:y+30,r:6,fill:"#F2B233"},g); el("circle",{cx:x+56,cy:y+26,r:6,fill:"#2EA3C7"},g);
+        el("text",{x:x+b/2,y:GROUND-14,"text-anchor":"middle","font-size":11,fill:"#3E2A55"},g).textContent = "アトリエ";
+        break;
+      case "gallery":
+        y = GROUND - 90;
+        el("rect",{x:x,y:y,width:b,height:90,fill:"#FAFAF7",stroke:"#5B6B78"},g);
+        el("rect",{x:x+14,y:y+16,width:b-28,height:30,fill:"#FFFFFF",stroke:"#7B4FA3","stroke-width":3},g);
+        el("path",{d:"M"+(x+18)+" "+(y+42)+" l14 -16 l10 10 l8 -8 l12 14 z",fill:"#7B4FA3",opacity:.6},g);
+        el("text",{x:x+b/2,y:GROUND-14,"text-anchor":"middle","font-size":11,fill:"#253341"},g).textContent = "ギャラリー";
+        break;
+      case "cafe":
+        y = GROUND - 82;
+        el("rect",{x:x+4,y:y,width:b-8,height:82,fill:"#F7E7D4",stroke:"#7A5C40"},g);
+        for(var s=0;s<6;s++){ el("rect",{x:x+4+s*((b-8)/6),y:y+20,width:(b-8)/6,height:14,fill:s%2?"#FFFFFF":"#C2453C"},g); }
+        el("text",{x:x+b/2,y:y+15,"text-anchor":"middle","font-size":11,fill:"#253341"},g).textContent = "カフェ";
+        win(g,x+12,GROUND-40,b-24,30,"#FDF6D8");
+        break;
+      case "boutique":
+        y = GROUND - 84;
+        el("rect",{x:x+4,y:y,width:b-8,height:84,fill:"#E9EEF2",stroke:"#3C5566"},g);
+        el("rect",{x:x+4,y:y+20,width:b-8,height:12,fill:"#253341"},g);
+        el("text",{x:x+b/2,y:y+15,"text-anchor":"middle","font-size":11,fill:"#253341"},g).textContent = "雑貨店";
+        win(g,x+12,GROUND-40,b-24,30,"#F4F8FB");
+        break;
+      case "chain":
+        y = GROUND - 92;
+        el("rect",{x:x,y:y,width:b,height:92,fill:"#DDE6EC",stroke:"#3C5566"},g);
+        el("rect",{x:x+6,y:y+8,width:b-12,height:20,fill:"#E8702A"},g);
+        el("text",{x:x+b/2,y:y+23,"text-anchor":"middle","font-size":11,fill:"#FFFFFF"},g).textContent = "大型店";
+        win(g,x+8,GROUND-44,b-16,34,"#F4F8FB");
+        break;
+    }
+  }
+  function drawPerson(g, x, color){
+    el("circle",{cx:x,cy:GROUND+28,r:7,fill:color},g);
+    el("path",{d:"M"+(x-9)+" "+(GROUND+58)+" Q"+x+" "+(GROUND+30)+" "+(x+9)+" "+(GROUND+58)+" Z",fill:color},g);
+  }
+  function drawStage(i){
+    var s = STAGES[i];
+    while(street.firstChild){ street.removeChild(street.firstChild); }
+    el("rect",{x:0,y:0,width:800,height:340,fill:"#EEF4F7"},street);
+    el("rect",{x:0,y:GROUND,width:800,height:78,fill:"#D7D2C6"},street);
+    el("line",{x1:0,y1:GROUND,x2:800,y2:GROUND,stroke:"#8F887A","stroke-width":2},street);
+    var g = el("g",{},street);
+    // 高層マンションは連続スロットを1棟として描く
+    var t0 = s.slots.indexOf("tower");
+    if(t0 >= 0){
+      var t1 = s.slots.lastIndexOf("tower");
+      var tx = X0 + t0 * SLOT_W, tw = (t1 - t0) * SLOT_W + BW, ty = 22;
+      el("rect",{x:tx,y:ty,width:tw,height:GROUND-ty,fill:"#B8CCDA",stroke:"#2E4A5E"},g);
+      for(var row = 0; row < 11; row++){
+        for(var col = 0; col < 9; col++){
+          el("rect",{x:tx+14+col*((tw-28)/9),y:ty+12+row*20,width:(tw-28)/9-8,height:12,fill:"#EAF2F8",stroke:"#7D98AB","stroke-width":.6},g);
+        }
+      }
+      el("text",{x:tx+tw/2,y:GROUND-8,"text-anchor":"middle","font-size":13,fill:"#1E3A4C","font-weight":"700"},g).textContent = "高層マンション（分譲）";
+    }
+    s.slots.forEach(function(type, j){ if(type !== "tower"){ drawBuilding(g, type, X0 + j * SLOT_W); } });
+    if(i === 0){ // 工場の煙
+      [0,1,7].forEach(function(j){ var x = X0 + j*SLOT_W + BW - 11; el("circle",{cx:x,cy:GROUND-178,r:9,fill:"#C9C9C4",opacity:.8},g); el("circle",{cx:x+10,cy:GROUND-192,r:12,fill:"#D8D8D3",opacity:.7},g); });
+    }
+    // 住民（前列に並べる）
+    var people = [];
+    for(var a = 0; a < s.old; a++){ people.push("var(--old)"); }
+    for(var b2 = 0; b2 < s.art; b2++){ people.push("var(--artist)"); }
+    for(var c = 0; c < s.nw; c++){ people.push("var(--newc)"); }
+    var pg = el("g",{},street);
+    var startX = 400 - (people.length - 1) * 19;
+    people.forEach(function(col, k){ drawPerson(pg, startX + k * 38, col); });
+    // 街を離れた元の住民（右端に矢印）
+    var gone = 8 - s.old;
+    if(gone > 0){
+      el("text",{x:790,y:GROUND+66,"text-anchor":"end","font-size":12,fill:"#A94436"},street).textContent = "→ 街を離れた元の住民 " + gone + "人";
+    }
+  }
+  function setStage(i){
+    i = Math.max(0, Math.min(4, Number(i)));
+    var s = STAGES[i];
+    stageInput.value = i;
+    stageInput.setAttribute("aria-valuetext", (i + 1) + "：" + s.name);
+    stageBtns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(j === i)); });
+    drawStage(i);
+    Array.prototype.forEach.call(rentEl.children, function(c, j){ c.className = j < s.rent ? "on" : ""; });
+    document.getElementById("rent-text").textContent = RENT_TEXT[s.rent];
+    document.getElementById("stage-kw").textContent = s.kw;
+    document.getElementById("c-old").textContent = s.old;
+    document.getElementById("c-art").textContent = s.art;
+    document.getElementById("c-new").textContent = s.nw;
+    document.getElementById("stage-caption").textContent = "場面" + (i + 1) + "「" + s.name + "」：" + s.cap;
+  }
+  stageInput.addEventListener("input", function(){ setStage(stageInput.value); });
+  setStage(0);
+
+  /* =========================================================
+     STEP2：事例タブ＋ロンドン人口グラフ
+     ========================================================= */
+  var caseTabs = [document.getElementById("ct-lon"), document.getElementById("ct-ny")];
+  caseTabs.forEach(function(t, i){
+    t.addEventListener("click", function(){
+      caseTabs.forEach(function(u, j){
+        u.setAttribute("aria-selected", String(i === j));
+        u.tabIndex = (i === j) ? 0 : -1;
+        document.getElementById(u.getAttribute("aria-controls")).hidden = (i !== j);
+      });
+    });
+  });
+  (function drawLondon(){
+    var svg = document.getElementById("lon-chart");
+    var data = [[1939,860],[1988,670],[2015,860],[2021,880]];
+    var L = 60, R = 570, T = 34, B = 180;
+    function px(y){ return L + (y - 1930) / (2030 - 1930) * (R - L); }
+    function py(v){ return B - (v - 600) / (900 - 600) * (B - T); }
+    [600,700,800,900].forEach(function(v){
+      el("line",{x1:L,y1:py(v),x2:R,y2:py(v),stroke:"#E3E7E4"},svg);
+      el("text",{x:L-8,y:py(v)+4,"text-anchor":"end","font-size":12,fill:"#5B6B78"},svg).textContent = v;
+    });
+    el("text",{x:L-8,y:T-16,"text-anchor":"end","font-size":11,fill:"#5B6B78"},svg).textContent = "万人";
+    [1940,1960,1980,2000,2020].forEach(function(y){
+      el("text",{x:px(y),y:B+18,"text-anchor":"middle","font-size":12,fill:"#5B6B78"},svg).textContent = y;
+    });
+    el("rect",{x:px(1939),y:T,width:px(1988)-px(1939),height:B-T,fill:"#F7ECEA",opacity:.6},svg);
+    el("text",{x:(px(1939)+px(1988))/2,y:T-8,"text-anchor":"middle","font-size":12,fill:"#A94436"},svg).textContent = "郊外化・インナーシティ問題";
+    el("rect",{x:px(1988),y:T,width:px(2021)-px(1988),height:B-T,fill:"#EAF4EE",opacity:.6},svg);
+    el("text",{x:(px(1988)+px(2021))/2,y:T-8,"text-anchor":"middle","font-size":12,fill:"#2E7D4F"},svg).textContent = "再生・人口回復";
+    var d = data.map(function(p, i){ return (i ? "L" : "M") + px(p[0]) + " " + py(p[1]); }).join(" ");
+    el("path",{d:d,fill:"none",stroke:"#1E5A73","stroke-width":3},svg);
+    // ラベル位置 [dx, dy, anchor]：重なりを避けて個別に配置
+    var LBL = [[8,-10,"start"],[0,22,"middle"],[-10,4,"end"],[0,-12,"middle"]];
+    data.forEach(function(p, i){
+      el("circle",{cx:px(p[0]),cy:py(p[1]),r:5,fill:"#1E5A73"},svg);
+      el("text",{x:px(p[0])+LBL[i][0],y:py(p[1])+LBL[i][1],"text-anchor":LBL[i][2],"font-size":12,fill:"#253341","font-weight":"700"},svg).textContent = p[0] + "年 約" + p[1];
+    });
+    el("text",{x:R,y:B+34,"text-anchor":"end","font-size":10,fill:"#5B6B78"},svg).textContent = "※4時点を直線で結んだ模式図（途中の細かな増減は省略）";
+  })();
+
+  /* =========================================================
+     STEP3：立場カード
+     ========================================================= */
+  var STAKES = [
+    { name:"長く住む高齢の借家人", who:"この街に40年住み、アパートを借りている",
+      view:"家賃の上昇や建て替えで、住み慣れた家や近所づきあいを失うおそれがある。一方で、治安がよくなったり、病院や店が増えて便利になったりする面もある。" },
+    { name:"土地・建物を持つ地権者", who:"古い木造の家と土地を持っている",
+      view:"地価が上がって資産の価値が増え、再開発では新しいビルの床（住まいや店）を得られることもある。一方で、工事中の仮住まいや、合意づくりの話し合いの負担がある。" },
+    { name:"新しく来た共働き世帯", who:"駅近のマンションを買って引っ越してきた",
+      view:"通勤や子育てに便利な暮らしが手に入る。一方で、住宅費は高く、昔からの住民とのつながりをつくりにくいこともある。" },
+    { name:"昔からの商店主", who:"親の代から続く店をテナントで営む",
+      view:"人通りが増えて新しい客をつかむチャンスがある。一方で、テナント料の値上がりや大型店・チェーン店との競争で、閉店に追い込まれることもある。" },
+    { name:"市役所（自治体）", who:"街全体のまちづくりを担う",
+      view:"人口と税収が増え、中心市街地がにぎわう。一方で、保育所や学校の不足、住民の入れ替わりによる地域の分断や多様性の喪失に対応する必要がある。" },
+    { name:"もんじゃを食べに来る観光客", who:"休日に下町の雰囲気を楽しみに来る",
+      view:"新しい店やきれいな街並み、駅から便利な道を楽しめる。一方で、昔ながらの路地や長屋、なじみの店が減り、「下町らしさ」が薄れてしまうこともある。" }
+  ];
+  var SCALE = ["とても困る","困る","どちらとも","得","とても得"];
+  var axis = document.getElementById("axis");
+  var cardWrap = document.getElementById("cards");
+  var stakes = [];
+  STAKES.forEach(function(s, i){
+    var card = document.createElement("div");
+    card.className = "scard";
+    card.innerHTML = "<h3>" + s.name + "</h3><p class='who'>" + s.who + "</p>";
+    var sc = document.createElement("div");
+    sc.className = "scale"; sc.setAttribute("role","group"); sc.setAttribute("aria-label", s.name + "は得をする？困る？");
+    var st = { val:null, btns:[], chip:null, view:null };
+    SCALE.forEach(function(lab, v){
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = lab; b.setAttribute("aria-pressed","false");
+      b.addEventListener("click", function(){ choose(i, v); });
+      sc.appendChild(b); st.btns.push(b);
+    });
+    card.appendChild(sc);
+    var vb = document.createElement("button");
+    vb.type = "button"; vb.className = "viewbtn"; vb.textContent = "別の見方を開く";
+    var view = document.createElement("div");
+    view.className = "view"; view.hidden = true; view.innerHTML = "<strong>考えられる視点：</strong>" + s.view;
+    vb.addEventListener("click", function(){ view.hidden = !view.hidden; vb.textContent = view.hidden ? "別の見方を開く" : "別の見方を閉じる"; });
+    card.appendChild(vb); card.appendChild(view);
+    st.view = view; st.vbtn = vb;
+    var chip = document.createElement("span");
+    chip.className = "chip"; chip.textContent = s.name; chip.style.display = "none";
+    axis.appendChild(chip); st.chip = chip;
+    cardWrap.appendChild(card);
+    stakes.push(st);
+  });
+  function choose(i, v){
+    var st = stakes[i];
+    st.val = v;
+    st.btns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(j === v)); });
+    if(isJishu()){ st.view.hidden = false; st.vbtn.textContent = "別の見方を閉じる"; }
+    layoutChips();
+  }
+  function layoutChips(){
+    var counts = [0,0,0,0,0], done = 0;
+    stakes.forEach(function(st){
+      if(st.val === null){ st.chip.style.display = "none"; return; }
+      done++;
+      var lane = counts[st.val]++;
+      st.chip.style.display = "";
+      st.chip.style.left = (10 + st.val * 20) + "%";
+      st.chip.style.top = (6 + (lane % 3) * 19) + "px";
+      st.chip.style.borderColor = st.val < 2 ? "var(--ng)" : (st.val > 2 ? "var(--ok)" : "var(--ink-weak)");
+    });
+    var sum = document.getElementById("axis-summary");
+    if(done < stakes.length){ sum.textContent = "あと" + (stakes.length - done) + "つの立場を選ぼう。"; }
+    else{
+      var win = counts[3] + counts[4], lose = counts[0] + counts[1];
+      sum.textContent = "全部選べた！「得」" + win + "・「困る」" + lose + "・「どちらとも」" + counts[2] + "。正解は1つではない。なぜそう判断したか、となりの人と比べよう。";
+    }
+  }
+  layoutChips();
+
+  /* =========================================================
+     STEP4：東京都区部の人口（国勢調査）
+     ========================================================= */
+  var TKY = [[1965,8893],[1970,8841],[1975,8647],[1980,8352],[1985,8355],[1990,8164],[1995,7968],
+             [2000,8135],[2005,8490],[2010,8946],[2015,9273],[2020,9733],[2025,9953]];
+  (function drawTokyo(){
+    var svg = document.getElementById("tky-chart");
+    var L = 56, R = 625, T = 18, B = 236, MIN = 7000, MAX = 10200;
+    function py(v){ return B - (v - MIN) / (MAX - MIN) * (B - T); }
+    [7000,8000,9000,10000].forEach(function(v){
+      el("line",{x1:L,y1:py(v),x2:R,y2:py(v),stroke:"#E3E7E4"},svg);
+      el("text",{x:L-6,y:py(v)+4,"text-anchor":"end","font-size":12,fill:"#5B6B78"},svg).textContent = (v/10) + "万";
+    });
+    el("text",{x:L,y:B+38,"font-size":10,fill:"#5B6B78"},svg).textContent = "※縦軸は700万人から始まります。2025年は速報値。";
+    var bw = (R - L) / TKY.length;
+    var readout = document.getElementById("tky-readout");
+    TKY.forEach(function(d, i){
+      var x = L + i * bw + 5, h = B - py(d[1]);
+      var color = d[0] <= 1995 ? "#D9822B" : "#2E6FDB";
+      var bar = el("rect",{x:x,y:py(d[1]),width:bw-10,height:h,fill:color,"class":"bar",tabindex:0,role:"button",
+                           "aria-label":d[0] + "年 " + (d[1]/10).toFixed(1) + "万人"},svg);
+      el("text",{x:x+(bw-10)/2,y:B+16,"text-anchor":"middle","font-size":11,fill:"#5B6B78"},svg).textContent = String(d[0]).slice(2);
+      function show(){
+        var msg = d[0] + "年：約" + (d[1]/10).toFixed(1) + "万人";
+        if(d[0] === 1965){ msg += "（いったんのピーク）"; }
+        if(d[0] === 1995){ msg += "（最も少ない。ここから増加に転じる）"; }
+        if(d[0] === 2010){ msg += "（1965年を上回った）"; }
+        if(d[0] === 2025){ msg += "（速報値）"; }
+        readout.textContent = msg;
+      }
+      bar.addEventListener("click", show);
+      bar.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); show(); } });
+    });
+    el("text",{x:L+bw*3,y:T+8,"text-anchor":"middle","font-size":12,fill:"#D9822B"},svg).textContent = "減少期（ドーナツ化）";
+    el("text",{x:L+bw*10,y:T+8,"text-anchor":"middle","font-size":12,fill:"#2E6FDB"},svg).textContent = "増加期（都心回帰）";
+    el("text",{x:R,y:B+28,"text-anchor":"end","font-size":11,fill:"#5B6B78"},svg).textContent = "年（西暦下2桁）";
+  })();
+
+  /* =========================================================
+     STEP5：政策カードとメーター（簡易モデル）
+     ========================================================= */
+  // 値：[にぎわい, 住み続けられる, 財政の持続]
+  var POLICIES = [
+    ["高層の分譲マンションを中心に建てる", [2,-2,2]],
+    ["家賃をおさえた住宅を一定の割合で入れる", [0,2,-1]],
+    ["昔からの商店を新しいビルに優先して入れる", [1,1,-1]],
+    ["大型の商業施設やチェーン店を誘致する", [2,-1,1]],
+    ["歩行者広場とバス乗り場を整える", [1,1,-1]],
+    ["子育て・高齢者向けの公共施設を入れる", [1,2,-2]],
+    ["古い建物を活かしてリノベーションする", [1,1,0]]
+  ];
+  var GNAMES = ["にぎわい","住み続けられる","財政の持続"];
+  var GCOLORS = ["#E8702A","#2E7D4F","#1E5A73"];
+  var picked = [];
+  var polWrap = document.getElementById("policies");
+  var polBtns = [];
+  POLICIES.forEach(function(p, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "policy"; b.textContent = p[0]; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){
+      var k = picked.indexOf(i);
+      if(k >= 0){ picked.splice(k, 1); } else if(picked.length < 3){ picked.push(i); }
+      renderPolicies();
+    });
+    polWrap.appendChild(b); polBtns.push(b);
+  });
+  var gaugeWrap = document.getElementById("gauges");
+  var gaugeEls = GNAMES.map(function(n, j){
+    var row = document.createElement("div"); row.className = "gauge";
+    row.innerHTML = "<span>" + n + "</span><span class='gtrack'><span class='gfill'></span></span><span class='gval'>0</span>";
+    gaugeWrap.appendChild(row);
+    return { fill: row.querySelector(".gfill"), val: row.querySelector(".gval"), color: GCOLORS[j] };
+  });
+  function renderPolicies(){
+    polBtns.forEach(function(b, i){
+      var on = picked.indexOf(i) >= 0;
+      b.setAttribute("aria-pressed", String(on));
+      b.disabled = !on && picked.length >= 3;
+    });
+    var tot = [0,0,0];
+    picked.forEach(function(i){ POLICIES[i][1].forEach(function(v, j){ tot[j] += v; }); });
+    gaugeEls.forEach(function(g, j){
+      var v = tot[j], w = Math.min(Math.abs(v), 6) / 6 * 50;
+      g.fill.style.background = v < 0 ? "var(--ng)" : g.color;
+      g.fill.style.width = w + "%";
+      g.fill.style.left = v < 0 ? (50 - w) + "%" : "50%";
+      g.val.textContent = (v > 0 ? "+" : "") + v;
+    });
+  }
+  renderPolicies();
+  window.__kyozai = { setStage:setStage, STAGES:STAGES, POLICIES:POLICIES, picked:function(){ return picked.slice(); }, showStep:showStep };
+
+  /* ── クイズ（テンプレート共通処理） ── */
+  document.querySelectorAll(".quiz").forEach(function(quiz){
+    var answer = Number(quiz.getAttribute("data-answer"));
+    var choices = quiz.querySelectorAll(".choice");
+    var feedback = quiz.querySelector(".feedback");
+    var kaisetsu = quiz.querySelector(".kaisetsu");
+    var showBtn = quiz.querySelector(".show-kaisetsu");
+    choices.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var i = Number(btn.getAttribute("data-i"));
+        if(i === answer){
+          btn.setAttribute("data-state","correct");
+          feedback.textContent = "正解！"; feedback.className = "feedback ok";
+          choices.forEach(function(b){ b.disabled = true; });
+          if(isJishu()){ kaisetsu.hidden = false; }
+        }else{
+          btn.setAttribute("data-state","wrong"); btn.disabled = true;
+          feedback.textContent = "おしい。もう一度考えてみよう。"; feedback.className = "feedback ng";
+        }
+      });
+    });
+    if(showBtn){
+      showBtn.addEventListener("click", function(){
+        kaisetsu.hidden = !kaisetsu.hidden;
+        showBtn.textContent = kaisetsu.hidden ? "解説を表示する" : "解説を閉じる";
+      });
+    }
+  });
+
+  /* ── コピー共通 ── */
+  function copyText(area, btn, label, counter){
+    var text = area.value;
+    if(!text){ counter.textContent = "まだ何も書かれていません"; return; }
+    function done(ok){
+      btn.textContent = ok ? "コピーしました" : "コピーできません（手動で選択してください）";
+      setTimeout(function(){ btn.textContent = label; }, 2000);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ area.select(); done(false); });
+    }else{ area.select(); done(false); }
+  }
+  var prop = document.getElementById("proposal"), propCount = document.getElementById("prop-count"), propCopy = document.getElementById("prop-copy");
+  prop.addEventListener("input", function(){ propCount.textContent = prop.value.length + "字"; });
+  propCopy.addEventListener("click", function(){
+    var chosen = picked.map(function(i){ return POLICIES[i][0]; });
+    var keep = prop.value;
+    if(keep && chosen.length){ prop.value = "【選んだ政策】" + chosen.join("／") + "\n" + keep; }
+    copyText(prop, propCopy, "提案をコピー（提出用）", propCount);
+    prop.value = keep;
+  });
+
+  /* ── exit ticket ── */
+  var ticket = document.getElementById("ticket"), counter = document.getElementById("charcount"), copyBtn = document.getElementById("copybtn");
+  var KEYS = [["郊外化",/郊外/],["インナーシティ問題",/インナーシティ/],["再開発",/再開発/],["ジェントリフィケーション",/ジェントリフィケーション/]];
+  var checks = document.getElementById("checks");
+  var checkEls = KEYS.map(function(k){ var li = document.createElement("li"); li.textContent = k[0]; checks.appendChild(li); return li; });
+  ticket.addEventListener("input", function(){
+    var n = ticket.value.replace(/\s/g, "").length;
+    counter.textContent = n + "字／140字" + (n > 140 ? "（オーバー）" : "");
+    KEYS.forEach(function(k, j){ checkEls[j].className = k[1].test(ticket.value) ? "hit" : ""; });
+  });
+  copyBtn.addEventListener("click", function(){ copyText(ticket, copyBtn, "回答をコピー（提出用）", counter); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人はなぜそこに集まる？──村落から大都市圏へ｜あらじお蔵</title>
+<!--
+  あらじお教材ラボ 標準テンプレート v1.0 ベース
+  地理探究｜村落・都市  ga_28_sonraku-toshi_v1
+  外部ライブラリなし・ブラウザ保存なし・click操作のみ
+-->
+<style>
+  :root{
+    --paper:#F5F7F4; --card:#FFFFFF; --ink:#253341; --ink-weak:#5B6B78;
+    --lake:#1E5A73; --lake-weak:#E3EDF1; --contour:#8A5A33;
+    --ok:#2E7D4F; --ng:#A94436; --line:#D4DAD6; --radius:10px;
+    --center:#D9822B; --suburb:#2E6FDB;
+    --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;
+    --font-display:"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.8;}
+  main{max-width:880px; margin:0 auto; padding:0 16px 64px;}
+
+  header{position:relative; overflow:hidden; background:var(--lake); color:#F2F7F9; padding:28px 16px 24px;}
+  header .contours{position:absolute; inset:0; opacity:.18; pointer-events:none;}
+  header .inner{position:relative; max-width:880px; margin:0 auto;}
+  .eyebrow{font-size:12px; letter-spacing:.18em; opacity:.85; margin:0 0 6px;}
+  h1{font-family:var(--font-display); font-weight:600; font-size:clamp(22px,4.5vw,30px); line-height:1.4; margin:0 0 10px;}
+  .goal{display:inline-block; background:rgba(255,255,255,.12); border-left:3px solid var(--contour); padding:6px 12px; border-radius:0 6px 6px 0; font-size:14px; margin:0;}
+
+  .modebar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:16px 0 8px;}
+  .modebar span{font-size:13px; color:var(--ink-weak);}
+  .modebtn{min-height:44px; min-width:120px; padding:8px 16px; border:1.5px solid var(--lake); border-radius:22px; background:var(--card); color:var(--lake); font-size:15px; font-family:inherit; cursor:pointer; touch-action:manipulation;}
+  .modebtn[aria-pressed="true"]{background:var(--lake); color:#fff;}
+
+  section{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px 18px; margin:20px 0;}
+  .seclabel{display:inline-block; font-size:12px; letter-spacing:.22em; color:var(--contour); border-bottom:2px solid var(--contour); padding-bottom:2px; margin:0 0 10px;}
+  h2{font-family:var(--font-display); font-size:21px; margin:0 0 12px; line-height:1.5;}
+  h3{font-size:17px; margin:14px 0 6px;}
+  p{margin:0 0 12px;}
+  .note{font-size:13px; color:var(--ink-weak);}
+  .hatsumon{background:var(--lake-weak); border:none; text-align:center; padding:28px 18px;}
+  .hatsumon p{font-family:var(--font-display); font-size:clamp(19px,3.5vw,25px); margin:0; color:var(--lake);}
+  .mini{margin:12px 0 0; padding:16px;}
+  .mini p{font-size:clamp(17px,3vw,21px);}
+
+  /* ── STEPナビ ── */
+  .stepnav{display:flex; gap:6px; flex-wrap:wrap; margin:18px 0 0; padding:0; list-style:none;}
+  .stepnav button{min-height:44px; padding:6px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font-family:inherit; font-size:14px; cursor:pointer; touch-action:manipulation;}
+  .stepnav button[aria-selected="true"]{border-color:var(--lake); background:var(--lake); color:#fff;}
+  .stepnav .num{font-weight:700; margin-right:4px;}
+  .panel[hidden]{display:none;}
+  .pager{display:flex; justify-content:space-between; gap:8px; margin-top:16px;}
+  .pager button{min-height:44px; padding:8px 18px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:15px; cursor:pointer;}
+  .pager button.next{background:var(--lake); color:#fff;}
+  .pager button:disabled{visibility:hidden;}
+
+  .box{border:1px solid var(--line); border-radius:8px; padding:10px 12px;}
+  .kw{display:inline-block; background:var(--lake); color:#fff; font-size:13px; padding:2px 10px; border-radius:12px; margin-bottom:6px;}
+  .readout{font-size:15px; margin-top:8px; border-left:3px solid var(--lake); padding-left:10px; min-height:1.8em;}
+  .twin{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+  @media (max-width:640px){ .twin{grid-template-columns:1fr;} }
+
+  /* ── STEP1 地形断面 ── */
+  .xsec{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#EEF4F7;}
+  .spot{cursor:pointer;}
+  .spot:focus{outline:none;}
+  .spot:focus-visible .ring{stroke:var(--contour); stroke-width:4;}
+  .spot .ring{fill:#fff; stroke:var(--lake); stroke-width:2.5;}
+  .spot[aria-pressed="true"] .ring{fill:var(--lake);}
+  .spot[aria-pressed="true"] text{fill:#fff;}
+  .spotbtns{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:10px 0 4px;}
+  @media (max-width:640px){ .spotbtns{grid-template-columns:repeat(2,1fr);} }
+  .spotbtns button{min-height:44px; padding:4px 6px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink);}
+  .spotbtns button[aria-pressed="true"]{border-color:var(--lake); background:var(--lake-weak); font-weight:700;}
+  .spotbtns button.found::after{content:" 🏠";}
+  .info{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;}
+  @media (max-width:640px){ .info{grid-template-columns:1fr;} }
+  .meter{display:flex; gap:4px; margin-top:2px;}
+  .meter i{flex:1; height:14px; border-radius:3px; background:#E6E9E7;}
+  .meter i.on{background:var(--lake);}
+  .verdict{font-size:20px; font-weight:700;}
+  .verdict.good{color:var(--ok);} .verdict.mid{color:var(--contour);} .verdict.bad{color:var(--ng);}
+  .progress{font-weight:700; color:var(--ok);}
+
+  /* ── マッチング（STEP2・STEP4共通） ── */
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 12px; padding:0; list-style:none;}
+  .chip{min-height:44px; padding:6px 14px; border:1.5px solid var(--contour); border-radius:22px; background:var(--card); color:var(--contour); font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; touch-action:manipulation;}
+  .chip[aria-pressed="true"]{background:var(--contour); color:#fff;}
+  .chip:disabled{opacity:.35; cursor:default; text-decoration:line-through;}
+  .mgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px;}
+  .mcard{display:block; width:100%; text-align:left; border:1.5px solid var(--line); border-radius:10px; padding:10px; background:var(--card); font-family:inherit; font-size:14px; color:var(--ink); cursor:pointer; touch-action:manipulation;}
+  .mcard:disabled{cursor:default;}
+  .mcard.done{border-color:var(--ok); background:#F3F9F5;}
+  .mcard.miss{border-color:var(--ng); background:#FBF1EF;}
+  .mcard .tag{display:inline-block; font-weight:700; font-size:13px; color:var(--ink-weak);}
+  .mcard .ans{display:inline-block; margin-left:6px; font-weight:700; color:var(--ok);}
+  .mcard svg{width:100%; height:auto; display:block; margin:6px 0; background:#F2F5EE; border-radius:6px;}
+  .mcard .reveal{display:none; margin-top:6px; font-size:13.5px; line-height:1.7;}
+  .mcard.done .reveal{display:block;}
+  .mfb{min-height:1.8em;}
+
+  /* ── STEP3 厚木年表 ── */
+  .eras{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0;}
+  @media (max-width:640px){ .eras{grid-template-columns:repeat(2,1fr);} }
+  .eras button{min-height:52px; padding:4px 6px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; line-height:1.35; cursor:pointer; color:var(--ink);}
+  .eras button[aria-pressed="true"]{border-color:var(--contour); background:#F6EEE6; font-weight:700;}
+  .eras button.seen{border-color:var(--contour);}
+  .eracard{border-left:4px solid var(--contour); background:#FBF7F2; padding:10px 14px; border-radius:0 8px 8px 0; min-height:7em;}
+  .eracard b.y{color:var(--contour); font-size:18px;}
+  .funcs{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px;}
+  @media (max-width:640px){ .funcs{grid-template-columns:repeat(2,1fr);} }
+  .func{border:2px dashed var(--line); border-radius:10px; padding:8px; text-align:center; font-size:14px; color:var(--ink-weak); transition:all .3s;}
+  .func .ic{font-size:26px; display:block; filter:grayscale(1); opacity:.4;}
+  .func.on{border-style:solid; border-color:var(--ok); background:#EAF4EE; color:var(--ink);}
+  .func.on .ic{filter:none; opacity:1;}
+
+  /* ── STEP4 内部構造 ── */
+  .tabs{display:flex; gap:6px; margin-bottom:12px;}
+  .tabs button{flex:1; min-height:48px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:15px; cursor:pointer;}
+  .tabs button[aria-selected="true"]{background:var(--lake); color:#fff;}
+  .model{width:100%; max-width:560px; height:auto; display:block; margin:0 auto;}
+  @keyframes pulse{0%{stroke-opacity:1;}50%{stroke-opacity:.25;}100%{stroke-opacity:1;}}
+  .pulse{animation:pulse 1.6s ease-in-out infinite;}
+
+  /* ── STEP5 発展段階 ── */
+  .stagebtns{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:12px 0 4px;}
+  .stagebtns button{min-height:48px; padding:4px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; line-height:1.3; cursor:pointer; color:var(--ink);}
+  .stagebtns button[aria-pressed="true"]{border-color:var(--contour); background:#F6EEE6; font-weight:700;}
+  input[type="range"]{width:100%; height:44px; margin:0; touch-action:pan-y; accent-color:var(--contour);}
+  .metro{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; background:#F7F9F6;}
+  .stage-caption{font-size:16px; border-left:3px solid var(--contour); padding-left:10px; margin-top:10px;}
+  table.data{border-collapse:collapse; width:100%; font-size:15px; margin:6px 0;}
+  table.data th, table.data td{border:1px solid var(--line); padding:6px 8px; text-align:center;}
+  table.data th{background:var(--lake-weak);}
+  .judge{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+  .judge button{min-height:44px; padding:6px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink);}
+  .judge button[data-state="correct"]{border-color:var(--ok); background:#EAF4EE;}
+  .judge button[data-state="wrong"]{border-color:var(--ng); background:#F7ECEA;}
+
+  /* ── クイズ ── */
+  .quiz-q{font-weight:700; margin-bottom:10px;}
+  .choices{display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none;}
+  .choice{min-height:44px; width:100%; text-align:left; padding:10px 14px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-size:15px; font-family:inherit; cursor:pointer; touch-action:manipulation; color:var(--ink);}
+  .choice[data-state="correct"]{border-color:var(--ok); background:#EAF4EE;}
+  .choice[data-state="wrong"]{border-color:var(--ng); background:#F7ECEA;}
+  .choice:disabled{cursor:default; opacity:.9;}
+  .feedback{min-height:1.6em; font-size:15px; margin-top:8px;}
+  .feedback.ok{color:var(--ok);} .feedback.ng{color:var(--ng);}
+  .kaisetsu{margin-top:10px; padding:10px 12px; font-size:14px; background:var(--lake-weak); border-radius:8px;}
+  .kaisetsu[hidden]{display:none;}
+  .show-kaisetsu{min-height:44px; padding:8px 14px; margin-top:8px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-size:14px; font-family:inherit; cursor:pointer;}
+  hr.sep{border:none; border-top:1px solid var(--line); margin:18px 0;}
+
+  textarea{width:100%; min-height:120px; padding:10px; border:1.5px solid var(--line); border-radius:8px; font-family:inherit; font-size:15px; resize:vertical;}
+  .ticket-foot{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:8px;}
+  .charcount{font-size:13px; color:var(--ink-weak);}
+  .copybtn{min-height:44px; padding:8px 16px; border:none; border-radius:8px; background:var(--lake); color:#fff; font-size:15px; font-family:inherit; cursor:pointer;}
+  .checks{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-wrap:wrap; gap:6px;}
+  .checks li{font-size:13px; padding:2px 10px; border-radius:12px; border:1px solid var(--line); color:var(--ink-weak);}
+  .checks li.hit{border-color:var(--ok); background:#EAF4EE; color:var(--ok);}
+
+  footer{max-width:880px; margin:0 auto; padding:0 16px 40px; font-size:13px; color:var(--ink-weak);}
+  footer h2{font-size:14px; font-family:var(--font-body); margin-bottom:6px;}
+  footer ul{margin:0 0 10px; padding-left:1.4em;}
+
+  body[data-mode="jugyo"] .jishu-only{display:none;}
+  body[data-mode="jishu"] .jugyo-only{display:none;}
+  :focus-visible{outline:3px solid var(--contour); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+  @media print{ header{background:#fff; color:var(--ink);} .modebar,.copybtn,.stepnav,.pager{display:none;} .panel[hidden]{display:block;} }
+</style>
+<!-- あらじお蔵 共通：トップへ戻るリンク -->
+<style>
+.arg-home{background:#16271c;font:500 13px/1.4 "Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;letter-spacing:.04em}
+.arg-home a{display:inline-flex;align-items:center;min-height:34px;padding:0 16px;color:#dbe6d6;text-decoration:none}
+.arg-home a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.arg-home a:focus-visible{outline:2px solid #9fd0bb;outline-offset:-2px}
+@media print{.arg-home{display:none}}
+</style>
+</head>
+<body data-mode="jugyo">
+<div class="arg-home" role="navigation" aria-label="サイト"><a href="/">← TOPに戻る</a></div>
+
+<header>
+  <svg class="contours" viewBox="0 0 820 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#FFFFFF" stroke-width="1.2">
+      <ellipse cx="640" cy="80" rx="60" ry="26"/><ellipse cx="640" cy="82" rx="110" ry="50"/>
+      <ellipse cx="640" cy="84" rx="165" ry="76"/><ellipse cx="640" cy="86" rx="225" ry="104"/>
+      <ellipse cx="150" cy="130" rx="50" ry="20"/><ellipse cx="150" cy="132" rx="95" ry="42"/>
+      <ellipse cx="150" cy="134" rx="145" ry="66"/>
+    </g>
+  </svg>
+  <div class="inner">
+    <p class="eyebrow">地理探究｜村落・都市</p>
+    <h1>人はなぜ“そこ”に集まる？<br>──村落から大都市圏へ</h1>
+    <p class="goal">学習目標：集落や都市ができる場所の理由と、都市の内部構造・大都市圏の発展段階を、身近な地域の例を使って説明できる。</p>
+  </div>
+</header>
+
+<main>
+  <div class="modebar" role="group" aria-label="表示モード切替">
+    <span>モード：</span>
+    <button type="button" class="modebtn" id="btn-jugyo" aria-pressed="true">授業モード</button>
+    <button type="button" class="modebtn" id="btn-jishu" aria-pressed="false">自習モード</button>
+  </div>
+  <p class="note">授業モード＝発問を大きく表示し、解説は先生が開くまで非表示。自習モード＝解説と振り返りを表示。</p>
+
+  <section class="hatsumon jugyo-only" aria-label="今日の問い">
+    <p class="seclabel">問い</p>
+    <p>昔の人は、どこに家を建てた？<br>そして、なぜ厚木に人が集まるようになった？</p>
+  </section>
+  <section class="jishu-only">
+    <p class="seclabel">導入</p>
+    <h2>この教材で考えること</h2>
+    <p>人が集まって住んでいる所を<strong>集落</strong>という。おもに農業や漁業などで暮らす集落を<strong>村落</strong>、商業や工業、サービス業などで暮らす人が多く集まる集落を<strong>都市</strong>という。</p>
+    <p>今日は、①集落ができやすい地形、②村落の形、③厚木が都市として育った理由、④大都市の中のしくみ、⑤大都市圏の広がり方、の順に考えていこう。</p>
+  </section>
+
+  <ul class="stepnav" role="tablist" aria-label="学習のステップ">
+    <li><button type="button" role="tab" id="tab-1" aria-controls="p-1" aria-selected="true"><span class="num">1</span>集落はどこに？</button></li>
+    <li><button type="button" role="tab" id="tab-2" aria-controls="p-2" aria-selected="false" tabindex="-1"><span class="num">2</span>村落の形</button></li>
+    <li><button type="button" role="tab" id="tab-3" aria-controls="p-3" aria-selected="false" tabindex="-1"><span class="num">3</span>厚木はなぜ栄えた？</button></li>
+    <li><button type="button" role="tab" id="tab-4" aria-controls="p-4" aria-selected="false" tabindex="-1"><span class="num">4</span>都市の内部構造</button></li>
+    <li><button type="button" role="tab" id="tab-5" aria-controls="p-5" aria-selected="false" tabindex="-1"><span class="num">5</span>大都市圏の発展段階</button></li>
+    <li><button type="button" role="tab" id="tab-6" aria-controls="p-6" aria-selected="false" tabindex="-1"><span class="num">6</span>確認・振り返り</button></li>
+  </ul>
+
+  <!-- ===== STEP1 ===== -->
+  <section class="panel" id="p-1" role="tabpanel" aria-labelledby="tab-1">
+    <p class="seclabel">STEP 1｜操作</p>
+    <h2>集落はどこにできる？──「水」と「水害」から考えよう</h2>
+    <p>断面図の①〜⑥（または下のボタン）をタップしよう。<strong>水の得やすさ</strong>と<strong>水害からの安全さ</strong>から、家を建てやすい場所を判定する。集落ができやすい場所は<strong>3つ</strong>ある。全部見つけよう。</p>
+    <svg class="xsec" id="xsec" viewBox="0 0 800 310" role="group" aria-label="山地から低地までの模式的な地形断面図。6つの地点を選べる"></svg>
+    <div class="spotbtns" role="group" aria-label="地点を選ぶ" id="spotbtns"></div>
+    <p>見つけた集落の場所：<span class="progress" id="found" aria-live="polite">0／3</span></p>
+    <div class="info" id="info" aria-live="polite">
+      <div class="box">
+        <span class="kw" id="sp-name">地点を選ぼう</span>
+        <div><strong>水の得やすさ</strong></div><div class="meter" id="m-water" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div style="margin-top:6px"><strong>水害からの安全さ</strong></div><div class="meter" id="m-safe" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div style="margin-top:8px">判定：<span class="verdict" id="sp-verdict">―</span></div>
+      </div>
+      <div class="box">
+        <strong>なぜ？</strong>
+        <p id="sp-text" style="margin:4px 0 0;font-size:15px">①〜⑥の地点をタップすると、理由と土地の使われ方が表示されます。</p>
+      </div>
+    </div>
+    <p class="note">※実際には別々の場所にある地形を、1つの断面にまとめた<strong>模式図</strong>です。高さや幅は実際の比率ではありません。低い土地で、集落のまわりを堤防で囲んだものを<strong>輪中集落</strong>という（木曽川などの下流）。</p>
+    <section class="hatsumon jugyo-only mini">
+      <p>自分の家や学校は、どんな地形の上にあるだろう？<br><small>（地理院地図の「地形分類」で確かめてみよう）</small></p>
+    </section>
+    <div class="pager"><button type="button" class="prev" disabled>← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP2 ===== -->
+  <section class="panel" id="p-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <p class="seclabel">STEP 2｜WORK</p>
+    <h2>村落の形を見分けよう──上から見た家の並び方</h2>
+    <p>①下の<strong>名前</strong>を1つ選び、②その形だと思う<strong>図</strong>をタップしよう。正しく置けると、その形になった理由と例が表示される。</p>
+    <ul class="chips" id="vchips" aria-label="村落の形の名前"></ul>
+    <div class="mgrid" id="vcards"></div>
+    <p class="readout mfb" id="vfb" aria-live="polite">名前を選んでから、図をタップしよう。</p>
+    <div class="twin">
+      <div class="box"><strong>集村</strong>（家が集まる）<br><span style="font-size:14px">塊村・円村／列村（路村・街村）。水を分け合う、外敵から守る、道や水路を使う、などの理由で集まる。</span></div>
+      <div class="box"><strong>散村</strong>（家が散らばる）<br><span style="font-size:14px">家のまわりに自分の農地があり、農作業に便利。開拓の歴史が比較的新しい所に多い。</span></div>
+    </div>
+    <section class="hatsumon jugyo-only mini">
+      <p>家が集まるのと、ばらばらに住むの。<br>それぞれ、どんな良い点と困る点があるだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP3 ===== -->
+  <section class="panel" id="p-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+    <p class="seclabel">STEP 3｜身近な地域</p>
+    <h2>厚木はなぜ栄えた？──宿場町から県央の中心へ</h2>
+    <p>年代のボタンを順に押そう。できごとが増えるたびに、下の<strong>4つの中心地機能</strong>のランプがつく。</p>
+    <div class="eras" role="group" aria-label="年代を選ぶ" id="eras"></div>
+    <div class="eracard" id="eracard" aria-live="polite">年代のボタンを押すと、できごとが表示されます。</div>
+    <div class="funcs" id="funcs" aria-label="厚木がもつ中心地機能"></div>
+    <div class="box" style="margin-top:12px;font-size:15px">
+      <strong>中心地機能</strong>とは、その都市に住む人だけでなく、<strong>まわりの地域の人々</strong>にも、商品やサービスを届けるはたらきのこと。中心地機能が大きい都市ほど、数は少なく、たがいに離れて立地する。
+    </div>
+    <section class="hatsumon jugyo-only mini">
+      <p>あなたや家族が「本厚木に行く」のは、どんな用事のとき？<br>それは4つの機能のどれだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP4 ===== -->
+  <section class="panel" id="p-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+    <p class="seclabel">STEP 4｜モデル＋WORK</p>
+    <h2>都市の内部構造──大都市の中は、場所ごとに役割が違う</h2>
+    <p>都市が大きくなると、中は役割ごとに分かれていく。3つのモデルを切り替えて比べよう。赤い点線の<strong>インナーシティ</strong>は、次回・次々回の主役になる場所。</p>
+    <div class="tabs" role="tablist" aria-label="モデルの切り替え">
+      <button type="button" role="tab" id="mt-0" aria-controls="model-box" aria-selected="true">同心円</button>
+      <button type="button" role="tab" id="mt-1" aria-controls="model-box" aria-selected="false" tabindex="-1">扇形</button>
+      <button type="button" role="tab" id="mt-2" aria-controls="model-box" aria-selected="false" tabindex="-1">多核心</button>
+    </div>
+    <div id="model-box" role="tabpanel">
+      <svg class="model" id="model" viewBox="0 0 560 360" role="img" aria-label="都市の内部構造モデル"></svg>
+      <p class="readout" id="model-text" aria-live="polite"></p>
+    </div>
+    <hr class="sep">
+    <h3>WORK：東京大都市圏の地区は、どの役割？</h3>
+    <p>名前を選んでから、あてはまる地区のカードをタップしよう。</p>
+    <ul class="chips" id="tchips" aria-label="地区の役割"></ul>
+    <div class="mgrid" id="tcards"></div>
+    <p class="readout mfb" id="tfb" aria-live="polite">役割を選んでから、カードをタップしよう。</p>
+    <section class="hatsumon jugyo-only mini">
+      <p>昼に人が多い地区と、夜に人が多い地区。<br>それぞれどこだろう？</p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP5 ===== -->
+  <section class="panel" id="p-5" role="tabpanel" aria-labelledby="tab-5" hidden>
+    <p class="seclabel">STEP 5｜操作</p>
+    <h2>大都市圏の発展段階──人口は「中心」と「郊外」のどちらで増える？</h2>
+    <p>都市が大きくなると、通勤などで結びついた<strong>大都市圏</strong>が広がる。スライダーで4つの段階を進め、<strong>中心都市</strong>と<strong>郊外</strong>の人口の増え方・減り方を比べよう。</p>
+    <svg class="metro" id="metro" viewBox="0 0 800 300" role="img" aria-label="中心都市と郊外の人口の増減を示す模式図"></svg>
+    <div class="stagebtns" role="group" aria-label="段階を選ぶ" id="stagebtns"></div>
+    <label for="stage" class="note">段階のスライダー</label>
+    <input type="range" id="stage" min="0" max="3" step="1" value="0">
+    <p class="stage-caption" id="stage-caption" aria-live="polite"></p>
+    <p class="note">※矢印と棒は増減の向きを示す<strong>模式図</strong>です（実際のデータではありません）。</p>
+    <hr class="sep">
+    <h3>WORK：東京23区はどの段階？（国勢調査）</h3>
+    <table class="data">
+      <thead><tr><th>年</th><th>1965</th><th>1995</th><th>2020</th></tr></thead>
+      <tbody><tr><th>東京23区の人口</th><td>約889万人</td><td>約797万人</td><td>約973万人</td></tr></tbody>
+    </table>
+    <p style="font-size:15px">1995年から2020年の東京23区（中心都市）は、どの段階にあたるだろう？</p>
+    <div class="judge" id="judge" role="group" aria-label="段階を選ぶ"></div>
+    <p class="readout" id="judge-fb" aria-live="polite"></p>
+    <section class="hatsumon jugyo-only mini">
+      <p>郊外化で人が出ていったあと、<br>都心のまわりの古い街はどうなったのだろう？ <small>→ 次回へ</small></p>
+    </section>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
+  </section>
+
+  <!-- ===== STEP6 ===== -->
+  <section class="panel" id="p-6" role="tabpanel" aria-labelledby="tab-6" hidden>
+    <p class="seclabel">STEP 6｜確認</p>
+    <h2>確認クイズ</h2>
+
+    <div class="quiz" data-answer="2">
+      <p class="quiz-q">Q1. 扇状地で、集落ができやすい場所とその理由の組み合わせとして正しいものはどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">扇央──水はけがよく、水が得やすいから</button></li>
+        <li><button type="button" class="choice" data-i="1">扇央──川が地下を流れ、洪水がおこらないから</button></li>
+        <li><button type="button" class="choice" data-i="2">扇端──しみこんだ地下水が湧き出し、水が得やすいから</button></li>
+        <li><button type="button" class="choice" data-i="3">扇端──砂や礫が厚く積もり、水はけがよいから</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>扇央は水はけがよすぎて川が地下にしみこみ（水無川）、水が得にくい。そのため果樹園や畑に使われる。しみこんだ水は扇端で湧き水となるので、扇端に集落が並ぶ。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="1">
+      <p class="quiz-q">Q2. 埼玉県の三富新田のように、台地を開拓した新田集落によくみられる村落の形はどれか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">円村──広場を囲んで家が円く並ぶ</button></li>
+        <li><button type="button" class="choice" data-i="1">路村──道路に沿って家が並び、家の裏に細長い農地が続く</button></li>
+        <li><button type="button" class="choice" data-i="2">散村──家が1軒ずつ離れて散らばる</button></li>
+        <li><button type="button" class="choice" data-i="3">塊村──家が不規則にかたまって集まる</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>三富新田は江戸時代の1694年に開拓が始まった畑作の新田。道路の両側に家が並び、1戸ごとに屋敷・畑・雑木林が短冊形に続く路村の形をしている。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="0">
+      <p class="quiz-q">Q3. 都市の内部構造で、都心（CBD）のすぐ外側にあり、住宅・商店・工場などが混ざっている古い市街地を何というか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">インナーシティ</button></li>
+        <li><button type="button" class="choice" data-i="1">副都心</button></li>
+        <li><button type="button" class="choice" data-i="2">ニュータウン</button></li>
+        <li><button type="button" class="choice" data-i="3">メガロポリス</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>CBDの外側の古い市街地をインナーシティという。低所得層や高齢者などが多く住む所もあり、次回学ぶ「インナーシティ問題」の舞台になる。副都心は鉄道の結節点に都心の機能の一部が移ってできた地区（例：新宿）。</div>
+    </div>
+    <hr class="sep">
+    <div class="quiz" data-answer="3">
+      <p class="quiz-q">Q4. 「中心都市の人口が減り、郊外の人口が大きく増える」段階を何というか。</p>
+      <ul class="choices">
+        <li><button type="button" class="choice" data-i="0">都市化</button></li>
+        <li><button type="button" class="choice" data-i="1">再都市化</button></li>
+        <li><button type="button" class="choice" data-i="2">反都市化</button></li>
+        <li><button type="button" class="choice" data-i="3">郊外化</button></li>
+      </ul>
+      <p class="feedback" aria-live="polite"></p>
+      <button type="button" class="show-kaisetsu jugyo-only">解説を表示する</button>
+      <div class="kaisetsu" hidden><strong>解説：</strong>郊外化は、中心都市より郊外の人口増加が大きい段階。中心都市の人口が減ることもあり、日本ではドーナツ化現象とよばれた。東京23区では1965年から1995年にかけて人口が減った。</div>
+    </div>
+
+    <div class="jishu-only">
+      <hr class="sep">
+      <p class="seclabel">振り返り</p>
+      <h2>exit ticket</h2>
+      <p>厚木が、まわりの地域から人を集める都市になった理由を、「<strong>交通</strong>」「<strong>中心地機能</strong>」という語を使って<strong>100字以内</strong>で説明しよう。</p>
+      <textarea id="ticket" aria-label="振り返りの記入欄" placeholder="例：厚木は江戸時代から……"></textarea>
+      <ul class="checks" id="checks" aria-label="使えているキーワード"></ul>
+      <div class="ticket-foot">
+        <span class="charcount" id="charcount" aria-live="polite">0字／100字</span>
+        <button type="button" class="copybtn" id="copybtn">回答をコピー（提出用）</button>
+      </div>
+      <p class="note">コピーした内容を、先生が指定した提出先（Classroom等）に貼り付けて提出します。この教材から自動送信はされません。</p>
+    </div>
+    <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next" disabled>次へ →</button></div>
+  </section>
+</main>
+
+<footer>
+  <h2>出典・参考資料</h2>
+  <ul>
+    <li>集落の立地（扇端・台地の縁辺部・自然堤防）、村落の形態（塊村・円村・路村・街村・散村）、都市の内部構造、大都市圏の発展段階（都市化・郊外化・反都市化・再都市化）：高等学校地理探究の教科書記述に基づく一般的な説明。円村の分布は「とされる」と表記。</li>
+    <li>三富新田（1694年に開拓開始、幅40間・奥行375間の短冊形地割）：埼玉県「景観資源データシート 三富新田」、三芳町資料。</li>
+    <li>厚木宿・矢倉沢往還（大山街道）・相模川の舟運・「小江戸」：神奈川県観光協会「大山街道をあるく（厚木宿から愛甲宿）」、国土交通省関東地方整備局「大山道」資料。厚木の渡しと1908年の相模橋完成による廃止：神奈川県「旧厚木村渡船場跡」。</li>
+    <li>小田急線の開業（1927年4月、相模厚木駅として開業し1944年に本厚木駅へ改称）：乗りものニュース「『厚木駅』なのに海老名市」、鉄道チャンネル「駅ぶら 小田急線」ほか。</li>
+    <li>厚木市の市制施行（1955年）：厚木市「厚木市のあゆみ（年表）」（1965年に市制施行10周年記念式典）。内陸工業団地の造成（1966年）：LOGISTICS TODAY（2023年）。</li>
+    <li>東名高速道路 東京IC〜厚木ICの開通（1968年4月25日、東名で最初に開通した区間の一つ）：高速道路開通の歴史（昭和43年度）、JAF Mate（2026年4月）。</li>
+    <li>千代田区の昼夜間人口比率（1,753.7）・世田谷区の夜間人口（943,664人）：2020年国勢調査（東京都資料）。新宿副都心（1958年に位置づけ、1991年に都庁移転）：新宿区資料。多摩ニュータウンの入居開始（1971年）：多摩市資料。川崎臨海部の高炉休止（2023年）：川崎市資料。</li>
+    <li>木造住宅密集地域が山手線外周部にドーナツ状に分布：東京都都市整備局「木造住宅密集地域の解消に向けた取組」。</li>
+    <li>東京23区の人口（1965年8,893千人、1995年7,968千人、2020年9,733,276人）：総務省「国勢調査」。</li>
+    <li>STEP1の断面図、STEP2の村落の図、STEP4・STEP5の図は、教材作成者が作った模式図であり、実際の地形・配置・データとは異なります。</li>
+  </ul>
+  <p>本教材は新井貴之が独自に作成したものです。数値は作成時点（2026年11月）に確認したもので、「とされる」と表記した内容は一般的な説明です。授業で使う前に最新の統計をご確認ください。</p>
+  <p>あらじお蔵｜CC BY-NC 4.0｜このページは単体HTMLで動作し、入力内容が外部に送信されることはありません。</p>
+</footer>
+
+<script>
+"use strict";
+(function(){
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent){
+    var e = document.createElementNS(SVGNS, tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    if(parent){ parent.appendChild(e); }
+    return e;
+  }
+  function tx(parent, x, y, s, attrs){
+    var a = {x:x, y:y, "font-size":12, fill:"#253341"};
+    for(var k in (attrs||{})){ a[k] = attrs[k]; }
+    var t = el("text", a, parent); t.textContent = s; return t;
+  }
+  function isJishu(){ return document.body.getAttribute("data-mode") === "jishu"; }
+  function setMeter(id, n){ Array.prototype.forEach.call(document.getElementById(id).children, function(c, j){ c.className = j < n ? "on" : ""; }); }
+
+  /* ── モード切替 ── */
+  var btnJugyo = document.getElementById("btn-jugyo");
+  var btnJishu = document.getElementById("btn-jishu");
+  function setMode(mode){
+    document.body.setAttribute("data-mode", mode);
+    btnJugyo.setAttribute("aria-pressed", String(mode === "jugyo"));
+    btnJishu.setAttribute("aria-pressed", String(mode === "jishu"));
+  }
+  btnJugyo.addEventListener("click", function(){ setMode("jugyo"); });
+  btnJishu.addEventListener("click", function(){ setMode("jishu"); });
+
+  /* ── STEPナビ ── */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".stepnav [role=tab]"));
+  function showStep(n, focus){
+    tabs.forEach(function(t, i){
+      var on = (i === n);
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if(focus){ tabs[n].focus(); }
+    var nav = document.querySelector(".stepnav");
+    if(nav.getBoundingClientRect && nav.getBoundingClientRect().top < 0 && nav.scrollIntoView){ nav.scrollIntoView({block:"start"}); }
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener("click", function(){ showStep(i); });
+    t.addEventListener("keydown", function(e){
+      if(e.key === "ArrowRight"){ e.preventDefault(); showStep((i + 1) % tabs.length, true); }
+      if(e.key === "ArrowLeft"){ e.preventDefault(); showStep((i - 1 + tabs.length) % tabs.length, true); }
+    });
+  });
+  document.querySelectorAll(".panel").forEach(function(p, i){
+    var prev = p.querySelector(".pager .prev"), next = p.querySelector(".pager .next");
+    if(prev){ prev.addEventListener("click", function(){ showStep(i - 1); }); }
+    if(next){ next.addEventListener("click", function(){ showStep(i + 1); }); }
+  });
+
+  /* =========================================================
+     STEP1：地形断面と集落の立地
+     ========================================================= */
+  var SPOTS = [
+    { name:"扇央", x:205, y:160, water:1, safe:2, v:"mid", vt:"△ 家は建てにくい", good:false,
+      text:"砂や礫（れき）が厚く積もり、水はけがよすぎる。川の水が地下にしみこんで水無川になりやすく、水が得にくい。集落より<strong>果樹園や畑</strong>に使われることが多い。" },
+    { name:"扇端", x:298, y:198, water:3, safe:2, v:"good", vt:"◎ 集落ができやすい", good:true,
+      text:"扇央でしみこんだ地下水が、<strong>湧き水</strong>となって出てくる。水が得やすいので、扇端に沿って集落が並ぶ。まわりでは水田もつくられる。" },
+    { name:"台地の上", x:400, y:166, water:1, safe:3, v:"mid", vt:"△ 開発はあとから", good:false,
+      text:"高いので水害の心配は少ないが、地下水が深く<strong>水が得にくい</strong>。人々はまず低い所から使い始め、台地はあとから開発された。江戸時代に<strong>新田</strong>として開かれた所も多い（→STEP2の路村）。" },
+    { name:"台地のへり", x:488, y:218, water:3, safe:3, v:"good", vt:"◎ 集落ができやすい", good:true,
+      text:"台地の縁（崖の下）では、台地にしみこんだ地下水が<strong>湧き出す</strong>。高い台地のすぐそばなので水害も避けやすく、古くから集落ができた。" },
+    { name:"自然堤防", x:575, y:206, water:2, safe:2, v:"good", vt:"◎ 集落ができやすい", good:true,
+      text:"洪水のたびに川からあふれた砂が積もった、<strong>まわりより少し高い土地</strong>。水はけがよく水害を受けにくいので、集落や畑がつくられた。" },
+    { name:"後背湿地", x:725, y:236, water:3, safe:0, v:"bad", vt:"× 家には向かない", good:false,
+      text:"自然堤防のうしろの<strong>低くて水はけが悪い</strong>土地。細かい泥がたまる。家を建てるには向かず、<strong>水田</strong>に使われてきた。近年は住宅地になった所もあり、大雨のときの浸水に注意が必要。" }
+  ];
+  var xsec = document.getElementById("xsec");
+  (function drawXsec(){
+    // 空・地下水
+    el("rect",{x:0,y:0,width:800,height:310,fill:"#EEF4F7"},xsec);
+    var ground = "M0 310 L0 62 L50 36 L118 104 Q210 170 300 200 L322 204 L336 166 L470 164 L484 222 L552 226 L566 210 L590 212 L596 236 L626 236 L632 212 L656 210 L670 236 L800 238 L800 310 Z";
+    el("path",{d:ground,fill:"#D9C7A6",stroke:"#8A6A47","stroke-width":2},xsec);
+    // 扇状地の礫層・台地の層
+    el("path",{d:"M118 104 Q210 170 300 200 L300 230 Q200 210 118 150 Z",fill:"#C8B08A",opacity:.7},xsec);
+    el("path",{d:"M336 166 L470 164 L476 190 L340 192 Z",fill:"#B9A07A",opacity:.6},xsec);
+    // 川
+    el("path",{d:"M596 236 L626 236 L622 248 L600 248 Z",fill:"#5BA3C9"},xsec);
+    el("path",{d:"M60 44 Q90 74 118 104",fill:"none",stroke:"#5BA3C9","stroke-width":3},xsec);
+    // 地下水（点線）
+    el("path",{d:"M140 150 Q220 205 298 214",fill:"none",stroke:"#2E6FDB","stroke-width":2,"stroke-dasharray":"6 5"},xsec);
+    el("path",{d:"M340 196 L482 222",fill:"none",stroke:"#2E6FDB","stroke-width":2,"stroke-dasharray":"6 5"},xsec);
+    tx(xsec,112,232,"地下にしみこむ水",{"font-size":11,fill:"#2E6FDB"});
+    // 湧き水マーク
+    [[300,204],[486,224]].forEach(function(p){ el("path",{d:"M"+p[0]+" "+p[1]+" q-6 -10 0 -16 q6 6 0 16z",fill:"#2E6FDB"},xsec); });
+    // 土地利用
+    for(var i=0;i<4;i++){ var fx=180+i*22, fy=150+i*11; el("circle",{cx:fx,cy:fy-8,r:6,fill:"#6E9F4E"},xsec); el("line",{x1:fx,y1:fy-2,x2:fx,y2:fy+3,stroke:"#6B4E2E","stroke-width":2},xsec); }
+    tx(xsec,200,214,"果樹園・畑",{"font-size":11,fill:"#4A6B2E"});
+    for(var j=0;j<6;j++){ el("line",{x1:350+j*20,y1:162,x2:362+j*20,y2:162,stroke:"#7A9A4A","stroke-width":3},xsec); }
+    tx(xsec,350,184,"畑・林",{"font-size":11,fill:"#4A6B2E"});
+    for(var k=0;k<7;k++){ el("line",{x1:680+k*16,y1:234,x2:680+k*16,y2:228,stroke:"#4F8A3A","stroke-width":2},xsec); }
+    tx(xsec,690,262,"水田",{"font-size":11,fill:"#4A6B2E"});
+    // 地形名
+    tx(xsec,22,24,"山地",{"font-size":13,"font-weight":"700"});
+    tx(xsec,190,98,"扇状地",{"font-size":13,"font-weight":"700",fill:"#6B4E2E"});
+    tx(xsec,428,150,"台地",{"font-size":13,"font-weight":"700",fill:"#6B4E2E"});
+    tx(xsec,640,180,"氾濫原（低地）",{"font-size":13,"font-weight":"700",fill:"#6B4E2E"});
+    tx(xsec,598,264,"川",{"font-size":12,fill:"#1E5A73"});
+    tx(xsec,795,300,"※模式図",{"font-size":10,"text-anchor":"end",fill:"#5B6B78"});
+  })();
+  var houseLayer = el("g",{},xsec);
+  var spotEls = [], spotBtns = [], found = {};
+  var spotBtnWrap = document.getElementById("spotbtns");
+  SPOTS.forEach(function(s, i){
+    var g = el("g",{"class":"spot",role:"button",tabindex:0,"aria-pressed":"false","aria-label":"地点" + (i+1) + " " + s.name},xsec);
+    el("circle",{"class":"ring",cx:s.x,cy:s.y-26,r:14},g);
+    tx(g,s.x,s.y-21,String(i+1),{"text-anchor":"middle","font-size":14,"font-weight":"700",fill:"#1E5A73"});
+    el("line",{x1:s.x,y1:s.y-12,x2:s.x,y2:s.y-2,stroke:"#1E5A73","stroke-width":2},g);
+    g.addEventListener("click", function(){ pickSpot(i); });
+    g.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); pickSpot(i); } });
+    spotEls.push(g);
+    var b = document.createElement("button");
+    b.type = "button"; b.textContent = (i+1) + " " + s.name; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){ pickSpot(i); });
+    spotBtnWrap.appendChild(b); spotBtns.push(b);
+  });
+  function drawHouse(x, y){
+    var g = el("g",{},houseLayer);
+    el("rect",{x:x-9,y:y-12,width:18,height:12,fill:"#F4E2C4",stroke:"#7A5C40"},g);
+    el("path",{d:"M"+(x-12)+" "+(y-12)+" L"+x+" "+(y-22)+" L"+(x+12)+" "+(y-12)+" Z",fill:"#9C4F38"},g);
+  }
+  function pickSpot(i){
+    var s = SPOTS[i];
+    spotEls.forEach(function(g, j){ g.setAttribute("aria-pressed", String(i === j)); });
+    spotBtns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(i === j)); });
+    document.getElementById("sp-name").textContent = (i+1) + " " + s.name;
+    setMeter("m-water", s.water); setMeter("m-safe", s.safe);
+    var v = document.getElementById("sp-verdict"); v.textContent = s.vt; v.className = "verdict " + s.v;
+    document.getElementById("sp-text").innerHTML = s.text;
+    if(s.good && !found[i]){
+      found[i] = true; spotBtns[i].className = "found";
+      drawHouse(s.x - 12, s.y + 2); drawHouse(s.x + 12, s.y + 4);
+    }
+    var n = Object.keys(found).length;
+    document.getElementById("found").textContent = n + "／3" + (n === 3 ? "　全部見つけた！共通点は「水が得やすく、水害を受けにくい」こと。" : "");
+  }
+
+  /* =========================================================
+     マッチング共通（STEP2・STEP4）
+     ========================================================= */
+  function makeMatch(chipWrapId, cardWrapId, fbId, names, items, drawFn){
+    var chipWrap = document.getElementById(chipWrapId), cardWrap = document.getElementById(cardWrapId), fb = document.getElementById(fbId);
+    var sel = null, chips = [], done = 0;
+    names.forEach(function(n, i){
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = n; b.setAttribute("aria-pressed","false");
+      b.addEventListener("click", function(){
+        sel = (sel === i) ? null : i;
+        chips.forEach(function(c, j){ c.setAttribute("aria-pressed", String(sel === j)); });
+        fb.textContent = sel === null ? "名前を選んでから、カードをタップしよう。" : "「" + n + "」を選択中。あてはまるカードをタップしよう。";
+      });
+      li.appendChild(b); chipWrap.appendChild(li); chips.push(b);
+    });
+    var cards = items.map(function(it, k){
+      var c = document.createElement("button");
+      c.type = "button"; c.className = "mcard";
+      c.innerHTML = "<span class='tag'>" + it.label + "</span><span class='ans'></span>";
+      if(drawFn){ var svg = document.createElementNS(SVGNS,"svg"); svg.setAttribute("viewBox","0 0 200 120"); svg.setAttribute("aria-hidden","true"); drawFn(svg, it.kind); c.appendChild(svg); }
+      if(it.desc){ var d = document.createElement("span"); d.style.display = "block"; d.style.fontSize = "14px"; d.textContent = it.desc; c.appendChild(d); }
+      var r = document.createElement("span"); r.className = "reveal"; r.innerHTML = it.reveal; c.appendChild(r);
+      c.setAttribute("aria-label", it.label + (it.desc ? "：" + it.desc : ""));
+      c.addEventListener("click", function(){
+        if(sel === null){ fb.textContent = "先に上の名前（役割）を1つ選ぼう。"; return; }
+        if(sel === it.answer){
+          c.className = "mcard done"; c.disabled = true;
+          c.querySelector(".ans").textContent = "→ " + names[sel];
+          chips[sel].disabled = true; chips[sel].setAttribute("aria-pressed","false");
+          done++;
+          fb.textContent = "正解！「" + names[sel] + "」。" + (done === items.length ? "全部そろった！理由を読み比べよう。" : "（あと" + (items.length - done) + "つ）");
+          sel = null;
+        }else{
+          c.className = "mcard miss";
+          fb.textContent = "おしい。「" + names[sel] + "」ではないようだ。図や説明をもう一度よく見よう。";
+          setTimeout(function(){ if(!c.disabled){ c.className = "mcard"; } }, 900);
+        }
+      });
+      cardWrap.appendChild(c);
+      return c;
+    });
+    return { cards:cards, chips:chips, count:function(){ return done; } };
+  }
+
+  /* ── STEP2：村落の形 ── */
+  function drawVillage(svg, kind){
+    var g = el("g",{},svg);
+    function house(x, y){ el("rect",{x:x-5,y:y-4,width:10,height:8,fill:"#C2453C",stroke:"#7A2E26","stroke-width":.8},g); }
+    function field(x, y, w, h, c){ el("rect",{x:x,y:y,width:w,height:h,fill:c||"#DCE7C4",stroke:"#B7C79A","stroke-width":.6},g); }
+    function tree(x, y, r){ el("circle",{cx:x,cy:y,r:r||4,fill:"#5E8F48"},g); }
+    if(kind === "kai"){
+      field(0,0,200,120,"#E4ECCF");
+      [[88,50],[100,44],[112,54],[96,62],[80,62],[108,68],[120,42],[90,36],[124,60],[72,48],[104,30],[84,74],[116,78],[130,50]].forEach(function(p){ house(p[0],p[1]); });
+      el("path",{d:"M0 96 Q60 80 100 60 T200 20",fill:"none",stroke:"#B59B73","stroke-width":3},g);
+    }else if(kind === "en"){
+      field(0,0,200,120,"#E4ECCF");
+      el("circle",{cx:100,cy:60,r:22,fill:"#EFE6D2",stroke:"#B59B73"},g);
+      tx(g,100,64,"広場",{"text-anchor":"middle","font-size":10,fill:"#6B4E2E"});
+      for(var a=0;a<12;a++){ var t = a/12*Math.PI*2; if(a===3){ continue; } house(100+Math.cos(t)*34, 60+Math.sin(t)*34); }
+      el("line",{x1:134,y1:60,x2:200,y2:60,stroke:"#B59B73","stroke-width":4},g);
+    }else if(kind === "ro"){
+      for(var s=0;s<8;s++){ field(s*25,0,24,46,s%2?"#DCE7C4":"#CFDDB0"); field(s*25,74,24,46,s%2?"#CFDDB0":"#DCE7C4"); }
+      el("rect",{x:0,y:54,width:200,height:12,fill:"#E9DDC5"},g);
+      for(var h=0;h<8;h++){ house(12+h*25,48); house(12+h*25,72); tree(12+h*25,40,3); tree(12+h*25,80,3); }
+    }else if(kind === "gai"){
+      field(0,0,200,120,"#E4ECCF");
+      el("rect",{x:0,y:52,width:200,height:16,fill:"#E9DDC5"},g);
+      tx(g,6,64,"街道",{"font-size":10,fill:"#6B4E2E"});
+      for(var m=0;m<16;m++){ el("rect",{x:30+m*10.5,y:38,width:9,height:12,fill:"#8C5A3C",stroke:"#5E3A26","stroke-width":.6},g); el("rect",{x:30+m*10.5,y:70,width:9,height:12,fill:"#8C5A3C",stroke:"#5E3A26","stroke-width":.6},g); }
+    }else if(kind === "san"){
+      field(0,0,200,120,"#D5E3B5");
+      for(var q=0;q<5;q++){ el("line",{x1:q*44,y1:0,x2:q*44+10,y2:120,stroke:"#B7C79A"},g); }
+      [[30,26],[96,20],[160,34],[56,82],[124,72],[180,96],[20,104]].forEach(function(p){ tree(p[0]-7,p[1]-5,5); tree(p[0]+7,p[1]-6,5); tree(p[0],p[1]+8,4); house(p[0],p[1]); });
+    }
+  }
+  var V_NAMES = ["塊村","円村","路村","街村","散村"];
+  makeMatch("vchips","vcards","vfb",V_NAMES,[
+    { label:"A", kind:"ro", answer:2, reveal:"<b>路村</b>（列村）：道路に沿って家が並び、家の裏に<strong>細長い（短冊形の）農地</strong>が続く。台地などを計画的に開拓した<strong>新田集落</strong>に多い。例：<strong>三富新田</strong>（埼玉県、1694年に開拓開始）、ヨーロッパの森林を開いた林地村。" },
+    { label:"B", kind:"san", answer:4, reveal:"<b>散村</b>：家が1軒ずつ離れ、まわりに<strong>自分の農地</strong>がある。農作業に便利。例：屋敷林に囲まれた家が点在する<strong>砺波平野</strong>（富山県）の散居村、北海道の開拓地、アメリカのタウンシップ制の開拓地。" },
+    { label:"C", kind:"en", answer:1, reveal:"<b>円村</b>（塊村の一種）：<strong>広場を囲んで</strong>家が円く並ぶ。外敵や家畜を守るなど、<strong>防御</strong>のために集まったとされる。ヨーロッパ（ドイツ東部など）でみられるとされる。" },
+    { label:"D", kind:"kai", answer:0, reveal:"<b>塊村</b>：家が<strong>不規則にかたまって</strong>集まる。住みやすい場所に自然に集まったものが多い。まわりに濠（ほり）をめぐらした<strong>環濠集落</strong>（奈良盆地など）も塊村の一種。" },
+    { label:"E", kind:"gai", answer:3, reveal:"<b>街村</b>（列村）：<strong>街道沿い</strong>に商店や宿が密集する、商業的な集落。<strong>宿場町</strong>がその例。→ 厚木も、もとは街道の宿場町だった（STEP3へ）。" }
+  ], drawVillage);
+
+  /* =========================================================
+     STEP3：厚木の年表と中心地機能
+     ========================================================= */
+  var FUNCS = [["交通","🚉"],["商業","🛍️"],["行政","🏛️"],["働く場","🏭"]];
+  var ERAS = [
+    { y:"江戸時代", t:"街道の宿場町",
+      body:"矢倉沢往還（<strong>大山街道</strong>）の宿場町「<strong>厚木宿</strong>」として発展した。大山参りの人々の中継地となり、相模川の<strong>舟運</strong>で運ばれる物資が集まる場所でもあった。「<strong>小江戸</strong>」とよばれるほどにぎわったとされる。",
+      on:[0,1] },
+    { y:"〜1908年", t:"厚木の渡し",
+      body:"相模川には、旅人が舟で川を渡る「<strong>厚木の渡し</strong>」があった。街道が川を渡る地点に町ができたことがわかる。1908年に橋（相模橋）がかかり、渡しは役目を終えた。",
+      on:[0,1] },
+    { y:"1927年", t:"小田急線が開業",
+      body:"新宿〜小田原の<strong>小田急線</strong>が開業し、町の中心に「<strong>相模厚木駅</strong>」ができた。隣の駅が「厚木駅」になったため、1944年に「<strong>本厚木駅</strong>」（本来の厚木の駅）と名前を変えた。東京への<strong>通勤・通学</strong>もできるようになった。",
+      on:[0,1] },
+    { y:"1955年", t:"厚木市の誕生",
+      body:"市制を施行し、<strong>厚木市</strong>が誕生した。現在、市役所は本厚木駅の北口側にあり、市の行政の中心となっている。",
+      on:[0,1,2] },
+    { y:"1960年代", t:"工業団地ができる",
+      body:"大規模な<strong>内陸工業団地</strong>がつくられ、工場が集まった。のちに大企業の研究所や物流施設も増え、<strong>まわりの市町村から働きに来る人</strong>が集まる都市になった。",
+      on:[0,1,2,3] },
+    { y:"1968年", t:"東名高速が開通",
+      body:"<strong>東名高速道路</strong>の最初の開通区間の一つとして、東京IC〜<strong>厚木IC</strong>が開通した。鉄道に加えて自動車の<strong>交通の結節点</strong>となり、工場・研究所・物流の拠点が集まる理由になった。",
+      on:[0,1,2,3] }
+  ];
+  var eraWrap = document.getElementById("eras"), eraCard = document.getElementById("eracard"), funcWrap = document.getElementById("funcs");
+  var funcEls = FUNCS.map(function(f){
+    var d = document.createElement("div"); d.className = "func"; d.innerHTML = "<span class='ic' aria-hidden='true'>" + f[1] + "</span>" + f[0];
+    funcWrap.appendChild(d); return d;
+  });
+  var eraBtns = ERAS.map(function(e, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.innerHTML = "<b>" + e.y + "</b><br>" + e.t; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){ showEra(i); });
+    eraWrap.appendChild(b); return b;
+  });
+  function showEra(i){
+    var e = ERAS[i];
+    eraBtns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(i === j)); if(j <= i){ b.classList.add("seen"); } });
+    eraCard.innerHTML = "<b class='y'>" + e.y + "</b>　<strong>" + e.t + "</strong><br>" + e.body;
+    funcEls.forEach(function(f, j){ f.className = e.on.indexOf(j) >= 0 ? "func on" : "func"; });
+  }
+
+  /* =========================================================
+     STEP4：都市の内部構造モデル
+     ========================================================= */
+  var model = document.getElementById("model"), modelText = document.getElementById("model-text");
+  var C = {cbd:"#C2453C", inner:"#E9B872", res:"#F6E7B8", sub:"#DDEBC8", ind:"#9AA7B2", high:"#B9D3E6", low:"#E3B98F", sub2:"#E07A3A"};
+  function legend(items){
+    items.forEach(function(it, i){
+      var y = 20 + i * 22;
+      el("rect",{x:420,y:y-11,width:14,height:14,fill:it[0],stroke:"#5B6B78","stroke-width":.6},model);
+      tx(model,440,y,it[1],{"font-size":12});
+    });
+  }
+  function innerRing(cx, cy, r){
+    el("circle",{cx:cx,cy:cy,r:r,fill:"none",stroke:"#A94436","stroke-width":3,"stroke-dasharray":"8 6","class":"pulse"},model);
+  }
+  var MODELS = [
+    { name:"同心円", text:"<strong>同心円構造</strong>：都心（CBD）を中心に、外へ向かって役割が輪のように並ぶ。CBDのすぐ外側の古い市街地が<strong>インナーシティ</strong>（住宅・商店・工場が混在）。その外に、都心へ通う人の住宅地が広がる。",
+      draw:function(){
+        var cx=200, cy=180;
+        el("circle",{cx:cx,cy:cy,r:170,fill:C.sub},model);
+        el("circle",{cx:cx,cy:cy,r:125,fill:C.res},model);
+        el("circle",{cx:cx,cy:cy,r:80,fill:C.inner},model);
+        el("circle",{cx:cx,cy:cy,r:38,fill:C.cbd},model);
+        innerRing(cx,cy,60);
+        tx(model,cx,cy+5,"CBD",{"text-anchor":"middle","font-size":15,"font-weight":"700",fill:"#fff"});
+        tx(model,cx,cy-65,"インナーシティ",{"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#7A2E26"});
+        tx(model,cx,cy-96,"住宅地区",{"text-anchor":"middle","font-size":12});
+        tx(model,cx,cy-140,"郊外（住宅都市・ニュータウン）",{"text-anchor":"middle","font-size":12});
+        el("circle",{cx:cx+64,cy:cy+50,r:10,fill:C.sub2,stroke:"#fff","stroke-width":2},model);
+        tx(model,cx+78,cy+70,"副都心（鉄道の結節点）",{"font-size":11});
+        legend([[C.cbd,"都心（CBD）"],[C.inner,"インナーシティ"],[C.res,"住宅地区"],[C.sub,"郊外"],[C.sub2,"副都心"]]);
+      } },
+    { name:"扇形", text:"<strong>扇形構造</strong>：都心から郊外へのびる<strong>鉄道・道路・川</strong>に沿って、同じ性格の地区が扇形に広がる。工業地区は川や鉄道沿いに、高所得層の住宅地は環境のよい方向にのびやすい。",
+      draw:function(){
+        var cx=200, cy=180, R=170;
+        var sec = [[0,60,C.ind,"工業"],[60,110,C.low,"低所得層の住宅"],[110,200,C.res,"中所得層の住宅"],[200,250,C.high,"高所得層の住宅"],[250,300,C.res,""],[300,330,C.low,""],[330,360,C.ind,""]];
+        sec.forEach(function(s){
+          var a0 = s[0]*Math.PI/180, a1 = s[1]*Math.PI/180;
+          var d = "M"+cx+" "+cy+" L"+(cx+R*Math.cos(a0))+" "+(cy+R*Math.sin(a0))+" A"+R+" "+R+" 0 "+((s[1]-s[0])>180?1:0)+" 1 "+(cx+R*Math.cos(a1))+" "+(cy+R*Math.sin(a1))+" Z";
+          el("path",{d:d,fill:s[2],stroke:"#fff","stroke-width":1.5},model);
+          if(s[3]){ var am=(s[0]+s[1])/2*Math.PI/180; tx(model,cx+112*Math.cos(am),cy+112*Math.sin(am),s[3],{"text-anchor":"middle","font-size":11}); }
+        });
+        el("line",{x1:cx,y1:cy,x2:cx+R,y2:cy,stroke:"#253341","stroke-width":3,"stroke-dasharray":"10 4"},model);
+        tx(model,cx+100,cy-6,"鉄道・川",{"font-size":11,"font-weight":"700"});
+        innerRing(cx,cy,58);
+        el("circle",{cx:cx,cy:cy,r:34,fill:C.cbd},model);
+        tx(model,cx,cy+5,"CBD",{"text-anchor":"middle","font-size":14,"font-weight":"700",fill:"#fff"});
+        legend([[C.cbd,"都心（CBD）"],[C.ind,"工業地区"],[C.low,"低所得層の住宅"],[C.res,"中所得層の住宅"],[C.high,"高所得層の住宅"]]);
+        tx(model,420,150,"赤い点線＝都心の外側の",{"font-size":11,fill:"#A94436"});
+        tx(model,420,166,"古い市街地（インナーシティ）",{"font-size":11,fill:"#A94436"});
+      } },
+    { name:"多核心", text:"<strong>多核心構造</strong>：さらに複雑になった都市では、都心のほかに<strong>いくつもの核</strong>（副都心・工業地区・郊外の商業地区など）ができ、それぞれが役割を分け合う。自動車社会のロサンゼルスなどが例とされる。",
+      draw:function(){
+        el("rect",{x:20,y:20,width:370,height:320,rx:30,fill:C.res},model);
+        el("path",{d:"M30 300 Q120 260 220 300 T390 290 L390 330 L30 330 Z",fill:C.ind},model);
+        tx(model,120,320,"工業地区",{"font-size":12,"font-weight":"700"});
+        el("rect",{x:150,y:120,width:80,height:60,rx:10,fill:C.cbd},model);
+        innerRing(190,150,62);
+        tx(model,190,155,"CBD",{"text-anchor":"middle","font-size":14,"font-weight":"700",fill:"#fff"});
+        el("circle",{cx:310,cy:90,r:28,fill:C.sub2},model); tx(model,310,95,"副都心",{"text-anchor":"middle","font-size":12,fill:"#fff","font-weight":"700"});
+        el("circle",{cx:80,cy:110,r:24,fill:C.sub2},model); tx(model,80,114,"商業",{"text-anchor":"middle","font-size":12,fill:"#fff","font-weight":"700"});
+        el("rect",{x:270,y:200,width:90,height:50,rx:8,fill:C.high},model); tx(model,315,230,"高級住宅地",{"text-anchor":"middle","font-size":11});
+        el("rect",{x:40,y:190,width:90,height:50,rx:8,fill:C.sub},model); tx(model,85,220,"郊外の住宅",{"text-anchor":"middle","font-size":11});
+        legend([[C.cbd,"都心（CBD）"],[C.sub2,"副都心・商業の核"],[C.ind,"工業地区"],[C.res,"住宅地区"],[C.high,"高級住宅地"]]);
+      } }
+  ];
+  var mtabs = [0,1,2].map(function(i){ return document.getElementById("mt-" + i); });
+  function showModel(i){
+    while(model.firstChild){ model.removeChild(model.firstChild); }
+    MODELS[i].draw();
+    model.setAttribute("aria-label", MODELS[i].name + "構造のモデル図");
+    modelText.innerHTML = MODELS[i].text;
+    mtabs.forEach(function(t, j){ t.setAttribute("aria-selected", String(i === j)); t.tabIndex = (i === j) ? 0 : -1; });
+  }
+  mtabs.forEach(function(t, i){ t.addEventListener("click", function(){ showModel(i); }); });
+  showModel(0);
+
+  var T_NAMES = ["CBD（中心業務地区）","副都心","インナーシティ","住宅地区","郊外のニュータウン","工業地区"];
+  makeMatch("tchips","tcards","tfb",T_NAMES,[
+    { label:"丸の内（千代田区）", desc:"大企業の本社や官庁が集まる。区の昼の人口は夜の約17.5倍。", answer:0,
+      reveal:"千代田区の昼夜間人口比率は1,753.7（2020年）。働きに来る人が多く、夜に住む人は少ない。これがCBDの特徴。" },
+    { label:"新宿駅の西側", desc:"鉄道が集まる駅の近くに、超高層ビルや都庁が建つ。", answer:1,
+      reveal:"1958年に副都心に位置づけられ、1991年には都庁が移転した。鉄道の結節点に都心の機能の一部が分かれてできた。" },
+    { label:"山手線の外側をドーナツ状に囲む地域", desc:"古い木造住宅が密集し、小さな工場や商店もまじる。", answer:2,
+      reveal:"東京都によると、木造住宅密集地域は山手線外周部にドーナツ状に分布する。都心の外側の古い市街地で、地震火災への対策（不燃化）が進められている。" },
+    { label:"世田谷区", desc:"23区で夜の人口が最も多い。昼は都心へ通勤する人が多い。", answer:3,
+      reveal:"世田谷区の夜間人口は943,664人（2020年）で23区最多。昼間人口の方が少なく、都心へ通う人が多く住む住宅地区。" },
+    { label:"多摩ニュータウン", desc:"丘陵を切り開いてつくられた、大規模な住宅のまち。", answer:4,
+      reveal:"1971年に入居が始まった。鉄道で都心へ通う人のための住宅都市（郊外化の代表例）。" },
+    { label:"川崎の臨海部", desc:"東京湾の埋立地に、製鉄所や石油化学の工場が並ぶ。", answer:5,
+      reveal:"京浜工業地帯の中心。2023年に製鉄所の高炉が休止し、跡地の土地利用の転換が進められている。" }
+  ], null);
+
+  /* =========================================================
+     STEP5：大都市圏の発展段階
+     ========================================================= */
+  // 値：中心都市・郊外の人口の増減（-3〜+3）
+  var STAGES = [
+    { name:"都市化", c:3, s:1, cap:"<strong>都市化</strong>：中心都市で工業や商業が成長し、仕事を求めて人が集まる。中心都市の人口が大きく増える。" },
+    { name:"郊外化", c:-1, s:3, cap:"<strong>郊外化</strong>：中心都市が過密になり、郊外に住宅都市やニュータウンがつくられる。<strong>郊外の人口増加が中心都市より大きい</strong>。中心都市の人口が減ることもあり、日本では<strong>ドーナツ化現象</strong>とよばれた。" },
+    { name:"反都市化", c:-2, s:-1, cap:"<strong>反都市化</strong>：中心都市も郊外も人口が減る。産業の衰退や国全体の人口減少で、大都市圏に入ってくる人が減ったり、出ていく人が増えたりすると起こることがある。" },
+    { name:"再都市化", c:2, s:-1, cap:"<strong>再都市化</strong>：都心の再開発などで産業が再び活気づき、<strong>中心都市の人口が再び増える</strong>。ニューヨーク・ロンドン・東京などの大都市は、今この段階にあるとされる。" }
+  ];
+  var metro = document.getElementById("metro"), stageInput = document.getElementById("stage"), stageBtnWrap = document.getElementById("stagebtns");
+  var stageBtns = STAGES.map(function(s, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.innerHTML = "①②③④".charAt(i) + "<br>" + s.name; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){ setStage(i); });
+    stageBtnWrap.appendChild(b); return b;
+  });
+  function arrowBar(x, label, v, color){
+    var base = 160, unit = 34;
+    tx(metro,x+40,286,label,{"text-anchor":"middle","font-size":14,"font-weight":"700"});
+    el("line",{x1:x-10,y1:base,x2:x+90,y2:base,stroke:"#5B6B78","stroke-width":1.5},metro);
+    var h = Math.abs(v) * unit, y = v >= 0 ? base - h : base;
+    el("rect",{x:x+15,y:y,width:50,height:Math.max(h,2),fill:v >= 0 ? color : "#A94436",opacity:.85},metro);
+    var sym = v > 0 ? "増加" : (v < 0 ? "減少" : "変化小");
+    tx(metro,x+40,v >= 0 ? y - 8 : y + h + 18,(v>0?"▲ ":"▼ ") + sym,{"text-anchor":"middle","font-size":13,"font-weight":"700",fill:v >= 0 ? color : "#A94436"});
+  }
+  function drawMetro(i){
+    var s = STAGES[i];
+    while(metro.firstChild){ metro.removeChild(metro.firstChild); }
+    el("rect",{x:0,y:0,width:800,height:300,fill:"#F7F9F6"},metro);
+    // 地図（左）
+    var cx = 180, cy = 140;
+    var subR = [60, 120, 120, 120][i];
+    el("circle",{cx:cx,cy:cy,r:130,fill:"#EEF2EA",stroke:"#D4DAD6"},metro);
+    el("circle",{cx:cx,cy:cy,r:subR,fill:"#DDEBC8",opacity:i === 0 ? .5 : 1},metro);
+    el("circle",{cx:cx,cy:cy,r:52,fill:"#F2D3AE",stroke:"#D9822B","stroke-width":2},metro);
+    tx(metro,cx,cy-22,"中心都市",{"text-anchor":"middle","font-size":13,"font-weight":"700"});
+    tx(metro,cx,cy-90,"郊外",{"text-anchor":"middle","font-size":13,"font-weight":"700",fill:"#2E6FDB"});
+    // 住民の点（決定的に配置）
+    var nc = [10, 7, 5, 9][i], ns = [3, 14, 11, 10][i];
+    for(var a = 0; a < nc; a++){ var t = a / nc * Math.PI * 2 + .3, r = 18 + (a % 3) * 9; el("circle",{cx:cx + Math.cos(t) * r,cy:cy + 14 + Math.sin(t) * r * .5,r:4,fill:"#D9822B"},metro); }
+    for(var b = 0; b < ns; b++){ var u = b / ns * Math.PI * 2 + .15, q = 74 + (b % 3) * 14; el("circle",{cx:cx + Math.cos(u) * q,cy:cy + Math.sin(u) * q,r:4,fill:"#2E6FDB"},metro); }
+    // 移動の矢印
+    if(i === 1){ [[0],[2.1],[4.2]].forEach(function(p){ var t=p[0]; el("line",{x1:cx+Math.cos(t)*40,y1:cy+Math.sin(t)*40,x2:cx+Math.cos(t)*92,y2:cy+Math.sin(t)*92,stroke:"#2E6FDB","stroke-width":3,"marker-end":"url(#ah)"},metro); }); }
+    if(i === 3){ [[.6],[2.7],[4.8]].forEach(function(p){ var t=p[0]; el("line",{x1:cx+Math.cos(t)*100,y1:cy+Math.sin(t)*100,x2:cx+Math.cos(t)*48,y2:cy+Math.sin(t)*48,stroke:"#D9822B","stroke-width":3,"marker-end":"url(#ah2)"},metro); }); }
+    var defs = el("defs",{},metro);
+    var m1 = el("marker",{id:"ah",markerWidth:8,markerHeight:8,refX:6,refY:4,orient:"auto"},defs); el("path",{d:"M0 0 L8 4 L0 8 Z",fill:"#2E6FDB"},m1);
+    var m2 = el("marker",{id:"ah2",markerWidth:8,markerHeight:8,refX:6,refY:4,orient:"auto"},defs); el("path",{d:"M0 0 L8 4 L0 8 Z",fill:"#D9822B"},m2);
+    // 棒（右）
+    tx(metro,560,26,"人口の増え方（模式）",{"text-anchor":"middle","font-size":13,fill:"#5B6B78"});
+    arrowBar(430,"中心都市",s.c,"#D9822B");
+    arrowBar(610,"郊外",s.s,"#2E6FDB");
+  }
+  function setStage(i){
+    i = Math.max(0, Math.min(3, Number(i)));
+    stageInput.value = i;
+    stageInput.setAttribute("aria-valuetext", (i + 1) + "：" + STAGES[i].name);
+    stageBtns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(i === j)); });
+    drawMetro(i);
+    document.getElementById("stage-caption").innerHTML = STAGES[i].cap;
+  }
+  stageInput.addEventListener("input", function(){ setStage(stageInput.value); });
+  setStage(0);
+
+  var judge = document.getElementById("judge"), judgeFb = document.getElementById("judge-fb");
+  STAGES.forEach(function(s, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.textContent = s.name;
+    b.addEventListener("click", function(){
+      if(i === 3){
+        b.setAttribute("data-state","correct");
+        judgeFb.textContent = "正解！1995年に最も少なくなったあと増加に転じ、2010年には1965年の人口を上回った。中心都市の人口が再び増える「再都市化」の段階。では1965〜1995年は？→人口が減った「郊外化（ドーナツ化現象）」の時期。";
+        Array.prototype.forEach.call(judge.children, function(c){ c.disabled = true; });
+      }else{
+        b.setAttribute("data-state","wrong"); b.disabled = true;
+        judgeFb.textContent = "おしい。1995年から2020年にかけて、23区の人口は増えたか、減ったか？表をもう一度見よう。";
+      }
+    });
+    judge.appendChild(b);
+  });
+
+  window.__kyozai = { pickSpot:pickSpot, showEra:showEra, showModel:showModel, setStage:setStage, showStep:showStep, SPOTS:SPOTS, ERAS:ERAS };
+
+  /* ── クイズ（テンプレート共通処理） ── */
+  document.querySelectorAll(".quiz").forEach(function(quiz){
+    var answer = Number(quiz.getAttribute("data-answer"));
+    var choices = quiz.querySelectorAll(".choice");
+    var feedback = quiz.querySelector(".feedback");
+    var kaisetsu = quiz.querySelector(".kaisetsu");
+    var showBtn = quiz.querySelector(".show-kaisetsu");
+    choices.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var i = Number(btn.getAttribute("data-i"));
+        if(i === answer){
+          btn.setAttribute("data-state","correct");
+          feedback.textContent = "正解！"; feedback.className = "feedback ok";
+          choices.forEach(function(b){ b.disabled = true; });
+          if(isJishu()){ kaisetsu.hidden = false; }
+        }else{
+          btn.setAttribute("data-state","wrong"); btn.disabled = true;
+          feedback.textContent = "おしい。もう一度考えてみよう。"; feedback.className = "feedback ng";
+        }
+      });
+    });
+    if(showBtn){
+      showBtn.addEventListener("click", function(){
+        kaisetsu.hidden = !kaisetsu.hidden;
+        showBtn.textContent = kaisetsu.hidden ? "解説を表示する" : "解説を閉じる";
+      });
+    }
+  });
+
+  /* ── exit ticket ── */
+  var ticket = document.getElementById("ticket"), counter = document.getElementById("charcount"), copyBtn = document.getElementById("copybtn");
+  var KEYS = [["交通",/交通|鉄道|駅|高速|IC|インター/],["中心地機能",/中心地機能/],["宿場町",/宿場/],["商業・働く場",/商業|店|工場|研究所|働/]];
+  var checks = document.getElementById("checks");
+  var checkEls = KEYS.map(function(k){ var li = document.createElement("li"); li.textContent = k[0]; checks.appendChild(li); return li; });
+  ticket.addEventListener("input", function(){
+    var n = ticket.value.replace(/\s/g, "").length;
+    counter.textContent = n + "字／100字" + (n > 100 ? "（オーバー）" : "");
+    KEYS.forEach(function(k, j){ checkEls[j].className = k[1].test(ticket.value) ? "hit" : ""; });
+  });
+  copyBtn.addEventListener("click", function(){
+    var text = ticket.value;
+    if(!text){ counter.textContent = "まだ何も書かれていません"; return; }
+    function done(ok){ copyBtn.textContent = ok ? "コピーしました" : "コピーできません（手動で選択してください）"; setTimeout(function(){ copyBtn.textContent = "回答をコピー（提出用）"; }, 2000); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ ticket.select(); done(false); }); }
+    else{ ticket.select(); done(false); }
+  });
+})();
+</script>
+</body>
+</html>
