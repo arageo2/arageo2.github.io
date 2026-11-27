@@ -110,25 +110,22 @@
   .def{background:#FBEDEB; border-left:4px solid var(--red); border-radius:0 8px 8px 0; padding:10px 12px; font-size:16px; margin:10px 0;}
   .kage{background:#F7ECEA; border-left:3px solid var(--ng); padding:8px 12px; border-radius:0 8px 8px 0; font-size:15px; margin-bottom:6px;}
 
-  /* WORK ○△× */
-  .work{width:100%; border-collapse:collapse; font-size:15px;}
-  .work th,.work td{border:1px solid var(--line); padding:8px; vertical-align:top;}
-  .work thead th{background:var(--lake); color:#fff; text-align:left;}
-  .work td.who b{display:block;}
-  .work td.who small{color:var(--ink-weak);}
-  .mark{display:flex; gap:4px;}
-  .mark button{min-width:44px; min-height:44px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); font-size:20px; font-family:inherit; cursor:pointer; color:var(--ink);}
-  .mark button[aria-pressed="true"]{border-color:var(--lake); background:var(--lake); color:#fff;}
-  .work input[type=text]{width:100%; min-height:40px; padding:6px 8px; border:1.5px solid var(--line); border-radius:6px; font-family:inherit; font-size:14px;}
-  .exbtn{min-height:36px; margin-top:6px; padding:2px 10px; border:1.5px solid var(--red); border-radius:6px; background:var(--card); color:var(--red); font-family:inherit; font-size:13px; cursor:pointer;}
-  .ex{margin-top:6px; font-size:14px; color:var(--red);}
-  .ex[hidden]{display:none;}
-  @media (max-width:640px){
-    .work thead{display:none;}
-    .work, .work tbody, .work tr, .work td{display:block; width:100%;}
-    .work tr{border:1px solid var(--line); border-radius:8px; margin-bottom:10px; padding:4px;}
-    .work td{border:none; padding:6px 8px;}
-  }
+  /* WORK 立場カード（5段階） */
+  .axis{position:relative; height:66px; margin:8px 0 18px; border-radius:8px;
+        background:linear-gradient(90deg,#F7ECEA 0%,#F5F7F4 50%,#EAF4EE 100%); border:1px solid var(--line);}
+  .axis .lab{position:absolute; bottom:-22px; font-size:12px; color:var(--ink-weak);}
+  .axis .chip{position:absolute; top:8px; transform:translateX(-50%); font-size:12px; line-height:1.2; background:var(--card); border:1.5px solid var(--ink); border-radius:12px; padding:3px 7px; white-space:nowrap; transition:left .3s;}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px;}
+  .scard{border:1.5px solid var(--line); border-radius:10px; padding:12px;}
+  .scard h3{margin:0 0 4px; font-size:16px;}
+  .scard .who{font-size:13px; color:var(--ink-weak); margin:0 0 8px;}
+  .scale{display:grid; grid-template-columns:repeat(5,1fr); gap:4px;}
+  .scale button{min-height:44px; padding:2px; border:1.5px solid var(--line); border-radius:6px; background:var(--card); font-family:inherit; font-size:12px; line-height:1.2; cursor:pointer; color:var(--ink);}
+  .scale button[aria-pressed="true"]{border-color:var(--lake); background:var(--lake); color:#fff;}
+  .view{margin-top:8px; font-size:14px; background:var(--lake-weak); border-radius:8px; padding:8px 10px;}
+  .view[hidden]{display:none;}
+  .viewbtn{min-height:44px; margin-top:8px; padding:6px 12px; border:1.5px solid var(--lake); border-radius:8px; background:var(--card); color:var(--lake); font-family:inherit; font-size:14px; cursor:pointer;}
+
   .readout{font-size:15px; margin-top:8px; border-left:3px solid var(--lake); padding-left:10px; min-height:1.8em;}
 
   /* グラフ */
@@ -342,16 +339,16 @@
   <section class="panel" id="p-3" role="tabpanel" aria-labelledby="tab-3" hidden>
     <p class="seclabel">【1】WORK</p>
     <h2>月島のような再開発で、誰が得をして、誰が困る？</h2>
-    <p>得をする<strong>○</strong>・困る<strong>×</strong>・どちらとも<strong>△</strong>を選び、そう考えた理由を書こう。</p>
-    <table class="work" id="work">
-      <thead><tr><th scope="col" style="width:30%">立場</th><th scope="col" style="width:20%">○△×</th><th scope="col">そう考えた理由</th></tr></thead>
-      <tbody></tbody>
-    </table>
-    <p class="readout" id="work-sum" aria-live="polite"></p>
-    <div class="ticket-foot">
-      <span class="note">例は先生の解答例の一つ。正解は1つではない。</span>
-      <button type="button" class="copybtn" id="work-copy">WORKをコピー（提出用）</button>
+    <p>月島のような下町が、再開発でタワーマンションの街に生まれ変わったとする。6つの立場それぞれについて、<strong>得をするか・困るか</strong>を選ぼう。選ぶと上の線に名前が並ぶ。</p>
+    <div class="axis" id="axis" aria-hidden="true">
+      <span class="lab" style="left:4px">← 困る</span>
+      <span class="lab" style="left:50%;transform:translateX(-50%)">どちらとも</span>
+      <span class="lab" style="right:4px">得をする →</span>
     </div>
+    <div class="cards" id="cards"></div>
+    <p class="readout" id="axis-summary" aria-live="polite"></p>
+    <p class="note">プリントの「○△×」には、「得」「とても得」→○、「どちらとも」→△、「困る」「とても困る」→× として書き写そう。</p>
+    <section class="hatsumon small jugyo-only"><p>全員が「得をする」再開発は、ありうるだろうか？</p></section>
     <p class="point"><strong>〔Point〕</strong>全員が「得」をする再開発はありうる？ →【5】で厚木の再開発を考えよう！</p>
     <div class="pager"><button type="button" class="prev">← 前へ</button><button type="button" class="next">次へ →</button></div>
   </section>
@@ -872,56 +869,72 @@
   document.getElementById("cmp-all").addEventListener("click", function(){ cmpRows.forEach(function(f){ f(); }); });
 
   /* =========================================================
-     【1】WORK ○△×
+     【1】WORK 立場カード（5段階評価＋別の見方）
      ========================================================= */
   var STAKES = [
-    ["長く住む高齢の借家人", "この街に40年住み、アパートを借りている", "×", "家賃が上がって、住み慣れた家や近所づきあいを失う"],
-    ["土地・建物を持つ地権者", "古い木造の家と土地を持っている", "○", "地価が上がって資産が増える"],
-    ["新しく来た共働き世帯", "駅近のマンションを買って引っ越してきた", "○", "通勤や子育てに便利な駅近に住める"],
-    ["昔からの商店主", "親の代から続く店をテナントで営む", "△", "客は増えるが、テナント料が上がる"],
-    ["市役所（自治体）", "街全体のまちづくりを担う", "○", "人口と税収が増え、街がにぎわう"],
-    ["もんじゃを食べに来る観光客", "休日に下町の雰囲気を楽しみに来る", "△", "新しい店は増えるが、下町らしい雰囲気が減る"]
+    { name:"長く住む高齢の借家人", who:"この街に40年住み、アパートを借りている",
+      view:"家賃の上昇や建て替えで、住み慣れた家や近所づきあいを失うおそれがある。一方で、治安がよくなったり、病院や店が増えて便利になったりする面もある。" },
+    { name:"土地・建物を持つ地権者", who:"古い木造の家と土地を持っている",
+      view:"地価が上がって資産の価値が増え、再開発では新しいビルの床（住まいや店）を得られることもある。一方で、工事中の仮住まいや、合意づくりの話し合いの負担がある。" },
+    { name:"新しく来た共働き世帯", who:"駅近のマンションを買って引っ越してきた",
+      view:"通勤や子育てに便利な暮らしが手に入る。一方で、住宅費は高く、昔からの住民とのつながりをつくりにくいこともある。" },
+    { name:"昔からの商店主", who:"親の代から続く店をテナントで営む",
+      view:"人通りが増えて新しい客をつかむチャンスがある。一方で、テナント料の値上がりや大型店・チェーン店との競争で、閉店に追い込まれることもある。" },
+    { name:"市役所（自治体）", who:"街全体のまちづくりを担う",
+      view:"人口と税収が増え、街がにぎわう。一方で、保育所や学校の不足、住民の入れ替わりによる地域の分断に対応する必要がある。" },
+    { name:"もんじゃを食べに来る観光客", who:"休日に下町の雰囲気を楽しみに来る",
+      view:"新しい店やきれいな街並み、駅から便利な道を楽しめる。一方で、昔ながらの路地や長屋、なじみの店が減り、「下町らしさ」が薄れてしまうこともある。" }
   ];
-  var MARKS = ["○","△","×"];
-  var workBody = document.querySelector("#work tbody");
-  var work = [];
+  var SCALE = ["とても困る","困る","どちらとも","得","とても得"];
+  var axis = document.getElementById("axis");
+  var cardWrap = document.getElementById("cards");
+  var stakes = [];
   STAKES.forEach(function(s, i){
-    var tr = document.createElement("tr");
-    tr.appendChild(h("td", "who", "<b>" + s[0] + "</b><small>" + s[1] + "</small>"));
-    var tdM = document.createElement("td");
-    var mk = h("div", "mark"); mk.setAttribute("role","group"); mk.setAttribute("aria-label", s[0] + "は得をする？困る？");
-    var st = { val:null, btns:[], input:null, ex:null, exbtn:null };
-    MARKS.forEach(function(m){
-      var b = h("button", "", m); b.type = "button"; b.setAttribute("aria-pressed","false");
-      b.setAttribute("aria-label", m === "○" ? "○ 得をする" : (m === "×" ? "× 困る" : "△ どちらとも"));
-      b.addEventListener("click", function(){
-        st.val = m;
-        st.btns.forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
-        if(isJishu()){ showEx(st, true); }
-        workSummary();
-      });
-      mk.appendChild(b); st.btns.push(b);
+    var card = h("div", "scard", "<h3>" + s.name + "</h3><p class='who'>" + s.who + "</p>");
+    var sc = h("div", "scale"); sc.setAttribute("role","group"); sc.setAttribute("aria-label", s.name + "は得をする？困る？");
+    var st = { val:null, btns:[], chip:null, view:null, vbtn:null };
+    SCALE.forEach(function(lab, v){
+      var b = h("button", "", lab); b.type = "button"; b.setAttribute("aria-pressed","false");
+      b.addEventListener("click", function(){ choose(i, v); });
+      sc.appendChild(b); st.btns.push(b);
     });
-    tdM.appendChild(mk); tr.appendChild(tdM);
-    var tdR = document.createElement("td");
-    var inp = document.createElement("input"); inp.type = "text"; inp.setAttribute("aria-label", s[0] + "：そう考えた理由"); inp.placeholder = "理由を書こう";
-    var eb = h("button", "exbtn", "例を見る"); eb.type = "button";
-    var ex = h("div", "ex", "（例）" + s[2] + "　" + s[3]); ex.hidden = true;
-    eb.addEventListener("click", function(){ showEx(st, ex.hidden); });
-    tdR.appendChild(inp); tdR.appendChild(eb); tdR.appendChild(ex); tr.appendChild(tdR);
-    st.input = inp; st.ex = ex; st.exbtn = eb;
-    workBody.appendChild(tr); work.push(st);
+    card.appendChild(sc);
+    var vb = h("button", "viewbtn", "別の見方を開く"); vb.type = "button";
+    var view = h("div", "view", "<strong>考えられる視点：</strong>" + s.view); view.hidden = true;
+    vb.addEventListener("click", function(){ setView(st, view.hidden); });
+    card.appendChild(vb); card.appendChild(view);
+    st.view = view; st.vbtn = vb;
+    var chip = h("span", "chip", s.name); chip.style.display = "none";
+    axis.appendChild(chip); st.chip = chip;
+    cardWrap.appendChild(card); stakes.push(st);
   });
-  function showEx(st, open){ st.ex.hidden = !open; st.exbtn.textContent = open ? "例を閉じる" : "例を見る"; }
-  modeHooks.push(function(mode){ if(mode === "jishu"){ work.forEach(function(st){ if(st.val){ showEx(st, true); } }); } });
-  function workSummary(){
-    var c = {"○":0,"△":0,"×":0}, done = 0;
-    work.forEach(function(st){ if(st.val){ c[st.val]++; done++; } });
-    var el2 = document.getElementById("work-sum");
-    if(done < work.length){ el2.textContent = "あと" + (work.length - done) + "つの立場を選ぼう。"; }
-    else{ el2.textContent = "全部選べた！ ○" + c["○"] + "・△" + c["△"] + "・×" + c["×"] + "。○の人と×の人の違いは何だろう？（家や土地を持っているか、など）"; }
+  function setView(st, open){ st.view.hidden = !open; st.vbtn.textContent = open ? "別の見方を閉じる" : "別の見方を開く"; }
+  function choose(i, v){
+    var st = stakes[i]; st.val = v;
+    st.btns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(j === v)); });
+    if(isJishu()){ setView(st, true); }
+    layoutChips();
   }
-  workSummary();
+  modeHooks.push(function(mode){ if(mode === "jishu"){ stakes.forEach(function(st){ if(st.val !== null){ setView(st, true); } }); } });
+  function layoutChips(){
+    var counts = [0,0,0,0,0], done = 0;
+    stakes.forEach(function(st){
+      if(st.val === null){ st.chip.style.display = "none"; return; }
+      done++;
+      var lane = counts[st.val]++;
+      st.chip.style.display = "";
+      st.chip.style.left = (10 + st.val * 20) + "%";
+      st.chip.style.top = (6 + (lane % 3) * 19) + "px";
+      st.chip.style.borderColor = st.val < 2 ? "var(--ng)" : (st.val > 2 ? "var(--ok)" : "var(--ink-weak)");
+    });
+    var sum = document.getElementById("axis-summary");
+    if(done < stakes.length){ sum.textContent = "あと" + (stakes.length - done) + "つの立場を選ぼう。"; }
+    else{
+      var win = counts[3] + counts[4], lose = counts[0] + counts[1];
+      sum.textContent = "全部選べた！「得」" + win + "・「困る」" + lose + "・「どちらとも」" + counts[2] + "。正解は1つではない。なぜそう判断したか、となりの人と比べよう。";
+    }
+  }
+  layoutChips();
 
   /* =========================================================
      【2】東京都区部の人口（国勢調査）＋因果チェーン
@@ -1257,11 +1270,6 @@
       navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ if(area){ area.select(); } done(false); });
     }else{ if(area){ area.select(); } done(false); }
   }
-  document.getElementById("work-copy").addEventListener("click", function(){
-    var any = work.some(function(st){ return st.val || st.input.value; });
-    var text = any ? "【1】WORK 誰が得をして、誰が困る？\n" + work.map(function(st, i){ return STAKES[i][0] + "：" + (st.val || "未選択") + "　" + st.input.value; }).join("\n") : "";
-    copyText(text, null, this, "WORKをコピー（提出用）", document.getElementById("work-sum"));
-  });
   var prop = document.getElementById("proposal"), propCount = document.getElementById("prop-count"), propCopy = document.getElementById("prop-copy");
   prop.addEventListener("input", function(){ propCount.textContent = prop.value.replace(/\s/g, "").length + "字"; });
   propCopy.addEventListener("click", function(){ copyText(prop.value, prop, propCopy, "提案をコピー（提出用）", propCount); });
