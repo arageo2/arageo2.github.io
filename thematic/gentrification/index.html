@@ -212,6 +212,9 @@
   footer{max-width:900px; margin:0 auto; padding:0 16px 40px; font-size:13px; color:var(--ink-weak);}
   footer h2{font-size:14px; font-family:var(--font-body); margin-bottom:6px;}
   footer ul{margin:0 0 10px; padding-left:1.4em;}
+  footer ul.src li{margin-bottom:6px;}
+  footer a{color:var(--lake); overflow-wrap:anywhere;}
+  footer a::after{content:"↗"; font-size:11px; margin-left:2px;}
 
   body[data-mode="jugyo"] .jishu-only{display:none;}
   body[data-mode="jishu"] .jugyo-only{display:none;}
@@ -595,16 +598,28 @@
 
 <footer>
   <h2>出典・参考資料</h2>
-  <ul>
-    <li>大都市圏の発展段階（都市化・郊外化・反都市化・再都市化）：オランダのクラッセンによるモデル（高校地理の一般的な説明による）。</li>
-    <li>ロンドン・ドックランズ：港の閉鎖（1967〜1981年、船の大型化・コンテナ化への対応の遅れ、下流のティルベリー港への移転など）はロンドン博物館「What is the Port of London Authority?」、Britannica「London: Industry」。開発公社LDDC（1981〜1998年）・カナリー・ワーフ・DLRはLDDC関連の公開資料による。</li>
-    <li>東京・月島（1892年の埋め立て、石川島造船所と工場で働く人の長屋、1988年の月島駅開業、2020年の32階建て再開発ビル、10棟以上のタワーマンション、反対運動）：三菱地所ハウスネット、東京都都市整備局、マネーポストWEB。</li>
-    <li>東京都区部の人口：総務省「国勢調査」各年（1965〜2015年、2020年確報値9,733,276人）。2025年は東京都総務局「令和7年国勢調査 人口及び世帯数（速報）」（2026年5月29日公表、区部9,953,160人・市部は初の減少）。</li>
-    <li>汐留：国土交通省「まちづくり事例 050」、東京都都市整備局（1986年の汐留貨物駅廃止とその跡地の再開発）。六本木ヒルズ：港区「六本木六丁目地区第一種市街地再開発事業」（大規模な低未利用地と周辺の木造密集住宅地を集約、2003年開業）。</li>
-    <li>みなとみらい21：三菱重工業「横浜製作所」（1982〜83年に造船所を本牧へ移転）、横浜市西区「旧第2号ドック」（1896年竣工・1973年に役目を終える）、国土交通省「汽車道」（1997年供用）、横浜市「赤レンガ倉庫 歴史年表」（1911・1913年竣工、1989年用途廃止、2002年オープン）。</li>
-    <li>多摩ニュータウン：東京都都市整備局「多摩ニュータウンの新たな再生方針」（2025年4月、1971年諏訪・永山地区で入居開始）。</li>
-    <li>本厚木駅南口・北口の再開発：厚木市「本厚木駅南口地区第一種市街地再開発事業について」、本厚木駅北口地区市街地再開発準備組合「まちづくりニュース」第1号（2022年）。</li>
-    <li>【1】の街の断面、【4】のニュータウン、【6】の街の形は、教材作成者が作った架空のモデルであり、実データではありません。</li>
+  <p>リンクはすべて2026年11月27日に確認しました。役所のPDFなどは、場所が移ったり削除されたりすることがあります。</p>
+  <ul class="src">
+    <li>【1】大都市圏の発展段階（都市化・郊外化・反都市化・再都市化）：オランダのクラッセンによるモデル。高校地理の教科書の一般的な説明による（リンクなし）。</li>
+    <li>【1】ロンドン・ドックランズの港の閉鎖（1967〜1981年、コンテナ化・船の大型化、下流のティルベリー港への移転）：<a href="https://www.londonmuseum.org.uk/collections/london-stories/what-is-the-port-of-london-authority/" target="_blank" rel="noopener">London Museum「What is the Port of London Authority?」</a>／<a href="https://www.britannica.com/place/London/Industry" target="_blank" rel="noopener">Britannica「London: Industry」</a></li>
+    <li>【1】ドックランズ開発公社（LDDC、1981〜1998年）とカナリー・ワーフ：<a href="https://www.british-history.ac.uk/survey-london/vols43-4/pp686-691" target="_blank" rel="noopener">British History Online「Modern Docklands: The background to redevelopment」（Survey of London）</a>／<a href="https://en.wikipedia.org/wiki/London_Docklands_Development_Corporation" target="_blank" rel="noopener">Wikipedia「London Docklands Development Corporation」</a></li>
+    <li>【1】東京・月島（1892年の埋め立て、石川島造船所と工場で働く人の長屋）：<a href="https://www.mec-h.com/town/mh-harumi/11" target="_blank" rel="noopener">三菱地所の住まいリレー「造船ともんじゃ・佃煮の街、月島エリア」</a></li>
+    <li>【1】月島の再開発（2020年10月の32階建てビル、もんじゃ焼きのルーツ）：<a href="https://www.mec-h.com/town/mh-harumi/289" target="_blank" rel="noopener">三菱地所の住まいリレー「再開発で新たな魅力が加わりつつあるもんじゃのまち、月島エリア」</a></li>
+    <li>【1】月島駅の開業（1988年6月8日、有楽町線の新富町〜新木場間の開業）：<a href="https://trafficnews.jp/post/119363" target="_blank" rel="noopener">乗りものニュース「営団地下鉄有楽町線が全線開通した日-1988.6.8」</a></li>
+    <li>【1】月島三丁目南地区の再開発の目的（老朽化した木造長屋の密集の解消・防災性の向上）：<a href="https://www.toshiseibi.metro.tokyo.lg.jp/machizukuri/shigaichi_seibi/sai-kai/saikaihatsu/tukisimagu_2_21" target="_blank" rel="noopener">東京都都市整備局「月島三丁目南地区第一種市街地再開発事業」</a></li>
+    <li>【1】月島のタワーマンションの棟数と反対運動の理由：<a href="https://www.moneypost.jp/1040606/3/" target="_blank" rel="noopener">マネーポストWEB「【タワマン供給過剰問題】…月島では“反対運動”も」</a></li>
+    <li>【2】東京都区部の人口（国勢調査）：<a href="https://www.toukei.metro.tokyo.lg.jp/kokusei/kd-index.htm" target="_blank" rel="noopener">東京都の統計「国勢調査」</a>／1995年の値：<a href="https://www.stat.go.jp/data/kokusei/1995/08-14.html" target="_blank" rel="noopener">総務省統計局「平成7年国勢調査確定人口及び世帯数（東京都）」</a></li>
+    <li>【2】【4】2025年の区部の人口（速報値9,953,160人）と市部の初の減少：<a href="https://www.metro.tokyo.lg.jp/information/press/2026/05/2026052914" target="_blank" rel="noopener">東京都総務局「令和7年国勢調査 人口及び世帯数（速報）」（2026年5月29日）</a></li>
+    <li>【3】汐留（1986年の汐留貨物駅廃止とその跡地の再開発）：<a href="https://www.mlit.go.jp/crd/city/mint/pdf/050minato1.pdf" target="_blank" rel="noopener">国土交通省「事例番号050 東京都港区汐留」（PDF）</a>／<a href="https://www.toshiseibi.metro.tokyo.lg.jp/dainiseibi/tikubetu/shiodome/keii.html" target="_blank" rel="noopener">東京都都市整備局「汐留地区 事業の経緯」</a></li>
+    <li>【3】六本木ヒルズ（低未利用地と木造密集住宅地を集約した再開発）：<a href="https://www.city.minato.tokyo.jp/saikaihatsu/kankyo-machi/toshikekaku/shigaichi/saikaihatsu/r-kan.html" target="_blank" rel="noopener">港区「六本木六丁目地区第一種市街地再開発事業（完了）」</a></li>
+    <li>【3】みなとみらい21の造船所の移転（1982〜83年、本牧へ）：<a href="https://www.mhi.com/jp/company/location/yokohamaw" target="_blank" rel="noopener">三菱重工業「横浜製作所」</a></li>
+    <li>【3】ドックヤードガーデン（旧第2号ドック、1896年完成・1973年に役目を終える）：<a href="https://www.city.yokohama.lg.jp/nishi/shokai/kanko/spot/tekuteku/tekutekusketch23.html" target="_blank" rel="noopener">横浜市西区「旧第2号ドック」</a></li>
+    <li>【3】汽車道（1911年開通の臨港線の跡、1997年に遊歩道）：<a href="https://www.mlit.go.jp/common/000030159.pdf" target="_blank" rel="noopener">国土交通省「汽車道」（PDF）</a></li>
+    <li>【3】赤レンガ倉庫（1911・1913年竣工、1989年に用途廃止、2002年オープン）：<a href="https://www.city.yokohama.lg.jp/kanko-bunka/minato/taikan/asobu/spot/red-renga/rekishi/history.html" target="_blank" rel="noopener">横浜市「赤レンガ倉庫 歴史年表」</a>／<a href="https://www.city.yokohama.lg.jp/kanko-bunka/minato/taikan/asobu/spot/red-renga/gaiyo/overview.html" target="_blank" rel="noopener">横浜市「赤レンガ倉庫 事業概要」</a></li>
+    <li>【4】多摩ニュータウン（1971年に諏訪・永山地区で入居開始）：<a href="https://www.toshiseibi.metro.tokyo.lg.jp/machizukuri/kozo_seibi/tamanew/about" target="_blank" rel="noopener">東京都都市整備局「多摩ニュータウンとは」</a>／<a href="https://www.toshiseibi.metro.tokyo.lg.jp/documents/d/toshiseibi/-3-1" target="_blank" rel="noopener">同「多摩ニュータウンの新たな再生方針」（2025年4月、PDF）</a></li>
+    <li>【5】本厚木駅南口の再開発（地上22階建てビル、2021年度末に事業完了）：<a href="https://www.city.atsugi.kanagawa.jp/material/files/group/3/siryou3.pdf" target="_blank" rel="noopener">厚木市「本厚木駅南口地区第一種市街地再開発事業について」（PDF）</a>／<a href="https://www.kanaloco.jp/news/life/entry-71529.html" target="_blank" rel="noopener">神奈川新聞「南口再開発スタート」（2016年2月16日）</a></li>
+    <li>【5】本厚木駅北口の再開発準備組合（2021年10月設立）：<a href="https://www.city.atsugi.kanagawa.jp/material/files/group/39/news01_0406.pdf" target="_blank" rel="noopener">本厚木駅北口地区市街地再開発準備組合「まちづくりニュース」第1号（PDF）</a></li>
+    <li>【1】の街の断面、【4】のニュータウン、【6】の街の形は、教材作成者が作った架空のモデルであり、実データではありません（リンクなし）。</li>
   </ul>
   <p>本教材は新井貴之が独自に作成したものです。数値は作成時点（2026年11月）に確認したもので、「とされる」と表記した内容は一般的な説明です。リンク先は外部サイトで、内容は変わることがあります。授業で使う前に最新の統計をご確認ください。</p>
   <p>あらじお蔵｜CC BY-NC 4.0｜このページは単体HTMLで動作し、入力内容が外部に送信されることはありません。</p>
